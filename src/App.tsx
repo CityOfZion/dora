@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { useDispatch } from 'react-redux'
 
 import logo from './logo.svg'
 import './App.css'
 import { fetchBlock } from './actions/blockActions'
 
-function App() {
+function App(): ReactElement<void> {
   const dispatch = useDispatch()
   dispatch(fetchBlock(1))
 
