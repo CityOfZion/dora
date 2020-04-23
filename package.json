@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/redux-mock-store": "^1.0.2",
     "@types/redux-thunk": "^2.1.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -30,6 +31,7 @@
     "prettier": "^2.0.5",
     "react-scripts": "3.4.1",
     "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.4",
     "typescript": "~3.7.2"
   },
   "scripts": {
