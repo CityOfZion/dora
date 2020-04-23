@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import test from './testReducer'
+import blockReducer from './blockReducer'
 
 export default combineReducers({
-  test,
+  block: blockReducer,
 })

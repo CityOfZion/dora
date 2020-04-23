@@ -1,12 +1,19 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["react-app", "prettier", "prettier/react"],
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "react-app",
+    "prettier",
+    "prettier/react",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "env": {
     "browser": true
   },
   "globals": {},
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "@typescript-eslint"],
   "rules": {
-    "prettier/prettier": 1
+    "prettier/prettier": 1,
+    "@typescript-eslint/member-delimiter-style": 0
   }
 }
