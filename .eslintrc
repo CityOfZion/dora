@@ -1,0 +1,12 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["react-app", "prettier", "prettier/react"],
+  "env": {
+    "browser": true
+  },
+  "globals": {},
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": 1
+  }
+}

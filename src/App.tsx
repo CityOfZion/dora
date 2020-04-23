@@ -1,8 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { useDispatch } from 'react-redux'
+
+import logo from './logo.svg'
+import './App.css'
+import { toggleExample } from './actions/testActions'
 
 function App() {
+  const dispatch = useDispatch()
+  dispatch(toggleExample())
+
   return (
     <div className="App">
       <header className="App-header">
@@ -20,7 +26,7 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

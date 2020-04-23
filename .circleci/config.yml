@@ -1,0 +1,30 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/neo-3-preview
+    docker:
+      - image: circleci/node:10.16.3
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install dependencies
+          command: npm install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run: # run tests
+          name: lint
+          # For now we will treat all warnings as errors https://github.com/facebook/create-react-app/issues/3657
+          command: npm run ci-lint
+      - run: # run tests
+          name: test
+          command: npm run test
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
