@@ -1,4 +1,5 @@
-// eslint-disable-next-line
+/* eslint-disable */
+
 // @ts-ignore
 
 // This optional code is used to register a service worker.
