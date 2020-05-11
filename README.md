@@ -1,4 +1,22 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <img
+    src="https://raw.githubusercontent.com/CityOfZion/visual-identity/develop/_CoZ%20Branding/_Logo/_Logo%20icon/_PNG%20200x178px/CoZ_Icon_DARKBLUE_200x178px.png"
+    width="125px;">
+</p>
+
+<h1 align="center">neoscan-2</h1>
+
+<p align="center">
+  React / TypeScript based block explorer for the NEO blockchain
+</p>
+
+<p align="center">
+  <a href="https://circleci.com/gh/CityOfZion/neoscan-2">
+    <img src="https://circleci.com/gh/CityOfZion/neoscan-2.svg?style=svg&circle-token=a7d4029776ee0262fce4c3aa466f329ae6616e5d">
+  </a>
+</p>
+
+`neoscan-2` is built on top of the new neoscan backend - documentation for which can be found [here](https://app.swaggerhub.com/apis-docs/SubProto2/neoscan-2-draft/1.0.0) and should be referenced for all contributors and future development.
 
 ## Available Scripts
 
@@ -26,19 +44,3 @@ The build is minified and the filenames include the hashes.<br />
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
