@@ -25,7 +25,7 @@ export const requestTransactions = (cursor: string) => (
 }
 
 export const REQUEST_TRANSACTION_SUCCESS = 'REQUEST_TRANSACTION_SUCCESS'
-export const requestTransactionSuccess = (hash: string, json: Transaction) => (
+export const requestTransactionSuccess = (hash: string, json: {}) => (
   dispatch: Dispatch,
 ): void => {
   dispatch({
@@ -84,31 +84,31 @@ export function shouldFetchTransaction(
   return false
 }
 
-// export function fetchTransaction(hash: string) {
-//   return async (
-//     dispatch: ThunkDispatch<State, void, Action>,
-//     getState: () => { transaction: State },
-//   ): Promise<void> => {
-//     if (shouldFetchTransaction(getState(), hash)) {
-//       dispatch(requestTransaction(hash))
+export function fetchTransaction(hash: string) {
+  return async (
+    dispatch: ThunkDispatch<State, void, Action>,
+    getState: () => { transaction: State },
+  ): Promise<void> => {
+    if (shouldFetchTransaction(getState(), hash)) {
+      dispatch(requestTransaction(hash))
 
-//       try {
-//         const responses = await Promise.all([
-//           fetch(`${GENERATE_BASE_URL()}/get_transaction/${hash}`),
-//           fetch(`${GENERATE_BASE_URL()}/get_log/${hash}`),
-//         ])
-//         const mergedResponse = {}
-//         for (const response of responses) {
-//           const json = await response.json()
-//           Object.assign(mergedResponse, json)
-//         }
-//         dispatch(requestTransactionSuccess(hash, mergedResponse))
-//       } catch (e) {
-//         dispatch(requestTransactionError(hash, e))
-//       }
-//     }
-//   }
-// }
+      try {
+        const responses = await Promise.all([
+          fetch(`${GENERATE_BASE_URL()}/get_transaction/${hash}`),
+          fetch(`${GENERATE_BASE_URL()}/get_log/${hash}`),
+        ])
+        const mergedResponse = {}
+        for (const response of responses) {
+          const json = await response.json()
+          Object.assign(mergedResponse, json)
+        }
+        dispatch(requestTransactionSuccess(hash, mergedResponse))
+      } catch (e) {
+        dispatch(requestTransactionError(hash, e))
+      }
+    }
+  }
+}
 
 export function fetchTransactions(cursor = '') {
   return async (
