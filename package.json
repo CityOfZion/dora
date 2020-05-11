@@ -16,6 +16,7 @@
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
+    "react-test-renderer": "^16.13.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },
@@ -50,6 +51,11 @@
     "lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "ci-lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "format": "prettier --write ./src"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!lodash-es)"
+    ]
   },
   "browserslist": {
     "production": [
