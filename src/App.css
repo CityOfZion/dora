@@ -1,10 +1,5 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#neoscan-logo {
+  width: 104px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

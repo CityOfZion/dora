@@ -1,6 +1,11 @@
 import { AnyAction } from 'redux'
 
-import { REQUEST_BLOCK, REQUEST_BLOCK_SUCCESS } from '../actions/blockActions'
+import {
+  REQUEST_BLOCK,
+  REQUEST_BLOCK_SUCCESS,
+  REQUEST_BLOCKS,
+  REQUEST_BLOCKS_SUCCESS,
+} from '../actions/blockActions'
 
 type Action = {
   type: string
@@ -14,9 +19,7 @@ type Action = {
 
 export type State = {
   isLoading: boolean
-  cached: {
-    [key: string]: Block
-  }
+  cached: { [key: string]: Block }
   list: []
   lastUpdated: Date | null
   block: Block | null
@@ -57,7 +60,10 @@ export default (
     case REQUEST_BLOCK:
       return Object.assign({}, state, {
         isLoading: true,
-        block: state.cached[action.indexOrHash],
+      })
+    case REQUEST_BLOCKS:
+      return Object.assign({}, state, {
+        isLoading: true,
       })
     case REQUEST_BLOCK_SUCCESS:
       return Object.assign({}, state, {
@@ -69,6 +75,13 @@ export default (
           [action.blockHeight]: action.json,
           [action.json.hash]: action.json,
         },
+      })
+    case REQUEST_BLOCKS_SUCCESS:
+      return Object.assign({}, state, {
+        isLoading: false,
+        list: action.json.items,
+        totalCount: action.json.totalCount,
+        lastUpdated: action.receivedAt,
       })
     default:
       return state
