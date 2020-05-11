@@ -1,11 +1,11 @@
 import { AnyAction } from 'redux'
 
 import {
-  REQUEST_BLOCK,
-  REQUEST_BLOCK_SUCCESS,
-  REQUEST_BLOCKS,
-  REQUEST_BLOCKS_SUCCESS,
-} from '../actions/blockActions'
+  REQUEST_TRANSACTION,
+  REQUEST_TRANSACTIONS,
+  REQUEST_TRANSACTIONS_SUCCESS,
+  REQUEST_TRANSACTION_SUCCESS,
+} from '../actions/transactionActions'
 
 type Action = {
   type: string
@@ -19,30 +19,17 @@ type Action = {
 
 export type State = {
   isLoading: boolean
-  cached: { [key: string]: Block }
+  cached: { [key: string]: Transaction }
   list: []
   lastUpdated: Date | null
-  block: Block | null
+  transaction: Transaction | null
+  cursor: string
 }
 
-export type Block = {
-  nextconsensus: string
-  oversize: number
-  tx: []
-  previousblockhash: string
-  index: number
-  version: number
-  nonce: string
-  script: {
-    invocation: string
-    verification: string
-  }
+export type Transaction = {
   size: number
-  blocktime: number
-  merkleroot: string
   time: number
-  hash: string
-  jsonsize: number
+  txid: string
 }
 
 export default (
@@ -51,35 +38,34 @@ export default (
     cached: {},
     list: [],
     lastUpdated: null,
-    block: null,
+    transaction: null,
+    cursor: '',
   },
   // TODO: Figure out why this needs to be here
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {
-    case REQUEST_BLOCK:
+    case REQUEST_TRANSACTION:
       return Object.assign({}, state, {
         isLoading: true,
       })
-    case REQUEST_BLOCKS:
+    case REQUEST_TRANSACTIONS:
       return Object.assign({}, state, {
         isLoading: true,
       })
-    case REQUEST_BLOCK_SUCCESS:
+    case REQUEST_TRANSACTION_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        block: action.json,
+        transaction: action.json,
         lastUpdated: action.receivedAt,
-        // cache both the index and the hash in memory
         cached: {
-          [action.blockHeight]: action.json,
           [action.json.hash]: action.json,
         },
       })
-    case REQUEST_BLOCKS_SUCCESS:
+    case REQUEST_TRANSACTIONS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: action.json.items,
+        list: action.json.transactions,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
       })

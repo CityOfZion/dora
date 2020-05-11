@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
-import blockReducer from './blockReducer'
+import block from './blockReducer'
+import transaction from './transactionReducer'
 
 export default combineReducers({
-  block: blockReducer,
+  block,
+  transaction,
 })

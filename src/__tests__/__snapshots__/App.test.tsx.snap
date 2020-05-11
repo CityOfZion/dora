@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  id="application-wrapper"
+>
+  <div />
+  <div
+    id="router-content-wrapper"
+  >
+    <div
+      id="Home"
+    >
+      <div
+        id="neoscan-logo-container"
+      >
+        <img
+          alt="neoscan-logo"
+          id="neoscan-logo"
+          src="logo.png"
+        />
+        <div
+          id="welcome-text"
+        >
+          <h1>
+             welcome to neoscan 
+          </h1>
+           
+          <div
+            id="welcome-text-underscore"
+          >
+            _
+          </div>
+        </div>
+        <span>
+          Your home for all NEO related blockchain information
+        </span>
+      </div>
+      <div
+        className="list-row-container"
+      >
+        <div
+          className="list-wrapper"
+        >
+          <div
+            className="label-wrapper"
+          >
+            <label>
+              explore blocks
+            </label>
+          </div>
+          <div
+            className="data-list-container"
+          >
+            <div
+              className="data-list"
+              style={
+                Object {
+                  "gridTemplateColumns": "repeat(4, auto)",
+                }
+              }
+            >
+              <div
+                className="data-list-column"
+                style={
+                  Object {
+                    "borderRadius": "3px 0 0 3px",
+                  }
+                }
+              >
+                Index
+              </div>
+              <div
+                className="data-list-column"
+                style={Object {}}
+              >
+                Time
+              </div>
+              <div
+                className="data-list-column"
+                style={Object {}}
+              >
+                Transactions
+              </div>
+              <div
+                className="data-list-column"
+                style={Object {}}
+              >
+                Size
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="list-wrapper"
+        >
+          <div
+            className="label-wrapper"
+          >
+            <label>
+              explore transactions
+            </label>
+          </div>
+          <div
+            className="data-list-container"
+          >
+            <div
+              className="data-list"
+              style={
+                Object {
+                  "gridTemplateColumns": "repeat(3, auto)",
+                }
+              }
+            >
+              <div
+                className="data-list-column"
+                style={
+                  Object {
+                    "borderRadius": "3px 0 0 3px",
+                  }
+                }
+              >
+                Transaction ID
+              </div>
+              <div
+                className="data-list-column"
+                style={Object {}}
+              >
+                Size
+              </div>
+              <div
+                className="data-list-column"
+                style={Object {}}
+              >
+                Time
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div />
+</div>
+`;
