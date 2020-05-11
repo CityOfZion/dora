@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactText } from 'react'
 import { uniqueId } from 'lodash-es'
 import classNames from 'classnames'
 
@@ -12,30 +12,31 @@ type ColumnType = {
 
 type ListProps = {
   columns: Array<ColumnType>
-  data: Array<{ [key: string]: string | number | Array<string> }>
+  data: Array<{ [key: string]: string | number | React.FC<{}> }>
   handleRowClick: (data: {}) => void
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
 }
 
-export const List = ({
+export const List: React.FC<ListProps> = ({
   columns,
   data,
   handleRowClick,
   isLoading,
   rowId,
   withoutPointer = false,
-}: ListProps): ReactElement => {
+}) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
-      id: string | number | Array<string>
-      [key: string]: string | number | Array<string>
+      id: string
+      [key: string]: string | number | React.FC<{}>
     }
+
     const sorted = {} as Sorted
     columns.forEach(column => {
       sorted[column.accessor] = data[column.accessor]
-      sorted.id = data[rowId]
+      sorted.id = String(data[rowId])
     })
     return sorted
   })
@@ -70,6 +71,16 @@ export const List = ({
 
   const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
 
+  const renderCellData = (
+    isLoading: boolean,
+    data: string | number | React.FC<{}>,
+  ): ReactText | React.ReactNode => {
+    const cellProps = {}
+    if (isLoading) return undefined
+    if (typeof data === 'function') return data(cellProps)
+    return data
+  }
+
   return (
     <div className="data-list-container">
       <div className="data-list" style={gridstyle}>
@@ -85,7 +96,9 @@ export const List = ({
 
         {sortedByAccessor.map(
           (
-            data: { [key: string]: string | number | Array<string> },
+            data: {
+              [key: string]: string | number | React.FC<{}>
+            },
             index: number,
           ) =>
             Object.keys(data).map((key, i) => {
@@ -104,7 +117,7 @@ export const List = ({
                     onMouseEnter={(): void => setCurrentHoveredIndex(index)}
                     onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
-                    {isLoading ? '' : data[key]}
+                    {renderCellData(isLoading, data[key])}
                   </span>
                 )
               )

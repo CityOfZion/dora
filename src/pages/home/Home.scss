@@ -1,6 +1,35 @@
 #Home {
   background-color: #1a2f34;
 
+  .list-row-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 24px;
+
+    .list-wrapper {
+      margin: 12px;
+      flex: 1;
+      max-width: 590px;
+
+      .label-wrapper {
+        margin-bottom: 36px;
+
+        label {
+          font-size: 16px;
+          color: #7d9fb1;
+          letter-spacing: -0.64px;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  #neoscan-logo {
+    width: 104px;
+  }
+
   #welcome-text {
     display: flex;
     align-items: center;

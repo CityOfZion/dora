@@ -1,29 +1,37 @@
-.data-list-container {
-}
-
 .data-list > span {
-  padding: 6px 24px;
-  background: var(--secondary-color);
-  font-weight: 600;
+  padding: 0px 24px;
   font-size: 14px;
-  color: var(--text-color-secondary);
-  line-height: 32px;
   cursor: pointer;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  min-height: 35px;
+  min-height: 45px;
+  background-color: var(--dark-grey);
+  display: flex;
+  align-items: center;
+}
+
+.block-index-cell {
+  color: var(--pink);
+  letter-spacing: 0.96px;
+}
+
+.txid-index-cell {
+  color: var(--pink);
+  max-width: 160px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .data-list-column {
-  padding: 12px 24px;
+  padding: 0px 24px;
   font-weight: 300;
-  background: var(--tertiary-color);
-  color: var(--primary-color);
+  display: flex;
+  align-items: center;
   font-weight: 600;
   font-size: 14px;
-  color: #000033;
-  min-height: 20px;
+  background-color: var(--medium-grey-blue);
+  min-height: 25px;
 }
 
 .data-list {
@@ -46,34 +54,14 @@
   margin-bottom: 12px;
 }
 
-.dark-mode .cellhovered {
-  background: #444444 !important;
-}
+// .dark-mode .cellhovered {
+//   background: #444444 !important;
+// }
 
 .cellhovered img {
   filter: invert(0%);
 }
 
 .cellhovered {
-  background: #2b393f !important;
-  color: #fff !important;
-}
-
-@media only screen and (max-width: 810px) {
-  .data-list > span {
-    padding: 3px 6px;
-    background: var(--secondary-color);
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--text-color-secondary);
-    line-height: 32px;
-    cursor: pointer;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .data-list-column {
-    padding: 6px 8px;
-  }
+  opacity: 0.75;
 }

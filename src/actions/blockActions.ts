@@ -1,8 +1,8 @@
 import { Dispatch, Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
-import { ThunkDispatch } from 'redux-thunk'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting

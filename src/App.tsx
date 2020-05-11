@@ -1,12 +1,12 @@
 import React, { ReactElement } from 'react'
+import Router from './components/navigation/Router'
 
 import './App.css'
-import Home from './pages/home/Home'
 
 function App(): ReactElement<void> {
   return (
-    <div className="App">
-      <Home />
+    <div id="application-wrapper">
+      <Router />
     </div>
   )
 }
