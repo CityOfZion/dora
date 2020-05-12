@@ -1,0 +1,190 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  className="data-list-container"
+>
+  <div
+    className="data-list"
+    style={
+      Object {
+        "gridTemplateColumns": "repeat(2, auto)",
+      }
+    }
+  >
+    <div
+      className="data-list-column"
+      key="Test Label"
+      style={
+        Object {
+          "backgroundColor": "purple",
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      Test Label
+    </div>
+    <div
+      className="data-list-column"
+      key="Test Label 2"
+      style={
+        Object {
+          "backgroundColor": "purple",
+        }
+      }
+    >
+      Test Label 2
+    </div>
+    <span
+      className=""
+      key="1"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      123423445
+    </span>
+    <span
+      className=""
+      key="2"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "0 3px 3px 0",
+        }
+      }
+    >
+      <div>
+         hello test 2 
+      </div>
+    </span>
+    <span
+      className=""
+      key="3"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      123423445
+    </span>
+    <span
+      className=""
+      key="4"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "0 3px 3px 0",
+        }
+      }
+    >
+      <div>
+         hello test 2 
+      </div>
+    </span>
+    <span
+      className=""
+      key="5"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      123423445
+    </span>
+    <span
+      className=""
+      key="6"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "0 3px 3px 0",
+        }
+      }
+    >
+      <div>
+         hello test 2 
+      </div>
+    </span>
+    <span
+      className=""
+      key="7"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      123423445
+    </span>
+    <span
+      className=""
+      key="8"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "0 3px 3px 0",
+        }
+      }
+    >
+      <div>
+         hello test 2 
+      </div>
+    </span>
+    <span
+      className=""
+      key="9"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "3px 0 0 3px",
+        }
+      }
+    >
+      123423445
+    </span>
+    <span
+      className=""
+      key="10"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "borderRadius": "0 3px 3px 0",
+        }
+      }
+    >
+      <div>
+         hello test 2 
+      </div>
+    </span>
+  </div>
+</div>
+`;

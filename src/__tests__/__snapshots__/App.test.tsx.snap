@@ -17,7 +17,7 @@ exports[`renders without crashing 1`] = `
         <img
           alt="neoscan-logo"
           id="neoscan-logo"
-          src="logo.png"
+          src={Object {}}
         />
         <div
           id="welcome-text"
