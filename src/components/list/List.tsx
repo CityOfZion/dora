@@ -1,5 +1,5 @@
 import React, { ReactText } from 'react'
-import { uniqueId } from 'lodash-es'
+import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
 
 import './List.scss'
@@ -13,7 +13,9 @@ type ColumnType = {
 type ListProps = {
   columns: Array<ColumnType>
   data: Array<{ [key: string]: string | number | React.FC<{}> }>
-  handleRowClick: (data: {}) => void
+  handleRowClick: (data: {
+    [key: string]: string | number | React.FC<{}>
+  }) => void
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
