@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import { shallow } from 'enzyme'
+import toJson from 'enzyme-to-json'
 
 import List from '../../components/list/List'
 
@@ -51,5 +52,5 @@ test('renders without crashing', () => {
       isLoading={false}
     />,
   )
-  expect(tree).toMatchSnapshot()
+  expect(toJson(tree)).toMatchSnapshot()
 })
