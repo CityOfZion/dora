@@ -1,0 +1,91 @@
+#Footer {
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+
+  .accent {
+    color: var(--pink);
+  }
+
+  #footer-body {
+    display: flex;
+    padding: 16px 68px;
+
+    .footer-col-1 {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      margin-right: 64px;
+
+      .neoscan-logo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .neoscan-copy {
+        font-size: 31.68px;
+        letter-spacing: 3.39px;
+        margin-left: 16px;
+      }
+
+      .license-copy {
+        max-width: 225px;
+        line-height: 20px;
+
+        .own-line {
+          display: block;
+        }
+      }
+    }
+
+    .links-container {
+      flex: 1;
+      padding: 0 16px;
+
+      .links-list {
+        list-style: none;
+        padding-left: 0;
+        li {
+          margin: 12px 0;
+        }
+      }
+    }
+
+    .more-info-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 0 16px;
+    }
+
+    .news-stream {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding-left: 16px;
+      
+      .view-more {
+        background: var(--medium-grey);
+        border-radius: 12.28px;
+        color: var(--white);
+        font-size: 14px;
+        border: none;
+        align-self: flex-end;
+      }
+    }
+  }
+
+  #company-banner {
+    padding-left: 64px;
+    display: flex;
+    .coz-logo {
+      margin-right: 16px;
+    }
+    .copyright {
+      align-self: flex-end;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+  }
+}
