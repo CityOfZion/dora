@@ -4,6 +4,7 @@ import moment from 'moment'
 import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA, MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
+import Button from '../../components/button/Button'
 import logo from '../../assets/icons/logo.png'
 import './Home.scss'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,6 +15,8 @@ import {
   Transaction,
   State as TxState,
 } from '../../reducers/transactionReducer'
+import { useHistory } from 'react-router-dom'
+import { ROUTES } from '../../constants'
 
 type Block = {
   index: number
@@ -85,6 +88,7 @@ const returnTxListData = (
 
 const Home: React.FC<{}> = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
 
@@ -98,7 +102,7 @@ const Home: React.FC<{}> = () => {
   }, [dispatch])
 
   return (
-    <div id="Home">
+    <div id="Home" className="page-container">
       <div id="neoscan-logo-container">
         <img id="neoscan-logo" alt="neoscan-logo" src={logo} />
         <div id="welcome-text">
@@ -112,6 +116,12 @@ const Home: React.FC<{}> = () => {
         <div className="list-wrapper">
           <div className="label-wrapper">
             <label>explore blocks</label>
+            <Button
+              primary
+              onClick={(): void => history.push(ROUTES.BLOCKS.url)}
+            >
+              view all
+            </Button>
           </div>
           <List
             data={returnBlockListData(blockState.list, blockState.isLoading)}
@@ -132,6 +142,12 @@ const Home: React.FC<{}> = () => {
         <div className="list-wrapper">
           <div className="label-wrapper">
             <label>explore transactions</label>
+            <Button
+              primary
+              onClick={(): void => history.push(ROUTES.TRANSACTIONS.url)}
+            >
+              view all
+            </Button>
           </div>
           <List
             data={returnTxListData(txState.list, txState.isLoading)}

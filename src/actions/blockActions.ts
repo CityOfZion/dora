@@ -72,6 +72,14 @@ export const requestBlocksError = (page: number, error: Error) => (
   })
 }
 
+export const CLEAR_BLOCKS_LIST = 'CLEAR_BLOCKS_LIST'
+export const clearList = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: CLEAR_BLOCKS_LIST,
+    receivedAt: Date.now(),
+  })
+}
+
 export function shouldFetchBlock(
   state: { block: State },
   index: number,

@@ -1,11 +1,10 @@
 #Home {
-  background-color: #1a2f34;
-
   .list-row-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding: 24px;
+    // padding: 24px;
+    padding: 24px 0;
 
     .list-wrapper {
       margin: 12px;
@@ -14,6 +13,9 @@
 
       .label-wrapper {
         margin-bottom: 36px;
+        justify-content: space-between;
+        display: flex;
+        align-items: center;
 
         label {
           font-size: 16px;

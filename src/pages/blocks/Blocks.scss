@@ -1,0 +1,43 @@
+#Blocks {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.page-title-container {
+  display: flex;
+  align-items: center;
+  margin: 12px 0 24px 0;
+
+  h1 {
+    letter-spacing: -1.27px;
+    line-height: 43.2px;
+  }
+
+  svg {
+    margin-bottom: 6px;
+    margin-right: 12px;
+
+    g {
+      fill: #fff;
+    }
+  }
+}
+
+.list-wrapper {
+  margin: 12px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.load-more-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+
+  button {
+    height: 31px;
+    width: 174px;
+  }
+}

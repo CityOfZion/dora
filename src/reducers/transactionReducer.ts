@@ -5,6 +5,7 @@ import {
   REQUEST_TRANSACTIONS,
   REQUEST_TRANSACTIONS_SUCCESS,
   REQUEST_TRANSACTION_SUCCESS,
+  CLEAR_TRANSACTIONS_LIST,
 } from '../actions/transactionActions'
 
 type Action = {
@@ -15,6 +16,7 @@ type Action = {
   json: {
     hash: string
   }
+  cursor: string
 }
 
 export type State = {
@@ -41,7 +43,6 @@ export default (
     transaction: null,
     cursor: '',
   },
-  // TODO: Figure out why this needs to be here
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {
@@ -65,9 +66,15 @@ export default (
     case REQUEST_TRANSACTIONS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: action.json.transactions,
+        list: [...state.list, ...action.json.transactions],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
+        cursor: action.cursor,
+      })
+    case CLEAR_TRANSACTIONS_LIST:
+      return Object.assign({}, state, {
+        list: [],
+        cursor: '',
       })
     default:
       return state

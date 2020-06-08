@@ -1,0 +1,25 @@
+.neoscan-button {
+  border-radius: 13.5px;
+  height: 27px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: -0px;
+  border: none;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.neoscan-button:focus {
+  outline: 0;
+}
+
+.primary-button {
+  background: #eb4dff;
+}
+
+.secondary-button {
+  background: #7d9fb1;
+  // border: 0 solid #7D9FB1;
+  // border-radius: 15.44px;
+}
