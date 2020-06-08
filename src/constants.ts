@@ -6,4 +6,28 @@ export const ROUTES = {
     url: '/',
     name: 'Home',
   },
+  CONTRACTS: {
+    url: '/contracts',
+    name: 'Contracts',
+  },
+  TRANSACTIONS: {
+    url: '/transactions',
+    name: 'Transactions',
+  },
+  BLOCKS: {
+    url: '/blocks',
+    name: 'Blocks',
+  },
+  WALLETS: {
+    url: '/wallets',
+    name: 'Wallets',
+  },
+  ASSETS: {
+    url: '/assets',
+    name: 'Assets',
+  },
+  API: {
+    url: '/api',
+    name: 'Api',
+  },
 }

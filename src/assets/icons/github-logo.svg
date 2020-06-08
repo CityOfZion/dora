@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="25px" viewBox="0 0 26 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <g id="-1440-desktop-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop--1440-Homepage" transform="translate(-926.000000, -2915.000000)">
+            <g id="Footer" transform="translate(0.000000, 2702.000000)">
+                <rect id="Rectangle-3" fill="#0D282E" x="0" y="0" width="1481" height="508"></rect>
+                <g id="Group" transform="translate(787.000000, 213.000000)">
+                    <rect id="Rectangle-3" fill="#EB4DFF" x="139.975993" y="0.224888878" width="24.5519988" height="24.5519988" rx="3.16799984"></rect>
+                    <text id="GitHub---FontAwesome" font-family="LastResort, .LastResort" font-size="15.8399992" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="145.519993" y="17.9768886"></tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

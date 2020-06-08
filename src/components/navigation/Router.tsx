@@ -19,8 +19,8 @@ const Router: React.FC = (): ReactElement => {
             />
           </Switch>
         </div>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </>
   )
 }
