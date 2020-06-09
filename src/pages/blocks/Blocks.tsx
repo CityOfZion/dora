@@ -10,6 +10,7 @@ import { State as BlockState } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
+import { useHistory } from 'react-router-dom'
 
 type Block = {
   index: number
@@ -27,6 +28,7 @@ type ParsedBlock = {
   transactions: number
   blocktime: string
   size: string
+  height: number
 }
 
 const mapBlockData = (block: Block): ParsedBlock => {
@@ -35,6 +37,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
+    height: block.index,
     transactions: block.txCount,
     blocktime: convertMilliseconds(block.blocktime),
     size: `${block.size.toLocaleString()} Bytes`,
@@ -54,7 +57,7 @@ const returnBlockListData = (
 
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
-
+  const history = useHistory()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
 
   function loadMore(): void {
@@ -81,8 +84,11 @@ const Blocks: React.FC<{}> = () => {
             blockState.list,
             blockState.isLoading && !blockState.list.length,
           )}
-          rowId="index"
-          handleRowClick={(data): void => console.log(data)}
+          rowId="height"
+          handleRowClick={(data): void => {
+            console.log(data)
+            history.push(`${ROUTES.BLOCK.url}/${data.id}`)
+          }}
           isLoading={blockState.isLoading && !blockState.list.length}
           columns={[
             {

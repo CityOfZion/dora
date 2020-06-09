@@ -10,6 +10,7 @@ import Navigation from './Navigation'
 import Footer from './Footer'
 import Sidebar from './Sidebar'
 import { ROUTES } from '../../constants'
+import Block from '../../pages/block/Block'
 
 const Router: React.FC = (): ReactElement => {
   return (
@@ -21,6 +22,10 @@ const Router: React.FC = (): ReactElement => {
             <Navigation />
             <div className="column-container">
               <Switch>
+                <Route
+                  path={`${ROUTES.BLOCK.url}/:hash`}
+                  component={(): ReactElement => <Block />}
+                />
                 <Route
                   path={`${ROUTES.CONTRACT.url}/:hash`}
                   component={(): ReactElement => <Contract />}
