@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { ReactElement } from 'react'
 import './Footer.scss'
 import logo from '../../../assets/icons/neoscan-logo.svg'
