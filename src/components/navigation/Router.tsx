@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
 import Transactions from '../../pages/transactions/Transactions'
+import Contract from '../../pages/contract/Contract'
 import Contracts from '../../pages/contracts/Contracts'
 import Navigation from './Navigation'
 import Footer from './Footer'
@@ -20,6 +21,10 @@ const Router: React.FC = (): ReactElement => {
             <Navigation />
             <div className="column-container">
               <Switch>
+                <Route
+                  path={`${ROUTES.CONTRACT.url}/:hash`}
+                  component={(): ReactElement => <Contract />}
+                />
                 <Route
                   path={ROUTES.CONTRACTS.url}
                   component={(): ReactElement => <Contracts />}

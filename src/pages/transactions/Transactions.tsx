@@ -83,7 +83,11 @@ const Transactions: React.FC<{}> = () => {
           ]}
         />
         <div className="load-more-button-container">
-          <Button primary={false} onClick={(): void => loadMore()}>
+          <Button
+            disabled={transactionState.isLoading}
+            primary={false}
+            onClick={(): void => loadMore()}
+          >
             load more
           </Button>
         </div>

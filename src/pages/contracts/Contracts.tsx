@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
+import { useHistory } from 'react-router-dom'
 
-import { getDiffInSecondsFromNow } from '../../utils/time'
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,9 +27,7 @@ type ParsedContract = {
 const mapContractData = (contract: Contract): ParsedContract => {
   return {
     hash: contract.hash,
-    time: `${getDiffInSecondsFromNow(
-      moment(contract.time).format(),
-    )} seconds ago`,
+    time: moment.unix(contract.time).format('MM-DD-YYY | HH:MM:SS'),
     block: (): ReactElement => (
       <div className="block-index-cell">{contract.block.toLocaleString()} </div>
     ),
@@ -49,10 +47,10 @@ const returnBlockListData = (
 
 const Contracts: React.FC<{}> = () => {
   const dispatch = useDispatch()
-
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
+  const history = useHistory()
 
   function loadMore(): void {
     const nextPage = contractsState.page + 1
@@ -79,16 +77,22 @@ const Contracts: React.FC<{}> = () => {
             contractsState.isLoading && !contractsState.list.length,
           )}
           rowId="index"
-          handleRowClick={(data): void => console.log(data)}
+          handleRowClick={(data): void =>
+            history.push(`${ROUTES.CONTRACT.url}/${data.hash}`)
+          }
           isLoading={contractsState.isLoading && !contractsState.list.length}
           columns={[
             { name: 'Hash', accessor: 'hash' },
             { name: 'Block', accessor: 'block' },
-            { name: 'Time', accessor: 'time' },
+            { name: 'Created on', accessor: 'time' },
           ]}
         />
         <div className="load-more-button-container">
-          <Button primary={false} onClick={(): void => loadMore()}>
+          <Button
+            disabled={contractsState.isLoading}
+            primary={false}
+            onClick={(): void => loadMore()}
+          >
             load more
           </Button>
         </div>

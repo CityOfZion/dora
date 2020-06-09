@@ -20,6 +20,9 @@
 
 .secondary-button {
   background: #7d9fb1;
-  // border: 0 solid #7D9FB1;
-  // border-radius: 15.44px;
+}
+
+.disabled-button {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

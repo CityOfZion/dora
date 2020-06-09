@@ -1,6 +1,8 @@
 #sidebar-container {
   width: 80px;
   background-color: #263a3e;
+  position: fixed;
+  height: 100%;
 }
 
 .sidebar-route-container {
@@ -16,6 +18,8 @@
   cursor: pointer;
   margin-bottom: 12px;
   text-decoration: none;
+  box-sizing: border-box;
+  border-right: solid 3px transparent;
 
   svg {
     margin-bottom: 12px;
@@ -24,8 +28,11 @@
 
 .active-sidebar-route,
 .sidebar-route-container:hover {
+  background-color: #0d282e;
   text-decoration: none;
-  border-right: solid thick yellow;
+  border-right: solid 3px #d355e7;
+  box-sizing: border-box;
+
   color: #d8d8d8;
 
   svg {

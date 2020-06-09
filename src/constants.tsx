@@ -22,7 +22,7 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Contracts />,
   },
   CONTRACT: {
-    url: '/contract/:id',
+    url: '/contract',
     name: 'Contract',
   },
   TRANSACTIONS: {
@@ -31,7 +31,7 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Transactions />,
   },
   TRANSACTION: {
-    url: '/transaction/:id',
+    url: '/transaction',
     name: 'Transaction',
   },
   BLOCKS: {
@@ -40,7 +40,7 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Blocks />,
   },
   BLOCK: {
-    url: '/block/:id',
+    url: '/block',
     name: 'Block',
   },
   WALLETS: {
@@ -49,7 +49,7 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Wallets />,
   },
   WALLET: {
-    url: '/address/:id',
+    url: '/address',
     name: 'Wallet',
   },
   API: {
@@ -64,6 +64,6 @@ export const SIDEBAR_ROUTES = [
   ROUTES.CONTRACTS,
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
-  ROUTES.WALLETS,
-  ROUTES.API,
+  // ROUTES.WALLETS,
+  // ROUTES.API,
 ]

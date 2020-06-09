@@ -134,9 +134,23 @@ export const MOCK_BLOCK_LIST_DATA = [
     hash: '0x722f18d875df501c5de8c7b159375380e696cba225eef0ca159c41a78c255ac4',
     txCount: 1,
   },
+  {
+    index: 786773,
+    time: 1510883880,
+    size: 686,
+    tx: ['0xee0490072b1cf85e8c56156a4917334ee3b64b339c11593a6e8baa50d29f6eba'],
+    blocktime: 20,
+    hash: '0x722f18d875df501c5de8c7b159375380e696cba225eef0ca159c41a78c255ac4',
+    txCount: 1,
+  },
 ]
 
 export const MOCK_TX_LIST_DATA = [
+  {
+    time: 666,
+    size: 666,
+    txid: '',
+  },
   {
     time: 666,
     size: 666,

@@ -23,7 +23,7 @@ export type State = {
   cached: { [key: string]: Contract }
   list: []
   lastUpdated: Date | null
-  contract: Contract | null
+  contract: DetailedContract | null
   page: number
 }
 
@@ -32,6 +32,15 @@ export type Contract = {
   time: number
   idx: number
   hash: string
+}
+
+export type DetailedContract = {
+  block: number
+  time: number
+  hash: string
+  email: string
+  name: string
+  script: string
 }
 
 export default (
@@ -66,7 +75,7 @@ export default (
     case REQUEST_CONTRACTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: [...state.list, ...action.json.items],
+        list: [...state.list, ...action.json.contracts],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
