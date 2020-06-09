@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { ROUTES } from '../../../constants'
+import { FOOTER_ROUTES } from '../../../constants'
 import { Link } from 'react-router-dom'
 import cozSm from '../../../assets/icons/coz-logo-sm.svg'
 import gitHubLogo from '../../../assets/icons/github-logo.svg'
@@ -23,8 +23,7 @@ interface InfoLinks {
 }
 
 export const makeNavLinks = (): ReactNode => {
-  const { HOME, ...routesWithOutHome } = ROUTES
-  return Object.values(routesWithOutHome).map(route => (
+  return FOOTER_ROUTES.map(route => (
     <li>
       <Link to={route.url}> {route.name} </Link>
     </li>

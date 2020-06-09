@@ -80,16 +80,13 @@ const Blocks: React.FC<{}> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <List
-          data={returnBlockListData(
-            blockState.list,
-            blockState.isLoading && !blockState.list.length,
-          )}
+          data={returnBlockListData(blockState.list, !blockState.list.length)}
           rowId="height"
           handleRowClick={(data): void => {
             console.log(data)
             history.push(`${ROUTES.BLOCK.url}/${data.id}`)
           }}
-          isLoading={blockState.isLoading && !blockState.list.length}
+          isLoading={!blockState.list.length}
           columns={[
             {
               name: 'Height',

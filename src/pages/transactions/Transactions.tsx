@@ -69,13 +69,11 @@ const Transactions: React.FC<{}> = () => {
         <List
           data={returnTxListData(
             transactionState.list,
-            transactionState.isLoading && !transactionState.list.length,
+            !transactionState.list.length,
           )}
           rowId="index"
           handleRowClick={(data): void => console.log(data)}
-          isLoading={
-            transactionState.isLoading && !transactionState.list.length
-          }
+          isLoading={!transactionState.list.length}
           columns={[
             { name: 'Transaction ID', accessor: 'txid' },
             { name: 'Size', accessor: 'size' },

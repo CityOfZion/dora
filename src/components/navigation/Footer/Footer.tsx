@@ -10,6 +10,7 @@ import {
   makeInfoLinks,
   infoLinksData,
 } from './helpers'
+import Button from '../../button/Button'
 
 const Footer: React.FC = (): ReactElement => {
   return (
@@ -59,16 +60,16 @@ const Footer: React.FC = (): ReactElement => {
           <hr className="divider" />
           <div className="news-stream">
             {makeNewsStream()}
-            <button
+            <Button
               onClick={(): void =>
                 console.log(
                   'Soon I will fetch more news items for the news stream',
                 )
               }
-              className="view-more"
+              primary={false}
             >
               view more
-            </button>
+            </Button>
           </div>
         </div>
       </div>

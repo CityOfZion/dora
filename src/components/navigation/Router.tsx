@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import React, { ReactElement, useEffect } from 'react'
+import { BrowserRouter, Switch, Route, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -12,6 +12,12 @@ import Sidebar from './Sidebar'
 import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
 
+const ScrollToTop = (): null => {
+  const { pathname } = useLocation()
+  useEffect(() => window.scrollTo(0, 0), [pathname])
+  return null
+}
+
 const Router: React.FC = (): ReactElement => {
   return (
     <>
@@ -20,6 +26,7 @@ const Router: React.FC = (): ReactElement => {
           <Sidebar />
           <div className="column-container">
             <Navigation />
+            <ScrollToTop />
             <div className="column-container">
               <Switch>
                 <Route

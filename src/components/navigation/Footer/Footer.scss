@@ -2,11 +2,13 @@
   display: flex;
   font-size: 14px;
   flex-direction: column;
+  margin-left: 80px;
+  padding: 24px 0;
 
   .accent {
     color: var(--pink);
   }
-  
+
   #footer-body {
     display: flex;
     padding: 16px 68px;
@@ -14,19 +16,19 @@
     @media screen and (max-width: 768px - 1) {
       flex-direction: column;
       padding: 16px 8px 16px 6px;
-      width: 100%
+      width: 100%;
     }
-    
+
     // common classes
     .section-container {
       flex: 1;
       padding: 0 16px;
 
-       @media screen and (max-width: 768px - 1) {
-         padding: 0
-       }
+      @media screen and (max-width: 768px - 1) {
+        padding: 0;
+      }
     }
-    
+
     .divider {
       border: 0.5px solid var(--medium-grey);
       width: 100%;
@@ -77,7 +79,7 @@
       }
       a {
         text-decoration: none;
-        color: var(--white)
+        color: var(--white);
       }
     }
 
@@ -88,6 +90,7 @@
     .info-links-container {
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
 
       @media screen and (max-width: 768px - 1) {
         margin-bottom: 48px;
@@ -130,11 +133,11 @@
         }
 
         p {
-          margin: 0
+          margin: 0;
         }
       }
-      
-      .view-more {
+
+      button {
         background: var(--medium-grey);
         border-radius: 12.28px;
         color: var(--white);
@@ -155,8 +158,8 @@
     display: flex;
 
     @media screen and (max-width: 768px - 1) {
-         padding: 0
-       }
+      padding: 0;
+    }
     .coz-logo {
       margin-right: 16px;
     }
@@ -166,5 +169,4 @@
       margin-bottom: 4px;
     }
   }
-  
 }

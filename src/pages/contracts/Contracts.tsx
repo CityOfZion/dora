@@ -74,13 +74,13 @@ const Contracts: React.FC<{}> = () => {
         <List
           data={returnBlockListData(
             contractsState.list,
-            contractsState.isLoading && !contractsState.list.length,
+            !contractsState.list.length,
           )}
           rowId="index"
           handleRowClick={(data): void =>
             history.push(`${ROUTES.CONTRACT.url}/${data.hash}`)
           }
-          isLoading={contractsState.isLoading && !contractsState.list.length}
+          isLoading={!contractsState.list.length}
           columns={[
             { name: 'Hash', accessor: 'hash' },
             { name: 'Block', accessor: 'block' },
