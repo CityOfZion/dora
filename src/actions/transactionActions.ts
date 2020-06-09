@@ -73,6 +73,14 @@ export const requestTransactionsError = (cursor: string, error: Error) => (
   })
 }
 
+export const CLEAR_TRANSACTIONS_LIST = 'CLEAR_TRANSACTIONS_LIST'
+export const clearList = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: CLEAR_TRANSACTIONS_LIST,
+    receivedAt: Date.now(),
+  })
+}
+
 export function shouldFetchTransaction(
   state: { transaction: State },
   hash: string,
@@ -113,9 +121,12 @@ export function fetchTransaction(hash: string) {
 export function fetchTransactions(cursor = '') {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { block: State },
+    getState: () => { transaction: State },
   ): Promise<void> => {
     try {
+      if (getState().transaction.list.length && !cursor) {
+        return
+      }
       dispatch(requestTransactions(cursor))
       const response = await fetch(
         `${GENERATE_BASE_URL()}/get_transactions/${cursor}`,

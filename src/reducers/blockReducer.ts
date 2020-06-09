@@ -5,6 +5,7 @@ import {
   REQUEST_BLOCK_SUCCESS,
   REQUEST_BLOCKS,
   REQUEST_BLOCKS_SUCCESS,
+  CLEAR_BLOCKS_LIST,
 } from '../actions/blockActions'
 
 type Action = {
@@ -15,6 +16,7 @@ type Action = {
   json: {
     hash: string
   }
+  page: number
 }
 
 export type State = {
@@ -23,6 +25,7 @@ export type State = {
   list: []
   lastUpdated: Date | null
   block: Block | null
+  page: number
 }
 
 export type Block = {
@@ -52,8 +55,8 @@ export default (
     list: [],
     lastUpdated: null,
     block: null,
+    page: 1,
   },
-  // TODO: Figure out why this needs to be here
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {
@@ -79,9 +82,15 @@ export default (
     case REQUEST_BLOCKS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: action.json.items,
+        list: [...state.list, ...action.json.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
+        page: action.page,
+      })
+    case CLEAR_BLOCKS_LIST:
+      return Object.assign({}, state, {
+        list: [],
+        page: 0,
       })
     default:
       return state
