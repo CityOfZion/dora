@@ -7,7 +7,7 @@ import Transactions from '../../pages/transactions/Transactions'
 import Contract from '../../pages/contract/Contract'
 import Contracts from '../../pages/contracts/Contracts'
 import Navigation from './Navigation'
-import Footer from './Footer'
+import Footer from './Footer/Footer'
 import Sidebar from './Sidebar'
 import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
@@ -50,8 +50,8 @@ const Router: React.FC = (): ReactElement => {
             </div>
           </div>
         </div>
+        <Footer />
       </BrowserRouter>
-      <Footer />
     </>
   )
 }

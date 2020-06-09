@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="25px" viewBox="0 0 26 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <g id="-1440-desktop-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop--1440-Homepage" transform="translate(-787.000000, -2953.000000)">
+            <g id="Footer" transform="translate(0.000000, 2702.000000)">
+                <rect id="Rectangle-1" fill="#0D282E" x="0" y="0" width="1481" height="508"></rect>
+                <g id="Group" transform="translate(787.000000, 213.000000)">
+                    <rect id="Rectangle-1" fill="#EB4DFF" x="0.5" y="38.240887" width="24.5519988" height="24.5519988" rx="3.16799984"></rect>
+                    <path d="M9.98963506,48.9813304 L9.98963506,46.2706641 L12.7666351,46.2699978 L12.7674157,43.5599978 L15.5451962,43.5599978 L15.5446351,46.2699978 L18.3229768,46.2706641 L18.3229768,48.9813304 L9.98963506,48.9813304 Z" id="Combined-Shape" fill="#FFFFFF" transform="translate(14.156306, 46.270664) rotate(-315.000000) translate(-14.156306, -46.270664) "></path>
+                    <path d="M11.405117,54.3370211 L8.62733645,57.0476873 L8.62677527,51.6256888 L3.07177527,51.6263551 L3.07177527,48.9156888 L11.405117,48.9156888 L11.405117,54.3370211 Z" id="Combined-Shape" fill="#FFFFFF" transform="translate(7.238446, 52.981688) rotate(-315.000000) translate(-7.238446, -52.981688) "></path>
+                    <polygon id="Rectangle-1" fill="#FFFFFF" transform="translate(17.907255, 53.967929) rotate(-405.000000) translate(-17.907255, -53.967929) " points="15.0612295 52.5773961 20.7366637 52.5983371 20.7532799 55.3584611 17.809685 55.3281569"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

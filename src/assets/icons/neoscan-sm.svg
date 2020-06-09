@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="25px" viewBox="0 0 26 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Rectangle</title>
+    <g id="-1440-desktop-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop--1440-Homepage" transform="translate(-787.000000, -2915.000000)">
+            <g id="Footer" transform="translate(0.000000, 2702.000000)">
+                <rect id="Rectangle-7" fill="#0D282E" x="0" y="0" width="1481" height="508"></rect>
+                <g id="Group" transform="translate(787.000000, 213.000000)">
+                    <rect id="Rectangle-7" fill="#EB4DFF" x="0.5" y="0.224888878" width="24.5519988" height="24.5519988" rx="3.16799984"></rect>
+                    <polygon id="Path-5" fill="#FFFFFF" transform="translate(12.379999, 11.708888) rotate(-585.000000) translate(-12.379999, -11.708888) " points="6.39599971 10.3511741 6.39599971 13.0666025 18.3639991 13.0666025 18.3639991 10.3511741"></polygon>
+                    <rect id="Rectangle-Copy-19" fill="#FFFFFF" transform="translate(7.801988, 8.126483) rotate(-315.000000) translate(-7.801988, -8.126483) " x="6.44427409" y="5.31048364" width="2.71542844" height="5.63199972"></rect>
+                    <rect id="Rectangle-Copy-18" fill="#FFFFFF" transform="translate(15.962404, 16.286899) rotate(-315.000000) translate(-15.962404, -16.286899) " x="14.60469" y="13.4708995" width="2.71542844" height="5.63199972"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
