@@ -165,6 +165,9 @@ const Home: React.FC<{}> = () => {
       </div>
 
       <div id="contracts-invocations-container">
+        <div className="label-wrapper">
+          <label>Contract Invocations in the last 24 hourss</label>
+        </div>
         <div className="invocations-list-wrapper">
           <ContractsInvocations />
         </div>
