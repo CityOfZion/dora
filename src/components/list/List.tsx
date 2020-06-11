@@ -112,7 +112,7 @@ export const List: React.FC<ListProps> = ({
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
                     className={
-                      currentHoveredIndex === index
+                      currentHoveredIndex === index && !withoutPointer
                         ? hoveredClassName
                         : rowClass
                     }

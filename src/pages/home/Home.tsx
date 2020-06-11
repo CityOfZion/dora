@@ -17,6 +17,7 @@ import {
 } from '../../reducers/transactionReducer'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from '../../constants'
+import ContractsInvocations from '../../components/contract-invocation/ContractsInvocations'
 
 type Block = {
   index: number
@@ -160,6 +161,12 @@ const Home: React.FC<{}> = () => {
               { name: 'Time', accessor: 'time' },
             ]}
           />
+        </div>
+      </div>
+
+      <div id="contracts-invocations-container">
+        <div className="invocations-list-wrapper">
+          <ContractsInvocations />
         </div>
       </div>
     </div>

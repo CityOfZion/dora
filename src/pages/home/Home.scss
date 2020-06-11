@@ -1,4 +1,5 @@
 #Home {
+  background: #14292e;
   .list-row-container {
     display: flex;
     flex-wrap: wrap;
@@ -7,9 +8,10 @@
     padding: 24px 0;
 
     .list-wrapper {
-      margin: 12px;
+      margin: 24px;
       flex: 1;
       max-width: 590px;
+      // min-width: 550px;
 
       .label-wrapper {
         margin-bottom: 36px;
@@ -25,6 +27,20 @@
           font-weight: 700;
         }
       }
+    }
+  }
+
+  #contracts-invocations-container {
+    padding: 48px 24px;
+    background: #1a2f34;
+    display: flex;
+    justify-content: center;
+
+    .invocations-list-wrapper {
+      // display: flex;
+      // flex: 1;
+      width: 100%;
+      max-width: 1540px;
     }
   }
 

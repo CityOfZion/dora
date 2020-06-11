@@ -1,0 +1,82 @@
+#ContractInvocations {
+  padding: 6px 24px;
+  background: #2a3d42;
+
+  .data-list {
+    grid-row-gap: 0px;
+
+    .data-list-column {
+      background: #2a3d42;
+      min-height: 48px;
+      border-bottom: 1px solid #445e65;
+      padding-top: 12px;
+    }
+
+    span {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #445e65;
+    }
+
+    span:last-child,
+    span:nth-last-child(2),
+    span:nth-last-child(3) {
+      border-bottom: none;
+    }
+  }
+
+  .invocation-count-bar {
+    background: #0d292f;
+    border-radius: 5.94px;
+    // background: #D355E7;
+    border-radius: 5.94px;
+    width: 450px;
+    height: 8px;
+
+    .invocation-count-bar-count-color {
+      background: #d355e7;
+      height: 8px;
+    }
+  }
+
+  .invocation-count {
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 0;
+  }
+
+  .invocation-change {
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 1.09px;
+    display: flex;
+    svg {
+      margin-right: 12px;
+    }
+  }
+
+  .invocation-name-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-right: 12px;
+
+    .invocation-name {
+      font-size: 16px;
+      color: #ffffff;
+      letter-spacing: 0;
+    }
+
+    .invocation-position {
+      background: #0d292f;
+      height: 22px;
+      width: 22px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 24px;
+    }
+  }
+}

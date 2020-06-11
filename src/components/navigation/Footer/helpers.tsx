@@ -24,7 +24,7 @@ interface InfoLinks {
 
 export const makeNavLinks = (): ReactNode => {
   return FOOTER_ROUTES.map(route => (
-    <li>
+    <li key={route.name}>
       <Link to={route.url}> {route.name} </Link>
     </li>
   ))
@@ -59,7 +59,7 @@ export const infoLinksData = {
 
 export const makeInfoLinks = (infoLinks: InfoLinks): ReactNode => {
   return Object.values(infoLinks).map(link => (
-    <a className="accent" href={link.href}>
+    <a className="accent" key={link.copy} href={link.href}>
       <img className="icon" alt={link.alt} src={link.src} />
       <span>{link.copy}</span>
     </a>
