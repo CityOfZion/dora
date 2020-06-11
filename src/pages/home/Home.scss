@@ -4,14 +4,12 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    // padding: 24px;
     padding: 24px 0;
 
     .list-wrapper {
       margin: 24px;
       flex: 1;
       max-width: 590px;
-      // min-width: 550px;
 
       .label-wrapper {
         margin-bottom: 36px;
@@ -37,8 +35,6 @@
     justify-content: center;
 
     .invocations-list-wrapper {
-      // display: flex;
-      // flex: 1;
       width: 100%;
       max-width: 1540px;
     }

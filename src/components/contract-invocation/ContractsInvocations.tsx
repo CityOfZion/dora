@@ -1,11 +1,9 @@
 import React, { ReactElement, useEffect } from 'react'
-// import moment from 'moment'
+import { useDispatch, useSelector } from 'react-redux'
 
-// import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
 import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import './ContractsInvocations.scss'
-import { useDispatch, useSelector } from 'react-redux'
 import { State as ContractState } from '../../reducers/contractReducer'
 import { fetchContractsInvocations } from '../../actions/contractActions'
 import { ReactComponent as ArrowUp } from '../../assets/icons/arrow-upward.svg'
