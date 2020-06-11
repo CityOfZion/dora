@@ -78,12 +78,53 @@ export const clearList = () => (dispatch: Dispatch): void => {
   })
 }
 
+export const REQUEST_CONTRACTS_INVOCATIONS = 'REQUEST_CONTRACTS_INVOCATIONS'
+export const requestContractsInvocations = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: REQUEST_CONTRACTS_INVOCATIONS,
+    receivedAt: Date.now(),
+  })
+}
+
+export const REQUEST_CONTRACTS_INVOCATIONS_SUCCESS =
+  'REQUEST_CONTRACTS_INVOCATIONS_SUCCESS'
+export const requestContractsInvocationsSuccess = (json: {}) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
+    json,
+    receivedAt: Date.now(),
+  })
+}
+
+export const REQUEST_CONTRACTS_INVOCATIONS_ERROR =
+  'REQUEST_CONTRACTS_INVOCATIONS_ERROR'
+export const requestContractsInvocationsError = (error: Error) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: REQUEST_CONTRACTS_INVOCATIONS_ERROR,
+    error,
+    receivedAt: Date.now(),
+  })
+}
+
 export function shouldFetchContract(
   state: { contract: State },
   hash: string,
 ): boolean {
   const contract = state.contract.cached[hash]
   if (!contract) {
+    return true
+  }
+  return false
+}
+
+export function shouldFetchContractsInvocations(state: {
+  contract: State
+}): boolean {
+  if (!state.contract.hasFetchedContractsInvocations) {
     return true
   }
   return false
@@ -113,7 +154,6 @@ export function fetchContract(hash: string) {
 export function fetchContracts(page = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { block: State },
   ): Promise<void> => {
     try {
       dispatch(requestContracts(page))
@@ -124,6 +164,27 @@ export function fetchContracts(page = 1) {
       dispatch(requestContractsSuccess(page, json))
     } catch (e) {
       dispatch(requestContractsError(page, e))
+    }
+  }
+}
+
+export function fetchContractsInvocations() {
+  return async (
+    dispatch: ThunkDispatch<State, void, Action>,
+    getState: () => { contract: State },
+  ): Promise<void> => {
+    if (shouldFetchContractsInvocations(getState())) {
+      dispatch(requestContractsInvocations())
+
+      try {
+        const response = await fetch(
+          `${GENERATE_BASE_URL()}/get_invocation_stats`,
+        )
+        const json = await response.json()
+        dispatch(requestContractsInvocationsSuccess(json))
+      } catch (e) {
+        dispatch(requestContractsInvocationsError(e))
+      }
     }
   }
 }

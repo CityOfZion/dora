@@ -6,6 +6,8 @@ import {
   REQUEST_CONTRACTS_SUCCESS,
   REQUEST_CONTRACT_SUCCESS,
   CLEAR_CONTRACTS_LIST,
+  REQUEST_CONTRACTS_INVOCATIONS,
+  REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
 } from '../actions/contractActions'
 
 type Action = {
@@ -24,7 +26,9 @@ export type State = {
   list: []
   lastUpdated: Date | null
   contract: DetailedContract | null
+  contractsInvocations: []
   page: number
+  hasFetchedContractsInvocations: boolean
 }
 
 export type Contract = {
@@ -48,6 +52,8 @@ export default (
     isLoading: false,
     cached: {},
     list: [],
+    contractsInvocations: [],
+    hasFetchedContractsInvocations: false,
     lastUpdated: null,
     contract: null,
     page: 1,
@@ -56,10 +62,8 @@ export default (
 ): State => {
   switch (action.type) {
     case REQUEST_CONTRACT:
-      return Object.assign({}, state, {
-        isLoading: true,
-      })
     case REQUEST_CONTRACTS:
+    case REQUEST_CONTRACTS_INVOCATIONS:
       return Object.assign({}, state, {
         isLoading: true,
       })
@@ -79,6 +83,13 @@ export default (
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
+      })
+    case REQUEST_CONTRACTS_INVOCATIONS_SUCCESS:
+      return Object.assign({}, state, {
+        isLoading: false,
+        contractsInvocations: action.json,
+        lastUpdated: action.receivedAt,
+        hasFetchedContractsInvocations: true,
       })
     case CLEAR_CONTRACTS_LIST:
       return Object.assign({}, state, {

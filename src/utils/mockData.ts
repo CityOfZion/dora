@@ -315,3 +315,120 @@ export const MOCK_CONTRACT_LIST_DATA = [
     hash: '0x50c8042a26a2608118a43a3eeb8b6e7052815b85',
   },
 ]
+
+export const MOCK_CONTRACTS_INVOCATIONS_DATA = [
+  {
+    name: 'HashPuppies NFT Test 2',
+    hash: '0x5b61f4cf3d75e3d55e41737d9638e1277c6f643c',
+    count: 48819,
+    change: '+100.00',
+  },
+  {
+    name: 'fish',
+    hash: '0x94a24ee381bc386daa91984c7dd606f6fdd8f19e',
+    count: 2476,
+    change: '-34.46',
+  },
+  {
+    name: 'oracle',
+    hash: '0xfde69a7dd2a1c948977fb3ce512158987c0e2197',
+    count: 850,
+    change: '-1.16',
+  },
+  {
+    name: 'T_COIN',
+    hash: '0x8f2ef174a387fad2d9f81a0018f45676864e4a02',
+    count: 31,
+    change: '+100.00',
+  },
+  {
+    name: 'Developer NFT Minter',
+    hash: '0x5b9c51062ccd3c99346febb4fda31dbe506e92d9',
+    count: 17,
+    change: '+100.00',
+  },
+  {
+    name: 'Dev Coin',
+    hash: '0xb51adf56e8a7d2ea8ff80d0e5b18596b34f5dbac',
+    count: 12,
+    change: '-76.47',
+  },
+  {
+    name: 'dice02281357',
+    hash: '0x6dbd26d6faac13e5cb9caa067c65ce68cab33af2',
+    count: 9,
+    change: '+350.00',
+  },
+  {
+    name: 'CGAS',
+    hash: '0x74f2dc36a68fdc4682034178eb2220729231db76',
+    count: 6,
+    change: '+200.00',
+  },
+  {
+    name: 'QLC',
+    hash: '0xb9d7ea3062e6aeeb3e8ad9548220c4ba1361d263',
+    count: 6,
+    change: '0.00',
+  },
+  {
+    name: 'wwx',
+    hash: '0xb2d966f84eb8128f4b86c9e226c7085c2af47b5f',
+    count: 5,
+    change: '+100.00',
+  },
+  {
+    name: 'sar4c',
+    hash: '0x1775f1af5df77ff876b2d7a06e256f1388199dc7',
+    count: 4,
+    change: '+100.00',
+  },
+  {
+    name: 'sneo',
+    hash: '0x789afc2bba96905d628cb41598c8f8cfcf213b58',
+    count: 4,
+    change: '+100.00',
+  },
+  {
+    name: 'sdusd',
+    hash: '0x80fe8494d517a0c9caaabd5ddffd48593f67d70f',
+    count: 3,
+    change: '+100.00',
+  },
+  {
+    name: 'LOCALTOKEN PYNEP5',
+    hash: '0xd7678dd97c000be3f33e9362e673101bac4ca654',
+    count: 2,
+    change: '-66.67',
+  },
+  {
+    name: '1',
+    hash: '0x4b4deb4caad37fcfbadcfefc0bebfc869ff523ea',
+    count: 1,
+    change: '+100.00',
+  },
+  {
+    name: '8 decimal token',
+    hash: '0xdcb8834bb3f4fa4a03d1d6d4140bf8fa897bb1a4',
+    count: 1,
+    change: '+100.00',
+  },
+  {
+    name: 'test1',
+    hash: '0xde8f159ad0e441e9253f184ebe70eae34c3af673',
+    count: 1,
+    change: '+100.00',
+  },
+  {
+    name: 'dgtcontract',
+    hash: '0xae0c18c8c9548fa0221521305f8ba36b4e250f12',
+    count: 1,
+    change: '+100.00',
+  },
+  {
+    name: 'dgtcontract',
+    hash: '0x74916afa0f079ef977dbb524c37dfe00087364f3',
+    count: 1,
+    change: '0.00',
+  },
+]

@@ -27,7 +27,7 @@ const Router: React.FC = (): ReactElement => {
           <div className="column-container">
             <Navigation />
             <ScrollToTop />
-            <div className="column-container">
+            <div className="column-container router-page-container">
               <Switch>
                 <Route
                   path={`${ROUTES.BLOCK.url}/:hash`}
