@@ -34,6 +34,13 @@ export type Transaction = {
   txid: string
 }
 
+export type BlockTransaction = {
+  size: number
+  time: number
+  txid: string
+  type: string
+}
+
 export default (
   state: State = {
     isLoading: false,

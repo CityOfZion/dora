@@ -19,7 +19,7 @@ const Contract: React.FC<Props> = (props: Props) => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
-  const { contract } = contractsState
+  const { contract, isLoading } = contractsState
 
   useEffect(() => {
     dispatch(fetchContract(hash))
@@ -32,53 +32,56 @@ const Contract: React.FC<Props> = (props: Props) => {
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>Contract Information</h1>
         </div>
-        {contract && (
-          <div id="contract-details-container">
-            <div id="contract-name-info">
-              <div id="contract-name">{contract.name}</div>
-              <div>
-                <span>CONTRACT:</span> {contract.hash}
-              </div>
+
+        <div id="contract-details-container">
+          <div id="contract-name-info">
+            <div id="contract-name">
+              {contract && !isLoading && contract.name}
             </div>
-            <div className="details-section">
-              <div className="section-label">DETAILS</div>
-              <div className="inner-details-container">
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>NAME</label>
-                    <span>{contract.name}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>TYPE</label>
-                    <span>NEP5</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>NAME</label>
-                    <span>{contract.name}</span>
-                  </div>
-                </div>
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>NAME</label>
-                    <span>{contract.name}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>NAME</label>
-                    <span>{contract.name}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>NAME</label>
-                    <span>{contract.name}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="script-section">
-              <div className="section-label">SCRIPT</div>
-              <div id="contract-script">{contract.script}</div>
+            <div>
+              <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
             </div>
           </div>
-        )}
+          <div className="details-section">
+            <div className="section-label">DETAILS</div>
+            <div className="inner-details-container">
+              <div className="detail-tile-row">
+                <div className="detail-tile">
+                  <label>NAME</label>
+                  <span>{contract && !isLoading && contract.name}</span>
+                </div>
+                <div className="detail-tile">
+                  <label>TYPE</label>
+                  <span>NEP5</span>
+                </div>
+                <div className="detail-tile">
+                  <label>NAME</label>
+                  <span>{contract && !isLoading && contract.name}</span>
+                </div>
+              </div>
+              <div className="detail-tile-row">
+                <div className="detail-tile">
+                  <label>NAME</label>
+                  <span>{contract && !isLoading && contract.name}</span>
+                </div>
+                <div className="detail-tile">
+                  <label>NAME</label>
+                  <span>{contract && !isLoading && contract.name}</span>
+                </div>
+                <div className="detail-tile">
+                  <label>NAME</label>
+                  <span>{contract && !isLoading && contract.name}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="script-section">
+            <div className="section-label">SCRIPT</div>
+            <div id="contract-script">
+              {contract && !isLoading && contract.script}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

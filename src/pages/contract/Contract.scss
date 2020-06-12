@@ -31,6 +31,17 @@
   }
 }
 
+.full-width-tile-row {
+  .detail-tile {
+    label {
+      font-size: 12px;
+      color: #7d9fb1;
+      letter-spacing: -0.48px;
+      margin: 0;
+    }
+  }
+}
+
 .detail-tile {
   max-height: 74px;
   height: 74px;
@@ -39,14 +50,15 @@
   display: flex;
   flex: 1;
   padding: 12px;
-  flex-direction: row;
+  flex-direction: column;
   margin: 2px;
 
   label {
     font-size: 12px;
     color: #7d9fb1;
     letter-spacing: -0.48px;
-    line-height: 38.45px;
+    margin-top: 4px;
+    margin-bottom: -4px;
   }
 
   span {
@@ -93,6 +105,7 @@
   letter-spacing: -0.64px;
   line-height: 38.45px;
   margin: 48px 0 24px 0;
+  font-weight: 700;
 }
 
 .inner-page-container {
