@@ -75,6 +75,35 @@ const Block: React.FC<Props> = (props: Props) => {
                     <span>{block.blocktime} seconds</span>
                   </div>
                 </div>
+                <div
+                  className="detail-tile-row full-width-tile-row"
+                  style={{ marginTop: '4px' }}
+                >
+                  <div className="detail-tile" style={{ marginTop: '0px' }}>
+                    <label>HASH</label>
+                    <span>{block.hash} </span>
+                  </div>
+                </div>
+
+                <div className="detail-tile-row full-width-tile-row">
+                  <div className="detail-tile">
+                    <label>MERKLE ROOT</label>
+                    <span>{block.merkleroot} </span>
+                  </div>
+                </div>
+
+                <div className="detail-tile-row full-width-tile-row">
+                  <div className="detail-tile">
+                    <label>NEXT CONSENSUS</label>
+                    <span>{block.nextconsensus} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="block-transactions-section">
+              <div className="details-section">
+                <div className="section-label">TRANSACTIONS</div>
               </div>
             </div>
           </div>
