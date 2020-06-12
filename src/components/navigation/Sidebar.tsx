@@ -16,7 +16,20 @@ const Sidebar: React.FC = (): ReactElement => {
           key={route.name}
           className="sidebar-route-container"
           activeClassName="active-sidebar-route"
-          exact
+          isActive={(match, location): boolean => {
+            if (
+              location.pathname.includes(
+                route.name.slice(0, -1).toLowerCase(),
+              ) &&
+              location.pathname !== '/'
+            ) {
+              return true
+            }
+            if (location.pathname === '/' && match) {
+              return true
+            }
+            return false
+          }}
           to={route.url}
         >
           {route.renderIcon()}

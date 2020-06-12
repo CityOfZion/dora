@@ -83,7 +83,6 @@ const Blocks: React.FC<{}> = () => {
           data={returnBlockListData(blockState.list, !blockState.list.length)}
           rowId="height"
           handleRowClick={(data): void => {
-            console.log(data)
             history.push(`${ROUTES.BLOCK.url}/${data.id}`)
           }}
           isLoading={!blockState.list.length}

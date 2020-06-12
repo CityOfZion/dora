@@ -28,8 +28,6 @@ const mapInvocationData = (
   position: number,
 ): ParsedInvocation => {
   const percentage = Math.floor((invocation.count / total) * 100)
-
-  console.log({ percentage })
   return {
     contract: (): ReactElement => (
       <div className="invocation-name-container">
