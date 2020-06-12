@@ -15,11 +15,13 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
-      - run: # run tests
+      - run:
+          name: type check
+          command: npm run ts-buld
+      - run:
           name: lint
-          # For now we will treat all warnings as errors https://github.com/facebook/create-react-app/issues/3657
           command: npm run ci-lint
-      - run: # run tests
+      - run:
           name: test
           command: npm run test
 
