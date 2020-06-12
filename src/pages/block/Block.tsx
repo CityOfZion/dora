@@ -7,6 +7,7 @@ import { State as BlockState } from '../../reducers/blockReducer'
 import './Block.scss'
 import { ROUTES } from '../../constants'
 import { fetchBlock } from '../../actions/blockActions'
+import BlockTransactionsList from '../../components/transaction/BlockTransactionsList'
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 
@@ -20,7 +21,7 @@ const Block: React.FC<Props> = (props: Props) => {
   const { hash } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const { block } = blockState
+  const { block, isLoading } = blockState
 
   useEffect(() => {
     dispatch(fetchBlock(hash))
@@ -33,81 +34,99 @@ const Block: React.FC<Props> = (props: Props) => {
           {ROUTES.BLOCKS.renderIcon()}
           <h1>Block Information</h1>
         </div>
-        {block && (
-          <div id="block-details-container">
-            <div className="details-section">
-              <div className="section-label">DETAILS</div>
-              <div className="inner-details-container">
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>BLOCK INDEX</label>
-                    <span>{block.index.toLocaleString()}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>TRANSACTIONS</label>
-                    <span>{block.tx.length}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>SIZE</label>
-                    <span>{block.size.toLocaleString()} bytes</span>
-                  </div>
+        <div id="block-details-container">
+          <div className="details-section">
+            <div className="section-label">DETAILS</div>
+            <div className="inner-details-container">
+              <div className="detail-tile-row">
+                <div className="detail-tile">
+                  <label>BLOCK INDEX</label>
+                  <span>
+                    {!isLoading && block && block.index.toLocaleString()}
+                  </span>
                 </div>
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>TIME</label>
-                    <span id="block-time-details-row">
-                      <div>
-                        <Calendar />
-                        {moment.unix(block.time).format('MM-DD-YYYY')}{' '}
-                      </div>
-                      <div>
-                        <Clock />
-                        {moment.unix(block.time).format('HH:MM:SS')}
-                      </div>
-                    </span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>VERSION</label>
-                    <span>{block.version}</span>
-                  </div>
-                  <div className="detail-tile">
-                    <label>BLOCK TIME</label>
-                    <span>{block.blocktime} seconds</span>
-                  </div>
+                <div className="detail-tile">
+                  <label>TRANSACTIONS</label>
+                  <span>{!isLoading && block && block.tx.length}</span>
                 </div>
-                <div
-                  className="detail-tile-row full-width-tile-row"
-                  style={{ marginTop: '4px' }}
-                >
-                  <div className="detail-tile" style={{ marginTop: '0px' }}>
-                    <label>HASH</label>
-                    <span>{block.hash} </span>
-                  </div>
-                </div>
-
-                <div className="detail-tile-row full-width-tile-row">
-                  <div className="detail-tile">
-                    <label>MERKLE ROOT</label>
-                    <span>{block.merkleroot} </span>
-                  </div>
-                </div>
-
-                <div className="detail-tile-row full-width-tile-row">
-                  <div className="detail-tile">
-                    <label>NEXT CONSENSUS</label>
-                    <span>{block.nextconsensus} </span>
-                  </div>
+                <div className="detail-tile">
+                  <label>SIZE</label>
+                  <span>
+                    {!isLoading && block && block.size.toLocaleString()} bytes
+                  </span>
                 </div>
               </div>
-            </div>
+              <div className="detail-tile-row">
+                <div className="detail-tile">
+                  <label>TIME</label>
+                  <span id="block-time-details-row">
+                    <div>
+                      {!isLoading && block && (
+                        <>
+                          <Calendar />
+                          {moment.unix(block.time).format('MM-DD-YYYY')}
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {!isLoading && block && (
+                        <>
+                          <Clock />
+                          {moment.unix(block.time).format('HH:MM:SS')}
+                        </>
+                      )}
+                    </div>
+                  </span>
+                </div>
+                <div className="detail-tile">
+                  <label>VERSION</label>
+                  <span>{!isLoading && block && block.version}</span>
+                </div>
+                <div className="detail-tile">
+                  <label>BLOCK TIME</label>
+                  <span>{!isLoading && block && block.blocktime} seconds</span>
+                </div>
+              </div>
+              <div
+                className="detail-tile-row full-width-tile-row"
+                style={{ marginTop: '4px' }}
+              >
+                <div className="detail-tile" style={{ marginTop: '0px' }}>
+                  <label>HASH</label>
+                  <span>{!isLoading && block && block.hash} </span>
+                </div>
+              </div>
 
-            <div className="block-transactions-section">
-              <div className="details-section">
-                <div className="section-label">TRANSACTIONS</div>
+              <div className="detail-tile-row full-width-tile-row">
+                <div className="detail-tile">
+                  <label>MERKLE ROOT</label>
+                  <span>{!isLoading && block && block.merkleroot} </span>
+                </div>
+              </div>
+
+              <div className="detail-tile-row full-width-tile-row">
+                <div className="detail-tile">
+                  <label>NEXT CONSENSUS</label>
+                  <span>{!isLoading && block && block.nextconsensus} </span>
+                </div>
               </div>
             </div>
           </div>
-        )}
+
+          {block && block.tx.length && (
+            <div className="block-transactions-section">
+              <div className="details-section">
+                <div className="section-label">TRANSACTIONS</div>
+
+                <BlockTransactionsList
+                  loading={isLoading}
+                  list={block.tx}
+                  block={block}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
