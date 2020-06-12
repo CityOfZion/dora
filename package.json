@@ -54,6 +54,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "ts-buld": "tsc -b",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
