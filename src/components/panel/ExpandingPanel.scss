@@ -1,0 +1,26 @@
+.expanding-panel-container,
+.expanding-panel-header,
+.expanding-panel-header-border {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.expanding-panel-container {
+  flex-direction: column;
+}
+
+.expanding-panel-header {
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  letter-spacing: -0.64px;
+  line-height: 38.01px;
+  cursor: pointer;
+}
+
+.expanding-panel-header-border {
+  background: #d355e7;
+  border-radius: 2.38px 2.38px 0 0;
+  height: 2px;
+}

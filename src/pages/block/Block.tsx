@@ -10,6 +10,7 @@ import { fetchBlock } from '../../actions/blockActions'
 import BlockTransactionsList from '../../components/transaction/BlockTransactionsList'
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
+import ExpandingPanel from '../../components/panel/ExpandingPanel'
 
 interface MatchParams {
   hash: string
@@ -126,6 +127,19 @@ const Block: React.FC<Props> = (props: Props) => {
               </div>
             </div>
           )}
+
+          <ExpandingPanel title="RAW SCRIPT" open={false}>
+            <div className="script-tile-row">
+              <div className="detail-tile script-tile">
+                <label>INVOCATION SCRIPT</label>
+                <span>{!isLoading && block && block.script.invocation} </span>
+              </div>
+              <div className="detail-tile script-tile">
+                <label>VERIFICATION SCRIPT</label>
+                <span>{!isLoading && block && block.script.verification} </span>
+              </div>
+            </div>
+          </ExpandingPanel>
         </div>
       </div>
     </div>
