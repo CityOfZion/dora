@@ -44,11 +44,12 @@ jobs:
           command: npm run deploy
     docker:
       - image: circleci/node:10.16.3
-    requires:
-      - build
 
 workflows:
   version: 2
   build:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
