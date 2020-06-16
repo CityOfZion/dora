@@ -1,0 +1,17 @@
+#transaction-hash-tile {
+  height: 28px;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 48px;
+
+  label {
+    margin: 0;
+  }
+
+  span {
+    font-size: 14px;
+    color: #d355e7;
+    letter-spacing: 0;
+    margin-left: 24px;
+  }
+}
