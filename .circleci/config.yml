@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  test:
     working_directory: ~/neoscan-2
     docker:
       - image: circleci/node:10.16.3
@@ -24,6 +24,28 @@ jobs:
       - run:
           name: test
           command: npm run test
+
+  deploy:
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - build:
+          name: build
+          command: npm run build
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: Build and release docs
+          command: npm run deploy
+    docker:
+      - image: circleci/node:10.16.3
+    requires:
+      - build
 
 workflows:
   version: 2
