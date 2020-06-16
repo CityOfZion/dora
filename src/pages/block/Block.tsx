@@ -60,7 +60,7 @@ const Block: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>TIME</label>
-                  <span id="block-time-details-row">
+                  <span id="time-details-row">
                     <div>
                       {!isLoading && block && (
                         <>

@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, useLocation } from 'react-router-dom'
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
 import Transactions from '../../pages/transactions/Transactions'
+import Transaction from '../../pages/transaction/Transaction'
 import Contract from '../../pages/contract/Contract'
 import Contracts from '../../pages/contracts/Contracts'
 import Navigation from './Navigation'
@@ -36,6 +37,10 @@ const Router: React.FC = (): ReactElement => {
                 <Route
                   path={`${ROUTES.CONTRACT.url}/:hash`}
                   component={(): ReactElement => <Contract />}
+                />
+                <Route
+                  path={`${ROUTES.TRANSACTION.url}/:hash`}
+                  component={(): ReactElement => <Transaction />}
                 />
                 <Route
                   path={ROUTES.CONTRACTS.url}

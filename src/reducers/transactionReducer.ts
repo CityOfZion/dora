@@ -17,6 +17,7 @@ type Action = {
     hash: string
   }
   cursor: string
+  hash: string
 }
 
 export type State = {
@@ -24,7 +25,7 @@ export type State = {
   cached: { [key: string]: Transaction }
   list: []
   lastUpdated: Date | null
-  transaction: Transaction | null
+  transaction: DetailedTransaction | null
   cursor: string
 }
 
@@ -32,6 +33,15 @@ export type Transaction = {
   size: number
   time: number
   txid: string
+}
+
+export type DetailedTransaction = {
+  type: string
+  size: number
+  block: number
+  time: number
+  txid: string
+  scripts: [{ invocation: string; verification: string }]
 }
 
 export type BlockTransaction = {
@@ -67,7 +77,7 @@ export default (
         transaction: action.json,
         lastUpdated: action.receivedAt,
         cached: {
-          [action.json.hash]: action.json,
+          [action.hash]: action.json,
         },
       })
     case REQUEST_TRANSACTIONS_SUCCESS:

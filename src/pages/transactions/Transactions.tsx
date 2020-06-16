@@ -13,11 +13,13 @@ import {
   Transaction,
   State as TxState,
 } from '../../reducers/transactionReducer'
+import { useHistory } from 'react-router-dom'
 
 type ParsedTx = {
   time: string
   txid: React.FC<{}>
   size: string
+  hash: string
 }
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
@@ -29,6 +31,7 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
       <div className="txid-index-cell"> {tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
+    hash: tx.txid,
   }
 }
 
@@ -45,6 +48,7 @@ const returnTxListData = (
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -73,8 +77,10 @@ const Transactions: React.FC<{}> = () => {
             transactionState.list,
             !transactionState.list.length,
           )}
-          rowId="index"
-          handleRowClick={(data): void => console.log(data)}
+          rowId="hash"
+          handleRowClick={(data): void =>
+            history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
+          }
           isLoading={!transactionState.list.length}
           columns={[
             { name: 'Transaction ID', accessor: 'txid' },

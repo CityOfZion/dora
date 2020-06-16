@@ -1,44 +1,44 @@
+#time-details-row {
+  display: flex;
+  justify-content: center;
+
+  div {
+    margin: 0 12px;
+  }
+
+  svg {
+    margin: 4px 8px 4px 4px;
+  }
+}
+
 #Block {
   padding-bottom: 48px;
-
-  #block-time-details-row {
-    display: flex;
-    justify-content: center;
-
-    div {
-      margin: 0 12px;
-    }
-
-    svg {
-      margin: 4px 8px 4px 4px;
-    }
-  }
 
   .block-transactions-section {
     margin-bottom: 48px;
   }
+}
 
-  .script-tile-row {
-    display: flex;
+.script-tile-row {
+  display: flex;
 
-    .detail-tile {
-      max-height: none;
-      height: auto;
-      margin: 2px;
-    }
-    .script-tile {
-      span {
-        font-weight: 400;
-        font-size: 14px;
-        margin-top: 24px;
-        color: #cae0eb;
-        letter-spacing: 0;
-        line-height: 12.67px;
-        display: inline-block;
-        word-break: break-word;
-        text-align: left;
-        padding-bottom: 24px;
-      }
+  .detail-tile {
+    max-height: none;
+    height: auto;
+    margin: 2px;
+  }
+  .script-tile {
+    span {
+      font-weight: 400;
+      font-size: 14px;
+      margin-top: 24px;
+      color: #cae0eb;
+      letter-spacing: 0;
+      line-height: 12.67px;
+      display: inline-block;
+      word-break: break-word;
+      text-align: left;
+      padding-bottom: 24px;
     }
   }
 }
