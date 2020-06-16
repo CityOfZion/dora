@@ -47,7 +47,7 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
-          name: Build and release docs
+          name: deploy
           command: npm run deploy
     docker:
       - image: circleci/node:10.16.3
