@@ -30,7 +30,7 @@ jobs:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
-      - build:
+      - run:
           name: build
           command: npm run build
       - run:
