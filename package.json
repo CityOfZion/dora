@@ -61,7 +61,7 @@
     "lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "ci-lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "format": "prettier --write ./src",
-    "deploy": "aws s3 sync ./build  s3://docs-coz/neo3/neon-js --acl public-read"
+    "deploy": "aws s3 sync ./build s3://neoscan/prod --acl public-read"
   },
   "browserslist": {
     "production": [
