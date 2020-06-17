@@ -43,7 +43,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
             <div className="inner-details-container">
               <div className="detail-tile-row">
                 <div className="detail-tile">
-                  <label>Type</label>
+                  <label>TYPE</label>
                   <span>{!isLoading && transaction && transaction.type}</span>
                 </div>
 
