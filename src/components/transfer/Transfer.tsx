@@ -21,7 +21,7 @@ const Transfer: React.FC<{
         <div key={uniqueId()} className="asset-transfer-detail-container">
           <div
             className="link"
-            onClick={() => handleAddressClick(transfer.from)}
+            onClick={(): void => handleAddressClick(transfer.from)}
           >
             {transfer.from}
           </div>
@@ -39,7 +39,10 @@ const Transfer: React.FC<{
       <div className="bold-subtitle">Sent To</div>
       {transfers.map((transfer: Transfer) => (
         <div key={uniqueId()} className="asset-transfer-detail-container">
-          <div className="link" onClick={() => handleAddressClick(transfer.to)}>
+          <div
+            className="link"
+            onClick={(): void => handleAddressClick(transfer.to)}
+          >
             {transfer.to}
           </div>
           <div className="transfer-amount-container">
