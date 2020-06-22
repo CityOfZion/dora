@@ -1,5 +1,4 @@
 import React from 'react'
-import tokens from '../../assets/tokens'
 import { uniqueId } from 'lodash-es'
 
 import './Transfer.scss'

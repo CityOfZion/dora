@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
-import { State as AddressState } from '../../reducers/addressReducer'
 import './Transaction.scss'
 import { ROUTES } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
@@ -17,10 +15,10 @@ type Props = RouteComponentProps<MatchParams>
 const Address: React.FC<Props> = (props: Props) => {
   const { hash } = props.match.params
   const dispatch = useDispatch()
-  const addressState = useSelector(
-    ({ address }: { address: AddressState }) => address,
-  )
-  const { requestedAddress, isLoading } = addressState
+  // const addressState = useSelector(
+  //   ({ address }: { address: AddressState }) => address,
+  // )
+  // const { requestedAddress, isLoading } = addressState
 
   useEffect(() => {
     dispatch(fetchTransaction(hash))
