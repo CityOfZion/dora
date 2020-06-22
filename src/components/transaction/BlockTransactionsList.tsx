@@ -8,12 +8,15 @@ import List from '../list/List'
 import './BlockTransactionsList.scss'
 
 import { BlockTransaction } from '../../reducers/transactionReducer'
+import { ROUTES } from '../../constants'
+import { useHistory } from 'react-router-dom'
 
 type ParsedTx = {
   time: React.FC<{}>
   txid: React.FC<{}>
   size: string
   type: string
+  hash: string
 }
 
 const mapTransactionData = (tx: BlockTransaction, block: Block): ParsedTx => {
@@ -35,6 +38,7 @@ const mapTransactionData = (tx: BlockTransaction, block: Block): ParsedTx => {
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     type: tx.type,
+    hash: tx.txid,
   }
 }
 
@@ -50,12 +54,15 @@ const BlockTransactionsList: React.FC<{
   block: Block
   loading: boolean
 }> = ({ list, block, loading }) => {
+  const history = useHistory()
   return (
     <div id="BlockTransactionsList">
       <List
         data={returnTxListData(list, block)}
-        rowId="index"
-        handleRowClick={(data): void => console.log(data)}
+        rowId="hash"
+        handleRowClick={(data): void => {
+          history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
+        }}
         isLoading={loading}
         columns={[
           { name: 'Type', accessor: 'type' },

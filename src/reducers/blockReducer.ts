@@ -75,7 +75,7 @@ export default (
         lastUpdated: action.receivedAt,
         // cache both the index and the hash in memory
         cached: {
-          [action.blockHeight]: action.json,
+          [action.json.index]: action.json,
           [action.json.hash]: action.json,
         },
       })

@@ -42,6 +42,14 @@ export type DetailedTransaction = {
   time: number
   txid: string
   scripts: [{ invocation: string; verification: string }]
+  Item: {
+    notifications: [
+      {
+        contract: string
+        state: { type: string; value: [{ type: string; value: string }] }
+      },
+    ]
+  }
 }
 
 export type BlockTransaction = {

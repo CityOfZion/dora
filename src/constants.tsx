@@ -10,6 +10,8 @@ import { ReactComponent as Api } from './assets/icons/api.svg'
 export const GENERATE_BASE_URL = (net = 'test_net'): string =>
   `https://node1.splyse.tech/${net}/v1`
 
+export const TRANSFER = '6d696e74'
+
 export const ROUTES = {
   HOME: {
     url: '/',
