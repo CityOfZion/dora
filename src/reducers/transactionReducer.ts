@@ -35,6 +35,18 @@ export type Transaction = {
   txid: string
 }
 
+export type Vin = {
+  txid: string
+  vout: number
+}
+
+export type Vout = {
+  address: string
+  asset: string
+  n: number
+  value: string
+}
+
 export type DetailedTransaction = {
   type: string
   size: number
@@ -50,6 +62,8 @@ export type DetailedTransaction = {
       },
     ]
   }
+  vin: Vin[]
+  vout: Vout[]
 }
 
 export type BlockTransaction = {

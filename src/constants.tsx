@@ -12,6 +12,14 @@ export const GENERATE_BASE_URL = (net = 'test_net'): string =>
 
 export const TRANSFER = '6d696e74'
 
+export const TRANSACTION_TYPES = {
+  invocation: 'InvocationTransaction',
+  miner: 'MinerTransaction',
+  claim: 'ClaimTransaction',
+  contract: 'ContractTransaction',
+  state: 'StateTransaction',
+}
+
 export const ROUTES = {
   HOME: {
     url: '/',

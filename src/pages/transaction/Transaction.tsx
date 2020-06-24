@@ -10,7 +10,12 @@ import {
   DetailedTransaction,
 } from '../../reducers/transactionReducer'
 import './Transaction.scss'
-import { ROUTES, TRANSFER, GENERATE_BASE_URL } from '../../constants'
+import {
+  ROUTES,
+  TRANSFER,
+  GENERATE_BASE_URL,
+  TRANSACTION_TYPES,
+} from '../../constants'
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import { fetchTransaction } from '../../actions/transactionActions'
@@ -19,7 +24,7 @@ import Transfer from '../../components/transfer/Transfer'
 
 type ParsedTransfer = { name: string; amount: string; to: string; from: string }
 
-const generateTransfersArr = async (
+const generateInvocationTransfersArr = async (
   transaction: DetailedTransaction,
 ): Promise<ParsedTransfer[]> => {
   const transfers = []
@@ -38,8 +43,6 @@ const generateTransfersArr = async (
             `${GENERATE_BASE_URL()}/get_asset/${notification.contract}`,
           )
           const json = await response.json()
-
-          console.log(NeoConvertor.StringHex.stringToHex('transfer'))
 
           const name = json.name
 
@@ -68,6 +71,71 @@ const generateTransfersArr = async (
   return transfers
 }
 
+type TransferHistoryAbstract = {
+  scripthash: string
+  amount: string
+  txid: string
+  from: string
+}
+
+const generateContractTransfersArr = async (
+  transaction: DetailedTransaction,
+): Promise<ParsedTransfer[]> => {
+  const transfers = []
+
+  const abstracts: TransferHistoryAbstract[] = []
+
+  async function fetchAbtracts(
+    counter: number,
+    address: string,
+  ): Promise<void> {
+    const response = await fetch(
+      `${GENERATE_BASE_URL()}/get_transfer_history/${address}/${counter}`,
+    )
+    const json = await response.json()
+    console.log(json)
+    abstracts.push(...json.items)
+  }
+
+  if (transaction) {
+    for (const vout of transaction.vout) {
+      // why is this data not getting returned from the API
+      const GAS_HASH_ARR = [
+        '0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+      ]
+
+      const name = GAS_HASH_ARR.includes(vout.asset) ? 'GAS' : 'NEO'
+
+      const counter = 0
+
+      // while (!abstracts.find(a => a.txid === transaction.txid)) {
+      //   console.log({ abstracts })
+      //   console.log(transaction.txid)
+      //   console.log(abstracts.find(a => a.txid === transaction.txid))
+      //   counter++
+      //   await fetchAbtracts(counter, vout.address)
+      // }
+
+      const abstract = abstracts.find(a => a.txid === transaction.txid)
+
+      const amount = vout.value
+
+      const from = (abstract && abstract.from) || 'foo'
+
+      const to = vout.address
+
+      transfers.push({
+        name,
+        amount,
+        to,
+        from,
+      })
+    }
+  }
+
+  return transfers
+}
+
 interface MatchParams {
   hash: string
 }
@@ -89,16 +157,21 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     async function computeTransfers(): Promise<void> {
-      if (transaction && transaction.Item && transaction.Item.notifications) {
-        const transfers = await generateTransfersArr(transaction)
-        setTransfers(transfers)
+      if (transaction) {
+        if (transaction.type === TRANSACTION_TYPES.invocation) {
+          const transfers = await generateInvocationTransfersArr(transaction)
+          setTransfers(transfers)
+        }
+
+        if (transaction.type === TRANSACTION_TYPES.contract) {
+          const transfers = await generateContractTransfersArr(transaction)
+          setTransfers(transfers)
+        }
       }
     }
     dispatch(fetchTransaction(hash))
     computeTransfers()
   }, [dispatch, hash, transaction])
-
-  console.log(transfers)
 
   return (
     <div id="Transaction" className="page-container">
