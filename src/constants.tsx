@@ -7,8 +7,26 @@ import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
 import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 
+export const NEO_HASHES = [
+  '0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
+]
+
+export const GAS_HASHES = [
+  '0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
+]
+
 export const GENERATE_BASE_URL = (net = 'test_net'): string =>
   `https://node1.splyse.tech/${net}/v1`
+
+export const TRANSFER = '7472616e73666572'
+
+export const TRANSACTION_TYPES = {
+  invocation: 'InvocationTransaction',
+  miner: 'MinerTransaction',
+  claim: 'ClaimTransaction',
+  contract: 'ContractTransaction',
+  state: 'StateTransaction',
+}
 
 export const ROUTES = {
   HOME: {

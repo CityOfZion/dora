@@ -12,6 +12,7 @@ import Footer from './Footer/Footer'
 import Sidebar from './Sidebar'
 import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
+import Address from '../../pages/address/Address'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -30,6 +31,10 @@ const Router: React.FC = (): ReactElement => {
             <ScrollToTop />
             <div className="column-container router-page-container">
               <Switch>
+                <Route
+                  path={`${ROUTES.WALLET.url}/:hash`}
+                  component={(): ReactElement => <Address />}
+                />
                 <Route
                   path={`${ROUTES.BLOCK.url}/:hash`}
                   component={(): ReactElement => <Block />}

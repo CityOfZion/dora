@@ -1,15 +1,82 @@
-import React, { useEffect } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import React, { useEffect, useState, ReactElement } from 'react'
+import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { State as TransactionState } from '../../reducers/transactionReducer'
+import {
+  State as TransactionState,
+  DetailedTransaction,
+} from '../../reducers/transactionReducer'
 import './Transaction.scss'
-import { ROUTES } from '../../constants'
+import {
+  ROUTES,
+  GENERATE_BASE_URL,
+  NEO_HASHES,
+  GAS_HASHES,
+} from '../../constants'
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import { fetchTransaction } from '../../actions/transactionActions'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
+import Transfer from '../../components/transfer/Transfer'
+
+type ParsedTransfer = { name: string; amount: string; to: string; from: string }
+
+const parseAbstractData = async (
+  transaction: DetailedTransaction,
+): Promise<ParsedTransfer[]> => {
+  const transfers: ParsedTransfer[] = []
+  if (transaction.items) {
+    transaction.items.inputs.forEach(({ address, value, asset }) => {
+      let name = ''
+      if (NEO_HASHES.includes(asset)) {
+        name = 'NEO'
+      } else if (GAS_HASHES.includes(asset)) {
+        name = 'GAS'
+      }
+
+      transfers.push({
+        name,
+        amount: value,
+        to: '',
+        from: address,
+      })
+    })
+
+    transaction.items.outputs.forEach(({ address, value, asset }) => {
+      let name = ''
+      if (NEO_HASHES.includes(asset)) {
+        name = 'NEO'
+      } else if (GAS_HASHES.includes(asset)) {
+        name = 'GAS'
+      }
+
+      transfers.push({
+        name,
+        amount: value,
+        to: address,
+        from: '',
+      })
+    })
+
+    for (const token of transaction.items.tokens) {
+      const { scripthash, amount, to, from } = token
+      const response = await fetch(
+        `${GENERATE_BASE_URL()}/get_asset/${scripthash}`,
+      )
+      const json = await response.json()
+      const name = json.name
+      transfers.push({
+        name,
+        amount,
+        to,
+        from,
+      })
+    }
+  }
+
+  return transfers
+}
 
 interface MatchParams {
   hash: string
@@ -20,14 +87,41 @@ type Props = RouteComponentProps<MatchParams>
 const Transaction: React.FC<Props> = (props: Props) => {
   const { hash } = props.match.params
   const dispatch = useDispatch()
+  const history = useHistory()
+  const transferArr: ParsedTransfer[] = []
+  const [transfers, setTransfers] = useState(transferArr)
+  const [localLoadComplete, setLocalLoadComplete] = useState(false)
+
   const transactionState = useSelector(
     ({ transaction }: { transaction: TransactionState }) => transaction,
   )
   const { transaction, isLoading } = transactionState
 
+  const renderSkeleton = (
+    value: null | string | ReactElement,
+  ): null | string | ReactElement => {
+    if (!transaction || isLoading || !localLoadComplete || !value) {
+      return null
+    }
+
+    return value
+  }
+
   useEffect(() => {
+    async function computeTransfers(): Promise<void> {
+      if (transaction) {
+        setLocalLoadComplete(true)
+        const transfers = await parseAbstractData(transaction)
+        setTransfers(transfers)
+      }
+    }
     dispatch(fetchTransaction(hash))
-  }, [dispatch, hash])
+    computeTransfers()
+
+    return (): void => {
+      setTransfers([])
+    }
+  }, [dispatch, hash, transaction])
 
   return (
     <div id="Transaction" className="page-container">
@@ -36,7 +130,17 @@ const Transaction: React.FC<Props> = (props: Props) => {
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>Transaction Information</h1>
         </div>
-
+        {!!transfers.length && (
+          <Transfer
+            transfers={transfers}
+            handleAddressClick={(address): void =>
+              history.push(`/address/${address}`)
+            }
+            networkFee={transaction ? transaction.net_fee : ''}
+            systemFee={transaction ? transaction.sys_fee : ''}
+            size={transaction ? transaction.size : ''}
+          />
+        )}
         <div id="transaction-details-container">
           <div className="details-section">
             <div className="section-label">DETAILS</div>
@@ -44,16 +148,16 @@ const Transaction: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>TYPE</label>
-                  <span>{!isLoading && transaction && transaction.type}</span>
+                  <span>{renderSkeleton(transaction && transaction.type)}</span>
                 </div>
 
                 <div className="detail-tile">
                   <label>SIZE</label>
                   <span>
-                    {!isLoading &&
+                    {renderSkeleton(
                       transaction &&
-                      transaction.size.toLocaleString()}{' '}
-                    bytes
+                        `${transaction.size.toLocaleString()} bytes`,
+                    )}
                   </span>
                 </div>
               </div>
@@ -62,9 +166,9 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>INCLUDED IN BLOCK</label>
                   <span>
-                    {!isLoading &&
-                      transaction &&
-                      transaction.block.toLocaleString()}
+                    {renderSkeleton(
+                      transaction && transaction.block.toLocaleString(),
+                    )}
                   </span>
                 </div>
 
@@ -72,19 +176,23 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   <label>TIME</label>
                   <span id="time-details-row">
                     <div>
-                      {!isLoading && transaction && (
-                        <>
-                          <Calendar />
-                          {moment.unix(transaction.time).format('MM-DD-YYYY')}
-                        </>
+                      {renderSkeleton(
+                        transaction && (
+                          <>
+                            <Calendar />
+                            {moment.unix(transaction.time).format('MM-DD-YYYY')}
+                          </>
+                        ),
                       )}
                     </div>
                     <div>
-                      {!isLoading && transaction && (
-                        <>
-                          <Clock />
-                          {moment.unix(transaction.time).format('HH:MM:SS')}
-                        </>
+                      {renderSkeleton(
+                        transaction && (
+                          <>
+                            <Clock />
+                            {moment.unix(transaction.time).format('HH:MM:SS')}
+                          </>
+                        ),
                       )}
                     </div>
                   </span>
@@ -93,7 +201,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
               <div id="transaction-hash-tile" className="detail-tile">
                 <label>HASH</label>
-                <span>{!isLoading && transaction && transaction.txid}</span>
+                <span>{renderSkeleton(transaction && transaction.txid)}</span>
               </div>
 
               {transaction && transaction.scripts[0] && (

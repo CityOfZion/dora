@@ -62,6 +62,10 @@ export default (
 ): State => {
   switch (action.type) {
     case REQUEST_CONTRACT:
+      return Object.assign({}, state, {
+        isLoading: true,
+        contract: null,
+      })
     case REQUEST_CONTRACTS:
     case REQUEST_CONTRACTS_INVOCATIONS:
       return Object.assign({}, state, {

@@ -5,7 +5,7 @@ import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchBlocks, clearList } from '../../actions/blockActions'
+import { fetchBlocks } from '../../actions/blockActions'
 import { State as BlockState } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import Button from '../../components/button/Button'
@@ -67,9 +67,6 @@ const Blocks: React.FC<{}> = () => {
 
   useEffect(() => {
     dispatch(fetchBlocks())
-    return (): void => {
-      dispatch(clearList())
-    }
   }, [dispatch])
 
   return (

@@ -104,6 +104,7 @@ export function fetchTransaction(hash: string) {
         const responses = await Promise.all([
           fetch(`${GENERATE_BASE_URL()}/get_transaction/${hash}`),
           fetch(`${GENERATE_BASE_URL()}/get_log/${hash}`),
+          fetch(`${GENERATE_BASE_URL()}/get_transaction_abstracts/${hash}`),
         ])
         const mergedResponse = {}
         for (const response of responses) {
@@ -114,6 +115,10 @@ export function fetchTransaction(hash: string) {
       } catch (e) {
         dispatch(requestTransactionError(hash, e))
       }
+    } else {
+      return dispatch(
+        requestTransactionSuccess(hash, getState().transaction.cached[hash]),
+      )
     }
   }
 }

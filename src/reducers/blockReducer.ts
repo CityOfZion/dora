@@ -63,6 +63,7 @@ export default (
     case REQUEST_BLOCK:
       return Object.assign({}, state, {
         isLoading: true,
+        block: null,
       })
     case REQUEST_BLOCKS:
       return Object.assign({}, state, {
@@ -75,8 +76,9 @@ export default (
         lastUpdated: action.receivedAt,
         // cache both the index and the hash in memory
         cached: {
-          [action.blockHeight]: action.json,
+          [action.json.index]: action.json,
           [action.json.hash]: action.json,
+          ...state.cached,
         },
       })
     case REQUEST_BLOCKS_SUCCESS:

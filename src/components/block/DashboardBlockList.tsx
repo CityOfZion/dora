@@ -7,6 +7,8 @@ import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks } from '../../actions/blockActions'
 import { State as BlockState } from '../../reducers/blockReducer'
+import { ROUTES } from '../../constants'
+import { useHistory } from 'react-router-dom'
 
 type Block = {
   index: number
@@ -24,6 +26,7 @@ type ParsedBlock = {
   transactions: number
   blocktime: string
   size: string
+  height: number
 }
 
 const mapBlockData = (block: Block): ParsedBlock => {
@@ -35,6 +38,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
     transactions: block.txCount,
     blocktime: convertMilliseconds(block.blocktime),
     size: `${block.size.toLocaleString()} Bytes`,
+    height: block.index,
   }
 }
 
@@ -51,6 +55,7 @@ const returnBlockListData = (
 
 const DashboardBlockList: React.FC<{}> = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
 
@@ -61,8 +66,10 @@ const DashboardBlockList: React.FC<{}> = () => {
   return (
     <List
       data={returnBlockListData(blockState.list, blockState.isLoading)}
-      rowId="index"
-      handleRowClick={(data): void => console.log(data)}
+      rowId="height"
+      handleRowClick={(data): void => {
+        history.push(`${ROUTES.BLOCK.url}/${data.id}`)
+      }}
       isLoading={blockState.isLoading}
       columns={[
         {

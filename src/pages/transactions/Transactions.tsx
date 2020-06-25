@@ -5,7 +5,7 @@ import { getDiffInSecondsFromNow } from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchTransactions, clearList } from '../../actions/transactionActions'
+import { fetchTransactions } from '../../actions/transactionActions'
 import './Transactions.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
@@ -60,9 +60,6 @@ const Transactions: React.FC<{}> = () => {
 
   useEffect(() => {
     dispatch(fetchTransactions())
-    return (): void => {
-      dispatch(clearList())
-    }
   }, [dispatch])
 
   return (

@@ -3,23 +3,23 @@
   font-size: 14px;
   color: #ffffff;
   letter-spacing: 0.96px;
+}
 
-  .transaction-time-details-row {
+.transaction-time-details-row {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+
+  div {
     display: flex;
-    justify-content: space-between;
-    width: 200px;
+    align-items: center;
+  }
 
-    div {
-      display: flex;
-      align-items: center;
-    }
+  svg {
+    margin: 0 4px 8px 0;
+  }
 
-    svg {
-      margin: 0 4px 8px 0;
-    }
-
-    span {
-      margin-bottom: 0;
-    }
+  span {
+    margin-bottom: 0;
   }
 }

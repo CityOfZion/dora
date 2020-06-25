@@ -1,0 +1,68 @@
+#address-hash-container {
+  background: #21383d;
+  border-radius: 2.4px;
+  background: #21383d;
+  border-radius: 2.4px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #7d9fb1;
+  letter-spacing: 0;
+  border-left: 4px solid #eb4dff;
+
+  span {
+    font-size: 16px;
+    color: #d355e7;
+    margin-left: 48px;
+  }
+}
+
+#address-balance-container {
+  margin: 48px 0;
+
+  #balance-label {
+    font-size: 18px;
+    color: #ffffff;
+    letter-spacing: -0.72px;
+    line-height: 48px;
+  }
+
+  .balance-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background: #25393e;
+    margin: 4px 0;
+    padding: 0 24px;
+    justify-content: space-between;
+
+    div {
+      display: flex;
+    }
+
+    span {
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: -0.8px;
+      line-height: 81.6px;
+    }
+
+    img {
+      width: 25px;
+      margin-right: 12px;
+    }
+
+    .balance-amount {
+      font-size: 24px;
+      color: #ffffff;
+      letter-spacing: 0;
+    }
+
+    .balance-name {
+      font-size: 16px;
+      margin-left: 8px;
+    }
+  }
+}
