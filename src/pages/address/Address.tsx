@@ -24,7 +24,7 @@ const Address: React.FC<Props> = (props: Props) => {
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
-  const { requestedAddress, balance, transferHistory } = addressState
+  const { requestedAddress, balance, transferHistory, isLoading } = addressState
 
   useEffect(() => {
     dispatch(fetchAddress(hash))
@@ -43,16 +43,16 @@ const Address: React.FC<Props> = (props: Props) => {
           <label>ADDRESS</label> <span>{requestedAddress}</span>
         </div>
 
-        {balance && (
+        {balance && !isLoading && (
           <>
             <div id="address-balance-container">
               <div id="balance-label">BALANCE</div>
               {balance &&
                 balance.map(balance => (
-                  <div key={balance.name} className="balance-container">
+                  <div key={balance.asset} className="balance-container">
                     <div>
-                      {tokens[balance.name] && (
-                        <img src={tokens[balance.name]} alt="token-logo" />
+                      {tokens[balance.symbol] && (
+                        <img src={tokens[balance.symbol]} alt="token-logo" />
                       )}{' '}
                       <span className="balance-symbol">{balance.symbol}</span>
                       {balance.name && (
@@ -64,7 +64,9 @@ const Address: React.FC<Props> = (props: Props) => {
                 ))}
             </div>
 
-            <AddressTransactionsList transactions={transferHistory || []} />
+            {transferHistory && !!transferHistory.length && (
+              <AddressTransactionsList transactions={transferHistory || []} />
+            )}
           </>
         )}
       </div>
