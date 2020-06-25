@@ -22,7 +22,7 @@ type Action = {
 
 export type State = {
   isLoading: boolean
-  cached: { [key: string]: Transaction }
+  cached: { [key: string]: DetailedTransaction }
   list: []
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
@@ -47,9 +47,26 @@ export type Vout = {
   value: string
 }
 
+export type TransactionTokenAbstract = {
+  block: number
+  txid: string
+  scripthash: string
+  from: string
+  amount: string
+  time: number
+  transferindex: string
+  to: string
+}
+
+export type TransactionIOAbstract = {
+  address: string
+  asset: string
+  value: string
+}
+
 export type DetailedTransaction = {
   type: string
-  size: number
+  size: string
   block: number
   time: number
   txid: string
@@ -64,6 +81,13 @@ export type DetailedTransaction = {
   }
   vin: Vin[]
   vout: Vout[]
+  net_fee: string
+  sys_fee: string
+  items: {
+    tokens: TransactionTokenAbstract[]
+    inputs: TransactionIOAbstract[]
+    outputs: TransactionIOAbstract[]
+  }
 }
 
 export type BlockTransaction = {
@@ -88,6 +112,7 @@ export default (
     case REQUEST_TRANSACTION:
       return Object.assign({}, state, {
         isLoading: true,
+        transaction: null,
       })
     case REQUEST_TRANSACTIONS:
       return Object.assign({}, state, {
@@ -100,6 +125,7 @@ export default (
         lastUpdated: action.receivedAt,
         cached: {
           [action.hash]: action.json,
+          ...state.cached,
         },
       })
     case REQUEST_TRANSACTIONS_SUCCESS:
@@ -115,6 +141,7 @@ export default (
         list: [],
         cursor: '',
       })
+
     default:
       return state
   }

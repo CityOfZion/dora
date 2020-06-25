@@ -1,7 +1,7 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL } from '../constants'
+import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
@@ -83,6 +83,11 @@ export const requestAddressTransferHistoryError = (
   })
 }
 
+type ParsedBalanceData = {
+  name: string
+  amount: string
+}
+
 export function fetchAddress(address: string) {
   return async (
     dispatch: ThunkDispatch<{}, void, Action>,
@@ -94,7 +99,41 @@ export function fetchAddress(address: string) {
         `${GENERATE_BASE_URL()}/get_balance/${address}`,
       )
       const json = await response.json()
-      dispatch(requestAddressSuccess(address, json))
+
+      // TODO: see if its possible for this data to be added
+      // so that these requests are not necessary
+      const fetchAssetData = async (): Promise<ParsedBalanceData[]> => {
+        const balances: ParsedBalanceData[] = []
+
+        for (const balanceData of json) {
+          let symbol
+          let name
+          if (NEO_HASHES.includes(balanceData.asset)) {
+            symbol = 'NEO'
+          } else if (GAS_HASHES.includes(balanceData.asset)) {
+            symbol = 'GAS'
+          } else {
+            const response = await fetch(
+              `${GENERATE_BASE_URL()}/get_asset/${balanceData.asset}`,
+            )
+            const json = await response.json()
+            symbol = json.symbol
+            name = json.name
+          }
+
+          balances.push({
+            name,
+            symbol,
+            ...balanceData,
+          })
+        }
+
+        return balances
+      }
+
+      const balances = await fetchAssetData()
+
+      dispatch(requestAddressSuccess(address, balances))
     } catch (e) {
       dispatch(requestAddressError(address, e))
     }

@@ -20,9 +20,7 @@ const Home: React.FC<{}> = () => {
           <h1> welcome to neoscan </h1>{' '}
           <div id="welcome-text-underscore">_</div>
         </div>
-        <span>
-          Your home for all NEO related blockchain information THIS IS A TEST
-        </span>
+        <span>Your home for all NEO related blockchain information</span>
       </div>
 
       <div className="list-row-container">

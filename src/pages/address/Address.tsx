@@ -1,10 +1,16 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
-import './Transaction.scss'
+import './Address.scss'
 import { ROUTES } from '../../constants'
-import { fetchTransaction } from '../../actions/transactionActions'
+import {
+  fetchAddress,
+  fetchAddressTransferHistory,
+} from '../../actions/addressActions'
+import { State as AddressState } from '../../reducers/addressReducer'
+import tokens from '../../assets/tokens'
+import AddressTransactionsList from '../../components/address/AddressTransactionsList'
 
 interface MatchParams {
   hash: string
@@ -15,13 +21,14 @@ type Props = RouteComponentProps<MatchParams>
 const Address: React.FC<Props> = (props: Props) => {
   const { hash } = props.match.params
   const dispatch = useDispatch()
-  // const addressState = useSelector(
-  //   ({ address }: { address: AddressState }) => address,
-  // )
-  // const { requestedAddress, isLoading } = addressState
+  const addressState = useSelector(
+    ({ address }: { address: AddressState }) => address,
+  )
+  const { requestedAddress, balance, transferHistory } = addressState
 
   useEffect(() => {
-    dispatch(fetchTransaction(hash))
+    dispatch(fetchAddress(hash))
+    dispatch(fetchAddressTransferHistory(hash))
   }, [dispatch, hash])
 
   return (
@@ -31,6 +38,35 @@ const Address: React.FC<Props> = (props: Props) => {
           {ROUTES.WALLETS.renderIcon()}
           <h1>Address Information</h1>
         </div>
+
+        <div id="address-hash-container">
+          <label>ADDRESS</label> <span>{requestedAddress}</span>
+        </div>
+
+        {balance && (
+          <>
+            <div id="address-balance-container">
+              <div id="balance-label">BALANCE</div>
+              {balance &&
+                balance.map(balance => (
+                  <div key={balance.name} className="balance-container">
+                    <div>
+                      {tokens[balance.name] && (
+                        <img src={tokens[balance.name]} alt="token-logo" />
+                      )}{' '}
+                      <span className="balance-symbol">{balance.symbol}</span>
+                      {balance.name && (
+                        <span className="balance-name">({balance.name})</span>
+                      )}
+                    </div>
+                    <div className="balance-amount"> {balance.balance} </div>
+                  </div>
+                ))}
+            </div>
+
+            <AddressTransactionsList transactions={transferHistory || []} />
+          </>
+        )}
       </div>
     </div>
   )

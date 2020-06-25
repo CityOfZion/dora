@@ -17,12 +17,19 @@ type Action = {
   transferHistoryPage: number
 }
 
+export type Balance = {
+  asset: string
+  balance: string
+  name: string
+  symbol: string
+}
+
 export type State = {
   isLoading: boolean
   transferHistoryLoading: boolean
   requestedAddress: string
-  balance: []
-  transferHistory: []
+  balance: Balance[] | null
+  transferHistory: [] | null
   transferHistoryPage: number
 }
 
@@ -33,8 +40,8 @@ export default (
     isLoading: false,
     transferHistoryLoading: false,
     requestedAddress: '',
-    balance: [],
-    transferHistory: [],
+    balance: null,
+    transferHistory: null,
     transferHistoryPage: 1,
   },
   action: Action,
