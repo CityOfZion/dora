@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash-es'
+import isEmpty from 'lodash/isEmpty'
 import { ThunkDispatch } from 'redux-thunk'
 import { Dispatch, Action } from 'redux'
 
