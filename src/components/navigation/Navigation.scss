@@ -1,13 +1,139 @@
 #navigation-container {
   height: 88px;
+
   background-color: #0d282e;
   align-items: center;
   display: flex;
-  margin-left: 80px;
-  padding: 0px 68px;
+  flex-wrap: wrap;
 
-  #coz-blockchain-logo {
-    margin-right: 60px;
-    margin-top: -6px;
+  padding: 0px 24px;
+
+  #desktop-navigation {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+
+    #coz-blockchain-logo {
+      margin-right: 60px;
+      margin-top: -6px;
+    }
+
+    .navigation-search-container {
+      width: 100%;
+      display: flex;
+      flex: 1;
+    }
   }
+
+  #mobile-navigation {
+    display: none;
+  }
+}
+
+.mobile-navigation-search-container {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  #navigation-container {
+    height: 53px;
+    align-items: center;
+    justify-content: center;
+
+    #desktop-navigation {
+      display: none;
+    }
+
+    #mobile-navigation {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+
+      #mobile-logo-container,
+      #burger-menu-container {
+        cursor: pointer;
+      }
+
+      #top-level-mobile-navigation {
+        display: flex;
+        // padding-bottom: 24px;
+      }
+    }
+
+    #navigation-search-container {
+      display: none;
+    }
+  }
+
+  .mobile-navigation-search-container {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    flex: 1;
+    margin: auto;
+    padding: 24px 0 12px 0;
+
+    form {
+      margin: auto;
+    }
+
+    #Search {
+      justify-content: center;
+    }
+  }
+}
+
+#mobile-routes-container {
+  display: flex !important;
+  flex-direction: row;
+  flex-wrap: wrap;
+  outline: none;
+  justify-content: center;
+  // background: #263a3e;
+  // padding: 24px;
+
+  .mobile-route-container {
+    height: 145px;
+    width: 145px;
+    flex: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    font-size: 8.9px;
+    color: #899fa8;
+    cursor: pointer;
+    margin-bottom: 12px;
+    text-decoration: none;
+    // box-sizing: border-box;
+    border: solid 1px #899fa8;
+    margin: 24px 12px;
+    border-radius: 3px;
+    svg {
+      margin-bottom: 12px;
+    }
+  }
+
+  .active-mobile-route,
+  .mobile-route-container:hover {
+    background-color: #0d282e;
+    text-decoration: none;
+    border: solid 1px #d355e7;
+    // box-sizing: border-box;
+
+    color: #d8d8d8;
+
+    svg {
+      g {
+        fill: #d8d8d8;
+      }
+    }
+  }
+}
+
+.bm-overlay-background {
+  background: #263a3e !important;
 }

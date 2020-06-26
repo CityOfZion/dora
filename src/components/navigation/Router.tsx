@@ -26,6 +26,7 @@ const Router: React.FC = (): ReactElement => {
       <BrowserRouter>
         <div id="router-container">
           <Sidebar />
+          <div className="sidebar-spacer" />
           <div className="column-container">
             <Navigation />
             <ScrollToTop />

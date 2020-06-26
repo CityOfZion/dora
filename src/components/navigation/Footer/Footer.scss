@@ -1,9 +1,17 @@
+#footer-container {
+  display: flex;
+}
+
 #Footer {
   display: flex;
   font-size: 14px;
   flex-direction: column;
-  margin-left: 80px;
+  // margin-left: 80px;
   padding: 24px 0;
+  // margin-left: 80px;
+  margin: auto;
+
+  max-width: 1200px;
 
   .accent {
     color: var(--pink);
@@ -11,20 +19,19 @@
 
   #footer-body {
     display: flex;
-    padding: 16px 68px;
+    padding: 16px 24px;
 
-    @media screen and (max-width: 768px - 1) {
+    @media screen and (max-width: 768px) {
       flex-direction: column;
       padding: 16px 8px 16px 6px;
-      width: 100%;
     }
 
     // common classes
     .section-container {
       flex: 1;
-      padding: 0 16px;
+      // padding: 0 16px;
 
-      @media screen and (max-width: 768px - 1) {
+      @media screen and (max-width: 768px) {
         padding: 0;
       }
     }
@@ -33,6 +40,20 @@
       border: 0.5px solid var(--medium-grey);
       width: 100%;
       margin: 0 0 30px 0;
+    }
+
+    .first-section,
+    .second-section {
+      padding-right: 16px;
+    }
+
+    .footer-sections {
+      display: flex;
+      flex-wrap: wrap;
+
+      .third-section {
+        min-width: 230px;
+      }
     }
 
     // Col 1
@@ -68,7 +89,7 @@
     .links-list {
       list-style: none;
       padding-left: 0;
-      @media screen and (max-width: 768px - 1) {
+      @media screen and (max-width: 768px) {
         columns: 2;
         li:first-child {
           margin-top: 0;
@@ -92,7 +113,7 @@
       flex-wrap: wrap;
       justify-content: space-between;
 
-      @media screen and (max-width: 768px - 1) {
+      @media screen and (max-width: 768px) {
         margin-bottom: 48px;
       }
 
@@ -145,7 +166,7 @@
         border: none;
         align-self: flex-end;
 
-        @media screen and (max-width: 768px - 1) {
+        @media screen and (max-width: 768px) {
           margin: 0 auto;
         }
       }
@@ -157,8 +178,8 @@
     padding-left: 64px;
     display: flex;
 
-    @media screen and (max-width: 768px - 1) {
-      padding: 0;
+    @media screen and (max-width: 768px) {
+      padding: 6px;
     }
     .coz-logo {
       margin-right: 16px;
@@ -167,6 +188,17 @@
       align-self: flex-end;
       display: inline-block;
       margin-bottom: 4px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .footer-sections {
+    flex-direction: column;
+
+    .first-section,
+    .second-section {
+      padding-right: 0px !important;
     }
   }
 }

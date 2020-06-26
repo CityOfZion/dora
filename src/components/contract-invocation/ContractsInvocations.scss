@@ -80,3 +80,18 @@
     }
   }
 }
+
+@media only screen and (max-width: 1200px) {
+  .invocation-count-bar {
+    width: 250px !important;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .invocation-count-bar {
+    display: none;
+  }
+  #ContractInvocations .invocation-name-container {
+    justify-content: flex-start;
+  }
+}

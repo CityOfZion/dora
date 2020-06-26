@@ -1,22 +1,200 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
+import { slide as Menu } from 'react-burger-menu'
 
 import './Navigation.scss'
 import { ReactComponent as ResourceLogo } from '../../assets/icons/coz-resource-logo.svg'
+import { ReactComponent as MobileLogo } from '../../assets/icons/mobile-logo.svg'
+import { ReactComponent as BurgerMenu } from '../../assets/icons/burger-menu.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import Search from '../search/Search'
+import { useHistory, NavLink } from 'react-router-dom'
+import { ROUTES } from '../../constants'
+import { useSelector, useDispatch } from 'react-redux'
+import { State as MenuState } from '../../reducers/menuReducer'
+import { openMenu, closeMenu } from '../../actions/menuActions'
 
 const Navigation: React.FC = (): ReactElement => {
+  const history = useHistory()
+  const dispatch = useDispatch()
+  const menuState = useSelector(({ menu }: { menu: MenuState }) => menu)
+
+  const [width, setWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = (): void => {
+      setWidth(window.innerWidth)
+    }
+    window.addEventListener('resize', handleResize)
+    return (): void => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
+
+  if (width > 768 && menuState.open) {
+    dispatch(closeMenu())
+  }
+
+  console.log({ menuState })
   return (
-    <div id="navigation-container">
-      <div id="coz-blockchain-logo">
-        <ResourceLogo />
+    <>
+      <div id="navigation-container">
+        <div id="desktop-navigation">
+          <div id="coz-blockchain-logo">
+            <ResourceLogo />
+          </div>
+
+          <div className="navigation-search-container">
+            <Search />
+          </div>
+        </div>
+
+        <div id="mobile-navigation">
+          <div id="mobile-logo-container">
+            <MobileLogo onClick={(): void => history.push(ROUTES.HOME.url)} />
+          </div>
+          <div id="burger-menu-container">
+            {menuState.open ? (
+              <CloseIcon />
+            ) : (
+              <BurgerMenu
+                onClick={(): void => {
+                  dispatch(openMenu())
+                }}
+              />
+            )}
+          </div>
+        </div>
       </div>
 
-      <Search />
+      <Menu
+        width={'100%'}
+        id="mobile-navigation"
+        isOpen={menuState.open}
+        onStateChange={(state: { isOpen: boolean }): void => {
+          if (state.isOpen) {
+            dispatch(openMenu())
+          } else {
+            dispatch(closeMenu())
+          }
+        }}
+        overlayClassName="bm-overlay-background"
+      >
+        <div id="mobile-routes-container">
+          <div className="mobile-routes-row">
+            <NavLink
+              onClick={(): void => {
+                dispatch(closeMenu())
+              }}
+              key={ROUTES.HOME.name}
+              className="mobile-route-container"
+              activeClassName="active-mobile-route"
+              isActive={(match, location): boolean => {
+                if (
+                  location.pathname.includes(
+                    ROUTES.HOME.name.slice(0, -1).toLowerCase(),
+                  ) &&
+                  location.pathname !== '/'
+                ) {
+                  return true
+                }
+                if (location.pathname === '/' && match) {
+                  return true
+                }
+                return false
+              }}
+              to={ROUTES.HOME.url}
+            >
+              {ROUTES.HOME.renderIcon()}
+              {ROUTES.HOME.name}
+            </NavLink>
+            <NavLink
+              onClick={(): void => {
+                dispatch(closeMenu())
+              }}
+              key={ROUTES.CONTRACTS.name}
+              className="mobile-route-container"
+              activeClassName="active-mobile-route"
+              isActive={(match, location): boolean => {
+                if (
+                  location.pathname.includes(
+                    ROUTES.CONTRACTS.name.slice(0, -1).toLowerCase(),
+                  ) &&
+                  location.pathname !== '/'
+                ) {
+                  return true
+                }
+                if (location.pathname === '/' && match) {
+                  return true
+                }
+                return false
+              }}
+              to={ROUTES.CONTRACTS.url}
+            >
+              {ROUTES.CONTRACTS.renderIcon()}
+              {ROUTES.CONTRACTS.name}
+            </NavLink>
+          </div>
+          <div className="mobile-routes-row">
+            <NavLink
+              onClick={(): void => {
+                dispatch(closeMenu())
+              }}
+              key={ROUTES.TRANSACTIONS.name}
+              className="mobile-route-container"
+              activeClassName="active-mobile-route"
+              isActive={(match, location): boolean => {
+                if (
+                  location.pathname.includes(
+                    ROUTES.TRANSACTIONS.name.slice(0, -1).toLowerCase(),
+                  ) &&
+                  location.pathname !== '/'
+                ) {
+                  return true
+                }
+                if (location.pathname === '/' && match) {
+                  return true
+                }
+                return false
+              }}
+              to={ROUTES.TRANSACTIONS.url}
+            >
+              {ROUTES.TRANSACTIONS.renderIcon()}
+              {ROUTES.TRANSACTIONS.name}
+            </NavLink>
+            <NavLink
+              onClick={(): void => {
+                dispatch(closeMenu())
+              }}
+              key={ROUTES.BLOCKS.name}
+              className="mobile-route-container"
+              activeClassName="active-mobile-route"
+              isActive={(match, location): boolean => {
+                if (
+                  location.pathname.includes(
+                    ROUTES.BLOCKS.name.slice(0, -1).toLowerCase(),
+                  ) &&
+                  location.pathname !== '/'
+                ) {
+                  return true
+                }
+                if (location.pathname === '/' && match) {
+                  return true
+                }
+                return false
+              }}
+              to={ROUTES.BLOCKS.url}
+            >
+              {ROUTES.BLOCKS.renderIcon()}
+              {ROUTES.BLOCKS.name}
+            </NavLink>
+          </div>
+        </div>
+      </Menu>
 
-      {/* <SeachInput />
-
-      <LanguageDropdown /> */}
-    </div>
+      <div className="mobile-navigation-search-container">
+        <Search />
+      </div>
+    </>
   )
 }
 
