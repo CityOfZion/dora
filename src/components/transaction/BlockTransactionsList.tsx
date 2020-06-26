@@ -6,7 +6,6 @@ import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import List from '../list/List'
 import './BlockTransactionsList.scss'
-
 import { BlockTransaction } from '../../reducers/transactionReducer'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'

@@ -185,6 +185,12 @@ export function fetchContractsInvocations() {
       } catch (e) {
         dispatch(requestContractsInvocationsError(e))
       }
+    } else {
+      dispatch(
+        requestContractsInvocationsSuccess(
+          getState().contract.contractsInvocations,
+        ),
+      )
     }
   }
 }

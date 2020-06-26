@@ -28,6 +28,13 @@ export const TRANSACTION_TYPES = {
   state: 'StateTransaction',
 }
 
+export const SEARCH_TYPES = {
+  ADDRESS: 'ADDRESS',
+  CONTRACT: 'CONTRACT',
+  BLOCK: 'BLOCK',
+  TRANSACTION: 'TRANSACTION',
+}
+
 export const ROUTES = {
   HOME: {
     url: '/',
