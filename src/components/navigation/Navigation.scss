@@ -12,16 +12,21 @@
     display: flex;
     flex-wrap: wrap;
 
-    padding: 0 48px;
     flex: 1 1;
     width: 100%;
     max-width: 1200px;
     margin: auto;
 
+    #inner-desktop-navigation-container {
+      padding: 0 12px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
     #coz-blockchain-logo {
       margin-right: 60px;
       margin-top: -6px;
-      margin-left: 12px;
     }
 
     .navigation-search-container {

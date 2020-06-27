@@ -1,18 +1,14 @@
 #Search {
   display: flex;
-  // width: 100%;
+  width: 100%;
   max-height: 200px;
-  min-width: 350px;
-  // margin-right: 24px;
 
   form {
     display: flex;
     align-items: center;
     display: flex;
     max-width: 440px;
-    min-width: 350px;
-    // flex: 1;
-    // width: 100%;
+    width: 100%;
   }
 
   input {

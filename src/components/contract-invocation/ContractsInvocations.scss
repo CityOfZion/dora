@@ -91,6 +91,16 @@
   }
 }
 
+@media only screen and (max-width: 768px) {
+  #ContractInvocations {
+    .invocation-count,
+    .invocation-change,
+    .invocation-name {
+      font-size: 11px !important;
+    }
+  }
+}
+
 @media only screen and (max-width: 1200px) {
   .invocation-count-bar {
     width: 250px !important;

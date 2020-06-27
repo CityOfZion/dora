@@ -6,7 +6,7 @@ import { handleSearchInput } from '../../actions/searchActions'
 import { State as SearchState } from '../../reducers/searchReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { SEARCH_TYPES } from '../../constants'
+import { SEARCH_TYPES, ROUTES } from '../../constants'
 
 const Search: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -19,17 +19,24 @@ const Search: React.FC<{}> = () => {
   const { searchType } = searchState
 
   useEffect(() => {
-    switch (searchType) {
-      case SEARCH_TYPES.TRANSACTION:
-        return history.push(`/transaction/${searchValue}`)
-      case SEARCH_TYPES.CONTRACT:
-        return history.push(`/contract/${searchValue}`)
-      case SEARCH_TYPES.ADDRESS:
-        return history.push(`/address/${searchValue}`)
-      case SEARCH_TYPES.BLOCK:
-        return history.push(`/block/${searchValue}`)
-      default:
-        break
+    console.log({ searchType, searchValue })
+    if (searchType && searchValue) {
+      switch (searchType) {
+        case SEARCH_TYPES.TRANSACTION:
+          history.push(`${ROUTES.TRANSACTION.url}/${searchValue}`)
+          return updateSearchValue('')
+        case SEARCH_TYPES.CONTRACT:
+          history.push(`${ROUTES.CONTRACT.url}/${searchValue}`)
+          return updateSearchValue('')
+        case SEARCH_TYPES.ADDRESS:
+          history.push(`${ROUTES.WALLET.url}/${searchValue}`)
+          return updateSearchValue('')
+        case SEARCH_TYPES.BLOCK:
+          history.push(`${ROUTES.BLOCK.url}/${searchValue}`)
+          return updateSearchValue('')
+        default:
+          break
+      }
     }
   }, [history, searchType, searchValue])
 

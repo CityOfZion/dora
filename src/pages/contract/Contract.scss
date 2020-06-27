@@ -125,3 +125,9 @@
   display: inline-block;
   word-break: break-word;
 }
+
+@media screen and (max-width: 768px) {
+  .section-label {
+    margin: 0;
+  }
+}

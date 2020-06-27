@@ -25,6 +25,7 @@
   font-size: 14px;
   color: #d355e7;
   letter-spacing: 0;
+  // min-width: 160px;
 }
 
 .data-list-column {
@@ -68,4 +69,12 @@
 
 .cellhovered {
   opacity: 0.75;
+}
+
+@media screen and (max-width: 768px) {
+  .data-list > span,
+  .data-list-column,
+  .txid-index-cell {
+    font-size: 11px;
+  }
 }

@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react'
 import moment from 'moment'
+import { useHistory } from 'react-router-dom'
 
 import { Block } from '../../reducers/blockReducer'
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
@@ -7,8 +8,8 @@ import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import List from '../list/List'
 import './BlockTransactionsList.scss'
 import { BlockTransaction } from '../../reducers/transactionReducer'
-import { ROUTES } from '../../constants'
-import { useHistory } from 'react-router-dom'
+import { ROUTES, TRANSACTION_TYPES } from '../../constants'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -36,7 +37,7 @@ const mapTransactionData = (tx: BlockTransaction, block: Block): ParsedTx => {
       <div className="txid-index-cell"> {tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    type: tx.type,
+    type: TRANSACTION_TYPES[tx.type].label || '',
     hash: tx.txid,
   }
 }
@@ -54,6 +55,26 @@ const BlockTransactionsList: React.FC<{
   loading: boolean
 }> = ({ list, block, loading }) => {
   const history = useHistory()
+  const width = useWindowWidth()
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Type', accessor: 'type' },
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+          { name: 'Completed on', accessor: 'time' },
+        ]
+      : [
+          { name: 'Type', accessor: 'type' },
+          {
+            name: 'Transaction ID',
+            accessor: 'txid',
+            style: { minWidth: '100px' },
+          },
+          { name: 'Size', accessor: 'size' },
+        ]
+
   return (
     <div id="BlockTransactionsList">
       <List
@@ -63,12 +84,7 @@ const BlockTransactionsList: React.FC<{
           history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
         }}
         isLoading={loading}
-        columns={[
-          { name: 'Type', accessor: 'type' },
-          { name: 'Transaction ID', accessor: 'txid' },
-          { name: 'Size', accessor: 'size' },
-          { name: 'Completed on', accessor: 'time' },
-        ]}
+        columns={columns}
       />
     </div>
   )
