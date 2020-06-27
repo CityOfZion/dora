@@ -8,6 +8,7 @@ import { State as ContractState } from '../../reducers/contractReducer'
 import { fetchContractsInvocations } from '../../actions/contractActions'
 import { ReactComponent as ArrowUp } from '../../assets/icons/arrow-upward.svg'
 import { ReactComponent as ArrowDown } from '../../assets/icons/arrow-downward.svg'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Invocation = {
   name: string
@@ -79,29 +80,43 @@ const ContractsInvocations: React.FC<{}> = () => {
   const contractState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
-
   const { contractsInvocations, isLoading } = contractState
+  const width = useWindowWidth()
 
   useEffect(() => {
     dispatch(fetchContractsInvocations())
   }, [dispatch])
 
-  return (
-    <div id="ContractInvocations">
-      <List
-        data={returnBlockListData(contractsInvocations, isLoading)}
-        rowId="index"
-        withoutPointer
-        handleRowClick={(data): void => console.log(data)}
-        isLoading={isLoading}
-        columns={[
+  const columns =
+    width > 768
+      ? [
           {
             name: 'Contracts',
             accessor: 'contract',
           },
           { name: 'Transactions', accessor: 'count' },
           { name: '24 hr change', accessor: 'change' },
-        ]}
+        ]
+      : [
+          {
+            name: 'Contracts',
+            accessor: 'contract',
+          },
+          { name: 'Transactions', accessor: 'count' },
+        ]
+
+  return (
+    <div
+      id="ContractInvocations"
+      className={width > 768 ? '' : 'mobile-contract-invocations'}
+    >
+      <List
+        data={returnBlockListData(contractsInvocations, isLoading)}
+        rowId="index"
+        withoutPointer
+        handleRowClick={(data): void => console.log(data)}
+        isLoading={isLoading}
+        columns={columns}
       />
     </div>
   )

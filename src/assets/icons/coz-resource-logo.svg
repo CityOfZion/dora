@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="317px" height="34px" viewBox="0 0 317 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="317px" height="34px" viewBox="0 0 319 34" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Title</title>
     <g id="-1440-desktop-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Desktop--1440-Homepage" transform="translate(-175.000000, -24.000000)">
@@ -15,12 +15,12 @@
                         <path d="M33.3727603,20.9319307 L35.6740824,20.9319307 C35.0401853,22.8566691 33.2211762,24.2452304 31.0852186,24.2452304 C28.4256068,24.2452304 26.2620885,22.0867737 26.2620885,19.4333843 C26.2620885,16.7799949 28.4256068,14.6215382 31.0852186,14.6215382 C33.2211762,14.6215382 35.0264049,15.9963514 35.660302,17.9073417 L33.3589799,17.9073417 C32.9731295,17.0687056 32.0360642,16.5462766 31.0852186,16.5462766 C29.5693777,16.5462766 28.356705,17.8523491 28.356705,19.4333843 C28.356705,21.0281676 29.5693777,22.320492 31.0852186,22.320492 C32.0498446,22.320492 32.9869099,21.7568186 33.3727603,20.9319307 Z" id="Path" stroke="#7D9FB1" stroke-width="0.5" fill="#7D9FB1" fill-rule="nonzero"></path>
                         <path d="M20.9731028,9.24092306 L21.3215834,29.2948971 L1.69154274,29.6390759 L1.34306213,9.58510184 L20.9731028,9.24092306 Z M5.88033947,16.7972267 L4.07132937,18.6705115 L7.78108442,22.2527408 L4.16355881,26.0000276 L7.82769373,25.918216 L11.4457139,22.1716464 L5.88033947,16.7972267 Z M16.8251072,20.2454914 L13.2469339,23.9551072 L16.858885,23.8958666 L18.6808913,21.982039 L16.8251072,20.2454914 Z M13.1401507,12.9668039 L11.3305935,14.8393208 L9.47601576,13.0486155 L7.66700566,14.9219003 L13.2323801,20.2963199 L15.0413902,18.4230351 L13.1857708,16.6308448 L14.9952755,14.7582771 L13.1401507,12.9668039 Z" id="Combined-Shape" fill="#7D9FB1" transform="translate(11.332323, 19.439999) rotate(1.000000) translate(-11.332323, -19.439999) "></path>
                     </g>
-                    <g id="Group-2" transform="translate(95.435995, 14.148000)" fill="#7D9FB1" font-family="SofiaProSemiBold, Sofia Pro" font-size="14.2559993" font-weight="500" letter-spacing="0.972913421">
+                    <g id="Group-2" transform="translate(95.435995, 14.148000)" fill="#7D9FB1" font-weight="500" font-size="14.2559993" letter-spacing="0.972913421">
                         <text id="NEO-blockchain-resou">
                             <tspan x="0" y="14">NEO BLOCKCHAIN RESOURCE</tspan>
                         </text>
                     </g>
-                    <g id="Group-2-Copy" transform="translate(0.000000, 14.148000)" fill="#7D9FB1" font-family="SofiaProSemiBold, Sofia Pro" font-size="14.2559993" font-weight="500" letter-spacing="0.972913421">
+                    <g id="Group-2-Copy" transform="translate(0.000000, 14.148000)" fill="#7D9FB1" font-weight="500" font-size="14.2559993" letter-spacing="0.972913421">
                         <text id="A">
                             <tspan x="0.39599998" y="14">A</tspan>
                         </text>

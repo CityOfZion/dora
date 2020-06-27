@@ -1,15 +1,45 @@
 #Home {
-  background: #14292e;
+  z-index: 10;
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+
+  #inner-home-page-container {
+    margin-top: -24px;
+    padding-top: 24px;
+
+    .full-width-background {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      z-index: -10;
+      margin-top: -24px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+
+      #inner-full-width-container {
+        max-width: 1200px;
+        width: 100%;
+        margin: auto;
+      }
+    }
+  }
+
+  .list-column-container {
+    display: flex;
+    flex-direction: column;
+  }
   .list-row-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    padding: 24px 0 48px 0;
   }
   .list-wrapper {
-    margin: 24px;
+    margin: 24px 0;
     flex: 1;
     max-width: 590px;
+    padding: 0px;
+    min-width: 450px;
   }
   .label-wrapper {
     margin-bottom: 36px;
@@ -27,12 +57,13 @@
   }
 
   #contracts-invocations-container {
-    padding: 48px 24px;
     background: #1a2f34;
     display: flex;
     align-items: center;
     flex-direction: column;
     margin-bottom: -24px;
+    position: relative;
+    padding: 12px;
 
     .label-wrapper {
       width: 100%;
@@ -42,7 +73,7 @@
 
     .invocations-list-wrapper {
       width: 100%;
-      max-width: 1540px;
+
       padding-bottom: 48px;
     }
   }
@@ -82,6 +113,46 @@
       font-size: 18px;
       color: #597b8d;
       letter-spacing: 1.09px;
+    }
+  }
+
+  .explore-tx {
+    margin: 12px;
+  }
+  .explore-blocks {
+    margin: 12px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  #Home {
+    .list-wrapper {
+      max-width: 100% !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #Home {
+    #neoscan-logo-container {
+      max-width: 375px !important;
+      min-width: 350px !important;
+      padding: 12px;
+      justify-content: center;
+      text-align: center;
+      margin: auto;
+    }
+    #welcome-text-underscore {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  #Home {
+    .list-wrapper {
+      max-width: 375px !important;
+      min-width: 350px !important;
     }
   }
 }

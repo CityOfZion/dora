@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="66px" height="64px" viewBox="0 0 66 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>Neoscan logo</title>
+<svg width="39px" height="39px" viewBox="0 0 39 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 2 Copy 4</title>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="80" height="3985"></rect>
+        <filter x="-29.4%" y="-0.5%" width="158.8%" height="101.2%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="7.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.0979840472 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
     <g id="-1440-desktop-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Desktop--1440-Homepage" transform="translate(-10.000000, -16.000000)">
+        <g id="Desktop--1440-Homepage" transform="translate(-21.000000, -16.000000)">
+            <g id="Header" transform="translate(-1.000000, 0.000000)" fill="#0D282E">
+                <rect id="Rectangle" transform="translate(741.000000, 44.000000) rotate(90.000000) translate(-741.000000, -44.000000) " x="697.5" y="-696.5" width="87" height="1481"></rect>
+            </g>
             <g id="Menu" transform="translate(1.000000, 1.000000)">
+                <g id="Rectangle">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#263A3E" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
                 <g id="Neoscan-logo" transform="translate(9.500000, 16.500000)">
                     <g id="Group-2-Copy-4" transform="translate(13.000000, 0.000000)">
                         <rect id="Rectangle-Copy-20" stroke="#D355E7" stroke-width="1.27999992" x="-0.514338002" y="0.52831687" width="34.9399999" height="34.9433663" rx="2.35199972"></rect>
@@ -15,9 +30,6 @@
                             </g>
                         </g>
                     </g>
-                    <text id="neoscan" font-family="SofiaProRegular, Sofia Pro" font-size="14" font-weight="normal" letter-spacing="1.49754829" fill="#FFFFFF">
-                        <tspan x="0.5" y="58">neoscan</tspan>
-                    </text>
                 </g>
             </g>
         </g>

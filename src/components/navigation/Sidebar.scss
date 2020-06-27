@@ -1,8 +1,14 @@
+.sidebar-spacer {
+  width: 80px;
+  min-width: 80px;
+}
+
 #sidebar-container {
   width: 80px;
   background-color: #263a3e;
   position: fixed;
   height: 100%;
+  z-index: 100000000;
 }
 
 .sidebar-route-container {
@@ -50,4 +56,26 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  img {
+    margin-top: 12px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    margin-top: 8px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #sidebar-container {
+    display: none;
+  }
+
+  .sidebar-spacer {
+    display: none;
+  }
 }

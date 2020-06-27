@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="130px" height="31px" viewBox="0 0 130 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 6</title>
+    <g id="Mobile-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Mobile-contracts" transform="translate(-7.000000, -11.000000)">
+            <g id="HEADER">
+                <g id="Group-6" transform="translate(7.500000, 12.000000)">
+                    <g id="Group-2-Copy-5">
+                        <rect id="Rectangle-Copy-20" stroke="#C350ED" x="0.719351611" y="-0.356939387" width="29.4350814" height="29.6121227" rx="1.95999988"></rect>
+                        <g id="Group-32-Copy" fill="#EB4DFF">
+                            <g id="Group-31-Copy" transform="translate(14.491788, 14.276064) rotate(-315.000000) translate(-14.491788, -14.276064) translate(3.813822, 5.118169)">
+                                <polygon id="Path-5" transform="translate(10.663156, 9.012819) rotate(-270.000000) translate(-10.663156, -9.012819) " points="1.7933975 6.88018753 1.7933975 11.1454497 19.5329136 11.1454497 19.5329136 6.88018753"></polygon>
+                                <rect id="Rectangle-Copy-19" x="-4.36557457e-11" y="4.00569717" width="4.26526221" height="8.5836368"></rect>
+                                <rect id="Rectangle-Copy-18" x="17.0610488" y="4.00569717" width="4.26526221" height="8.5836368"></rect>
+                            </g>
+                        </g>
+                    </g>
+                    <text id="neoscan" font-size="19.9999988" font-weight="300" letter-spacing="2.13935447" fill="#FFFFFF">
+                        <tspan x="37" y="24">neoscan</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
