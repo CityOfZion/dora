@@ -63,3 +63,9 @@ code {
   --black: #000000;
   --white: #fff;
 }
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 27px;
+  }
+}

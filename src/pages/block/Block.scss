@@ -1,6 +1,7 @@
 #time-details-row {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 
   div {
     margin: 0 12px;
@@ -15,11 +16,15 @@
   padding-bottom: 48px;
 
   .block-transactions-section {
-    margin-bottom: 48px;
+    margin-bottom: 24px;
+    margin-top: 24px;
   }
 
   span {
     word-break: break-all;
+    word-break: break-all;
+    text-align: left;
+    word-wrap: break-word;
   }
 }
 
@@ -40,9 +45,44 @@
       letter-spacing: 0;
       line-height: 12.67px;
       display: inline-block;
-      word-break: break-word;
+      word-wrap: break-word;
       text-align: left;
       padding-bottom: 24px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #Block {
+    .detail-tile {
+      height: 50px;
+
+      span {
+        font-size: 18px;
+      }
+    }
+
+    .script-tile-row {
+      flex-direction: column;
+    }
+
+    .script-tile {
+      span {
+        font-size: 12px;
+      }
+    }
+
+    .full-width-tile-row {
+      span {
+        font-size: 12px;
+      }
+
+      .detail-tile {
+        label {
+          width: 60px;
+          min-width: 60px;
+        }
+      }
     }
   }
 }

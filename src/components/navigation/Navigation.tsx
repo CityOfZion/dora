@@ -38,12 +38,14 @@ const Navigation: React.FC = (): ReactElement => {
     <>
       <div id="navigation-container">
         <div id="desktop-navigation">
-          <div id="coz-blockchain-logo">
-            <ResourceLogo />
-          </div>
+          <div id="inner-desktop-navigation-container">
+            <div id="coz-blockchain-logo">
+              <ResourceLogo />
+            </div>
 
-          <div className="navigation-search-container">
-            <Search />
+            <div className="navigation-search-container">
+              <Search />
+            </div>
           </div>
         </div>
 

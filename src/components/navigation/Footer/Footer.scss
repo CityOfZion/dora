@@ -19,11 +19,11 @@
 
   #footer-body {
     display: flex;
-    padding: 16px 24px;
+    padding: 12px 24px;
 
     @media screen and (max-width: 768px) {
       flex-direction: column;
-      padding: 16px 8px 16px 6px;
+      padding: 12px;
     }
 
     // common classes
@@ -179,7 +179,7 @@
     display: flex;
 
     @media screen and (max-width: 768px) {
-      padding: 6px;
+      padding: 12px;
     }
     .coz-logo {
       margin-right: 16px;

@@ -20,12 +20,29 @@ export const GENERATE_BASE_URL = (net = 'test_net'): string =>
 
 export const TRANSFER = '7472616e73666572'
 
-export const TRANSACTION_TYPES = {
-  invocation: 'InvocationTransaction',
-  miner: 'MinerTransaction',
-  claim: 'ClaimTransaction',
-  contract: 'ContractTransaction',
-  state: 'StateTransaction',
+export const TRANSACTION_TYPES: {
+  [key: string]: { id: string; label: string }
+} = {
+  InvocationTransaction: {
+    id: 'InvocationTransaction',
+    label: 'Invocation',
+  },
+  MinerTransaction: {
+    id: 'MinerTransaction',
+    label: 'Miner',
+  },
+  ClaimTransaction: {
+    id: 'ClaimTransaction',
+    label: 'Claim',
+  },
+  ContractTransaction: {
+    id: 'ContractTransaction',
+    label: 'Contract',
+  },
+  StateTransaction: {
+    id: 'StateTransaction',
+    label: 'State',
+  },
 }
 
 export const SEARCH_TYPES = {

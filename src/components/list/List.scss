@@ -21,7 +21,6 @@
   max-width: 160px;
   text-overflow: ellipsis;
   overflow: hidden;
-
   font-size: 14px;
   color: #d355e7;
   letter-spacing: 0;
@@ -58,14 +57,18 @@
   margin-bottom: 12px;
 }
 
-// .dark-mode .cellhovered {
-//   background: #444444 !important;
-// }
-
 .cellhovered img {
   filter: invert(0%);
 }
 
 .cellhovered {
   opacity: 0.75;
+}
+
+@media screen and (max-width: 768px) {
+  .data-list > span,
+  .data-list-column,
+  .txid-index-cell {
+    font-size: 11px;
+  }
 }
