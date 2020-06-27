@@ -21,11 +21,9 @@
   max-width: 160px;
   text-overflow: ellipsis;
   overflow: hidden;
-
   font-size: 14px;
   color: #d355e7;
   letter-spacing: 0;
-  // min-width: 160px;
 }
 
 .data-list-column {
@@ -58,10 +56,6 @@
   justify-content: space-between;
   margin-bottom: 12px;
 }
-
-// .dark-mode .cellhovered {
-//   background: #444444 !important;
-// }
 
 .cellhovered img {
   filter: invert(0%);
