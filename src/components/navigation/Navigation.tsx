@@ -34,7 +34,6 @@ const Navigation: React.FC = (): ReactElement => {
     dispatch(closeMenu())
   }
 
-  console.log({ menuState })
   return (
     <>
       <div id="navigation-container">
@@ -50,11 +49,20 @@ const Navigation: React.FC = (): ReactElement => {
 
         <div id="mobile-navigation">
           <div id="mobile-logo-container">
-            <MobileLogo onClick={(): void => history.push(ROUTES.HOME.url)} />
+            <MobileLogo
+              onClick={(): void => {
+                dispatch(closeMenu())
+                history.push(ROUTES.HOME.url)
+              }}
+            />
           </div>
           <div id="burger-menu-container">
             {menuState.open ? (
-              <CloseIcon />
+              <CloseIcon
+                onClick={(): void => {
+                  dispatch(closeMenu())
+                }}
+              />
             ) : (
               <BurgerMenu
                 onClick={(): void => {
@@ -67,10 +75,13 @@ const Navigation: React.FC = (): ReactElement => {
       </div>
 
       <Menu
+        disableOverlayClick
         width={'100%'}
-        id="mobile-navigation"
+        noTransition
+        id="mobile-navigation-menu"
         isOpen={menuState.open}
         onStateChange={(state: { isOpen: boolean }): void => {
+          console.log({ state })
           if (state.isOpen) {
             dispatch(openMenu())
           } else {
@@ -79,7 +90,10 @@ const Navigation: React.FC = (): ReactElement => {
         }}
         overlayClassName="bm-overlay-background"
       >
-        <div id="mobile-routes-container">
+        <div
+          id="mobile-routes-container"
+          style={{ opacity: menuState.open ? 1 : 0 }}
+        >
           <div className="mobile-routes-row">
             <NavLink
               onClick={(): void => {

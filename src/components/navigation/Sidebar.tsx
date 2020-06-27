@@ -10,6 +10,7 @@ const Sidebar: React.FC = (): ReactElement => {
     <div id="sidebar-container">
       <NavLink id="sidebar-logo-container" to={ROUTES.HOME.url}>
         <img src={SidebarLogo} alt="neoscan-sidebar-logo" />
+        <p>neoscan</p>
       </NavLink>
       {SIDEBAR_ROUTES.map(route => (
         <NavLink

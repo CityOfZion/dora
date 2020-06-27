@@ -1,13 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="26px" height="18px" viewBox="0 0 26 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>menu - material</title>
-    <g id="Mobile-designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-family="material" font-size="34" font-weight="normal">
-        <g id="Mobile-contracts" transform="translate(-286.000000, -17.000000)" fill="#FFFFFF">
-            <g id="HEADER">
-                <text id="menu---material">
-                    <tspan x="282" y="38"></tspan>
-                </text>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="34px" height="34px"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>

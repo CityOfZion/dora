@@ -1,22 +1,27 @@
 #navigation-container {
   height: 88px;
-
   background-color: #0d282e;
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-
-  padding: 0px 24px;
+  width: 100%;
+  margin: auto;
 
   #desktop-navigation {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
+
+    padding: 0 48px;
+    flex: 1 1;
     width: 100%;
+    max-width: 1200px;
+    margin: auto;
 
     #coz-blockchain-logo {
       margin-right: 60px;
       margin-top: -6px;
+      margin-left: 12px;
     }
 
     .navigation-search-container {
@@ -50,6 +55,7 @@
       width: 100%;
       align-items: center;
       justify-content: space-between;
+      padding: 0 12px;
 
       #mobile-logo-container,
       #burger-menu-container {
@@ -73,7 +79,10 @@
     display: flex;
     flex: 1;
     margin: auto;
-    padding: 24px 0 12px 0;
+    max-height: 50px;
+    // padding: 24px 0 12px 0;
+    //margin: 24px 12px 0 12px;
+    margin-top: 24px;
 
     form {
       margin: auto;
@@ -81,6 +90,7 @@
 
     #Search {
       justify-content: center;
+      padding: 0 12px;
     }
   }
 }
@@ -91,8 +101,6 @@
   flex-wrap: wrap;
   outline: none;
   justify-content: center;
-  // background: #263a3e;
-  // padding: 24px;
 
   .mobile-route-container {
     height: 145px;
@@ -108,7 +116,6 @@
     cursor: pointer;
     margin-bottom: 12px;
     text-decoration: none;
-    // box-sizing: border-box;
     border: solid 1px #899fa8;
     margin: 24px 12px;
     border-radius: 3px;
@@ -122,8 +129,6 @@
     background-color: #0d282e;
     text-decoration: none;
     border: solid 1px #d355e7;
-    // box-sizing: border-box;
-
     color: #d8d8d8;
 
     svg {
@@ -134,6 +139,21 @@
   }
 }
 
-.bm-overlay-background {
+.bm-overlay-background,
+.bm-overlay {
   background: #263a3e !important;
+  transition: opacity 0.3s ease 0s !important;
 }
+
+.bm-burger-button {
+  display: none;
+}
+
+#mobile-routes-container {
+  transition: opacity 0.3s ease 0s !important;
+}
+
+// .bm-overlay,
+// .bm-menu-wrap {
+//   transition-duration: 0.6s !important;
+// }

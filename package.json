@@ -29,6 +29,7 @@
     "react-test-renderer": "^16.13.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "simple-line-icons": "^2.4.1",
     "ts-jest": "^25.5.1"
   },
   "devDependencies": {

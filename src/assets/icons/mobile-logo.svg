@@ -15,7 +15,7 @@
                             </g>
                         </g>
                     </g>
-                    <text id="neoscan" font-family="SofiaProRegular, Sofia Pro" font-size="19.9999988" font-weight="normal" letter-spacing="2.13935447" fill="#FFFFFF">
+                    <text id="neoscan" font-size="19.9999988" font-weight="300" letter-spacing="2.13935447" fill="#FFFFFF">
                         <tspan x="37" y="24">neoscan</tspan>
                     </text>
                 </g>

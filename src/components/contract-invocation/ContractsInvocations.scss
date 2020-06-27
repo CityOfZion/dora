@@ -1,3 +1,11 @@
+.mobile-contract-invocations {
+  .data-list {
+    span:nth-last-child(3) {
+      border-bottom: 1px solid #445e65 !important;
+    }
+  }
+}
+
 #ContractInvocations {
   padding: 6px 24px;
   background: #2a3d42;
@@ -70,6 +78,8 @@
 
     .invocation-position {
       background: #0d292f;
+      min-height: 22px;
+      min-width: 22px;
       height: 22px;
       width: 22px;
       border-radius: 22px;

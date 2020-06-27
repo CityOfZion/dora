@@ -9,6 +9,7 @@ import { fetchBlocks } from '../../actions/blockActions'
 import { State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Block = {
   index: number
@@ -56,12 +57,34 @@ const returnBlockListData = (
 const DashboardBlockList: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
 
   useEffect(() => {
     dispatch(fetchBlocks())
   }, [dispatch])
+
+  const columns =
+    width > 768
+      ? [
+          {
+            name: 'Index',
+            accessor: 'index',
+          },
+          { name: 'Time', accessor: 'time' },
+          { name: 'Transactions', accessor: 'transactions' },
+          { name: 'Size', accessor: 'size' },
+        ]
+      : [
+          {
+            name: 'Index',
+            accessor: 'index',
+          },
+
+          { name: 'Transactions', accessor: 'transactions' },
+          { name: 'Size', accessor: 'size' },
+        ]
 
   return (
     <List
@@ -71,15 +94,7 @@ const DashboardBlockList: React.FC<{}> = () => {
         history.push(`${ROUTES.BLOCK.url}/${data.id}`)
       }}
       isLoading={blockState.isLoading}
-      columns={[
-        {
-          name: 'Index',
-          accessor: 'index',
-        },
-        { name: 'Time', accessor: 'time' },
-        { name: 'Transactions', accessor: 'transactions' },
-        { name: 'Size', accessor: 'size' },
-      ]}
+      columns={columns}
     />
   )
 }

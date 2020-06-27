@@ -28,7 +28,7 @@ const Home: React.FC<{}> = () => {
 
             <div className="list-column-container">
               <div className="list-row-container">
-                <div className="list-wrapper">
+                <div className="list-wrapper explore-blocks">
                   <div className="label-wrapper">
                     <label>explore blocks</label>
                     <Button
@@ -40,7 +40,7 @@ const Home: React.FC<{}> = () => {
                   </div>
                   <DashboardBlockList />
                 </div>
-                <div className="list-wrapper">
+                <div className="list-wrapper explore-tx">
                   <div className="label-wrapper">
                     <label>explore transactions</label>
                     <Button
@@ -60,7 +60,7 @@ const Home: React.FC<{}> = () => {
         </div>
         <div id="contracts-invocations-container">
           <div className="label-wrapper">
-            <label>Contract Invocations in the last 24 hourss</label>
+            <label>Contract Invocations in the last 24 hours</label>
           </div>
           <div className="invocations-list-wrapper">
             <ContractsInvocations />

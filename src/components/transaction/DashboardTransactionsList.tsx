@@ -12,6 +12,7 @@ import {
 } from '../../reducers/transactionReducer'
 import { useHistory } from 'react-router-dom'
 import { ROUTES } from '../../constants'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedTx = {
   time: string
@@ -45,6 +46,7 @@ const returnTxListData = (
 const DashboardTransactionsList: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const width = useWindowWidth()
 
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -54,6 +56,18 @@ const DashboardTransactionsList: React.FC<{}> = () => {
     dispatch(fetchTransactions())
   }, [dispatch])
 
+  const columns =
+    width > 768
+      ? [
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+          { name: 'Time', accessor: 'time' },
+        ]
+      : [
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+        ]
+
   return (
     <List
       data={returnTxListData(txState.list, txState.isLoading)}
@@ -62,11 +76,7 @@ const DashboardTransactionsList: React.FC<{}> = () => {
         history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
       }}
       isLoading={txState.isLoading}
-      columns={[
-        { name: 'Transaction ID', accessor: 'txid' },
-        { name: 'Size', accessor: 'size' },
-        { name: 'Time', accessor: 'time' },
-      ]}
+      columns={columns}
     />
   )
 }
