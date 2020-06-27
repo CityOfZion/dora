@@ -81,7 +81,6 @@ const Navigation: React.FC = (): ReactElement => {
         id="mobile-navigation-menu"
         isOpen={menuState.open}
         onStateChange={(state: { isOpen: boolean }): void => {
-          console.log({ state })
           if (state.isOpen) {
             dispatch(openMenu())
           } else {

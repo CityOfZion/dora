@@ -64,7 +64,6 @@
 
       #top-level-mobile-navigation {
         display: flex;
-        // padding-bottom: 24px;
       }
     }
 
@@ -80,8 +79,6 @@
     flex: 1;
     margin: auto;
     max-height: 50px;
-    // padding: 24px 0 12px 0;
-    //margin: 24px 12px 0 12px;
     margin-top: 24px;
 
     form {
@@ -152,8 +149,3 @@
 #mobile-routes-container {
   transition: opacity 0.3s ease 0s !important;
 }
-
-// .bm-overlay,
-// .bm-menu-wrap {
-//   transition-duration: 0.6s !important;
-// }
