@@ -1,17 +1,10 @@
-import React, { ReactElement, useEffect } from 'react'
-import moment from 'moment'
-
-import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
-import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
-import List from '../../components/list/List'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchBlocks } from '../../actions/blockActions'
+
 import { State as SearchState } from '../../reducers/searchReducer'
 import './NotFound.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
-import { useHistory } from 'react-router-dom'
-
 import { ReactComponent as NotFoundIllustration } from '../../assets/icons/Illustration.svg'
 import { clearSearchInputState } from '../../actions/searchActions'
 
