@@ -1,0 +1,70 @@
+#NotFound {
+  .error-search-results-container {
+    display: flex;
+    margin-bottom: 12px;
+    h2 {
+      font-size: 24px;
+      color: #ffffff;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    #search-results-terms {
+      color: #d355e7;
+      margin-left: 6px;
+    }
+  }
+
+  #inner-not-found-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 24px;
+
+    svg {
+      margin-bottom: 24px;
+      max-width: 100%;
+      display: flex;
+    }
+
+    span {
+      font-size: 20px;
+      color: #7d9fb1;
+      letter-spacing: 0;
+      text-align: center;
+    }
+
+    h3 {
+      font-weight: 400;
+      font-size: 29px;
+      color: #ffffff;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 25px;
+    }
+  }
+
+  .page-title-container {
+    max-height: 85px;
+
+    svg {
+      max-width: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #NotFound {
+    #inner-not-found-page-container {
+      h3 {
+        font-size: 24px;
+      }
+    }
+    .error-search-results-container {
+      h2 {
+        font-size: 18px;
+      }
+    }
+  }
+}

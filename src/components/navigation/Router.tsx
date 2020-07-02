@@ -13,6 +13,7 @@ import Sidebar from './Sidebar'
 import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
 import Address from '../../pages/address/Address'
+import NotFound from '../../pages/not-found/NotFound'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -63,7 +64,13 @@ const Router: React.FC = (): ReactElement => {
                 <Route
                   path={ROUTES.HOME.url}
                   component={(): ReactElement => <Home />}
+                  exact
                 />
+                <Route
+                  path={ROUTES.NOT_FOUND.url}
+                  component={(): ReactElement => <NotFound />}
+                />
+                <Route component={(): ReactElement => <NotFound />} />
               </Switch>
             </div>
           </div>

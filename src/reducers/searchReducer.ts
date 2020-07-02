@@ -6,6 +6,7 @@ import {
   SEARCH_INPUT_ENTERED_ERROR,
   CLEAR_SEARCH_INPUT_STATE,
   CLEAR_SEARCH_INPUT_ENTERED_ERROR,
+  UPDATE_SEARCH_INPUT,
 } from '../actions/searchActions'
 
 export type State = {
@@ -37,6 +38,11 @@ export default (
     case SEARCH_INPUT_ENTERED:
       return Object.assign({}, state, {
         isSearching: true,
+        searchValue: action.search,
+      })
+    case UPDATE_SEARCH_INPUT:
+      return Object.assign({}, state, {
+        searchValue: action.search,
       })
     case SEARCH_INPUT_ENTERED_SUCCESS:
       return Object.assign({}, state, {

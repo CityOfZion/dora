@@ -6,6 +6,7 @@ import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
 import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
 import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
+import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
 
 export const NEO_HASHES = [
   '0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
@@ -98,6 +99,11 @@ export const ROUTES = {
     url: '/api',
     name: 'API',
     renderIcon: (): React.ReactNode => <Api />,
+  },
+  NOT_FOUND: {
+    url: '/not-found',
+    name: 'No Results found',
+    renderIcon: (): React.ReactNode => <Magnify />,
   },
 }
 
