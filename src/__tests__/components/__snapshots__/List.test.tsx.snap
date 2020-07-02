@@ -18,6 +18,7 @@ exports[`renders without crashing 1`] = `
       style={
         Object {
           "backgroundColor": "purple",
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }
@@ -43,6 +44,7 @@ exports[`renders without crashing 1`] = `
       onMouseLeave={[Function]}
       style={
         Object {
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }
@@ -73,6 +75,7 @@ exports[`renders without crashing 1`] = `
       onMouseLeave={[Function]}
       style={
         Object {
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }
@@ -103,6 +106,7 @@ exports[`renders without crashing 1`] = `
       onMouseLeave={[Function]}
       style={
         Object {
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }
@@ -133,6 +137,7 @@ exports[`renders without crashing 1`] = `
       onMouseLeave={[Function]}
       style={
         Object {
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }
@@ -163,6 +168,7 @@ exports[`renders without crashing 1`] = `
       onMouseLeave={[Function]}
       style={
         Object {
+          "borderLeft": "",
           "borderRadius": "3px 0 0 3px",
         }
       }

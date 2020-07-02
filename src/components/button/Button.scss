@@ -16,10 +16,26 @@
 
 .primary-button {
   background: #eb4dff;
+
+  &:hover {
+    background: #dc6fed;
+  }
+
+  &:disabled {
+    background: #724579;
+  }
 }
 
 .secondary-button {
   background: #7d9fb1;
+
+  &:hover {
+    background: #96c0d5;
+  }
+
+  &:disabled {
+    background: #4b575e;
+  }
 }
 
 .disabled-button {

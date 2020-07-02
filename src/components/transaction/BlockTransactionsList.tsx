@@ -85,6 +85,27 @@ const BlockTransactionsList: React.FC<{
         }}
         isLoading={loading}
         columns={columns}
+        leftBorderColorOnRow={(
+          id: string | number | void | React.FC<{}>,
+        ): string => {
+          const listData = returnTxListData(list, block)
+          const transaction = listData.find(tx => tx.hash === id)
+          if (transaction) {
+            switch (transaction.type) {
+              case 'Miner':
+                return '#FEDD5B'
+              case 'Invocation':
+                return '#D355E7'
+              case 'Claim':
+                return '#00CBFF'
+              case 'Contract':
+                return '#4CFFB3'
+              default:
+                return ''
+            }
+          }
+          return ''
+        }}
       />
     </div>
   )

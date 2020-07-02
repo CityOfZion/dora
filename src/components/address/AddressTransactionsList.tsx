@@ -11,7 +11,7 @@ import './AddressTransactionsList.scss'
 type ParsedTransaction = {
   amount: string
   id: string
-  txid: string
+  txid: () => ReactElement
   from: string
   to: string
   time: () => ReactElement
@@ -30,7 +30,9 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
   return {
     amount: tx.amount,
     id: tx.txid,
-    txid: tx.txid,
+    txid: (): ReactElement => (
+      <div className="block-index-cell address-history-txid"> {tx.txid} </div>
+    ),
     from: tx.from,
     to: tx.to,
     time: (): ReactElement => (

@@ -19,6 +19,7 @@ import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import { fetchTransaction } from '../../actions/transactionActions'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import Transfer from '../../components/transfer/Transfer'
+import { disassemble } from '../../utils/disassemble'
 
 type ParsedTransfer = { name: string; amount: string; to: string; from: string }
 
@@ -225,6 +226,44 @@ const Transaction: React.FC<Props> = (props: Props) => {
                     </div>
                   </div>
                 </ExpandingPanel>
+              )}
+
+              {transaction && transaction.scripts[0] && (
+                <div style={{ margin: '24px 0' }}>
+                  <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
+                    <div className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>INVOCATION SCRIPT</label>
+                        <span>
+                          {!isLoading &&
+                            transaction &&
+                            disassemble(transaction.scripts[0].invocation)}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label>VERIFICATION SCRIPT</label>
+                        <span>
+                          {!isLoading &&
+                            transaction &&
+                            transaction.scripts &&
+                            transaction.scripts[0] &&
+                            disassemble(
+                              transaction.scripts[0].verification,
+                            )}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label> SCRIPT</label>
+                        <span>
+                          {!isLoading &&
+                            transaction &&
+                            transaction.script &&
+                            disassemble(transaction.script)}{' '}
+                        </span>
+                      </div>
+                    </div>
+                  </ExpandingPanel>
+                </div>
               )}
             </div>
           </div>

@@ -114,7 +114,7 @@ const ContractsInvocations: React.FC<{}> = () => {
         data={returnBlockListData(contractsInvocations, isLoading)}
         rowId="index"
         withoutPointer
-        handleRowClick={(data): void => console.log(data)}
+        handleRowClick={(data): null => null}
         isLoading={isLoading}
         columns={columns}
       />
