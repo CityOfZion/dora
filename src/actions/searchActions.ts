@@ -29,6 +29,17 @@ export const searchInputEnteredSuccess = (
   })
 }
 
+export const UPDATE_SEARCH_INPUT = 'UPDATE_SEARCH_INPUT'
+export const updateSearchInput = (search: string) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: UPDATE_SEARCH_INPUT,
+    search,
+    receivedAt: Date.now(),
+  })
+}
+
 export const SEARCH_INPUT_ENTERED_ERROR = 'SEARCH_INPUT_ENTERED_ERROR'
 export const searchInputEnteredError = (errorMessage: string) => (
   dispatch: Dispatch,

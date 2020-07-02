@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { ReactComponent as Magnify } from '../../assets/icons/magnify.svg'
 import './Search.scss'
-import { handleSearchInput } from '../../actions/searchActions'
+import {
+  handleSearchInput,
+  updateSearchInput,
+  clearSearchInputState,
+} from '../../actions/searchActions'
 import { State as SearchState } from '../../reducers/searchReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,50 +16,59 @@ const Search: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const [searchValue, updateSearchValue] = useState('')
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { searchType } = searchState
+  const { searchType, error, searchValue } = searchState
 
   useEffect(() => {
     if (searchType && searchValue) {
       switch (searchType) {
         case SEARCH_TYPES.TRANSACTION:
-          history.push(`${ROUTES.TRANSACTION.url}/${searchValue}`)
-          return updateSearchValue('')
+          dispatch(clearSearchInputState())
+          return history.push(`${ROUTES.TRANSACTION.url}/${searchValue}`)
+
         case SEARCH_TYPES.CONTRACT:
-          history.push(`${ROUTES.CONTRACT.url}/${searchValue}`)
-          return updateSearchValue('')
+          dispatch(clearSearchInputState())
+          return history.push(`${ROUTES.CONTRACT.url}/${searchValue}`)
+
         case SEARCH_TYPES.ADDRESS:
-          history.push(`${ROUTES.WALLET.url}/${searchValue}`)
-          return updateSearchValue('')
+          dispatch(clearSearchInputState())
+          return history.push(`${ROUTES.WALLET.url}/${searchValue}`)
+
         case SEARCH_TYPES.BLOCK:
-          history.push(`${ROUTES.BLOCK.url}/${searchValue}`)
-          return updateSearchValue('')
+          dispatch(clearSearchInputState())
+          return history.push(`${ROUTES.BLOCK.url}/${searchValue}`)
+
         default:
           break
       }
     }
-  }, [history, searchType, searchValue])
+    if (error) {
+      history.push(ROUTES.NOT_FOUND.url)
+    }
+  }, [dispatch, error, history, searchType, searchValue])
 
   function handleSearch(e: React.SyntheticEvent): void {
     e.preventDefault()
-    dispatch(handleSearchInput(searchValue))
+    dispatch(handleSearchInput(searchValue || ''))
   }
 
-  function updateSearch(e: React.SyntheticEvent): void {
-    const target = e.target as HTMLInputElement
-    const searchTerms = target.value
-    updateSearchValue(searchTerms)
+  function updateSearch(searchTerms: string): void {
+    dispatch(updateSearchInput(searchTerms))
   }
 
   return (
     <div id="Search">
       <form onSubmit={handleSearch}>
         <input
-          value={searchValue}
-          onChange={updateSearch}
+          value={searchValue || ''}
+          onChange={(e: React.SyntheticEvent): void => {
+            const target = e.target as HTMLInputElement
+            const searchTerms = target.value
+
+            updateSearch(searchTerms)
+          }}
           placeholder="Search for Block Height, Hash, Address or transaction id"
         ></input>{' '}
         <Magnify onClick={handleSearch} />
