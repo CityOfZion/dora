@@ -32,6 +32,8 @@
   display: flex;
 
   .detail-tile {
+    white-space: pre-line;
+
     max-height: none;
     height: auto;
     margin: 2px;
@@ -46,6 +48,7 @@
       line-height: 12.67px;
       display: inline-block;
       word-wrap: break-word;
+      word-break: break-all;
       text-align: left;
       padding-bottom: 24px;
     }

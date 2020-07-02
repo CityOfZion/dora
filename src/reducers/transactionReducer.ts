@@ -70,6 +70,7 @@ export type DetailedTransaction = {
   block: number
   time: number
   txid: string
+  script: string
   scripts: [{ invocation: string; verification: string }]
   Item: {
     notifications: [

@@ -6,9 +6,7 @@
   display: flex;
   font-size: 14px;
   flex-direction: column;
-  // margin-left: 80px;
   padding: 24px 0;
-  // margin-left: 80px;
   margin: auto;
 
   max-width: 1200px;
@@ -29,8 +27,6 @@
     // common classes
     .section-container {
       flex: 1;
-      // padding: 0 16px;
-
       @media screen and (max-width: 768px) {
         padding: 0;
       }
@@ -159,9 +155,6 @@
       }
 
       button {
-        background: var(--medium-grey);
-        border-radius: 12.28px;
-        color: var(--white);
         font-size: 14px;
         border: none;
         align-self: flex-end;

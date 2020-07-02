@@ -10,6 +10,7 @@ import { State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import './DashboardBlockList.scss'
 
 type Block = {
   index: number
@@ -71,6 +72,7 @@ const DashboardBlockList: React.FC<{}> = () => {
           {
             name: 'Index',
             accessor: 'index',
+            class: 'pink-border-left',
           },
           { name: 'Time', accessor: 'time' },
           { name: 'Transactions', accessor: 'transactions' },
@@ -95,6 +97,7 @@ const DashboardBlockList: React.FC<{}> = () => {
       }}
       isLoading={blockState.isLoading}
       columns={columns}
+      leftBorderColorOnRow="#D355E7"
     />
   )
 }

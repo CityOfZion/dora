@@ -77,6 +77,7 @@ const DashboardTransactionsList: React.FC<{}> = () => {
       }}
       isLoading={txState.isLoading}
       columns={columns}
+      leftBorderColorOnRow="#D355E7"
     />
   )
 }

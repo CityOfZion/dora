@@ -11,6 +11,7 @@ import BlockTransactionsList from '../../components/transaction/BlockTransaction
 import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
+import { disassemble } from '../../utils/disassemble'
 
 interface MatchParams {
   hash: string
@@ -140,6 +141,29 @@ const Block: React.FC<Props> = (props: Props) => {
               </div>
             </div>
           </ExpandingPanel>
+
+          <div style={{ margin: '24px 0' }}>
+            <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
+              <div className="script-tile-row">
+                <div className="detail-tile script-tile">
+                  <label>INVOCATION SCRIPT</label>
+                  <span>
+                    {!isLoading &&
+                      block &&
+                      disassemble(block.script.invocation)}{' '}
+                  </span>
+                </div>
+                <div className="detail-tile script-tile">
+                  <label>VERIFICATION SCRIPT</label>
+                  <span>
+                    {!isLoading &&
+                      block &&
+                      disassemble(block.script.verification)}{' '}
+                  </span>
+                </div>
+              </div>
+            </ExpandingPanel>
+          </div>
         </div>
       </div>
     </div>

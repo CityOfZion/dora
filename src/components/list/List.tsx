@@ -19,6 +19,9 @@ type ListProps = {
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
+  leftBorderColorOnRow?:
+    | string
+    | ((id: string | number | void | React.FC<{}>) => string)
 }
 
 export const List: React.FC<ListProps> = ({
@@ -28,6 +31,7 @@ export const List: React.FC<ListProps> = ({
   isLoading,
   rowId,
   withoutPointer = false,
+  leftBorderColorOnRow = '',
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -49,15 +53,29 @@ export const List: React.FC<ListProps> = ({
 
   const conditionalBorderRadius = (
     index: number,
+    shouldReturnBorderLeftStyle?: boolean,
+    id?: string | number | React.FC<{}>,
   ): { borderRadius: string } | undefined => {
-    if (!index)
-      return {
+    if (!index) {
+      const border = {
         borderRadius: '3px 0 0 3px',
+        borderLeft: '',
       }
-    if (index === columns.length)
-      return {
+      if (shouldReturnBorderLeftStyle && leftBorderColorOnRow) {
+        border.borderLeft = `solid 3px ${
+          typeof leftBorderColorOnRow === 'function'
+            ? leftBorderColorOnRow(id)
+            : leftBorderColorOnRow
+        }`
+      }
+      return border
+    }
+    if (index === columns.length) {
+      const border = {
         borderRadius: '0 3px 3px 0',
       }
+      return border
+    }
     return undefined
   }
 
@@ -88,7 +106,10 @@ export const List: React.FC<ListProps> = ({
       <div className="data-list" style={gridstyle}>
         {columns.map((column, i) => (
           <div
-            style={{ ...conditionalBorderRadius(i), ...(column.style || {}) }}
+            style={{
+              ...conditionalBorderRadius(i),
+              ...(column.style || {}),
+            }}
             className={headerRowClass}
             key={column.name}
           >
@@ -108,7 +129,7 @@ export const List: React.FC<ListProps> = ({
               return (
                 key !== 'id' && (
                   <span
-                    style={conditionalBorderRadius(i)}
+                    style={conditionalBorderRadius(i, true, data.id)}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
                     className={
