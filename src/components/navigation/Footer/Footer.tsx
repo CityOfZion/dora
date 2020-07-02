@@ -1,16 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { ReactElement } from 'react'
+
 import './Footer.scss'
 import logo from '../../../assets/icons/neoscan-logo.svg'
 import cozLogo from '../../../assets/icons/coz-logo.svg'
 import newsStreamLogo from '../../../assets/icons/news-stream-logo.svg'
-import {
-  makeNavLinks,
-  makeNewsStream,
-  makeInfoLinks,
-  infoLinksData,
-} from './helpers'
+import { makeNavLinks, makeInfoLinks, infoLinksData } from './helpers'
 import Button from '../../button/Button'
+import NewsFeed from './NewsFeed'
 
 const Footer: React.FC = (): ReactElement => {
   return (
@@ -62,17 +59,14 @@ const Footer: React.FC = (): ReactElement => {
               </div>
               <hr className="divider" />
               <div className="news-stream">
-                {makeNewsStream()}
-                <Button
-                  onClick={(): void =>
-                    console.log(
-                      'Soon I will fetch more news items for the news stream',
-                    )
-                  }
-                  primary={false}
+                <NewsFeed />
+                <a
+                  href="https://neonewstoday.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  view more
-                </Button>
+                  <Button primary={false}>view more</Button>
+                </a>
               </div>
             </div>
           </div>
