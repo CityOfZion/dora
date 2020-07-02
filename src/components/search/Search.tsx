@@ -19,7 +19,6 @@ const Search: React.FC<{}> = () => {
   const { searchType } = searchState
 
   useEffect(() => {
-    console.log({ searchType, searchValue })
     if (searchType && searchValue) {
       switch (searchType) {
         case SEARCH_TYPES.TRANSACTION:
