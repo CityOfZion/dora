@@ -6,11 +6,6 @@ import gitHubLogo from '../../../assets/icons/github-logo.svg'
 import discordLogo from '../../../assets/icons/discord-logo.svg'
 import neoScanApiLogo from '../../../assets/icons/neoscan-sm.svg'
 
-interface FakeNewsFeedShape {
-  image: string
-  description: string
-}
-
 interface InfoLink {
   copy: string
   href: string
@@ -63,19 +58,5 @@ export const makeInfoLinks = (infoLinks: InfoLinks): ReactNode => {
       <img className="icon" alt={link.alt} src={link.src} />
       <span>{link.copy}</span>
     </a>
-  ))
-}
-
-export const makeNewsStream = (
-  data?: FakeNewsFeedShape[],
-): ReactNode | null => {
-  if (!data) {
-    return null
-  }
-  return data.map(item => (
-    <div className={'news-item'}>
-      <img alt={item.image} src={item.image} />
-      <p>item.description </p>
-    </div>
   ))
 }
