@@ -236,6 +236,12 @@ const Transaction: React.FC<Props> = (props: Props) => {
                           transaction.scripts[0].verification}{' '}
                       </span>
                     </div>
+                    <div className="detail-tile script-tile">
+                      <label> SCRIPT</label>
+                      <span>
+                        {!isLoading && transaction && transaction.script}
+                      </span>
+                    </div>
                   </div>
                 </ExpandingPanel>
               )}
