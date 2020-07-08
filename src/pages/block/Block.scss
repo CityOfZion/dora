@@ -30,6 +30,7 @@
 
 .script-tile-row {
   display: flex;
+  flex-wrap: wrap;
 
   .detail-tile {
     white-space: pre-line;

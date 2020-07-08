@@ -22,8 +22,9 @@ const News: React.FC = (): ReactElement => {
 
   useEffect(() => {
     async function fetchAndSetFeed(): Promise<void> {
+      const CORS_PROXY = 'https://thingproxy.freeboard.io/fetch/'
       const results = await parser.parseURL(
-        'https://cors-anywhere.herokuapp.com/http://neonewstoday.com/feed/',
+        CORS_PROXY + 'http://neonewstoday.com/feed/',
       )
       if (results) {
         results.items && setItems(results.items)
@@ -70,7 +71,6 @@ const News: React.FC = (): ReactElement => {
           >
             <img src={imgSrc} alt={title} />
             <div>
-              <small>{moment(item.isoDate).format('YYYY-MM-DD')}</small>
               <p> {title}</p>
             </div>
           </a>

@@ -27,7 +27,7 @@ type ParsedContract = {
 const mapContractData = (contract: Contract): ParsedContract => {
   return {
     hash: contract.hash,
-    time: moment.unix(contract.time).format('MM-DD-YYY | HH:MM:SS'),
+    time: moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS'),
     block: (): ReactElement => (
       <div className="block-index-cell">{contract.block.toLocaleString()} </div>
     ),

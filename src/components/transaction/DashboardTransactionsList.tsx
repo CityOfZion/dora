@@ -23,7 +23,9 @@ type ParsedTx = {
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    time: `${getDiffInSecondsFromNow(moment(tx.time).format())} seconds ago`,
+    time: `${getDiffInSecondsFromNow(
+      moment.unix(tx.time).format(),
+    )} seconds ago`,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.txid} </div>
     ),

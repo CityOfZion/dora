@@ -67,9 +67,12 @@ const parseAbstractData = async (
       )
       const json = await response.json()
       const name = json.name
+
+      const amountWithDecimals = Number(amount) / json.decimals
+
       transfers.push({
         name,
-        amount,
+        amount: amountWithDecimals,
         to,
         from,
       })
