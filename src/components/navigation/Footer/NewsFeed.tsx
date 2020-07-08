@@ -1,7 +1,6 @@
 // @flow
 import React, { useState, useEffect, ReactElement } from 'react'
 import Parser, { Item } from 'rss-parser'
-import moment from 'moment'
 
 import './NewsFeed.scss'
 
