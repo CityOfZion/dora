@@ -396,9 +396,9 @@ export function disassemble(textScript: string): string {
 
       if (opcodedata.name === 'SYSCALL') {
         ip += 1
-        let data_length = script.readUInt8(ip)
+        const dataLength = script.readUInt8(ip)
 
-        if (data_length === 4) {
+        if (dataLength === 4) {
           const hash = script.readUInt32LE(ip + 1)
           let interopName = interopmethod[hash]
           if (interopName == null) interopName = hash
@@ -406,7 +406,7 @@ export function disassemble(textScript: string): string {
           ip += 4
         } else {
           ip += 1
-          const data = script.slice(ip, ip + data_length)
+          const data = script.slice(ip, ip + dataLength)
           const datawords = CryptoJS.enc.Hex.parse(data.toString('hex'))
           const hashBuffer = Buffer.from(SHA256(datawords).toString(), 'hex')
           const hash = hashBuffer.readUInt32LE(0)
@@ -415,7 +415,7 @@ export function disassemble(textScript: string): string {
             interopName = '- UNKNOWN Interop: ' + data.toString('utf8')
           }
           out += `${inst} ${interopName}\n\n`
-          ip += data_length - 1 // -1 because ip always gets increased by one, whereas this is inclusive
+          ip += dataLength - 1 // -1 because ip always gets increased by one, whereas this is inclusive
         }
       } else if (opcodedata.size === 0) {
         out += `${inst}\n\n`
