@@ -33,7 +33,9 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(moment(block.time).format())} seconds ago`,
+    time: `${getDiffInSecondsFromNow(
+      moment.unix(block.time).format(),
+    )} seconds ago`,
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),

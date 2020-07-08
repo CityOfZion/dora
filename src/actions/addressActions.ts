@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
+import { convertToArbitraryDecimals } from '../utils/formatter'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress = (requestedAddress: string) => (
@@ -85,14 +86,12 @@ export const requestAddressTransferHistoryError = (
 
 type ParsedBalanceData = {
   name: string
-  amount: string
+  balance: string | number
+  symbol: string
 }
 
 export function fetchAddress(address: string) {
-  return async (
-    dispatch: ThunkDispatch<{}, void, Action>,
-    getState: () => State,
-  ): Promise<void> => {
+  return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
     dispatch(requestAddress(address))
     try {
       const response = await fetch(
@@ -108,6 +107,7 @@ export function fetchAddress(address: string) {
         for (const balanceData of json) {
           let symbol
           let name
+          let balance = balanceData.balance
           if (NEO_HASHES.includes(balanceData.asset)) {
             symbol = 'NEO'
           } else if (GAS_HASHES.includes(balanceData.asset)) {
@@ -119,12 +119,16 @@ export function fetchAddress(address: string) {
             const json = await response.json()
             symbol = json.symbol
             name = json.name
+            balance = convertToArbitraryDecimals(
+              balanceData.balance,
+              json.decimals,
+            )
           }
 
           balances.push({
             name,
             symbol,
-            ...balanceData,
+            balance,
           })
         }
 

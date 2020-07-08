@@ -20,8 +20,14 @@ import { fetchTransaction } from '../../actions/transactionActions'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import Transfer from '../../components/transfer/Transfer'
 import { disassemble } from '../../utils/disassemble'
+import { convertToArbitraryDecimals } from '../../utils/formatter'
 
-type ParsedTransfer = { name: string; amount: string; to: string; from: string }
+type ParsedTransfer = {
+  name: string
+  amount: string | number
+  to: string
+  from: string
+}
 
 const parseAbstractData = async (
   transaction: DetailedTransaction,
@@ -67,9 +73,15 @@ const parseAbstractData = async (
       )
       const json = await response.json()
       const name = json.name
+
+      const amountWithDecimals = convertToArbitraryDecimals(
+        Number(amount),
+        json.decimals,
+      )
+
       transfers.push({
         name,
-        amount,
+        amount: amountWithDecimals,
         to,
         from,
       })

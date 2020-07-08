@@ -10,7 +10,7 @@ type Transfer = {
   from: string
   name: string
   to: string
-  amount: string
+  amount: string | number
 }
 
 const Transfer: React.FC<{

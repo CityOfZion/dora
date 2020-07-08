@@ -49,7 +49,7 @@ const Address: React.FC<Props> = (props: Props) => {
               <div id="balance-label">BALANCE</div>
               {balance &&
                 balance.map(balance => (
-                  <div key={balance.asset} className="balance-container">
+                  <div key={balance.symbol} className="balance-container">
                     <div>
                       {tokens[balance.symbol] && (
                         <img src={tokens[balance.symbol]} alt="token-logo" />
