@@ -373,7 +373,7 @@ const methodnames = [
 
 // resolve all interop method names to 32-bit hash
 type Interopmethod = {
-  [key: string]: string | number
+  [key: number]: string | number
 }
 const interopmethod = {} as Interopmethod
 for (let i = 0; i < methodnames.length; i++) {
