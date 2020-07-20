@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { ReactComponent as Magnify } from '../../assets/icons/magnify.svg'
+import SearchIcon from '@material-ui/icons/Search'
 import './Search.scss'
 import {
   handleSearchInput,
@@ -71,7 +71,7 @@ const Search: React.FC<{}> = () => {
           }}
           placeholder="Search for Block Height, Hash, Address or transaction id"
         ></input>{' '}
-        <Magnify onClick={handleSearch} />
+        <SearchIcon onClick={handleSearch} />
       </form>
     </div>
   )

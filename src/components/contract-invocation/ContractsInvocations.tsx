@@ -8,8 +8,6 @@ import List from '../../components/list/List'
 import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
 import { fetchContractsInvocations } from '../../actions/contractActions'
-import { ReactComponent as ArrowUp } from '../../assets/icons/arrow-upward.svg'
-import { ReactComponent as ArrowDown } from '../../assets/icons/arrow-downward.svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Invocation = {
