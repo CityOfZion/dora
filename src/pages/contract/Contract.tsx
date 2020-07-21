@@ -7,6 +7,7 @@ import './Contract.scss'
 import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 interface MatchParams {
   hash: string
@@ -47,6 +48,7 @@ const Contract: React.FC<Props> = (props: Props) => {
             },
           ]}
         />
+        <BackButton url={ROUTES.CONTRACTS.url} text="back to contracts" />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>Contract Information</h1>
