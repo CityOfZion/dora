@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-
+import moment from 'moment'
+import { Icon } from '@iconify/react'
+import DateRangeIcon from '@material-ui/icons/DateRange'
+import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { useDispatch, useSelector } from 'react-redux'
+
 import { State as ContractState } from '../../reducers/contractReducer'
 import './Contract.scss'
 import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 interface MatchParams {
   hash: string
@@ -28,6 +34,25 @@ const Contract: React.FC<Props> = (props: Props) => {
   return (
     <div id="Contract" className="page-container">
       <div className="inner-page-container">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: ROUTES.CONTRACTS.url,
+              label: 'Contracts',
+            },
+            {
+              url: '#',
+              label:
+                (contract && !isLoading && contract.name) || 'Contract info',
+              active: true,
+            },
+          ]}
+        />
+        <BackButton url={ROUTES.CONTRACTS.url} text="back to contracts" />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>Contract Information</h1>
@@ -55,22 +80,45 @@ const Contract: React.FC<Props> = (props: Props) => {
                   <span>NEP5</span>
                 </div>
                 <div className="detail-tile">
-                  <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <label>BLOCK</label>
+                  <span>{contract && !isLoading && contract.block}</span>
                 </div>
               </div>
               <div className="detail-tile-row">
                 <div className="detail-tile">
-                  <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <label>IDX</label>
+                  <span>{contract && !isLoading && contract.idx}</span>
                 </div>
                 <div className="detail-tile">
-                  <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <label>RETURN TYPE</label>
+                  <span>{contract && !isLoading && contract.returntype}</span>
                 </div>
                 <div className="detail-tile">
-                  <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <label>TIME</label>
+
+                  <span id="time-details-row">
+                    <div>
+                      {!isLoading && contract && (
+                        <>
+                          <DateRangeIcon
+                            style={{ color: '#7698A9', fontSize: 20 }}
+                          />
+                          {moment.unix(contract.time).format('MM-DD-YYYY')}
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {!isLoading && contract && (
+                        <>
+                          <Icon
+                            icon={clockIcon}
+                            style={{ color: '#7698A9', fontSize: 18 }}
+                          />
+                          {moment.unix(contract.time).format('HH:MM:SS')}
+                        </>
+                      )}
+                    </div>
+                  </span>
                 </div>
               </div>
             </div>

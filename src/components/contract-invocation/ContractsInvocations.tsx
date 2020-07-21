@@ -1,13 +1,13 @@
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
 import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
 import { fetchContractsInvocations } from '../../actions/contractActions'
-import { ReactComponent as ArrowUp } from '../../assets/icons/arrow-upward.svg'
-import { ReactComponent as ArrowDown } from '../../assets/icons/arrow-downward.svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Invocation = {
@@ -49,7 +49,11 @@ const mapInvocationData = (
     ),
     change: (): ReactElement => (
       <div className="invocation-change">
-        {invocation.change[0] === '+' ? <ArrowUp /> : <ArrowDown />}
+        {invocation.change[0] === '+' ? (
+          <ArrowUpwardIcon style={{ color: '#00F5B2', height: '22px' }} />
+        ) : (
+          <ArrowDownwardIcon style={{ color: '#D355E7' }} />
+        )}
         {invocation.change}%
       </div>
     ),

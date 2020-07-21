@@ -11,6 +11,8 @@ import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 type Block = {
   index: number
@@ -74,6 +76,20 @@ const Blocks: React.FC<{}> = () => {
   return (
     <div id="Blocks" className="page-container">
       <div className="list-wrapper">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: '#',
+              label: 'Blocks',
+              active: true,
+            },
+          ]}
+        />
+
         <div className="page-title-container">
           {ROUTES.BLOCKS.renderIcon()}
           <h1>{ROUTES.BLOCKS.name}</h1>

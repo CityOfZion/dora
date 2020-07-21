@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -10,6 +11,7 @@ import './Contracts.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 type Contract = {
   block: number
@@ -19,7 +21,7 @@ type Contract = {
 }
 
 type ParsedContract = {
-  time: string
+  time: React.FC<{}>
   block: React.FC<{}>
   hash: string
 }
@@ -27,7 +29,13 @@ type ParsedContract = {
 const mapContractData = (contract: Contract): ParsedContract => {
   return {
     hash: contract.hash,
-    time: moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS'),
+    time: (): ReactElement => (
+      <div className="contract-time-cell">
+        {' '}
+        {moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS')}{' '}
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
     block: (): ReactElement => (
       <div className="block-index-cell">{contract.block.toLocaleString()} </div>
     ),
@@ -67,6 +75,19 @@ const Contracts: React.FC<{}> = () => {
   return (
     <div id="Contracts" className="page-container">
       <div className="list-wrapper">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: '#',
+              label: 'Contracts',
+              active: true,
+            },
+          ]}
+        />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>{ROUTES.CONTRACTS.name}</h1>
@@ -86,6 +107,7 @@ const Contracts: React.FC<{}> = () => {
             { name: 'Block', accessor: 'block' },
             { name: 'Created on', accessor: 'time' },
           ]}
+          leftBorderColorOnRow="#D355E7"
         />
         <div className="load-more-button-container">
           <Button

@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import moment from 'moment'
+import { Icon } from '@iconify/react'
+import DateRangeIcon from '@material-ui/icons/DateRange'
+import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { State as BlockState } from '../../reducers/blockReducer'
@@ -8,10 +11,10 @@ import './Block.scss'
 import { ROUTES } from '../../constants'
 import { fetchBlock } from '../../actions/blockActions'
 import BlockTransactionsList from '../../components/transaction/BlockTransactionsList'
-import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
-import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import { disassemble } from '../../utils/disassemble'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 interface MatchParams {
   hash: string
@@ -32,6 +35,26 @@ const Block: React.FC<Props> = (props: Props) => {
   return (
     <div id="Block" className="page-container">
       <div className="inner-page-container">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: ROUTES.BLOCKS.url,
+              label: 'Blocks',
+            },
+            {
+              url: '#',
+              label: 'Block information',
+              active: true,
+            },
+          ]}
+        />
+
+        <BackButton url={ROUTES.BLOCKS.url} text="back to blocks" />
+
         <div className="page-title-container">
           {ROUTES.BLOCKS.renderIcon()}
           <h1>Block Information</h1>
@@ -65,7 +88,9 @@ const Block: React.FC<Props> = (props: Props) => {
                     <div>
                       {!isLoading && block && (
                         <>
-                          <Calendar />
+                          <DateRangeIcon
+                            style={{ color: '#7698A9', fontSize: 20 }}
+                          />
                           {moment.unix(block.time).format('MM-DD-YYYY')}
                         </>
                       )}
@@ -73,7 +98,10 @@ const Block: React.FC<Props> = (props: Props) => {
                     <div>
                       {!isLoading && block && (
                         <>
-                          <Clock />
+                          <Icon
+                            icon={clockIcon}
+                            style={{ color: '#7698A9', fontSize: 18 }}
+                          />
                           {moment.unix(block.time).format('HH:MM:SS')}
                         </>
                       )}

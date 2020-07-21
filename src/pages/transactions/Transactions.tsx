@@ -14,6 +14,7 @@ import {
   State as TxState,
 } from '../../reducers/transactionReducer'
 import { useHistory } from 'react-router-dom'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 type ParsedTx = {
   time: string
@@ -65,6 +66,20 @@ const Transactions: React.FC<{}> = () => {
   return (
     <div id="Transactions" className="page-container">
       <div className="list-wrapper">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: '#',
+              label: 'Transactions',
+              active: true,
+            },
+          ]}
+        />
+
         <div className="page-title-container">
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>{ROUTES.TRANSACTIONS.name}</h1>

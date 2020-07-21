@@ -7,6 +7,7 @@ import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { ReactComponent as NotFoundIllustration } from '../../assets/icons/Illustration.svg'
 import { clearSearchInputState } from '../../actions/searchActions'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 const NotFound: React.FC<{}> = () => {
   const dispatch = useDispatch()
@@ -23,6 +24,19 @@ const NotFound: React.FC<{}> = () => {
   return (
     <div id="NotFound" className="page-container">
       <div className="list-wrapper">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: '#',
+              label: searchState.error ? 'Search results' : 'Page not found',
+              active: true,
+            },
+          ]}
+        />
         <div className="page-title-container">
           {ROUTES.NOT_FOUND.renderIcon()}
           <h1>{ROUTES.NOT_FOUND.name}</h1>
