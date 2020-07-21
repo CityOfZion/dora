@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import Button from '../button/Button'
 

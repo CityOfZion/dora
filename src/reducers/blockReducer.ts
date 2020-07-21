@@ -21,14 +21,24 @@ type Action = {
 
 export type State = {
   isLoading: boolean
-  cached: { [key: string]: Block }
-  list: []
+  cached: { [key: string]: DetailedBlock }
+  list: Block[]
   lastUpdated: Date | null
-  block: Block | null
+  block: DetailedBlock | null
   page: number
 }
 
 export type Block = {
+  index: number
+  time: number
+  size: number
+  tx: Array<string>
+  blocktime: number
+  hash: string
+  txCount: number
+}
+
+export type DetailedBlock = {
   nextconsensus: string
   oversize: number
   tx: []

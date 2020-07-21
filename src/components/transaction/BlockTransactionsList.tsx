@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
-import { Block } from '../../reducers/blockReducer'
+import { DetailedBlock } from '../../reducers/blockReducer'
 import List from '../list/List'
 import './BlockTransactionsList.scss'
 import { BlockTransaction } from '../../reducers/transactionReducer'
@@ -20,7 +20,10 @@ type ParsedTx = {
   hash: string
 }
 
-const mapTransactionData = (tx: BlockTransaction, block: Block): ParsedTx => {
+const mapTransactionData = (
+  tx: BlockTransaction,
+  block: DetailedBlock,
+): ParsedTx => {
   return {
     time: (): ReactElement => (
       <span className="transaction-time-details-row">
@@ -45,14 +48,14 @@ const mapTransactionData = (tx: BlockTransaction, block: Block): ParsedTx => {
 
 const returnTxListData = (
   data: Array<BlockTransaction>,
-  block: Block,
+  block: DetailedBlock,
 ): Array<ParsedTx> => {
   return data.map(tx => mapTransactionData(tx, block)).slice(0, 8)
 }
 
 const BlockTransactionsList: React.FC<{
   list: Array<BlockTransaction>
-  block: Block
+  block: DetailedBlock
   loading: boolean
 }> = ({ list, block, loading }) => {
   const history = useHistory()

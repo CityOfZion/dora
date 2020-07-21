@@ -6,23 +6,12 @@ import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks } from '../../actions/blockActions'
-import { State as BlockState } from '../../reducers/blockReducer'
+import { State as BlockState, Block } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import BackButton from '../../components/navigation/BackButton'
-
-type Block = {
-  index: number
-  time: number
-  size: number
-  tx: Array<string>
-  blocktime: number
-  hash: string
-  txCount: number
-}
 
 type ParsedBlock = {
   time: string
@@ -110,6 +99,11 @@ const Blocks: React.FC<{}> = () => {
             { name: 'Transactions', accessor: 'transactions' },
             { name: 'Size', accessor: 'size' },
           ]}
+          countConfig={{
+            label: 'Blocks',
+            total:
+              blockState.list && blockState.list[0] && blockState.list[0].index,
+          }}
         />
         <div className="load-more-button-container">
           <Button

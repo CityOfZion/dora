@@ -23,12 +23,13 @@ type Action = {
 export type State = {
   isLoading: boolean
   cached: { [key: string]: Contract }
-  list: []
+  list: Contract[]
   lastUpdated: Date | null
   contract: DetailedContract | null
   contractsInvocations: []
   page: number
   hasFetchedContractsInvocations: boolean
+  totalCount: number
 }
 
 export type Contract = {
@@ -59,6 +60,7 @@ export default (
     lastUpdated: null,
     contract: null,
     page: 1,
+    totalCount: 0,
   },
   action: AnyAction | Action,
 ): State => {

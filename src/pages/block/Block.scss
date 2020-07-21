@@ -27,6 +27,14 @@
     text-align: left;
     word-wrap: break-word;
   }
+
+  .details-section {
+    margin-top: 0;
+
+    .section-label {
+      margin-top: 0;
+    }
+  }
 }
 
 .script-tile-row {

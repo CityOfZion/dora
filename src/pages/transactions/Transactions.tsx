@@ -99,6 +99,9 @@ const Transactions: React.FC<{}> = () => {
             { name: 'Size', accessor: 'size' },
             { name: 'Time', accessor: 'time' },
           ]}
+          countConfig={{
+            label: 'Transactions',
+          }}
         />
         <div className="load-more-button-container">
           <Button
