@@ -3,4 +3,11 @@
   flex-direction: row;
 
   justify-content: center;
+
+  .contract-time-cell {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 }

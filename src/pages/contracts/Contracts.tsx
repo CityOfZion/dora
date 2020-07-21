@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -20,7 +21,7 @@ type Contract = {
 }
 
 type ParsedContract = {
-  time: string
+  time: React.FC<{}>
   block: React.FC<{}>
   hash: string
 }
@@ -28,7 +29,13 @@ type ParsedContract = {
 const mapContractData = (contract: Contract): ParsedContract => {
   return {
     hash: contract.hash,
-    time: moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS'),
+    time: (): ReactElement => (
+      <div className="contract-time-cell">
+        {' '}
+        {moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS')}{' '}
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
     block: (): ReactElement => (
       <div className="block-index-cell">{contract.block.toLocaleString()} </div>
     ),
@@ -100,6 +107,7 @@ const Contracts: React.FC<{}> = () => {
             { name: 'Block', accessor: 'block' },
             { name: 'Created on', accessor: 'time' },
           ]}
+          leftBorderColorOnRow="#D355E7"
         />
         <div className="load-more-button-container">
           <Button
