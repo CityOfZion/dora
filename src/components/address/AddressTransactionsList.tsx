@@ -1,11 +1,12 @@
 import React, { ReactElement } from 'react'
 import moment from 'moment'
+import { Icon } from '@iconify/react'
+import DateRangeIcon from '@material-ui/icons/DateRange'
+import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import List from '../../components/list/List'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
-import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
-import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import './AddressTransactionsList.scss'
 
 type ParsedTransaction = {
@@ -38,11 +39,11 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
     time: (): ReactElement => (
       <span className="transaction-time-details-row">
         <div>
-          <Calendar />
+          <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
           <span>{moment.unix(tx.time).format('MM-DD-YYYY')}</span>
         </div>
         <div>
-          <Clock />
+          <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
           <span>{moment.unix(tx.time).format('HH:MM:SS')}</span>
         </div>
       </span>

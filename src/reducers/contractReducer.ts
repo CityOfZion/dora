@@ -45,6 +45,8 @@ export type DetailedContract = {
   email: string
   name: string
   script: string
+  idx: number
+  returntype: string
 }
 
 export default (

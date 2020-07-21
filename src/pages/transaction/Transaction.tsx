@@ -2,6 +2,9 @@ import React, { useEffect, useState, ReactElement } from 'react'
 import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
+import { Icon } from '@iconify/react'
+import DateRangeIcon from '@material-ui/icons/DateRange'
+import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import {
   State as TransactionState,
@@ -14,8 +17,6 @@ import {
   NEO_HASHES,
   GAS_HASHES,
 } from '../../constants'
-import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
-import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import { fetchTransaction } from '../../actions/transactionActions'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import Transfer from '../../components/transfer/Transfer'
@@ -213,7 +214,9 @@ const Transaction: React.FC<Props> = (props: Props) => {
                       {renderSkeleton(
                         transaction && (
                           <>
-                            <Calendar />
+                            <DateRangeIcon
+                              style={{ color: '#7698A9', fontSize: 20 }}
+                            />
                             {moment.unix(transaction.time).format('MM-DD-YYYY')}
                           </>
                         ),
@@ -223,7 +226,10 @@ const Transaction: React.FC<Props> = (props: Props) => {
                       {renderSkeleton(
                         transaction && (
                           <>
-                            <Clock />
+                            <Icon
+                              icon={clockIcon}
+                              style={{ color: '#7698A9', fontSize: 18 }}
+                            />
                             {moment.unix(transaction.time).format('HH:MM:SS')}
                           </>
                         ),
