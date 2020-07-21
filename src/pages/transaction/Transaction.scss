@@ -1,18 +1,27 @@
-#transaction-hash-tile {
-  height: 28px;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 48px;
+#Transaction {
+  .details-section {
+    margin-top: 0;
 
-  label {
-    margin: 0;
+    .section-label {
+      margin-top: 0;
+    }
   }
+  #transaction-hash-tile {
+    height: 28px;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 48px;
 
-  span {
-    font-size: 14px;
-    color: #d355e7;
-    letter-spacing: 0;
-    margin-left: 24px;
-    word-break: break-all;
+    label {
+      margin: 0;
+    }
+
+    span {
+      font-size: 14px;
+      color: #d355e7;
+      letter-spacing: 0;
+      margin-left: 24px;
+      word-break: break-all;
+    }
   }
 }

@@ -22,6 +22,10 @@ type ListProps = {
   leftBorderColorOnRow?:
     | string
     | ((id: string | number | void | React.FC<{}>) => string)
+  countConfig?: {
+    total?: number
+    label: string
+  }
 }
 
 export const List: React.FC<ListProps> = ({
@@ -32,6 +36,7 @@ export const List: React.FC<ListProps> = ({
   rowId,
   withoutPointer = false,
   leftBorderColorOnRow = '',
+  countConfig,
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -103,6 +108,15 @@ export const List: React.FC<ListProps> = ({
 
   return (
     <div className="data-list-container">
+      {countConfig && (
+        <div className="data-list-count-stats">
+          {' '}
+          {countConfig.label} 1 to {data.length}{' '}
+          {!!countConfig.total
+            ? `of ${countConfig.total.toLocaleString()}`
+            : null}
+        </div>
+      )}
       <div className="data-list" style={gridstyle}>
         {columns.map((column, i) => (
           <div

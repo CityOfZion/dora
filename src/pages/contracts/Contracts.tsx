@@ -32,7 +32,7 @@ const mapContractData = (contract: Contract): ParsedContract => {
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {' '}
-        {moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS')}{' '}
+        {moment.unix(contract.time).format('MM-DD-YYYY | hh:mm:ss')}{' '}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),
@@ -108,6 +108,13 @@ const Contracts: React.FC<{}> = () => {
             { name: 'Created on', accessor: 'time' },
           ]}
           leftBorderColorOnRow="#D355E7"
+          countConfig={{
+            label: 'Contracts',
+            total:
+              contractsState.list &&
+              contractsState.list[0] &&
+              contractsState.totalCount,
+          }}
         />
         <div className="load-more-button-container">
           <Button
