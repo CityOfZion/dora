@@ -102,7 +102,7 @@ const Block: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {moment.unix(block.time).format('HH:MM:SS')}
+                          {moment.unix(block.time).format('hh:mm:ss')}
                         </>
                       )}
                     </div>

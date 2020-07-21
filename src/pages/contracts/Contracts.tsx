@@ -32,7 +32,7 @@ const mapContractData = (contract: Contract): ParsedContract => {
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {' '}
-        {moment.unix(contract.time).format('MM-DD-YYYY | HH:MM:SS')}{' '}
+        {moment.unix(contract.time).format('MM-DD-YYYY | hh:mm:ss')}{' '}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),

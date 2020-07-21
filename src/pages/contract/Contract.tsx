@@ -114,7 +114,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {moment.unix(contract.time).format('HH:MM:SS')}
+                          {moment.unix(contract.time).format('hh:mm:ss')}
                         </>
                       )}
                     </div>

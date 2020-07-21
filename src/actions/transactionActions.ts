@@ -129,9 +129,9 @@ export function fetchTransactions(cursor = '') {
     getState: () => { transaction: State },
   ): Promise<void> => {
     try {
-      if (getState().transaction.list.length && !cursor) {
-        return
-      }
+      // if (getState().transaction.list.length && !cursor) {
+      //   return
+      // }
       dispatch(requestTransactions(cursor))
       const response = await fetch(
         `${GENERATE_BASE_URL()}/get_transactions/${cursor}`,

@@ -33,7 +33,7 @@ const mapTransactionData = (
         </div>
         <div>
           <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-          <span>{moment.unix(block.time).format('HH:MM:SS')}</span>
+          <span>{moment.unix(block.time).format('hh:mm:ss')}</span>
         </div>
       </span>
     ),

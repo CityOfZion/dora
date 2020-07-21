@@ -117,9 +117,9 @@ export function fetchBlocks(page = 1) {
     getState: () => { block: State },
   ): Promise<void> => {
     try {
-      if (getState().block.list.length && page === 1) {
-        return
-      }
+      // if (getState().block.list.length && page === 1) {
+      //   return
+      // }
       dispatch(requestBlocks(page))
       const response = await fetch(`${GENERATE_BASE_URL()}/get_blocks/${page}`)
       const json = await response.json()
