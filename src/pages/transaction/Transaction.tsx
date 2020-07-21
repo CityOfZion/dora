@@ -21,6 +21,8 @@ import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import Transfer from '../../components/transfer/Transfer'
 import { disassemble } from '../../utils/disassemble'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 type ParsedTransfer = {
   name: string
@@ -139,6 +141,25 @@ const Transaction: React.FC<Props> = (props: Props) => {
   return (
     <div id="Transaction" className="page-container">
       <div className="inner-page-container">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: ROUTES.TRANSACTIONS.url,
+              label: 'Transactions',
+            },
+            {
+              url: '#',
+              label: 'Transaction info',
+              active: true,
+            },
+          ]}
+        />
+
+        <BackButton url={ROUTES.TRANSACTIONS.url} text="back to transactions" />
         <div className="page-title-container">
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>Transaction Information</h1>

@@ -10,6 +10,7 @@ import './Contracts.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 type Contract = {
   block: number
@@ -67,6 +68,19 @@ const Contracts: React.FC<{}> = () => {
   return (
     <div id="Contracts" className="page-container">
       <div className="list-wrapper">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: '#',
+              label: 'Contracts',
+              active: true,
+            },
+          ]}
+        />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>{ROUTES.CONTRACTS.name}</h1>

@@ -23,7 +23,7 @@ const News: React.FC = (): ReactElement => {
     async function fetchAndSetFeed(): Promise<void> {
       const CORS_PROXY = 'https://thingproxy.freeboard.io/fetch/'
       const results = await parser.parseURL(
-        CORS_PROXY + 'http://neonewstoday.com/feed/',
+        CORS_PROXY + 'https://neonewstoday.com/feed/',
       )
       if (results) {
         results.items && setItems(results.items)

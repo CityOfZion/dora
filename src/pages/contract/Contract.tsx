@@ -6,6 +6,7 @@ import { State as ContractState } from '../../reducers/contractReducer'
 import './Contract.scss'
 import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 interface MatchParams {
   hash: string
@@ -28,6 +29,24 @@ const Contract: React.FC<Props> = (props: Props) => {
   return (
     <div id="Contract" className="page-container">
       <div className="inner-page-container">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: ROUTES.CONTRACTS.url,
+              label: 'Contracts',
+            },
+            {
+              url: '#',
+              label:
+                (contract && !isLoading && contract.name) || 'Contract info',
+              active: true,
+            },
+          ]}
+        />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>Contract Information</h1>

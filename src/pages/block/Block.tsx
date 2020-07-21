@@ -12,6 +12,8 @@ import { ReactComponent as Calendar } from '../../assets/icons/calendar.svg'
 import { ReactComponent as Clock } from '../../assets/icons/clock.svg'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import { disassemble } from '../../utils/disassemble'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import BackButton from '../../components/navigation/BackButton'
 
 interface MatchParams {
   hash: string
@@ -32,6 +34,26 @@ const Block: React.FC<Props> = (props: Props) => {
   return (
     <div id="Block" className="page-container">
       <div className="inner-page-container">
+        <Breadcrumbs
+          crumbs={[
+            {
+              url: ROUTES.HOME.url,
+              label: 'Home',
+            },
+            {
+              url: ROUTES.BLOCKS.url,
+              label: 'Blocks',
+            },
+            {
+              url: '#',
+              label: 'Block information',
+              active: true,
+            },
+          ]}
+        />
+
+        <BackButton url={ROUTES.BLOCKS.url} text="back to blocks" />
+
         <div className="page-title-container">
           {ROUTES.BLOCKS.renderIcon()}
           <h1>Block Information</h1>
