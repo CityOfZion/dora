@@ -17,7 +17,7 @@ type Props = {
 const Breadcrumbs: React.FC<Props> = ({ crumbs }): ReactElement => (
   <div id="Breadcrumbs">
     {crumbs.map((crumb, i) => (
-      <>
+      <div className="crumb-container" key={crumb.label}>
         <NavLink
           to={crumb.active ? '#' : crumb.url}
           isActive={(): boolean => !!crumb.active}
@@ -28,7 +28,7 @@ const Breadcrumbs: React.FC<Props> = ({ crumbs }): ReactElement => (
         {i + 1 < crumbs.length && (
           <ChevronRightIcon style={{ color: '#7d9fb1', height: '20px' }} />
         )}
-      </>
+      </div>
     ))}
   </div>
 )

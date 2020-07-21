@@ -2,6 +2,11 @@
   display: flex;
   align-items: center;
 
+  .crumb-container {
+    display: flex;
+    align-items: center;
+  }
+
   a {
     text-decoration: none;
     color: #d355e7;
