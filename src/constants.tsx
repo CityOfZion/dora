@@ -1,6 +1,7 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
+import NeoConvertor from 'neo-convertor'
 
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
@@ -126,3 +127,111 @@ export const FOOTER_ROUTES = [
   // ROUTES.WALLETS,
   // ROUTES.API,
 ]
+
+export const getAddressFromSriptHash = (hash: string): string => {
+  return hash
+}
+
+export const hexToAscii = async (str1: string): Promise<string> => {
+  // const size = parseInt(str1.replace(/=/g, '').length * 0.75)
+
+  // if (size === 20) {
+  //   return getAddressFromSriptHash(str1)
+  // } else {
+  //   const unencoded = atob(unescape(str1))
+  //   return unencoded
+  // }
+  return str1
+}
+
+export const asciiToByteArray = (str: string): string => {
+  return str
+}
+
+export const HEX_STRING_OPTION = {
+  value: 'Hexstring',
+  label: 'Hexstring',
+  convert: (value: string): string => asciiToByteArray(value),
+}
+
+export const STRING_OPTION = {
+  value: 'String',
+  label: 'String',
+  convert: async (value: string): Promise<string> => hexToAscii(value),
+}
+
+export const INTEGER_OPTION = {
+  value: 'Integer',
+  label: 'Integer',
+}
+
+export const ADDRESS_OPTION = {
+  value: 'Address',
+  label: 'Address',
+  convert: (value: string): Promise<string> =>
+    NeoConvertor.Address.scriptHashToAddress(value, true),
+}
+
+type TxStateType = {
+  value: string
+  label: string
+  convert?: (val: string) => string | Promise<string>
+}
+
+type TxStateTypeMappings = {
+  [key: string]: {
+    color: string
+    options: TxStateType[]
+  }
+}
+
+export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
+  Signature: {
+    color: '#E9265C',
+    options: [HEX_STRING_OPTION, STRING_OPTION],
+  },
+  Boolean: {
+    color: '#D355E7',
+    options: [STRING_OPTION],
+  },
+  Integer: {
+    color: '#B167F2',
+    options: [INTEGER_OPTION],
+  },
+  Hash160: {
+    color: '#008529',
+    options: [HEX_STRING_OPTION, STRING_OPTION],
+  },
+  Null: {
+    color: 'rgba(255, 255, 255, 0.08)',
+    options: [STRING_OPTION],
+  },
+  Hash256: {
+    color: '#1DB5FF',
+    options: [HEX_STRING_OPTION, STRING_OPTION],
+  },
+  ByteArray: {
+    color: '#0DCDFF',
+    options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  PublicKey: {
+    color: '#00D69D',
+    options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  String: {
+    color: '#67DD8B',
+    options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  Array: {
+    color: '#F28F00',
+    options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  InteropInterface: {
+    color: '#A50000',
+    options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  Void: {
+    color: '#528D93',
+    options: [STRING_OPTION],
+  },
+}

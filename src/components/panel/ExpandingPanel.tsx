@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
+import ChevronUpIcon from '@material-ui/icons/ExpandLess'
+import ChevronDownIcon from '@material-ui/icons/ExpandMore'
 
-import expandMore from '../../assets/icons/expand-more.svg'
-import expandLess from '../../assets/icons/expand-less.svg'
 import './ExpandingPanel.scss'
 
 const ExpandingPanel: React.FC<{
-  title: string
+  title: string | ReactElement
   open: boolean
   children: React.ReactNode
 }> = ({ title, open, children }) => {
@@ -15,15 +15,6 @@ const ExpandingPanel: React.FC<{
     <div className="expanding-panel-container">
       <div
         className="expanding-panel-header"
-        style={
-          {
-            // backgroundColor: isOpen
-            //   ? 'var(--tertiary-color)'
-            //   : 'var(--secondary-color)',
-            // color: isOpen ? '#000033' : 'var(--text-color)',
-            // borderBottom: isOpen ? '1px solid var(--tertiary-color)' : 'none',
-          }
-        }
         onClick={(): void => {
           setIsOpen(!isOpen)
         }}
@@ -31,13 +22,9 @@ const ExpandingPanel: React.FC<{
         <div className="expanding-panel-title">{title}</div>
 
         {isOpen ? (
-          <div>
-            <img src={expandMore} alt="Close" />
-          </div>
+          <ChevronDownIcon style={{ width: 30, color: '#D355E7' }} />
         ) : (
-          <div>
-            <img src={expandLess} alt="Explore" />
-          </div>
+          <ChevronUpIcon style={{ width: 30, color: '#D355E7' }} />
         )}
       </div>
       <div className="expanding-panel-header-border" />

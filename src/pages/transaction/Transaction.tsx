@@ -24,6 +24,7 @@ import { disassemble } from '../../utils/disassemble'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
+import Notification from '../../components/notification/Notification'
 
 type ParsedTransfer = {
   name: string
@@ -310,6 +311,17 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   </ExpandingPanel>
                 </div>
               )}
+
+              {transaction &&
+                transaction.Item &&
+                transaction.Item.notifications &&
+                transaction.Item.notifications.length &&
+                transaction.Item.notifications.map(notification => (
+                  <Notification
+                    key={notification.contract}
+                    notification={notification}
+                  />
+                ))}
             </div>
           </div>
         </div>
