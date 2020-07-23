@@ -1,0 +1,57 @@
+.Notification {
+  .NotificationHeaderLink {
+    a {
+      font-weight: 500;
+      font-size: 14px;
+      color: #d355e7;
+      letter-spacing: 0;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 12px;
+    }
+  }
+
+  .notification-panel {
+    padding: 24px 0;
+    background: rgba(255, 255, 255, 0.07);
+    width: 100%;
+  }
+  .notification-panel-header {
+    margin-left: 12px;
+    font-size: 12px;
+    color: #7d9fb1;
+    letter-spacing: -0.48px;
+  }
+
+  .select-computed-value {
+    font-size: 14px;
+    color: #cae0eb;
+    letter-spacing: 0;
+    line-height: 12.67px;
+    font-weight: 500;
+  }
+
+  .notification-state-row-container {
+    display: flex;
+    align-items: center;
+
+    span {
+      width: 48px;
+      margin-left: 12px;
+    }
+
+    p {
+      width: 76px;
+      height: 23px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 500;
+      font-size: 11px;
+      color: #1a2f34;
+      letter-spacing: 0;
+      text-align: center;
+      margin-right: 24px;
+    }
+  }
+}

@@ -64,6 +64,11 @@ export type TransactionIOAbstract = {
   value: string
 }
 
+export type TransactionNotification = {
+  contract: string
+  state: { type: string; value: [{ type: string; value: string }] }
+}
+
 export type DetailedTransaction = {
   type: string
   size: string
@@ -73,12 +78,7 @@ export type DetailedTransaction = {
   script: string
   scripts: [{ invocation: string; verification: string }]
   Item: {
-    notifications: [
-      {
-        contract: string
-        state: { type: string; value: [{ type: string; value: string }] }
-      },
-    ]
+    notifications: TransactionNotification[]
   }
   vin: Vin[]
   vout: Vout[]
