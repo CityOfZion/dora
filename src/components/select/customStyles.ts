@@ -20,7 +20,6 @@ export const customStyles = {
   valueContainer: (): CSSProperties => ({
     backgroundColor: '#2F454E',
   }),
-
   control: (provided: CSSProperties, state: SelectState): CSSProperties => ({
     ...provided,
     backgroundColor: '#2F454E',
@@ -29,28 +28,12 @@ export const customStyles = {
     height: '30px',
     minHeight: '30px',
     paddingLeft: '12px',
-
     boxShadow: state.isFocused ? '0' : '0',
-
     // eslint-disable-next-line
     // @ts-ignore
     '&:hover': {
       border: state.isFocused ? '0' : '0',
     },
-
-    // backgroundColor: state.isFocused ? '#000033' : 'transparent',
-    // display: 'flex',
-    // border: state.isFocused
-    //   ? 'solid 1px var(--text-color-secondary)'
-    //   : 'solid 1px transparent',
-    // borderRadius: state.isFocused ? '3px 3px 0 0' : '3px',
-    // minHeight: '32px',
-    // opacity: state.isDisabled ? 0.4 : 1,
-
-    //  '&:hover': {
-    //    border: 'solid 1px var(--text-color-secondary)',
-    //  },
-    // boxShadow: 'none',
   }),
   container: (provided: CSSProperties, state: SelectState): CSSProperties => ({
     ...provided,
@@ -80,14 +63,11 @@ export const customStyles = {
     color: '#cae0eb',
     backgroundColor:
       state.isFocused || state.isSelected ? '#2F454E' : '#2F454E',
-    // padding: '4px 8px',
-    // margin: '6px 0',
     // eslint-disable-next-line
     // @ts-ignore
     '&:active': {
       color: '#cae0eb',
       background: 'transparent',
-      // color: '#000033',
     },
   }),
 }
