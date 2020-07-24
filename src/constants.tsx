@@ -18,8 +18,8 @@ export const GAS_HASHES = [
   '0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
 ]
 
-export const GENERATE_BASE_URL = (net = 'test_net'): string =>
-  `https://node1.splyse.tech/${net}/v1`
+export const GENERATE_BASE_URL = (net = 'testnet'): string =>
+  `https://cors-anywhere.herokuapp.com/https://dora.coz.io/api/v2/neo2/${net}`
 
 export const TRANSFER = '7472616e73666572'
 
