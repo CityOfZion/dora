@@ -22,9 +22,9 @@ const ExpandingPanel: React.FC<{
         <div className="expanding-panel-title">{title}</div>
 
         {isOpen ? (
-          <ChevronDownIcon style={{ width: 30, color: '#D355E7' }} />
-        ) : (
           <ChevronUpIcon style={{ width: 30, color: '#D355E7' }} />
+        ) : (
+          <ChevronDownIcon style={{ width: 30, color: '#D355E7' }} />
         )}
       </div>
       <div className="expanding-panel-header-border" />
