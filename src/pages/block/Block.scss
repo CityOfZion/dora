@@ -6,10 +6,12 @@
 
   div {
     margin: 0 12px;
+    display: flex;
+    align-items: center;
   }
 
   svg {
-    margin: 4px 8px 4px 4px;
+    margin: 0px 8px 4px 0;
   }
 }
 
