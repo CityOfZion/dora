@@ -41,6 +41,13 @@
   display: flex;
   flex-wrap: wrap;
 
+  .script-label-and-copy-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: -4px;
+  }
+
   .detail-tile {
     white-space: pre-line;
 

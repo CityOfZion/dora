@@ -15,6 +15,7 @@ import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import { disassemble } from '../../utils/disassemble'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
+import Copy from '../../components/copy/Copy'
 
 interface MatchParams {
   hash: string
@@ -124,6 +125,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile" style={{ marginTop: '0px' }}>
                   <label>HASH</label>
                   <span>{!isLoading && block && block.hash} </span>
+                  <Copy text={block ? block.hash : ''} />
                 </div>
               </div>
 
@@ -131,6 +133,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>MERKLE ROOT</label>
                   <span>{!isLoading && block && block.merkleroot} </span>
+                  <Copy text={block ? block.merkleroot : ''} />
                 </div>
               </div>
 
@@ -138,6 +141,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>NEXT CONSENSUS</label>
                   <span>{!isLoading && block && block.nextconsensus} </span>
+                  <Copy text={block ? block.nextconsensus : ''} />
                 </div>
               </div>
             </div>
@@ -160,11 +164,17 @@ const Block: React.FC<Props> = (props: Props) => {
           <ExpandingPanel title="RAW SCRIPT" open={false}>
             <div className="script-tile-row">
               <div className="detail-tile script-tile">
-                <label>INVOCATION SCRIPT</label>
+                <div className="script-label-and-copy-row">
+                  <label>INVOCATION SCRIPT</label>{' '}
+                  <Copy text={block ? block.script.invocation : ''} />
+                </div>
                 <span>{!isLoading && block && block.script.invocation} </span>
               </div>
               <div className="detail-tile script-tile">
-                <label>VERIFICATION SCRIPT</label>
+                <div className="script-label-and-copy-row">
+                  <label>VERIFICATION SCRIPT</label>
+                  <Copy text={block ? block.script.verification : ''} />
+                </div>
                 <span>{!isLoading && block && block.script.verification} </span>
               </div>
             </div>
