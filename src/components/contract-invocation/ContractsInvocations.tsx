@@ -93,8 +93,8 @@ const ContractsInvocations: React.FC<{}> = () => {
   const width = useWindowWidth()
 
   useEffect(() => {
-    dispatch(fetchContractsInvocations())
-  }, [dispatch])
+    if (!contractsInvocations.length) dispatch(fetchContractsInvocations())
+  }, [contractsInvocations, dispatch])
 
   const columns =
     width > 768

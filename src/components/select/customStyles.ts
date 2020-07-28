@@ -29,6 +29,7 @@ export const customStyles = {
     minHeight: '30px',
     paddingLeft: '12px',
     boxShadow: state.isFocused ? '0' : '0',
+    zIndex: 100,
     // eslint-disable-next-line
     // @ts-ignore
     '&:hover': {

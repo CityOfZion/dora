@@ -92,6 +92,14 @@ export function shouldFetchTransaction(
   return false
 }
 
+export const RESET = 'RESET'
+export const resetTransactionState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: RESET,
+    receivedAt: Date.now(),
+  })
+}
+
 export function fetchTransaction(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,

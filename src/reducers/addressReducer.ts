@@ -35,17 +35,16 @@ export type State = {
 
 export type Block = {}
 
-export default (
-  state: State = {
-    isLoading: false,
-    transferHistoryLoading: false,
-    requestedAddress: '',
-    balance: null,
-    transferHistory: null,
-    transferHistoryPage: 1,
-  },
-  action: Action,
-): State => {
+export const INITIAL_STATE = {
+  isLoading: false,
+  transferHistoryLoading: false,
+  requestedAddress: '',
+  balance: null,
+  transferHistory: null,
+  transferHistoryPage: 1,
+}
+
+export default (state: State = INITIAL_STATE, action: Action): State => {
   switch (action.type) {
     case REQUEST_ADDRESS:
       return Object.assign({}, state, {
@@ -71,7 +70,8 @@ export default (
         lastUpdated: action.receivedAt,
         transferHistoryPage: action.transferHistoryPage,
       })
-
+    case 'RESET':
+      return INITIAL_STATE
     default:
       return state
   }

@@ -130,6 +130,14 @@ export function shouldFetchContractsInvocations(state: {
   return false
 }
 
+export const RESET = 'RESET'
+export const resetContractState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: RESET,
+    receivedAt: Date.now(),
+  })
+}
+
 export function fetchContract(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,

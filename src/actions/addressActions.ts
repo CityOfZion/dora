@@ -84,6 +84,14 @@ export const requestAddressTransferHistoryError = (
   })
 }
 
+export const RESET = 'RESET'
+export const resetAddressState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: RESET,
+    receivedAt: Date.now(),
+  })
+}
+
 type ParsedBalanceData = {
   name: string
   balance: string | number

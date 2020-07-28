@@ -9,9 +9,11 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import configureStore from './store'
 
+export const store = configureStore()
+
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={configureStore()}>
+    <Provider store={store}>
       <App />
     </Provider>
   </React.StrictMode>,

@@ -5,12 +5,11 @@ export type State = {
   open: boolean
 }
 
-export default (
-  state: State = {
-    open: false,
-  },
-  action: AnyAction,
-): State => {
+const INITIAL_STATE = {
+  open: false,
+}
+
+export default (state: State = INITIAL_STATE, action: AnyAction): State => {
   switch (action.type) {
     case CLOSE_MENU:
       return Object.assign({}, state, {
