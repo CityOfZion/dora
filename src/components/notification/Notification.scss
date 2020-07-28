@@ -29,6 +29,7 @@
     letter-spacing: 0;
     line-height: 12.67px;
     font-weight: 500;
+    line-break: anywhere;
   }
 
   .notification-state-row-container {
@@ -37,10 +38,12 @@
 
     span {
       width: 48px;
+      min-width: 48px;
       margin-left: 12px;
     }
 
     p {
+      min-width: 76px;
       width: 76px;
       height: 23px;
       display: flex;
