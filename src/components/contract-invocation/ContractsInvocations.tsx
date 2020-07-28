@@ -9,6 +9,8 @@ import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
 import { fetchContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../../constants'
 
 type Invocation = {
   name: string
@@ -31,7 +33,10 @@ const mapInvocationData = (
   const percentage = Math.floor((invocation.count / total) * 100)
   return {
     contract: (): ReactElement => (
-      <div className="invocation-name-container">
+      <Link
+        to={`${ROUTES.CONTRACT.url}/${invocation.hash}`}
+        className="invocation-name-container"
+      >
         <div className="invocation-position">{position + 1}</div>
         <div className="invocation-name">{invocation.name}</div>
         <div className="invocation-count-bar">
@@ -40,7 +45,7 @@ const mapInvocationData = (
             style={{ width: `${percentage}%` }}
           ></div>
         </div>
-      </div>
+      </Link>
     ),
     count: (): ReactElement => (
       <div className="invocation-count">

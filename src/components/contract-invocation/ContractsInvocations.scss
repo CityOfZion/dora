@@ -70,6 +70,8 @@
     justify-content: space-between;
     width: 100%;
     margin-right: 12px;
+    text-decoration: none;
+    color: #ffffff;
 
     .invocation-name {
       font-size: 16px;
@@ -79,12 +81,12 @@
 
     .invocation-position {
       background: #0d292f;
-      min-height: 22px;
+      min-height: 21px;
       min-width: 24px;
-      height: 22px;
+      height: 21px;
       width: 24px;
       border-radius: 22px;
-      padding-top: 2px;
+      padding-top: 3px;
       display: flex;
       align-items: center;
       justify-content: center;
