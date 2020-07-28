@@ -50,6 +50,18 @@ export type DetailedContract = {
   returntype: string
 }
 
+export const INITIAL_STATE = {
+  isLoading: false,
+  cached: {},
+  list: [],
+  contractsInvocations: [],
+  hasFetchedContractsInvocations: false,
+  lastUpdated: null,
+  contract: null,
+  page: 1,
+  totalCount: 0,
+}
+
 export default (
   state: State = {
     isLoading: false,
@@ -104,6 +116,11 @@ export default (
         list: [],
         page: 0,
       })
+
+    case 'RESET':
+      // eslint-disable-next-line
+      // @ts-ignore
+      return INITIAL_STATE
     default:
       return state
   }

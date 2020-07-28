@@ -53,10 +53,11 @@ const DashboardTransactionsList: React.FC<{}> = () => {
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
+  const { list } = txState
 
   useEffect(() => {
-    dispatch(fetchTransactions())
-  }, [dispatch])
+    if (!list.length) dispatch(fetchTransactions())
+  }, [dispatch, list.length])
 
   const columns =
     width > 768

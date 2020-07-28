@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
 
+import { store } from './store'
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
 import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
@@ -18,8 +19,10 @@ export const GAS_HASHES = [
   '0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
 ]
 
-export const GENERATE_BASE_URL = (net = 'testnet'): string =>
-  `https://cors-anywhere.herokuapp.com/https://dora.coz.io/api/v2/neo2/${net}`
+export const GENERATE_BASE_URL = (): string => {
+  const net = store.getState().network.network
+  return `https://dora.coz.io/api/v1/neo2/${net}`
+}
 
 export const TRANSFER = '7472616e73666572'
 

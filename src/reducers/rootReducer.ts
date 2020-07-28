@@ -5,6 +5,7 @@ import contract from './contractReducer'
 import address from './addressReducer'
 import search from './searchReducer'
 import menu from './menuReducer'
+import network from './networkReducer'
 
 export default combineReducers({
   block,
@@ -13,4 +14,5 @@ export default combineReducers({
   address,
   search,
   menu,
+  network,
 })

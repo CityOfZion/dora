@@ -58,15 +58,17 @@ export type DetailedBlock = {
   jsonsize: number
 }
 
+export const INITIAL_STATE = {
+  isLoading: false,
+  cached: {},
+  list: [],
+  lastUpdated: null,
+  block: null,
+  page: 1,
+}
+
 export default (
-  state: State = {
-    isLoading: false,
-    cached: {},
-    list: [],
-    lastUpdated: null,
-    block: null,
-    page: 1,
-  },
+  state: State = INITIAL_STATE,
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {
@@ -104,6 +106,8 @@ export default (
         list: [],
         page: 0,
       })
+    case 'RESET':
+      return INITIAL_STATE
     default:
       return state
   }

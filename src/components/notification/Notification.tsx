@@ -60,8 +60,6 @@ export const NotificationRow: React.FC<{
     filteredOptions = [HEX_STRING_OPTION, STRING_OPTION]
   }
 
-  console.log({ selectedOption })
-
   return (
     <Select
       selectedOption={(selectedOption.label && selectedOption) || options[0]}

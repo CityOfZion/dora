@@ -63,10 +63,10 @@ const DashboardBlockList: React.FC<{}> = () => {
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-
+  const { list } = blockState
   useEffect(() => {
-    dispatch(fetchBlocks())
-  }, [dispatch])
+    if (!list.length) dispatch(fetchBlocks())
+  }, [dispatch, list.length])
 
   const columns =
     width > 768

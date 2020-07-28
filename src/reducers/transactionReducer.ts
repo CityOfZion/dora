@@ -98,6 +98,15 @@ export type BlockTransaction = {
   type: string
 }
 
+export const INITIAL_STATE = {
+  isLoading: false,
+  cached: {},
+  list: [],
+  lastUpdated: null,
+  transaction: null,
+  cursor: '',
+}
+
 export default (
   state: State = {
     isLoading: false,
@@ -142,7 +151,10 @@ export default (
         list: [],
         cursor: '',
       })
-
+    case 'RESET':
+      // eslint-disable-next-line
+      // @ts-ignore
+      return INITIAL_STATE
     default:
       return state
   }

@@ -10,7 +10,7 @@ type SelectOption = {
 }
 
 type SelectProps = {
-  computedDisplayValue: string
+  computedDisplayValue?: string
   options: SelectOption[]
   handleChange: (selected: ValueType<SelectOption>) => void
   selectedOption: SelectOption

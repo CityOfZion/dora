@@ -91,6 +91,14 @@ export function shouldFetchBlock(
   return false
 }
 
+export const RESET = 'RESET'
+export const resetBlockState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: RESET,
+    receivedAt: Date.now(),
+  })
+}
+
 export function fetchBlock(indexOrHash: string | number = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
