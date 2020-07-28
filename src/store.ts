@@ -18,7 +18,7 @@ export const INITIAL_STATE = {}
 
 const loggerMiddleware = createLogger()
 
-export default function configureStore(initialState = INITIAL_STATE): Store {
+function configureStore(initialState = INITIAL_STATE): Store {
   return createStore(
     rootReducer,
     initialState,
@@ -27,3 +27,4 @@ export default function configureStore(initialState = INITIAL_STATE): Store {
       : applyMiddleware(thunk, loggerMiddleware),
   )
 }
+export const store = configureStore()

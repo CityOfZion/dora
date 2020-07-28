@@ -7,9 +7,7 @@ import 'simple-line-icons/css/simple-line-icons.css'
 import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
-import configureStore from './store'
-
-export const store = configureStore()
+import { store } from './store'
 
 ReactDOM.render(
   <React.StrictMode>

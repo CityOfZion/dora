@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
 
-import { store } from './'
+import { store } from './store'
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
 import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
