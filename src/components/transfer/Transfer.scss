@@ -3,6 +3,22 @@
   display: flex;
   background: transparent;
 
+  .tx-cube-image {
+    position: absolute;
+
+    left: 10;
+    margin-left: 370px;
+    margin-top: 50px;
+  }
+
+  .sent-to-cube {
+    margin-left: 0;
+    -moz-transform: scale(-1, -1);
+    -o-transform: scale(-1, -1);
+    -webkit-transform: scale(-1, -1);
+    transform: scale(-1, -1);
+  }
+
   label {
     font-size: 12px;
     color: #7d9fb1;
@@ -26,9 +42,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+
+  img {
+    margin: -18px 0 -108px 0;
+    overflow: hidden;
+  }
 
   svg {
-    margin-bottom: 24px;
+    margin: 12px 0 18px 0;
   }
 
   div {
