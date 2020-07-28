@@ -12,6 +12,7 @@ import { ROUTES } from '../../constants'
 import { useSelector, useDispatch } from 'react-redux'
 import { State as MenuState } from '../../reducers/menuReducer'
 import { openMenu, closeMenu } from '../../actions/menuActions'
+import NetworkToggle from '../network-toggle/NetworkToggle'
 
 const Navigation: React.FC = (): ReactElement => {
   const history = useHistory()
@@ -45,6 +46,10 @@ const Navigation: React.FC = (): ReactElement => {
 
             <div className="navigation-search-container">
               <Search />
+            </div>
+
+            <div className="navigation-network-toggle">
+              <NetworkToggle />
             </div>
           </div>
         </div>
