@@ -3,6 +3,8 @@ import uniqueId from 'lodash/uniqueId'
 
 import { ReactComponent as TransferArrow } from '../../assets/icons/transfer-arrow.svg'
 import tokens from '../../assets/tokens'
+import txBackgroundCubes from '../../assets/tx_mask.svg'
+import txCube from '../../assets/tx_cube.svg'
 
 import './Transfer.scss'
 
@@ -44,21 +46,29 @@ const Transfer: React.FC<{
             ),
         )}
       </div>
+      <img className="tx-cube-image" src={txCube} alt="tx-background-cubes" />
     </div>
     <div id="transfer-arrow-container" className="transfer-column">
+      <img src={txBackgroundCubes} alt="tx-background-cubes" />
+
       <TransferArrow />
       <div>
-        <span>Network Fee:</span> <p>{networkFee} GAS</p>
+        <span>Network fee:</span> <p>{networkFee} GAS</p>
       </div>
       <div>
-        <span>System Fee:</span> <p>{systemFee} GAS</p>
+        <span>System fee:</span> <p>{systemFee} GAS</p>
       </div>
       <div>
-        <span>Data Size:</span> <p>{size.toLocaleString()} bytes</p>
+        <span>Data size:</span> <p>{size.toLocaleString()} bytes</p>
       </div>
     </div>
     <div className="transfer-column detail-tile">
       <label>SENT TO</label>
+      <img
+        className="tx-cube-image sent-to-cube"
+        src={txCube}
+        alt="tx-background-cubes"
+      />
       <div className="asset-transfer-details-container">
         {transfers.map(
           (transfer: Transfer) =>
