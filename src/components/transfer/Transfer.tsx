@@ -2,7 +2,7 @@ import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 
 import { ReactComponent as TransferArrow } from '../../assets/icons/transfer-arrow.svg'
-import tokens from '../../assets/tokens'
+import tokens from '../../assets/nep5/svg'
 import txBackgroundCubes from '../../assets/tx_mask.svg'
 import txCube from '../../assets/tx_cube.svg'
 
@@ -40,7 +40,8 @@ const Transfer: React.FC<{
                   {tokens[transfer.name] && (
                     <img src={tokens[transfer.name]} alt="token-logo" />
                   )}{' '}
-                  {transfer.amount} {transfer.name}
+                  <div>{transfer.amount}</div>
+                  <div>{transfer.name}</div>
                 </div>
               </div>
             ),
@@ -84,7 +85,8 @@ const Transfer: React.FC<{
                   {tokens[transfer.name] && (
                     <img src={tokens[transfer.name]} alt="token-logo" />
                   )}{' '}
-                  {transfer.amount} {transfer.name}
+                  <div>{transfer.amount}</div>
+                  <div>{transfer.name}</div>
                 </div>
               </div>
             ),

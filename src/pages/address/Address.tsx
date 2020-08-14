@@ -9,7 +9,7 @@ import {
   fetchAddressTransferHistory,
 } from '../../actions/addressActions'
 import { State as AddressState } from '../../reducers/addressReducer'
-import tokens from '../../assets/tokens'
+import tokens from '../../assets/nep5/svg'
 import AddressTransactionsList from '../../components/address/AddressTransactionsList'
 
 interface MatchParams {

@@ -27,7 +27,7 @@ export const makeNavLinks = (): ReactNode => {
 
 export const infoLinksData = {
   api: {
-    copy: 'NEOSCAN API',
+    copy: 'Dora API',
     href: '#',
     src: neoScanApiLogo,
     alt: 'Neoscan API logo',

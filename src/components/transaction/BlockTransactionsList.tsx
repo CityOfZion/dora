@@ -9,14 +9,16 @@ import { DetailedBlock } from '../../reducers/blockReducer'
 import List from '../list/List'
 import './BlockTransactionsList.scss'
 import { BlockTransaction } from '../../reducers/transactionReducer'
-import { ROUTES, TRANSACTION_TYPES } from '../../constants'
+import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import ParsedTransactionType from './ParsedTransactionType'
 
 type ParsedTx = {
   time: React.FC<{}>
   txid: React.FC<{}>
   size: string
   type: string
+  parsedType: React.FC<{}>
   hash: string
 }
 
@@ -41,7 +43,8 @@ const mapTransactionData = (
       <div className="txid-index-cell"> {tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    type: TRANSACTION_TYPES[tx.type].label || '',
+    parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
+    type: tx.type,
     hash: tx.txid,
   }
 }
@@ -50,7 +53,7 @@ const returnTxListData = (
   data: Array<BlockTransaction>,
   block: DetailedBlock,
 ): Array<ParsedTx> => {
-  return data.map(tx => mapTransactionData(tx, block)).slice(0, 8)
+  return data.map(tx => mapTransactionData(tx, block))
 }
 
 const BlockTransactionsList: React.FC<{
@@ -64,13 +67,13 @@ const BlockTransactionsList: React.FC<{
   const columns =
     width > 768
       ? [
-          { name: 'Type', accessor: 'type' },
+          { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
           { name: 'Completed on', accessor: 'time' },
         ]
       : [
-          { name: 'Type', accessor: 'type' },
+          { name: 'Type', accessor: 'parsedType' },
           {
             name: 'Transaction ID',
             accessor: 'txid',
@@ -96,13 +99,13 @@ const BlockTransactionsList: React.FC<{
           const transaction = listData.find(tx => tx.hash === id)
           if (transaction) {
             switch (transaction.type) {
-              case 'Miner':
+              case 'MinerTransaction':
                 return '#FEDD5B'
-              case 'Invocation':
+              case 'InvocationTransaction':
                 return '#D355E7'
-              case 'Claim':
+              case 'ClaimTransaction':
                 return '#00CBFF'
-              case 'Contract':
+              case 'ContractTransaction':
                 return '#4CFFB3'
               default:
                 return ''

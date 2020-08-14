@@ -1,0 +1,1009 @@
+openapi: 3.0.0
+info:
+  description: This is version 2 of the Neoscan API
+  version: 1.0.0
+  title: Neoscan 2
+  termsOfService: "https://neoscan.io/terms/"
+  contact:
+    email: joe@coz.io
+  license:
+    name: MIT
+    url: "https://opensource.org/licenses/MIT"
+servers:
+  - url: "https://node1.splyse.tech/test_net/v1"
+paths:
+  "/get_asset/{hash}":
+    get:
+      summary: Get an asset record
+      parameters:
+        - in: path
+          name: hash
+          schema:
+            type: string
+          required: true
+          description: Hash of the asset to get
+      responses:
+        "200":
+          description: Asset record
+          content:
+            application/json:
+              example:
+                firstseen: 627498
+                name: LOCALTOKEN
+                symbol: LWTF
+                scripthash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                state:
+                  author: localhuman
+                  code_version: ".4"
+                  returntype: ByteArray
+                  name: LOCALTOKEN PYNEP5
+                  description: an NEP5 token in python
+                  version: 0
+                  parameters:
+                    - String
+                    - Array
+                  hash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                  script: >-
+                    013ec56b6c766b00527ac46c766b51527ac40480d43c5a6c766b52527ac40400c991596c766b53527ac40400...
+                  email: tom@cityofzion.io
+                  properties:
+                    dynamic_invoke: false
+                    storage: true
+                decimals: "8"
+  "/get_assets/{page}":
+    get:
+      description: Get the list of assets by page number
+      summary: Get the list of assets
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the page to get
+      responses:
+        "200":
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        firstseen:
+                          type: integer
+                        symbol:
+                          type: string
+                        scripthash:
+                          type: string
+                        decimals:
+                          type: string
+                        name:
+                          type: string
+              example:
+                items:
+                  - firstseen: 781137
+                    name: NeoTrade Coin
+                    symbol: NTC
+                    scripthash: "0x0f43f3f4c05a84cfd4618feff45421d4a015a384"
+                    decimals: "8"
+                  - firstseen: 775781
+                    name: AphelionPT5
+                    symbol: APHPT5
+                    scripthash: "0xbaf253166decef2e76aa2fe631c08061a7037611"
+                    decimals: "8"
+                  - firstseen: 764664
+                    name: AphelionPT5
+                    symbol: APHPT5
+                    scripthash: "0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f"
+                    decimals: "8"
+                  - firstseen: 764462
+                    name: AphelionPT4
+                    symbol: APHPT4
+                    scripthash: "0xf731620b027ada4572eff8a1996cdf57ed4634df"
+                    decimals: "8"
+                  - firstseen: 759289
+                    name: Default result here!!
+                    symbol: Default result here!!
+                    scripthash: "0x50c8042a26a2608118a43a3eeb8b6e7052815b85"
+                    decimals: "48420213067929558104055100052158650941618918942020"
+                  - firstseen: 756602
+                    name: AphelionPTest
+                    symbol: APHPTest
+                    scripthash: "0x7cd0a1358415f4e3a0612da293dc3ecb07430f69"
+                    decimals: "8"
+                  - firstseen: 751216
+                    name: AphelionMike1
+                    symbol: APHMK1
+                    scripthash: "0xc6c05299d38ebab5531f21785aecb429b76744b7"
+                    decimals: "8"
+                  - firstseen: 747660
+                    name: Default result here!!
+                    symbol: Default result here!!
+                    scripthash: "0xcfe928a70070e37d76ceaef56d8a1b4134855e79"
+                    decimals: "48420213067929558104055100052158650941618918942020"
+                  - firstseen: 747315
+                    name: AphelionAnd1267
+                    symbol: APHAnd1267
+                    scripthash: "0xc3171aa5bd01a54a9870e4025ea7787277165948"
+                    decimals: "8"
+                  - firstseen: 727224
+                    name: NEP5 Standard
+                    symbol: NEP5
+                    scripthash: "0xf8d448b227991cf07cb96a6f9c0322437f1599b9"
+                    decimals: "8"
+                  - firstseen: 702280
+                    name: name of the token
+                    symbol: SymbolOfTheToken
+                    scripthash: "0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0"
+                    decimals: "8"
+                  - firstseen: 700808
+                    name: Aphelion NEO CHINA
+                    symbol: SymbolOfTheToken
+                    scripthash: "0xb6fddc5021622701d7ed67ff079c8ef846d083df"
+                    decimals: "8"
+                  - firstseen: 662202
+                    name: name of the token
+                    symbol: SymbolOfTheToken
+                    scripthash: "0xe1ab84e20dbe746e0fae0f519c402f056973d160"
+                    decimals: "8"
+                  - firstseen: 662154
+                    name: name of the token
+                    symbol: SymbolOfTheToken
+                    scripthash: "0x1065db6c790ac411d76bac510a46d027208ccbaf"
+                    decimals: "8"
+                  - firstseen: 638484
+                    name: Red Pulse Token
+                    symbol: RPX
+                    scripthash: "0x5dcdd77e65134e0077247e2837e7df4e06e62315"
+                    decimals: "8"
+                totalCount: 88
+  "/get_balance/{address}":
+    get:
+      summary: Get the balance of an address
+      parameters:
+        - in: path
+          name: address
+          schema:
+            type: string
+          required: true
+          description: Address to get the balance of
+      responses:
+        "200":
+          description: List of balances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    balance:
+                      type: integer
+                    asset:
+                      type: string
+              example:
+                - balance: "4"
+                  asset: >-
+                    0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
+                - balance: "10"
+                  asset: >-
+                    0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b
+  "/get_block/{hash}":
+    get:
+      summary: Get a block record
+      parameters:
+        - in: path
+          name: hash
+          schema:
+            type: string
+          required: true
+          description: Hash of the block to get
+      responses:
+        "200":
+          description: Block record
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nextconsensus:
+                    type: string
+                  oversize:
+                    type: integer
+                  tx:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        net_fee:
+                          type: string
+                        size:
+                          type: integer
+                        txid:
+                          type: string
+                        attributes:
+                          type: array
+                          items:
+                            type: string
+                        vin:
+                          type: array
+                          items:
+                            type: string
+                        type:
+                          type: string
+                        sys_fee:
+                          type: string
+                        scripts:
+                          type: array
+                          items:
+                            type: string
+                        version:
+                          type: integer
+                        nonce:
+                          type: integer
+                        vout:
+                          type: array
+                          items:
+                            type: string
+                  previousblockhash:
+                    type: string
+                  index:
+                    type: integer
+                  version:
+                    type: integer
+                  nonce:
+                    type: string
+                  script:
+                    type: object
+                    properties:
+                      invocation:
+                        type: string
+                      verification:
+                        type: string
+                  size:
+                    type: integer
+                  blocktime:
+                    type: integer
+                  merkleroot:
+                    type: string
+                  time:
+                    type: integer
+                  hash:
+                    type: string
+                  jsonsize:
+                    type: integer
+              example:
+                nextconsensus: AdyQbbn6ENjqWDa5JNYMwN3ikNcA4JeZdk
+                oversize: 0
+                tx:
+                  - net_fee: "0"
+                    size: 10
+                    txid: >-
+                      0x8e3a32ba3a7e8bdb0ad9a2ad064713e45bd20eb0dab0d2e77df5b5ce985276d0
+                    attributes: []
+                    vin: []
+                    type: MinerTransaction
+                    sys_fee: "0"
+                    scripts: []
+                    version: 0
+                    nonce: 679092177
+                    vout: []
+                previousblockhash: >-
+                  0xb3181718ef6167105b70920e4a8fbbd0a0a56aacf460d70e10ba6fa1668f1fef
+                index: 1
+                version: 0
+                nonce: afbd1492287a1fd1
+                script:
+                  invocation: >-
+                    40884037dd265cb5f5a54802f53c2c8593b31d5b8a9c0bad4c7e366b153d878989d168080ac36b930036a9eb966b48c70bb41792e698fa021116f27c09643563b840e83ab14404d964a91dbac45f5460e88ad57196b1779478e3475334af8c1b49cd9f0213257895c60b5b92a4800eb32d785cbb39ae1f022528943909fd37deba63403677848bf98cc9dbd8fbfd7f2e4f34471866ea82ca6bffbf0f778b6931483700c17829b4bd066eb04983d3aac0bd46b9c8d03a73a8e714d3119de93cd9522e314054d16853b22014190063f77d9edf6fbccefcf71fffd1234f688823b4e429ae5fa639d0a664c842fbdfcb4d6e21f39d81c23563b92cffa09696d93c95bc4893a6401a43071d00d3e854f7f1f321afa7d5301d36f2195dc1e2643463f34ae637d2b02ae0eb11d4256c507a4f8304cea6396a7fce640f50acb301c2f6336d27717e84
+                  verification: >-
+                    55210209e7fd41dfb5c2f8dc72eb30358ac100ea8c72da18847befe06eade68cebfcb9210327da12b5c40200e9f65569476bbff2218da4f32548ff43b6387ec1416a231ee821034ff5ceeac41acf22cd5ed2da17a6df4dd8358fcb2bfb1a43208ad0feaab2746b21026ce35b29147ad09e4afe4ec4a7319095f08198fa8babbe3c56e970b143528d2221038dddc06ce687677a53d54f096d2591ba2302068cf123c1f2d75c2dddc542557921039dafd8571a641058ccc832c5e2111ea39b09c0bde36050914384f7a48bce9bf92102d02b1873a0863cd042cc717da31cea0d7cf9db32b74d4c72c01b0011503e2e2257ae
+                size: 686
+                blocktime: 25804981
+                merkleroot: >-
+                  0x8e3a32ba3a7e8bdb0ad9a2ad064713e45bd20eb0dab0d2e77df5b5ce985276d0
+                time: 1494400282
+                hash: >-
+                  0x0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c
+                jsonsize: 1804
+  "/get_blocks/{page}":
+    get:
+      summary: Get the list of blocks
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the page to get
+      responses:
+        "200":
+          description: List of block records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        size:
+                          type: integer
+                        tx:
+                          type: array
+                          items:
+                            type: string
+                        blocktime:
+                          type: integer
+                        txCount:
+                          type: integer
+                        index:
+                          type: integer
+                        time:
+                          type: integer
+                        hash:
+                          type: string
+              example:
+                items:
+                  - index: 786786
+                    time: 1510884204
+                    size: 686
+                    tx:
+                      - >-
+                        0x332090115531dac3bf046d9f68413c41f4e438d6e959738bb577ccd66c4c99d2
+                    blocktime: 21
+                    hash: >-
+                      0x8207fd1bec74fd2af9c52d523f6fda3525b0a2b7555298ab4bb20087415dcce1
+                    txCount: 1
+                  - index: 786785
+                    time: 1510884183
+                    size: 686
+                    tx:
+                      - >-
+                        0xf580984be4c0926f9cc4486f5a0ac1d5a0652059cf6c35b7859bbc93da6e6bd7
+                    blocktime: 24
+                    hash: >-
+                      0xc09e2a161589c103f6e245744ed1264e5cd35ebdb79f879a7db3679d20aabe41
+                    txCount: 1
+                  - index: 786784
+                    time: 1510884159
+                    size: 686
+                    tx:
+                      - >-
+                        0x5d24df9bd71e2b97f25d268b3d5d8f9ed87464868ff3db860a50782a259c45d8
+                    blocktime: 24
+                    hash: >-
+                      0x126f57f706fd07623aa2620e3f95cf15c0e4f42994443bccf7c5b631e93590ee
+                    txCount: 1
+                  - index: 786783
+                    time: 1510884135
+                    size: 686
+                    tx:
+                      - >-
+                        0x079a3f5ac617f6100b8cdc6a8817f70ee049dfa6afd20e203c3698e12052f2e2
+                    blocktime: 27
+                    hash: >-
+                      0xc35390bd14c4800dad7c3acc29c00f210a12338431f784ac280f67222064d8f2
+                    txCount: 1
+                  - index: 786782
+                    time: 1510884108
+                    size: 686
+                    tx:
+                      - >-
+                        0xe14820ca14a9347f9b26e71359dd5ac2ff49017fe4ba2b101967ed987b48e8c7
+                    blocktime: 26
+                    hash: >-
+                      0x36016ad7684ead70568de0dbef7d4ec9deb95a99a81fdb4f354c2d533babcf3d
+                    txCount: 1
+                  - index: 786781
+                    time: 1510884082
+                    size: 888
+                    tx:
+                      - >-
+                        0x8a3b147f62f16489719d323c5f7687990466ac8f5bb8b8581043f97f56888524
+                      - >-
+                        0xc90113a346c704d07811fa72a48d757d86019bd7e84d1d7e6c630e71b5f8e7f3
+                    blocktime: 27
+                    hash: >-
+                      0x091f4b38a176fb05e7f6a7303a1be675e0ff7b4a77fd640f2dfd128d941f7a17
+                    txCount: 2
+                  - index: 786780
+                    time: 1510884055
+                    size: 686
+                    tx:
+                      - >-
+                        0xd65073dc9bb64fedb4bb43d57fb83ea8ae354cac370f5da04eef3a877f930089
+                    blocktime: 20
+                    hash: >-
+                      0x221e3ef8afc7ded6fb2daa38ae0401cad47840a4a1697f954f4a43e4beb5eddd
+                    txCount: 1
+                  - index: 786779
+                    time: 1510884035
+                    size: 686
+                    tx:
+                      - >-
+                        0x80de7957dd206d2038aec04a0d09db320ea118379be901171a2362284cfe8fb0
+                    blocktime: 23
+                    hash: >-
+                      0x53bd2d626973065615c43aed14ebabeb603a2562c6fb76e35fef0a1c92c4fedc
+                    txCount: 1
+                  - index: 786778
+                    time: 1510884012
+                    size: 1118
+                    tx:
+                      - >-
+                        0xe8bc74f7a946c0bb88d04520fb01de974a8ae131242c00f2df560b90271f5d21
+                      - >-
+                        0x0a954f1adc87c1dc79ef14b0b12a69d2dce1b18b2c67697bb764db3c563629f8
+                    blocktime: 23
+                    hash: >-
+                      0x9731a6c365f2fdf9ca48eaaa2a8fbc10c47a3385bf3bc24fb7a2464736d844e0
+                    txCount: 2
+                  - index: 786777
+                    time: 1510883989
+                    size: 686
+                    tx:
+                      - >-
+                        0x31bc89691305f1f0d3db6a45dd2540f08b81ee8ee84787a62ecca936722dc0e4
+                    blocktime: 20
+                    hash: >-
+                      0xbdf054a24d87eff1115af3c3f0ab68268882c2573b71916d0558c354541c5e5d
+                    txCount: 1
+                  - index: 786776
+                    time: 1510883969
+                    size: 1084
+                    tx:
+                      - >-
+                        0xaf46537cb863befe87b27e91db999b006a115d87323b4bf5463968d3729d584a
+                      - >-
+                        0x7a053c2c33b8718c570bb736e7835c8d421728c761072baa01013c8a2f33e2ad
+                    blocktime: 29
+                    hash: >-
+                      0xf7eb2c3057c3c5715a28a41b6b5c8d7d587b3a5122fc05dd8eb29f12021eb39d
+                    txCount: 2
+                  - index: 786775
+                    time: 1510883940
+                    size: 686
+                    tx:
+                      - >-
+                        0x380c72f8cb49efd7b69d156cdb942a620461be4b95980684183e84f223e5b762
+                    blocktime: 33
+                    hash: >-
+                      0x9be75481ff0f3d5f4e4238dc43082a02b35a4f59b0f15ae9bf096fd448068923
+                    txCount: 1
+                  - index: 786774
+                    time: 1510883907
+                    size: 686
+                    tx:
+                      - >-
+                        0x139f7ea61cdc053b61292d80e20f2c8ad88a810e6c8638e8bcbd29f025f702f1
+                    blocktime: 27
+                    hash: >-
+                      0x150dea7e5b008ef539ee73e00d0aa0d30230341659407989fc8ad89f46144ea9
+                    txCount: 1
+                  - index: 786773
+                    time: 1510883880
+                    size: 686
+                    tx:
+                      - >-
+                        0xee0490072b1cf85e8c56156a4917334ee3b64b339c11593a6e8baa50d29f6eba
+                    blocktime: 20
+                    hash: >-
+                      0x722f18d875df501c5de8c7b159375380e696cba225eef0ca159c41a78c255ac4
+                    txCount: 1
+                  - index: 786772
+                    time: 1510883860
+                    size: 686
+                    tx:
+                      - >-
+                        0x0ef56bdd38fda1989c98b0fc9a509d101aa44f5714003d71994dad33217471ab
+                    blocktime: 23
+                    hash: >-
+                      0x705d46c7cc11384f204a6d26fb444f0a67c2e17970f4ad3a31315d2614b81202
+                    txCount: 1
+                totalCount: 786817
+  "/get_contract/{hash}":
+    get:
+      summary: Get a contract record
+      parameters:
+        - in: path
+          name: hash
+          schema:
+            type: string
+          required: true
+          description: Hash of the contract to get
+      responses:
+        "200":
+          description: Contract record
+          content:
+            application/json:
+              example:
+                author: localhuman
+                returntype: ByteArray
+                description: an NEP5 token in python
+                version: 0
+                script: >-
+                  013ec56b6c766b00527ac46c766b51527ac40480d43c5a6c766b52527ac40400c991596c766b53527ac40400...
+                code_version: ".4"
+                name: LOCALTOKEN PYNEP5
+                block: 627488
+                time: 1507511281
+                idx: 433
+                parameters:
+                  - String
+                  - Array
+                hash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                email: tom@cityofzion.io
+                properties:
+                  dynamic_invoke: false
+                  storage: true
+  "/get_contracts/{page}":
+    get:
+      summary: Get the list of contracts
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the page to get
+      responses:
+        "200":
+          description: List of contract records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totalCount:
+                    type: integer
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        block:
+                          type: integer
+                        time:
+                          type: integer
+                        idx:
+                          type: integer
+                        hash:
+                          type: string
+              example:
+                items:
+                  - block: 786238
+                    time: 1510871340
+                    idx: 751
+                    hash: "0x994d4b6cec1fde9d3fa93a41a09c271fc7f975fd"
+                  - block: 786120
+                    time: 1510868562
+                    idx: 750
+                    hash: "0x6439c5b9610fbdc5294fe8f3e9835e2fbb0e62d6"
+                  - block: 785778
+                    time: 1510860403
+                    idx: 746
+                    hash: "0xb84fedada6769a0e6d015e775c6171fbf4426b61"
+                  - block: 784390
+                    time: 1510827971
+                    idx: 742
+                    hash: "0xea1945077dd871428d83ff2bbf54b40bcad6f538"
+                  - block: 782993
+                    time: 1510795272
+                    idx: 739
+                    hash: "0x1a90add2f2dec86a37fed1cf289af3f4f90d924e"
+                  - block: 782619
+                    time: 1510787269
+                    idx: 738
+                    hash: "0xf47835ee4d9785431c82a13cc65ad055acc8ed2b"
+                  - block: 781121
+                    time: 1510754457
+                    idx: 735
+                    hash: "0x0f43f3f4c05a84cfd4618feff45421d4a015a384"
+                  - block: 780886
+                    time: 1510748989
+                    idx: 734
+                    hash: "0x3b5f41dc4107cec01bca263233f7aaac54666c75"
+                  - block: 777380
+                    time: 1510665047
+                    idx: 723
+                    hash: "0x4bc67dbd6b374d179a9b1869add111e6a3b12ea3"
+                  - block: 776960
+                    time: 1510654673
+                    idx: 721
+                    hash: "0x0a30fdd900af656cb4eb7caabaa5ddf77355b9fc"
+                  - block: 774970
+                    time: 1510605819
+                    idx: 717
+                    hash: "0x58c991b640b15305f060c19cba3c65e7236e8199"
+                  - block: 774745
+                    time: 1510600575
+                    idx: 716
+                    hash: "0x1e66cccfed7a0a9f4bc9bf6c92b286acef65fc77"
+                  - block: 764654
+                    time: 1510358990
+                    idx: 704
+                    hash: "0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f"
+                  - block: 759964
+                    time: 1510260825
+                    idx: 693
+                    hash: "0x5e4011a7c98a204bfe86e37f59ec278de85a75cb"
+                  - block: 758205
+                    time: 1510224565
+                    idx: 691
+                    hash: "0x50c8042a26a2608118a43a3eeb8b6e7052815b85"
+                totalCount: 160
+  /get_height/:
+    get:
+      summary: Get the currently indexed blockchain height
+      responses:
+        "200":
+          description: Height of the last indexed block
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  height:
+                    type: integer
+              example:
+                height: 786816
+  "/get_log/{hash}":
+    get:
+      summary: Get the application log of a transaction
+      parameters:
+        - in: path
+          name: hash
+          schema:
+            type: string
+          required: true
+          description: Hash of the transaction to get the log of
+      responses:
+        "200":
+          description: Application log
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vmstate:
+                    type: string
+                  gas_consumed:
+                    type: string
+                  stack:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        value:
+                          type: string
+                  txid:
+                    type: string
+                  trigger:
+                    type: string
+                  notifications:
+                    type: array
+                    items:
+                      type: string
+              example:
+                vmstate: HALT
+                txid: >-
+                  0x0a2a717b94062fb22bbb7c2a30e2d9849409e36f3dfe0eeac0825e098271c4b4
+                gas_consumed: "2.427"
+                stack:
+                  - type: Integer
+                    value: "1"
+                trigger: Application
+                notifications: []
+  /get_stats:
+    get:
+      summary: Get statistics about the blockchain
+      responses:
+        "200":
+          description: Stats record
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses:
+                    type: integer
+                  assets:
+                    type: integer
+                  transfers:
+                    type: number
+                  transactions:
+                    type: integer
+                  contracts:
+                    type: integer
+                  height:
+                    type: integer
+              example:
+                height: 786816
+                transactions: 892068
+                addresses: 3016
+                assets: 136
+                contracts: 759
+                transfers: 379
+  /get_transaction_count:
+    get:
+      summary: Get the total count of transactions
+      responses:
+        "200":
+          description: Total transaction count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+              example:
+                count: 892068
+  "/get_transaction/{hash}":
+    get:
+      summary: Get a transaction record
+      parameters:
+        - in: path
+          name: hash
+          schema:
+            type: string
+          required: true
+          description: Hash of the transaction to get
+      responses:
+        "200":
+          description: Transaction record
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  oversize:
+                    type: integer
+                  txid:
+                    type: string
+                  type:
+                    type: string
+                  version:
+                    type: integer
+                  script:
+                    type: string
+                  vout:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        asset:
+                          type: string
+                        value:
+                          type: string
+                        "n":
+                          type: integer
+                  net_fee:
+                    type: string
+                  size:
+                    type: integer
+                  gas:
+                    type: string
+                  attributes:
+                    type: array
+                    items:
+                      type: string
+                  vin:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        txid:
+                          type: string
+                        vout:
+                          type: integer
+                  block:
+                    type: integer
+                  time:
+                    type: integer
+                  sys_fee:
+                    type: string
+                  scripts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        invocation:
+                          type: string
+                        verification:
+                          type: string
+                  jsonsize:
+                    type: integer
+              example:
+                oversize: 0
+                txid: >-
+                  0x0a2a717b94062fb22bbb7c2a30e2d9849409e36f3dfe0eeac0825e098271c4b4
+                type: InvocationTransaction
+                version: 1
+                script: >-
+                  4c8a7b224964223a31302c225469746c65223a22d0a5d0bed187d183222c22436f6e74656e74223a22d091d18bd182d18c20d0bdd0b5d181d187d0b0d181d182d0bdd18bd0bc222c2244617465223a22303030312d30312d30315430303a30303a3030222c22436f6d706c6963697479223a332c22537461747573223a302c2250726f6f66223a6e756c6c7d22416431716b454d396f4674335454794b7853455644776f7a5156526a6b756377505352c103616464672ee587299a784aad2646fd74de51a53f91bb2aa4
+                vout:
+                  - address: Ad1qkEM9oFt3TTyKxSEVDwozQVRjkucwPS
+                    asset: >-
+                      0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
+                    value: "18"
+                    "n": 0
+                net_fee: "0"
+                size: 413
+                gas: "1"
+                attributes: []
+                vin:
+                  - txid: >-
+                      0x132430bb77e461bf35c6db06c914b55bed4129cf58186c30aa3f04299365c9ae
+                    vout: 0
+                block: 771899
+                time: 1510533484
+                sys_fee: "1"
+                scripts:
+                  - invocation: >-
+                      40f5d1dcd5b0642caa7f35e8624777758cf8103e76e2a5d355cb9ddb32f915e417da30c9e8206fb1748e6a31d19f31541827aa63c1cbe6988fd9849e9e11a4e5ea
+                    verification: >-
+                      2102961ae485792dffc28cc1e022db8dd29bb8226d50552c2ca6619fecae9dd9fa11ac
+                jsonsize: 1131
+  "/get_transactions/{page}":
+    get:
+      summary: Get the list of transactions
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the page to get
+      responses:
+        "200":
+          description: List of transaction records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  last_evaluated_key:
+                    type: string
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        size:
+                          type: integer
+                        txid:
+                          type: string
+                        time:
+                          type: integer
+              example:
+                transactions:
+                  - size: 10
+                    txid: >-
+                      0x5ea05ed441a8f9901604bc830d4a9f85fda3c532f9b7991236facd8d910c5a0e
+                    time: 1510884957
+                  - size: 10
+                    txid: >-
+                      0x1ac3707a45193cff66060d737ed3cbbf561e42344abcb31436b97cd957cde068
+                    time: 1510884936
+                  - size: 10
+                    txid: >-
+                      0xd85281d81954f0400b8c48ad64a55dc7ddbf8f772636a617a39a1d5ae9407613
+                    time: 1510884917
+                  - size: 10
+                    txid: >-
+                      0x9416f56f69b0312c94602a258d25ca228ae2e508057c67c09032f32e89844154
+                    time: 1510884892
+                  - size: 10
+                    txid: >-
+                      0x9c2422b2d3dfe97c94cdd8bd084c62c4189ca1a0a6ea1df14254ac53a4a855d9
+                    time: 1510884850
+                  - size: 10
+                    txid: >-
+                      0xb0906c731322a90955d104f686bd71e2aa8ff963167c428a672b3e071f030a76
+                    time: 1510884828
+                  - size: 10
+                    txid: >-
+                      0xd64ea96e8f944e91da245ff15a5caee019bcedf43b7f1a14a147aa96b013e114
+                    time: 1510884804
+                  - size: 10
+                    txid: >-
+                      0x56368bba1714a6c6c13ed070c6a2ff4e3666a997a1bb4e5ae6dc80802a5a1bc5
+                    time: 1510884762
+                  - size: 10
+                    txid: >-
+                      0xf5bd96421b3da40350e4dd5be6fb320c8c0f07ad3b566291afaf937b77f66ac7
+                    time: 1510884742
+                  - size: 10
+                    txid: >-
+                      0x8af9075587cb1e584ed29c3e432d92366040c2468e37eefd1f329099ca37a236
+                    time: 1510884722
+                  - size: 10
+                    txid: >-
+                      0x5f45d815506ad59a6752cf93fd2af7bf841876dd1b748a2c8d0981269631393e
+                    time: 1510884700
+                  - size: 10
+                    txid: >-
+                      0xdfb2b71cd71860e57c2d62776308d66c6a6ce39f03da72eed6d0b895bd283504
+                    time: 1510884678
+                  - size: 10
+                    txid: >-
+                      0x97dbfd9f8bed8ff67dd0193723cd0b51c00ad93b2a958f1a81eb650f417c2d99
+                    time: 1510884655
+                  - size: 283
+                    txid: >-
+                      0xced350a23e3ac2e0fb644cfdea58e69348c8a986c0727a6acb9aa652b34fd8c9
+                    time: 1510884655
+                  - size: 10
+                    txid: >-
+                      0xa561b335bbe7c6402c3a964d90b45b23d2a6bb84ef078c38cf290051834892a6
+                    time: 1510884632
+                last_evaluated_key: >-
+                  eyJ0eGlkIjogIjB4YTU2MWIzMzViYmU3YzY0MDJjM2E5NjRkOTBiNDViMjNkMmE2YmI4NGVmMDc4YzM4Y2YyOTAwNTE4MzQ4OTJhNiIsICJ2ZXJzaW9uIjogMCwgInRpbWUiOiAxNTEwODg0NjMyfQ==
+  "/get_transfer_history/{address}/{page}":
+    get:
+      summary: Get the history of transfers for an address
+      parameters:
+        - in: path
+          name: address
+          schema:
+            type: string
+          required: true
+          description: Address to get the history of
+        - in: path
+          name: page
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the page to get
+      responses:
+        "200":
+          description: List of transfers for address
+          content:
+            application/json:
+              example:
+                items:
+                  - scripthash: "0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0"
+                    amount: "3000000000000000"
+                    transferindex: "702280.0"
+                    txid: >-
+                      0xdac19da4f2fa9c5a79dfda64c852ec9ea113093556489c2cd13e22b2ff800445
+                    from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM
+                    block: 702280
+                    to: AL5e5ZcqtBTKjcQ8reiePrUBMYSD88v59a
+                    time: 1509066917
+                  - scripthash: "0xb6fddc5021622701d7ed67ff079c8ef846d083df"
+                    amount: "3000000000000000"
+                    transferindex: "700808.0"
+                    txid: >-
+                      0xdb018a9a75b68a293bd3a2b664324ca70abf23fd1d26a6b4b31cf7fa07bcb805
+                    from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM
+                    block: 700808
+                    to: AL5e5ZcqtBTKjcQ8reiePrUBMYSD88v59a
+                    time: 1509031894
+                  - scripthash: "0xe1ab84e20dbe746e0fae0f519c402f056973d160"
+                    amount: "10000000000000"
+                    transferindex: "662204.0"
+                    txid: >-
+                      0x6700f509abb6b226ef8b0809ddcbe53680797fdde5de115b2077608901fc85f1
+                    from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM
+                    block: 662204
+                    to: AL5e5ZcqtBTKjcQ8reiePrUBMYSD88v59a
+                    time: 1508211985
+                totalCount: 3

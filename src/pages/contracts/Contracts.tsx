@@ -12,23 +12,46 @@ import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import tokens from '../../assets/nep5/svg'
 
 type Contract = {
   block: number
   time: number
-  idx: number
+  name?: string
   hash: string
+  idx: number
+  author?: string
+  asset_name: string
+  symbol: string
+  type: string
 }
 
 type ParsedContract = {
   time: React.FC<{}>
   block: React.FC<{}>
+  name: React.FC<{}>
+  type: string
+  symbol: string
   hash: string
 }
 
 const mapContractData = (contract: Contract): ParsedContract => {
   return {
     hash: contract.hash,
+    name: (): ReactElement => (
+      <div className="contract-name-and-icon-row">
+        {tokens[contract.symbol] ? (
+          <div className="contract-icon-container">
+            <img src={tokens[contract.symbol]} alt="token-logo" />
+          </div>
+        ) : (
+          <div className="contract-icon-stub"></div>
+        )}
+        <div> {contract.name || contract.asset_name} </div>
+      </div>
+    ),
+    symbol: contract.symbol || 'N/A',
+    type: contract.type || 'N/A',
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {' '}
@@ -37,7 +60,9 @@ const mapContractData = (contract: Contract): ParsedContract => {
       </div>
     ),
     block: (): ReactElement => (
-      <div className="block-index-cell">{contract.block.toLocaleString()} </div>
+      <div className="block-index-cell" style={{ color: '#FFFFFF' }}>
+        {contract.block.toLocaleString()}{' '}
+      </div>
     ),
   }
 }
@@ -97,13 +122,15 @@ const Contracts: React.FC<{}> = () => {
             contractsState.list,
             !contractsState.list.length,
           )}
-          rowId="index"
+          rowId="hash"
           handleRowClick={(data): void =>
-            history.push(`${ROUTES.CONTRACT.url}/${data.hash}`)
+            history.push(`${ROUTES.CONTRACT.url}/${data.id}`)
           }
           isLoading={!contractsState.list.length}
           columns={[
-            { name: 'Hash', accessor: 'hash' },
+            { name: 'Name', accessor: 'name' },
+            { name: 'Symbol', accessor: 'symbol' },
+            { name: 'Type', accessor: 'type' },
             { name: 'Block', accessor: 'block' },
             { name: 'Created on', accessor: 'time' },
           ]}

@@ -24,6 +24,7 @@
 
 .react-select__menu {
   padding: 3px 6px;
+  z-index: 1000 !important;
 
   .react-select__option {
     border-bottom: solid 1px #979797;

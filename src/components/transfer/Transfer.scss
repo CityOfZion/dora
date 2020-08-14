@@ -85,7 +85,6 @@
   text-align: center;
   background: rgba(255, 255, 255, 0.05);
   border: 0 solid #25393e;
-  // justify-content: center;
   height: auto !important;
   max-height: none !important;
 }
@@ -106,10 +105,19 @@
   justify-content: center;
   align-items: center;
   margin-top: 8px;
+  div {
+    display: flex;
+    align-items: center;
+  }
   img {
     margin-right: 10px;
     margin-top: -2px;
+    max-width: 20px;
   }
+}
+
+.transfer-amount-container :nth-child(2) {
+  margin-right: 4px;
 }
 
 @media only screen and (max-width: 810px) {

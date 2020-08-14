@@ -20,7 +20,7 @@ const Home: React.FC<{}> = () => {
             <div id="neoscan-logo-container">
               <img id="neoscan-logo" alt="neoscan-logo" src={logo} />
               <div id="welcome-text">
-                <h1> welcome to neoscan </h1>{' '}
+                <h1> welcome to dora </h1>{' '}
                 <div id="welcome-text-underscore">_</div>
               </div>
               <span>Your home for all NEO related blockchain information</span>

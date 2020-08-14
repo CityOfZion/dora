@@ -18,7 +18,7 @@ const Footer: React.FC = (): ReactElement => {
           <div className="footer-col-1">
             <div className="neoscan-logo-container">
               <img className="neoscan-logo" alt="neoscan-logo" src={logo} />
-              <span className="neoscan-copy">neoscan</span>
+              <span className="neoscan-copy">dora</span>
             </div>
             <div className="license-copy">
               <p>
@@ -44,9 +44,9 @@ const Footer: React.FC = (): ReactElement => {
               <p>More information</p>
               <hr className="divider" />
               <p className="neoscan-description">
-                NEOScan is part of COZ. To learn more about the NEOScan and
-                where it fits within the COZ organisation and it’s products
-                please follow the links below:
+                Dora is part of COZ. To learn more about the Dora and where it
+                fits within the COZ organisation and it’s products please follow
+                the links below:
               </p>
               <div className="info-links-container ">
                 {makeInfoLinks(infoLinksData)}
