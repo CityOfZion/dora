@@ -33,6 +33,7 @@ export type Transaction = {
   size: number
   time: number
   txid: string
+  type: string
 }
 
 export type Vin = {

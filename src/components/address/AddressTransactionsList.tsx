@@ -74,7 +74,7 @@ const AddressTransactionsList: React.FC<{ transactions: Transaction[] }> = ({
           name: 'Transaction ID',
           accessor: 'txid',
         },
-        { name: 'Sent', accessor: 'amount' },
+
         { name: 'From', accessor: 'from' },
         { name: 'To', accessor: 'to' },
         { name: 'Completed on', accessor: 'time' },

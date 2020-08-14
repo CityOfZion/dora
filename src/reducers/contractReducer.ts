@@ -35,8 +35,13 @@ export type State = {
 export type Contract = {
   block: number
   time: number
-  idx: number
+  name?: string
   hash: string
+  idx: number
+  author?: string
+  asset_name: string
+  symbol: string
+  type: string
 }
 
 export type DetailedContract = {

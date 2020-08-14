@@ -15,12 +15,15 @@ import {
 } from '../../reducers/transactionReducer'
 import { useHistory } from 'react-router-dom'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 
 type ParsedTx = {
   time: string
   txid: React.FC<{}>
   size: string
   hash: string
+  type: string
+  parsedType: React.FC<{}>
 }
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
@@ -33,6 +36,8 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     hash: tx.txid,
+    type: tx.type,
+    parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
   }
 }
 
@@ -99,12 +104,37 @@ const Transactions: React.FC<{}> = () => {
           }
           isLoading={!transactionState.list.length}
           columns={[
+            { name: 'Type', accessor: 'parsedType' },
             { name: 'Transaction ID', accessor: 'txid' },
             { name: 'Size', accessor: 'size' },
             { name: 'Time', accessor: 'time' },
           ]}
           countConfig={{
             label: 'Transactions',
+          }}
+          leftBorderColorOnRow={(
+            id: string | number | void | React.FC<{}>,
+          ): string => {
+            const listData = returnTxListData(
+              transactionState.list,
+              !transactionState.list.length,
+            )
+            const transaction = listData.find(tx => tx.hash === id)
+            if (transaction) {
+              switch (transaction.type) {
+                case 'MinerTransaction':
+                  return '#FEDD5B'
+                case 'InvocationTransaction':
+                  return '#D355E7'
+                case 'ClaimTransaction':
+                  return '#00CBFF'
+                case 'ContractTransaction':
+                  return '#4CFFB3'
+                default:
+                  return 'transparent'
+              }
+            }
+            return ''
           }}
         />
         <div className="load-more-button-container">
