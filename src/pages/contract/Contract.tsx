@@ -12,7 +12,6 @@ import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
-import tokens from '../../assets/nep5/svg'
 
 interface MatchParams {
   hash: string
