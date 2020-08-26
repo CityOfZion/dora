@@ -23,7 +23,7 @@ const Home: React.FC<{}> = () => {
                 <h1> welcome to dora </h1>{' '}
                 <div id="welcome-text-underscore">_</div>
               </div>
-              <span>Your home for all NEO related blockchain information</span>
+              <span>Your home for all Neo related blockchain information</span>
             </div>
 
             <div className="list-column-container">
