@@ -44,10 +44,10 @@ export const infoLinksData = {
     alt: 'Coz logo',
   },
   discord: {
-    copy: 'NEO Discord',
+    copy: 'Neo Discord',
     href: 'https://discordapp.com/invite/R8v48YA',
     src: discordLogo,
-    alt: 'NEO Discord logo',
+    alt: 'Neo Discord logo',
   },
 }
 
