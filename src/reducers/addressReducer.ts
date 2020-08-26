@@ -5,13 +5,25 @@ import {
   REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS,
 } from '../actions/addressActions'
 
+export type TransferHistoryDetail = {
+  amount: string
+  block: number
+  from: string
+  scripthash: string
+  time: number
+  to: string
+  txid: string
+  symbol: string
+  decimalamount: number
+}
+
 type Action = {
   type: string
   receivedAt: Date
   indexOrHash: string
   requestedAddress: string
   json: {
-    items: number
+    items: TransferHistoryDetail[]
     totalCount: number
   }
   transferHistoryPage: number
@@ -29,8 +41,9 @@ export type State = {
   transferHistoryLoading: boolean
   requestedAddress: string
   balance: Balance[] | null
-  transferHistory: [] | null
+  transferHistory: TransferHistoryDetail[]
   transferHistoryPage: number
+  totalCount: number
 }
 
 export type Block = {}
@@ -40,8 +53,9 @@ export const INITIAL_STATE = {
   transferHistoryLoading: false,
   requestedAddress: '',
   balance: null,
-  transferHistory: null,
+  transferHistory: [],
   transferHistoryPage: 1,
+  totalCount: 0,
 }
 
 export default (state: State = INITIAL_STATE, action: Action): State => {
@@ -65,7 +79,7 @@ export default (state: State = INITIAL_STATE, action: Action): State => {
     case REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS:
       return Object.assign({}, state, {
         transferHistoryLoading: false,
-        transferHistory: action.json.items,
+        transferHistory: [...state.transferHistory, ...action.json.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         transferHistoryPage: action.transferHistoryPage,

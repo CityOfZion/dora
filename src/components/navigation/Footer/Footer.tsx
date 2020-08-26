@@ -75,7 +75,12 @@ const Footer: React.FC = (): ReactElement => {
           <img className="coz-logo" alt="coz-logo" src={cozLogo} />
           <p className="copyright">
             2020 Copyright{' '}
-            <a className="accent" href="#">
+            <a
+              className="accent"
+              href="https://coz.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               COZ
             </a>
           </p>

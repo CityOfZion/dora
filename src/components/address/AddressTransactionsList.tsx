@@ -8,14 +8,18 @@ import List from '../../components/list/List'
 import { ROUTES } from '../../constants'
 import { useHistory } from 'react-router-dom'
 import './AddressTransactionsList.scss'
+import tokens from '../../assets/nep5/svg'
+import { convertToArbitraryDecimals } from '../../utils/formatter'
+import Button from '../button/Button'
 
 type ParsedTransaction = {
-  amount: string
+  amount: number
   id: string
   txid: () => ReactElement
-  from: string
-  to: string
+  from: () => ReactElement
+  to: () => ReactElement
   time: () => ReactElement
+  symbol: () => ReactElement
 }
 
 type Transaction = {
@@ -26,16 +30,33 @@ type Transaction = {
   time: number
   to: string
   txid: string
+  symbol: string
+  decimalamount: number
 }
+
 const mapTransactionData = (tx: Transaction): ParsedTransaction => {
   return {
-    amount: tx.amount,
+    amount: convertToArbitraryDecimals(Number(tx.amount), tx.decimalamount),
     id: tx.txid,
     txid: (): ReactElement => (
       <div className="block-index-cell address-history-txid"> {tx.txid} </div>
     ),
-    from: tx.from,
-    to: tx.to,
+    from: (): ReactElement => (
+      <div className="tx-address-container">{tx.from}</div>
+    ),
+    to: (): ReactElement => (
+      <div className="tx-address-container">{tx.to} </div>
+    ),
+    symbol: (): ReactElement => (
+      <div className="tx-symbol-and-icon-column">
+        <div> {tx.symbol === 'unknown' || !tx.symbol ? 'N/A' : tx.symbol} </div>
+        {tokens[tx.symbol] && (
+          <div className="symbol-icon-container">
+            <img src={tokens[tx.symbol]} alt="token-logo" />
+          </div>
+        )}
+      </div>
+    ),
     time: (): ReactElement => (
       <span className="transaction-time-details-row">
         <div>
@@ -57,29 +78,51 @@ const returnBlockListData = (
   return data.map(mapTransactionData)
 }
 
-const AddressTransactionsList: React.FC<{ transactions: Transaction[] }> = ({
-  transactions,
-}) => {
+const AddressTransactionsList: React.FC<{
+  transactions: Transaction[]
+  shouldRenderLoadMore: boolean
+  isLoading: boolean
+  handleLoadMore: () => void
+}> = ({ transactions, shouldRenderLoadMore, handleLoadMore, isLoading }) => {
   const history = useHistory()
   return (
-    <List
-      data={returnBlockListData(transactions)}
-      rowId="id"
-      handleRowClick={(data): void => {
-        history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
-      }}
-      isLoading={false}
-      columns={[
-        {
-          name: 'Transaction ID',
-          accessor: 'txid',
-        },
+    <>
+      <List
+        data={returnBlockListData(transactions)}
+        rowId="id"
+        handleRowClick={(data): void => {
+          history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
+        }}
+        isLoading={false}
+        columns={[
+          {
+            name: 'Transaction ID',
+            accessor: 'txid',
+          },
 
-        { name: 'From', accessor: 'from' },
-        { name: 'To', accessor: 'to' },
-        { name: 'Completed on', accessor: 'time' },
-      ]}
-    />
+          {
+            name: 'Symbol',
+            accessor: 'symbol',
+          },
+
+          { name: 'From', accessor: 'from' },
+          { name: 'To', accessor: 'to' },
+          { name: 'Amount', accessor: 'amount' },
+          { name: 'Completed on', accessor: 'time' },
+        ]}
+      />
+      {shouldRenderLoadMore && (
+        <div className="load-more-button-container">
+          <Button
+            disabled={isLoading}
+            primary={false}
+            onClick={(): void => handleLoadMore()}
+          >
+            load more
+          </Button>
+        </div>
+      )}
+    </>
   )
 }
 

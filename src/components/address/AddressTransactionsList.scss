@@ -5,3 +5,27 @@
   display: block;
   overflow: hidden;
 }
+
+.tx-symbol-and-icon-column {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  img {
+    max-width: 18px;
+    margin-left: 6px;
+  }
+}
+
+.tx-address-container {
+  text-overflow: ellipsis;
+  width: 160px;
+  display: block;
+  overflow: hidden;
+}
+
+#load-more-tx-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

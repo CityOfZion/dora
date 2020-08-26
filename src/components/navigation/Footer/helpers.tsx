@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import cozSm from '../../../assets/icons/coz-logo-sm.svg'
 import gitHubLogo from '../../../assets/icons/github-logo.svg'
 import discordLogo from '../../../assets/icons/discord-logo.svg'
-import neoScanApiLogo from '../../../assets/icons/neoscan-sm.svg'
 
 interface InfoLink {
   copy: string
@@ -26,27 +25,27 @@ export const makeNavLinks = (): ReactNode => {
 }
 
 export const infoLinksData = {
-  api: {
-    copy: 'Dora API',
-    href: '#',
-    src: neoScanApiLogo,
-    alt: 'Neoscan API logo',
-  },
+  // api: {
+  //   copy: 'Dora API',
+  //   href: '#',
+  //   src: neoScanApiLogo,
+  //   alt: 'Neoscan API logo',
+  // },
   github: {
     copy: 'COZ Github',
-    href: '#',
+    href: 'https://github.com/CityOfZion',
     src: gitHubLogo,
     alt: 'Github logo',
   },
   coz: {
     copy: 'COZ',
-    href: '#',
+    href: 'https://coz.io',
     src: cozSm,
     alt: 'Coz logo',
   },
   discord: {
     copy: 'NEO Discord',
-    href: '#',
+    href: 'https://discordapp.com/invite/R8v48YA',
     src: discordLogo,
     alt: 'NEO Discord logo',
   },
@@ -54,7 +53,13 @@ export const infoLinksData = {
 
 export const makeInfoLinks = (infoLinks: InfoLinks): ReactNode => {
   return Object.values(infoLinks).map(link => (
-    <a className="accent" key={link.copy} href={link.href}>
+    <a
+      className="accent"
+      key={link.copy}
+      href={link.href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <img className="icon" alt={link.alt} src={link.src} />
       <span>{link.copy}</span>
     </a>
