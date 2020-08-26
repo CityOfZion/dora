@@ -87,6 +87,7 @@
       padding-left: 0;
       @media screen and (max-width: 768px) {
         columns: 2;
+        margin-bottom: 24px;
         li:first-child {
           margin-top: 0;
         }
@@ -110,7 +111,7 @@
       justify-content: space-between;
 
       @media screen and (max-width: 768px) {
-        margin-bottom: 48px;
+        margin-bottom: 24px;
       }
 
       a.accent {
@@ -186,6 +187,9 @@
 }
 
 @media screen and (max-width: 768px) {
+  .license-copy {
+    max-width: 275px !important;
+  }
   .footer-sections {
     flex-direction: column;
 

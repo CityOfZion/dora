@@ -22,15 +22,9 @@ const Footer: React.FC = (): ReactElement => {
             </div>
             <div className="license-copy">
               <p>
-                The source code is{' '}
-                <a className="accent" href="#">
-                  licensed MIT
-                </a>{' '}
-                The website content is licensed{' '}
-                <a className="accent own-line" href="#">
-                  CC ANS 4.0
-                </a>{' '}
-                <span className="accent">NEOSCAN Testnet</span>
+                The source code is <span className="accent">licensed MIT</span>{' '}
+                the website content is licensed{' '}
+                <span className="accent">CC ANS 4.0</span>.{' '}
               </p>
             </div>
           </div>
