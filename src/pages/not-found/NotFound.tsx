@@ -54,7 +54,7 @@ const NotFound: React.FC<{}> = () => {
             Well would you believe it!
             <br />
             <br />
-            Unfortunatly we didn’t find anything that matched.
+            Unfortunately we didn’t find anything that matched.
           </h3>
 
           <span>

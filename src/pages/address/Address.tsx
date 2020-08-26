@@ -24,12 +24,24 @@ const Address: React.FC<Props> = (props: Props) => {
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
-  const { requestedAddress, balance, transferHistory, isLoading } = addressState
+  const {
+    requestedAddress,
+    balance,
+    transferHistory,
+    isLoading,
+    totalCount,
+    transferHistoryPage,
+    transferHistoryLoading,
+  } = addressState
 
   useEffect(() => {
     dispatch(fetchAddress(hash))
     dispatch(fetchAddressTransferHistory(hash))
   }, [dispatch, hash])
+
+  const loadNextTransactionsPage = (): void => {
+    dispatch(fetchAddressTransferHistory(hash, transferHistoryPage + 1))
+  }
 
   return (
     <div id="Address" className="page-container">
@@ -65,7 +77,12 @@ const Address: React.FC<Props> = (props: Props) => {
             </div>
 
             {transferHistory && !!transferHistory.length && (
-              <AddressTransactionsList transactions={transferHistory || []} />
+              <AddressTransactionsList
+                transactions={transferHistory || []}
+                shouldRenderLoadMore={transferHistory.length < totalCount}
+                handleLoadMore={loadNextTransactionsPage}
+                isLoading={transferHistoryLoading}
+              />
             )}
           </>
         )}

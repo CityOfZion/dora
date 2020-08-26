@@ -120,7 +120,7 @@ export const SIDEBAR_ROUTES = [
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
   // ROUTES.WALLETS,
-  ROUTES.API,
+  // ROUTES.API,
 ]
 
 export const FOOTER_ROUTES = [
@@ -128,7 +128,7 @@ export const FOOTER_ROUTES = [
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
   // ROUTES.WALLETS,
-  ROUTES.API,
+  // ROUTES.API,
 ]
 
 export const getAddressFromSriptHash = (hash: string): string => {

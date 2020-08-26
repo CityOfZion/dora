@@ -383,82 +383,87 @@ for (let i = 0; i < methodnames.length; i++) {
   interopmethod[hashBuffer.readUInt32LE(0)] = methodnames[i]
 }
 
-export function disassemble(textScript: string): string {
+export function disassemble(textScript: string): string | void {
   let out = ''
-  const script = Buffer.from(textScript, 'hex')
 
-  let ip = 0
-  while (ip < script.length) {
-    const opcode = script[ip]
-    if (opcodetable.hasOwnProperty(opcode)) {
-      const opcodedata = opcodetable[opcode]
-      const inst = opcodedata.name
+  try {
+    const script = Buffer.from(textScript, 'hex')
 
-      if (opcodedata.name === 'SYSCALL') {
-        ip += 1
-        const dataLength = script.readUInt8(ip)
+    let ip = 0
+    while (ip < script.length) {
+      const opcode = script[ip]
+      if (opcodetable.hasOwnProperty(opcode)) {
+        const opcodedata = opcodetable[opcode]
+        const inst = opcodedata.name
 
-        if (dataLength === 4) {
-          const hash = script.readUInt32LE(ip + 1)
-          let interopName = interopmethod[hash]
-          if (interopName == null) interopName = hash
-          out += `${inst} ${interopName}\n\n`
-          ip += 4
-        } else {
+        if (opcodedata.name === 'SYSCALL') {
           ip += 1
-          const data = script.slice(ip, ip + dataLength)
-          const datawords = CryptoJS.enc.Hex.parse(data.toString('hex'))
-          const hashBuffer = Buffer.from(SHA256(datawords).toString(), 'hex')
-          const hash = hashBuffer.readUInt32LE(0)
-          let interopName = interopmethod[hash]
-          if (interopName == null) {
-            interopName = '- UNKNOWN Interop: ' + data.toString('utf8')
-          }
-          out += `${inst} ${interopName}\n\n`
-          ip += dataLength - 1 // -1 because ip always gets increased by one, whereas this is inclusive
-        }
-      } else if (opcodedata.size === 0) {
-        out += `${inst}\n\n`
-      } else {
-        if (
-          inst === 'PUSHDATA1' ||
-          inst === 'PUSHDATA2' ||
-          inst === 'PUSHDATA4'
-        ) {
-          let dataSize = 0
-          switch (opcodedata.size) {
-            case 1: {
-              dataSize = script.readUInt8(ip + 1)
-              break
-            }
-            case 2: {
-              dataSize = script.readUInt16LE(ip + 1)
-              break
-            }
-            case 4: {
-              dataSize = script.readUInt32LE(ip + 1)
-              break
-            }
-            default:
-              // if you messed up the size you deserve to pay for it :-)
-              out += `SOMEBODY MESSED UP THE PUSHDATA SIZE for ${opcodedata.name} at index ${ip} (size ${opcodedata.size})`
-              break
-          }
+          const dataLength = script.readUInt8(ip)
 
-          const DATA_START_IDX = ip + opcodedata.size + 1
-          const data = script.slice(DATA_START_IDX, DATA_START_IDX + dataSize)
-          out += `${inst} ${data.toString('hex')}\n\n`
-          ip += opcodedata.size + dataSize
+          if (dataLength === 4) {
+            const hash = script.readUInt32LE(ip + 1)
+            let interopName = interopmethod[hash]
+            if (interopName == null) interopName = hash
+            out += `${inst} ${interopName}\n\n`
+            ip += 4
+          } else {
+            ip += 1
+            const data = script.slice(ip, ip + dataLength)
+            const datawords = CryptoJS.enc.Hex.parse(data.toString('hex'))
+            const hashBuffer = Buffer.from(SHA256(datawords).toString(), 'hex')
+            const hash = hashBuffer.readUInt32LE(0)
+            let interopName = interopmethod[hash]
+            if (interopName == null) {
+              interopName = '- UNKNOWN Interop: ' + data.toString('utf8')
+            }
+            out += `${inst} ${interopName}\n\n`
+            ip += dataLength - 1 // -1 because ip always gets increased by one, whereas this is inclusive
+          }
+        } else if (opcodedata.size === 0) {
+          out += `${inst}\n\n`
         } else {
-          const data = script.slice(ip + 1, ip + 1 + opcodedata.size)
-          out += `${inst} ${data.toString('hex')}\n\n`
-          ip += opcodedata.size
+          if (
+            inst === 'PUSHDATA1' ||
+            inst === 'PUSHDATA2' ||
+            inst === 'PUSHDATA4'
+          ) {
+            let dataSize = 0
+            switch (opcodedata.size) {
+              case 1: {
+                dataSize = script.readUInt8(ip + 1)
+                break
+              }
+              case 2: {
+                dataSize = script.readUInt16LE(ip + 1)
+                break
+              }
+              case 4: {
+                dataSize = script.readUInt32LE(ip + 1)
+                break
+              }
+              default:
+                // if you messed up the size you deserve to pay for it :-)
+                out += `SOMEBODY MESSED UP THE PUSHDATA SIZE for ${opcodedata.name} at index ${ip} (size ${opcodedata.size})`
+                break
+            }
+
+            const DATA_START_IDX = ip + opcodedata.size + 1
+            const data = script.slice(DATA_START_IDX, DATA_START_IDX + dataSize)
+            out += `${inst} ${data.toString('hex')}\n\n`
+            ip += opcodedata.size + dataSize
+          } else {
+            const data = script.slice(ip + 1, ip + 1 + opcodedata.size)
+            out += `${inst} ${data.toString('hex')}\n\n`
+            ip += opcodedata.size
+          }
         }
+      } else {
+        out += `INVALID OPCODE ${opcode.toString()}\n\n`
       }
-    } else {
-      out += `INVALID OPCODE ${opcode.toString()}\n\n`
+      ip++
     }
-    ip++
+    return out
+  } catch (e) {
+    console.warn('Error running disassemble()', e)
   }
-  return out
 }

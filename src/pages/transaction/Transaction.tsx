@@ -25,6 +25,7 @@ import { convertToArbitraryDecimals } from '../../utils/formatter'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Notification from '../../components/notification/Notification'
+import { uniqueId } from 'lodash'
 
 type ParsedTransfer = {
   name: string
@@ -317,10 +318,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 transaction.Item.notifications &&
                 transaction.Item.notifications.length &&
                 transaction.Item.notifications.map(notification => (
-                  <Notification
-                    key={notification.contract}
-                    notification={notification}
-                  />
+                  <Notification key={uniqueId()} notification={notification} />
                 ))}
             </div>
           </div>
