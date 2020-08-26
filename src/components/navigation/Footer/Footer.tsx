@@ -24,7 +24,7 @@ const Footer: React.FC = (): ReactElement => {
               <p>
                 The source code is <span className="accent">licensed MIT</span>{' '}
                 the website content is licensed{' '}
-                <span className="accent">CC ANS 4.0</span>.{' '}
+                <span className="accent">CC ANS 4.0</span>{' '}
               </p>
             </div>
           </div>
