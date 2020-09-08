@@ -63,6 +63,7 @@ export const ROUTES = {
     url: '/',
     name: 'Home',
     renderIcon: (): React.ReactNode => <Home />,
+    target: '_self',
   },
   CONTRACTS: {
     url: '/contracts',
@@ -70,47 +71,57 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => (
       <Icon icon={noteIcon} style={{ fontSize: 24 }} />
     ),
+    target: '_self',
   },
   CONTRACT: {
     url: '/contract',
     name: 'Contract',
+    target: '_self',
   },
   TRANSACTIONS: {
     url: '/transactions',
     name: 'Transactions',
     renderIcon: (): React.ReactNode => <Transactions />,
+    target: '_self',
   },
   TRANSACTION: {
     url: '/transaction',
     name: 'Transaction',
+    target: '_self',
   },
   BLOCKS: {
     url: '/blocks',
     name: 'Blocks',
     renderIcon: (): React.ReactNode => <Blocks />,
+    target: '_self',
   },
   BLOCK: {
     url: '/block',
     name: 'Block',
+    target: '_self',
   },
   WALLETS: {
     url: '/addresses',
     name: 'Wallets',
     renderIcon: (): React.ReactNode => <Wallets />,
+    target: '_self',
   },
   WALLET: {
     url: '/address',
     name: 'Wallet',
+    target: '_self',
   },
   API: {
-    url: '/api',
+    url: '/api.html',
     name: 'API',
     renderIcon: (): React.ReactNode => <Api />,
+    target: '_blank',
   },
   NOT_FOUND: {
     url: '/not-found',
     name: 'No Results found',
     renderIcon: (): React.ReactNode => <Magnify />,
+    target: '_self',
   },
 }
 
@@ -120,7 +131,7 @@ export const SIDEBAR_ROUTES = [
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
   // ROUTES.WALLETS,
-  // ROUTES.API,
+  ROUTES.API,
 ]
 
 export const FOOTER_ROUTES = [
@@ -128,7 +139,7 @@ export const FOOTER_ROUTES = [
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
   // ROUTES.WALLETS,
-  // ROUTES.API,
+  ROUTES.API,
 ]
 
 export const getAddressFromSriptHash = (hash: string): string => {

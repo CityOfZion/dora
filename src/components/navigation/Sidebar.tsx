@@ -17,6 +17,7 @@ const Sidebar: React.FC = (): ReactElement => {
           key={route.name}
           className="sidebar-route-container"
           activeClassName="active-sidebar-route"
+          target={route.target}
           isActive={(match, location): boolean => {
             if (
               location.pathname.includes(
