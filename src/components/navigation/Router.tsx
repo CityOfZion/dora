@@ -1,5 +1,11 @@
 import React, { ReactElement, useEffect } from 'react'
-import { BrowserRouter, Switch, Route, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter,
+  Switch,
+  Route,
+  useLocation,
+  // Redirect,
+} from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -20,6 +26,8 @@ const ScrollToTop = (): null => {
   useEffect(() => window.scrollTo(0, 0), [pathname])
   return null
 }
+
+const reload = (): void => window.location.reload()
 
 const Router: React.FC = (): ReactElement => {
   return (
@@ -70,6 +78,7 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
                 />
+                <Route path={`${ROUTES.API.url}`} onEnter={reload} />
                 <Route component={(): ReactElement => <NotFound />} />
               </Switch>
             </div>
