@@ -44,6 +44,10 @@ export type Contract = {
   type: string
 }
 
+export type InvocationStat = {
+  [date: string]: number
+}
+
 export type DetailedContract = {
   block: number
   time: number
@@ -53,6 +57,7 @@ export type DetailedContract = {
   script: string
   idx: number
   returntype: string
+  invocationStats: InvocationStat
 }
 
 export const INITIAL_STATE = {
