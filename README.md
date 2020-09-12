@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://circleci.com/gh/CityOfZion/neoscan-2">
-    <img src="https://circleci.com/gh/CityOfZion/neoscan-2.svg?style=svg&circle-token=a7d4029776ee0262fce4c3aa466f329ae6616e5d">
+  <a href="https://circleci.com/gh/CityOfZion/dora">
+    <img src="https://circleci.com/gh/CityOfZion/dora.svg?style=svg&circle-token=a7d4029776ee0262fce4c3aa466f329ae6616e5d">
   </a>
 </p>
 
