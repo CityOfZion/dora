@@ -4,7 +4,7 @@
     width="125px;">
 </p>
 
-<h1 align="center">neoscan-2</h1>
+<h1 align="center">dora</h1>
 
 <p align="center">
   React / TypeScript based block explorer for the NEO blockchain
