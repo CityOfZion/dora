@@ -29,6 +29,8 @@ const CustomSelect: React.FC<SelectProps> = ({
         onChange={handleChange}
         options={options}
         isSearchable={false}
+        // eslint-disable-next-line
+        // @ts-ignore
         styles={customStyles}
         autosize={false}
         classNamePrefix="react-select"

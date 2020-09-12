@@ -12,6 +12,7 @@ import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
+import InvocationGraph from '../../components/data-visualization/InvocationGraph'
 
 interface MatchParams {
   hash: string
@@ -67,6 +68,16 @@ const Contract: React.FC<Props> = (props: Props) => {
               <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
             </div>
           </div>
+
+          {contract && contract.invocationStats && (
+            <div>
+              <div className="section-label" style={{ marginBottom: -20 }}>
+                LAST 30 DAYS INVOCATIONS
+              </div>
+              <InvocationGraph data={contract.invocationStats} />
+            </div>
+          )}
+
           <div className="details-section">
             <div className="section-label">DETAILS</div>
             <div className="inner-details-container">

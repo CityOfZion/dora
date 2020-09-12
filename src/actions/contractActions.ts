@@ -150,7 +150,20 @@ export function fetchContract(hash: string) {
         const response = await fetch(
           `${GENERATE_BASE_URL()}/get_contract/${hash}`,
         )
+
+        const invocationStatsResponse = await fetch(
+          `${GENERATE_BASE_URL()}/get_contract_stats/${hash}`,
+        )
+
+        const invocationStats = await invocationStatsResponse
+          .json()
+          .catch(e => {
+            console.error('An error occurred fetching invocation stats.', { e })
+          })
+
         const json = await response.json()
+        json.invocationStats = invocationStats || null
+
         dispatch(requestContractSuccess(hash, json))
       } catch (e) {
         dispatch(requestContractError(hash, e))

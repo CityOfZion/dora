@@ -42,7 +42,8 @@
     "redux-thunk": "^2.3.0",
     "rss-parser": "^3.8.0",
     "simple-line-icons": "^2.4.1",
-    "ts-jest": "^25.5.1"
+    "ts-jest": "^25.5.1",
+    "victory": "^35.0.9"
   },
   "devDependencies": {
     "@iconify/icons-simple-line-icons": "^1.0.3",
