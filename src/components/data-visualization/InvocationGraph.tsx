@@ -60,7 +60,6 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
     return thirtyDayPlaceholder.map((day, i) => {
       const now = moment(Date.now())
       const formattedDay = now.add(i - 30, 'days').format('MM/DD/YY')
-      console.log({ formattedDay })
       return (
         mappedStats.find(stat => stat.x === formattedDay) || {
           x: formattedDay,
@@ -71,8 +70,6 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
   }
 
   const parsedData = returnFormatedGraphData(data)
-
-  console.log(parsedData)
 
   return (
     <div id="InvocationGraph">
