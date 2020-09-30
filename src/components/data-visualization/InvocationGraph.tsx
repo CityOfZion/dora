@@ -25,7 +25,7 @@ const theme = {
       },
       tickLabels: {
         fill: 'white',
-        fontSize: 16,
+        fontSize: 18,
         padding: 4,
       },
     },
@@ -58,7 +58,7 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
       y: data[key],
     }))
     return thirtyDayPlaceholder.map((day, i) => {
-      const now = moment(Date.now())
+      const now = moment(Date.now()).add(1, 'days')
       const formattedDay = now.add(i - 30, 'days').format('MM/DD/YY')
       return (
         mappedStats.find(stat => stat.x === formattedDay) || {
@@ -103,6 +103,7 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
           theme={theme}
           height={400}
           width={width}
+          padding={{ left: 90, top: 50, right: 10, bottom: 50 }}
           standalone={false}
         >
           <VictoryArea
@@ -116,6 +117,7 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
           />
           <VictoryAxis
             fixLabelOverlap
+            offsetY={35}
             axisLabelComponent={<VictoryLabel />}
             style={{
               axisLabel: {
@@ -135,7 +137,7 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
             }),
           ) && (
             <VictoryAxis
-              offsetX={40}
+              offsetX={70}
               dependentAxis
               axisLabelComponent={<VictoryLabel />}
               style={{
