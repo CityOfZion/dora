@@ -47,10 +47,14 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - run:
+          name: generate documentation
+          command: npm run generate-documentation
+      - run:
           name: deploy
           command: npm run deploy
     docker:
       - image: circleci/node:10.16.3
+      - image: swaggerapi/swagger-codegen-cli
 
 workflows:
   version: 2
