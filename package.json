@@ -80,8 +80,7 @@
     "ci-lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "format": "prettier --write ./src",
     "deploy": "aws s3 sync ./build s3://neoscan/prod --acl public-read",
-    "generate-docs": "swagger-codegen generate -i ./src/documentation/api.yaml -l html2 -o ./public/documentation -t ./src/documentation/templates --template-engine 'mustache'",
-    "generate-docs-cli": "java -jar swagger-codegen-cli.jar  generate -i ./src/documentation/api.yaml -l html2 -o ./public/documentation -t ./src/documentation/templates --template-engine 'mustache'"
+    "generate-docs": "swagger-codegen generate -i ./src/documentation/api.yaml -l html2 -o ./public/documentation -t ./src/documentation/templates --template-engine 'mustache'"
   },
   "browserslist": {
     "production": [
