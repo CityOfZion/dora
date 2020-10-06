@@ -53,7 +53,7 @@ jobs:
           command: wget https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.22/swagger-codegen-cli-3.0.22.jar -O swagger-codegen-cli.jar
       - run:
           name: generate documentation
-          command: npm run generate-docs
+          command: npm run generate-docs-cli
       - run:
           name: deploy
           command: npm run deploy
