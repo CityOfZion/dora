@@ -44,7 +44,7 @@ jobs:
           command: npm run build
       - run:
           name: install unzip
-          command: apt-get install zip unzip
+          command: sudo apt-get install zip unzip
       - run:
           name: install aws cli
           command: |
