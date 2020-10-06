@@ -1,16 +1,16 @@
 openapi: 3.0.0
 info:
-  description: This is version 2 of the Neoscan API
-  version: 1.0.0
-  title: Neoscan 2
-  termsOfService: "https://neoscan.io/terms/"
+  description: This is version 2 of the Dora API
+  version: 2.0.0
+  title: Dora
+  termsOfService: "https://dora.coz.io//terms/"
   contact:
     email: joe@coz.io
   license:
     name: MIT
     url: "https://opensource.org/licenses/MIT"
 servers:
-  - url: "https://node1.splyse.tech/test_net/v1"
+  - url: "https://dora.coz.io/api/v1/neo2/mainnet"
 paths:
   "/get_asset/{hash}":
     get:

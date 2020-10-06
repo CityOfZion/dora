@@ -112,7 +112,7 @@ export const ROUTES = {
     target: '_self',
   },
   API: {
-    url: '/api.html',
+    url: '/documentation/index.html',
     name: 'API',
     renderIcon: (): React.ReactNode => <Api />,
     target: '_blank',
