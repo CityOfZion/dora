@@ -104,15 +104,15 @@ export async function determineSearchType(search: string): Promise<string> {
   if (isPossibleTxOrContract) {
     urls.push(
       ...[
-        `${GENERATE_BASE_URL()}/get_transaction/${search}`,
-        `${GENERATE_BASE_URL()}/get_contract/${search}`,
+        `${GENERATE_BASE_URL()}/transaction/${search}`,
+        `${GENERATE_BASE_URL()}/contract/${search}`,
       ],
     )
   } else {
     urls.push(
       ...[
-        `${GENERATE_BASE_URL()}/get_balance/${search}`,
-        `${GENERATE_BASE_URL()}/get_block/${search}`,
+        `${GENERATE_BASE_URL()}/balance/${search}`,
+        `${GENERATE_BASE_URL()}/block/${search}`,
       ],
     )
   }

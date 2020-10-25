@@ -16,7 +16,7 @@ type Action = {
   json: {
     hash: string
   }
-  cursor: string
+  page: number
   hash: string
 }
 
@@ -26,7 +26,7 @@ export type State = {
   list: []
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
-  cursor: string
+  page: number
 }
 
 export type Transaction = {
@@ -105,7 +105,7 @@ export const INITIAL_STATE = {
   list: [],
   lastUpdated: null,
   transaction: null,
-  cursor: '',
+  page: 1,
 }
 
 export default (
@@ -115,7 +115,7 @@ export default (
     list: [],
     lastUpdated: null,
     transaction: null,
-    cursor: '',
+    page: 1,
   },
   action: AnyAction | Action,
 ): State => {
@@ -145,12 +145,12 @@ export default (
         list: [...state.list, ...action.json.transactions],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
-        cursor: action.cursor,
+        page: action.page,
       })
     case CLEAR_TRANSACTIONS_LIST:
       return Object.assign({}, state, {
         list: [],
-        cursor: '',
+        page: 0,
       })
     case 'RESET':
       // eslint-disable-next-line

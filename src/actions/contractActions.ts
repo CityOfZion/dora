@@ -148,11 +148,11 @@ export function fetchContract(hash: string) {
 
       try {
         const response = await fetch(
-          `${GENERATE_BASE_URL()}/get_contract/${hash}`,
+          `${GENERATE_BASE_URL()}/contract/${hash}`,
         )
 
         const invocationStatsResponse = await fetch(
-          `${GENERATE_BASE_URL()}/get_contract_stats/${hash}`,
+          `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
         )
 
         const invocationStats = await invocationStatsResponse
@@ -179,7 +179,7 @@ export function fetchContracts(page = 1) {
     try {
       dispatch(requestContracts(page))
       const response = await fetch(
-        `${GENERATE_BASE_URL()}/get_contracts/${page}`,
+        `${GENERATE_BASE_URL()}/contracts/${page}`,
       )
       const json = await response.json()
       dispatch(requestContractsSuccess(page, json))
@@ -199,7 +199,7 @@ export function fetchContractsInvocations() {
 
       try {
         const response = await fetch(
-          `${GENERATE_BASE_URL()}/get_invocation_stats`,
+          `${GENERATE_BASE_URL()}/invocation_stats`,
         )
         const json = await response.json()
         dispatch(requestContractsInvocationsSuccess(json))

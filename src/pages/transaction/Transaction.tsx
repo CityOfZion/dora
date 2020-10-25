@@ -74,7 +74,7 @@ const parseAbstractData = async (
     for (const token of transaction.items.tokens) {
       const { scripthash, amount, to, from } = token
       const response = await fetch(
-        `${GENERATE_BASE_URL()}/get_asset/${scripthash}`,
+        `${GENERATE_BASE_URL()}/asset/${scripthash}`,
       )
       const json = await response.json()
       const name = json.name

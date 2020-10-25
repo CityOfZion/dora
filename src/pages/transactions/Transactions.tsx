@@ -61,7 +61,8 @@ const Transactions: React.FC<{}> = () => {
   )
 
   function loadMore(): void {
-    dispatch(fetchTransactions(transactionState.cursor))
+    const nextPage = transactionState.page + 1
+    dispatch(fetchTransactions(nextPage))
   }
 
   useEffect(() => {
