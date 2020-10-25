@@ -21,10 +21,7 @@ const News: React.FC = (): ReactElement => {
 
   useEffect(() => {
     async function fetchAndSetFeed(): Promise<void> {
-      const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/'
-      const results = await parser.parseURL(
-        CORS_PROXY + 'https://neonewstoday.com/feed/',
-      )
+      const results = await parser.parseURL('https://neonewstoday.com/feed/')
       if (results) {
         results.items && setItems(results.items)
       }
