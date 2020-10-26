@@ -102,9 +102,7 @@ export function fetchAddress(address: string) {
   return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const response = await fetch(
-        `${GENERATE_BASE_URL()}/balance/${address}`,
-      )
+      const response = await fetch(`${GENERATE_BASE_URL()}/balance/${address}`)
       const json = await response.json()
 
       // TODO: see if its possible for this data to be added
