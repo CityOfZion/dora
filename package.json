@@ -1,6 +1,6 @@
 {
-  "name": "neoscan-2",
-  "version": "0.1.0",
+  "name": "dora",
+  "version": "0.3.0",
   "private": true,
   "dependencies": {
     "@babel/preset-typescript": "^7.9.0",
