@@ -15,12 +15,12 @@ export const requestTransaction = (hash: string) => (
 }
 
 export const REQUEST_TRANSACTIONS = 'REQUEST_TRANSACTIONS'
-export const requestTransactions = (cursor: string) => (
+export const requestTransactions = (page: number) => (
   dispatch: Dispatch,
 ): void => {
   dispatch({
     type: REQUEST_TRANSACTIONS,
-    cursor,
+    page,
   })
 }
 
@@ -38,12 +38,12 @@ export const requestTransactionSuccess = (hash: string, json: {}) => (
 
 export const REQUEST_TRANSACTIONS_SUCCESS = 'REQUEST_TRANSACTIONS_SUCCESS'
 export const requestTransactionsSuccess = (
-  cursor: string,
+  page: number,
   json: { transactions: Array<Transaction> },
 ) => (dispatch: Dispatch): void => {
   dispatch({
     type: REQUEST_TRANSACTIONS_SUCCESS,
-    cursor,
+    page,
     json,
     receivedAt: Date.now(),
   })
@@ -62,12 +62,12 @@ export const requestTransactionError = (hash: string, error: Error) => (
 }
 
 export const REQUEST_TRANSACTIONS_ERROR = 'REQUEST_TRANSACTIONS_ERROR'
-export const requestTransactionsError = (cursor: string, error: Error) => (
+export const requestTransactionsError = (page: number, error: Error) => (
   dispatch: Dispatch,
 ): void => {
   dispatch({
     type: REQUEST_TRANSACTIONS_ERROR,
-    cursor,
+    page,
     error,
     receivedAt: Date.now(),
   })
@@ -110,9 +110,9 @@ export function fetchTransaction(hash: string) {
 
       try {
         const responses = await Promise.all([
-          fetch(`${GENERATE_BASE_URL()}/get_transaction/${hash}`),
-          fetch(`${GENERATE_BASE_URL()}/get_log/${hash}`),
-          fetch(`${GENERATE_BASE_URL()}/get_transaction_abstracts/${hash}`),
+          fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
+          fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
+          fetch(`${GENERATE_BASE_URL()}/transaction_abstracts/${hash}`),
         ])
         const mergedResponse = {}
         for (const response of responses) {
@@ -131,24 +131,23 @@ export function fetchTransaction(hash: string) {
   }
 }
 
-export function fetchTransactions(cursor = '') {
+export function fetchTransactions(page = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { transaction: State },
   ): Promise<void> => {
     try {
-      // if (getState().transaction.list.length && !cursor) {
+      // if (getState().transaction.list.length && !page) {
       //   return
       // }
-      dispatch(requestTransactions(cursor))
+      dispatch(requestTransactions(page))
       const response = await fetch(
-        `${GENERATE_BASE_URL()}/get_transactions/${cursor}`,
+        `${GENERATE_BASE_URL()}/transactions/${page}`,
       )
       const json = await response.json()
-      const nextCursor = json.last_evaluated_key
-      dispatch(requestTransactionsSuccess(nextCursor, json))
+      dispatch(requestTransactionsSuccess(page, json))
     } catch (e) {
-      dispatch(requestTransactionsError(cursor, e))
+      dispatch(requestTransactionsError(page, e))
     }
   }
 }

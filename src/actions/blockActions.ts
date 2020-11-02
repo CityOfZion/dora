@@ -108,7 +108,7 @@ export function fetchBlock(indexOrHash: string | number = 1) {
       dispatch(requestBlock(indexOrHash))
       try {
         const response = await fetch(
-          `${GENERATE_BASE_URL()}/get_block/${indexOrHash}`,
+          `${GENERATE_BASE_URL()}/block/${indexOrHash}`,
         )
         const json = await response.json()
         dispatch(requestBlockSuccess(json))
@@ -129,7 +129,7 @@ export function fetchBlocks(page = 1) {
       //   return
       // }
       dispatch(requestBlocks(page))
-      const response = await fetch(`${GENERATE_BASE_URL()}/get_blocks/${page}`)
+      const response = await fetch(`${GENERATE_BASE_URL()}/blocks/${page}`)
       const json = await response.json()
       dispatch(requestBlocksSuccess(page, json))
     } catch (e) {

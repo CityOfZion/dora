@@ -12,7 +12,7 @@ info:
 servers:
   - url: "https://dora.coz.io/api/v1/neo2/mainnet"
 paths:
-  "/get_asset/{hash}":
+  "/asset/{hash}":
     get:
       summary: Get an asset record
       parameters:
@@ -50,7 +50,7 @@ paths:
                     dynamic_invoke: false
                     storage: true
                 decimals: "8"
-  "/get_assets/{page}":
+  "/assets/{page}":
     get:
       description: Get the list of assets by page number
       summary: Get the list of assets
@@ -164,7 +164,7 @@ paths:
                     scripthash: "0x5dcdd77e65134e0077247e2837e7df4e06e62315"
                     decimals: "8"
                 totalCount: 88
-  "/get_balance/{address}":
+  "/balance/{address}":
     get:
       summary: Get the balance of an address
       parameters:
@@ -195,7 +195,7 @@ paths:
                 - balance: "10"
                   asset: >-
                     0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b
-  "/get_block/{hash}":
+  "/block/{hash}":
     get:
       summary: Get a block record
       parameters:
@@ -313,7 +313,7 @@ paths:
                 hash: >-
                   0x0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c
                 jsonsize: 1804
-  "/get_blocks/{page}":
+  "/blocks/{page}":
     get:
       summary: Get the list of blocks
       parameters:
@@ -513,7 +513,7 @@ paths:
                       0x705d46c7cc11384f204a6d26fb444f0a67c2e17970f4ad3a31315d2614b81202
                     txCount: 1
                 totalCount: 786817
-  "/get_contract/{hash}":
+  "/contract/{hash}":
     get:
       summary: Get a contract record
       parameters:
@@ -548,7 +548,7 @@ paths:
                 properties:
                   dynamic_invoke: false
                   storage: true
-  "/get_contracts/{page}":
+  "/contracts/{page}":
     get:
       summary: Get the list of contracts
       parameters:
@@ -644,7 +644,7 @@ paths:
                     idx: 691
                     hash: "0x50c8042a26a2608118a43a3eeb8b6e7052815b85"
                 totalCount: 160
-  /get_height/:
+  /height/:
     get:
       summary: Get the currently indexed blockchain height
       responses:
@@ -659,7 +659,7 @@ paths:
                     type: integer
               example:
                 height: 786816
-  "/get_log/{hash}":
+  "/log/{hash}":
     get:
       summary: Get the application log of a transaction
       parameters:
@@ -708,7 +708,7 @@ paths:
                     value: "1"
                 trigger: Application
                 notifications: []
-  /get_stats:
+  /stats:
     get:
       summary: Get statistics about the blockchain
       responses:
@@ -738,7 +738,7 @@ paths:
                 assets: 136
                 contracts: 759
                 transfers: 379
-  /get_transaction_count:
+  /transaction_count:
     get:
       summary: Get the total count of transactions
       responses:
@@ -753,7 +753,7 @@ paths:
                     type: integer
               example:
                 count: 892068
-  "/get_transaction/{hash}":
+  "/transaction/{hash}":
     get:
       summary: Get a transaction record
       parameters:
@@ -861,7 +861,7 @@ paths:
                     verification: >-
                       2102961ae485792dffc28cc1e022db8dd29bb8226d50552c2ca6619fecae9dd9fa11ac
                 jsonsize: 1131
-  "/get_transactions/{page}":
+  "/transactions/{page}":
     get:
       summary: Get the list of transactions
       parameters:
@@ -956,7 +956,7 @@ paths:
                     time: 1510884632
                 last_evaluated_key: >-
                   eyJ0eGlkIjogIjB4YTU2MWIzMzViYmU3YzY0MDJjM2E5NjRkOTBiNDViMjNkMmE2YmI4NGVmMDc4YzM4Y2YyOTAwNTE4MzQ4OTJhNiIsICJ2ZXJzaW9uIjogMCwgInRpbWUiOiAxNTEwODg0NjMyfQ==
-  "/get_transfer_history/{address}/{page}":
+  "/transfer_history/{address}/{page}":
     get:
       summary: Get the history of transfers for an address
       parameters:

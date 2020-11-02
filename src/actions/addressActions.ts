@@ -102,9 +102,7 @@ export function fetchAddress(address: string) {
   return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const response = await fetch(
-        `${GENERATE_BASE_URL()}/get_balance/${address}`,
-      )
+      const response = await fetch(`${GENERATE_BASE_URL()}/balance/${address}`)
       const json = await response.json()
 
       // TODO: see if its possible for this data to be added
@@ -122,7 +120,7 @@ export function fetchAddress(address: string) {
             symbol = 'GAS'
           } else {
             const response = await fetch(
-              `${GENERATE_BASE_URL()}/get_asset/${balanceData.asset}`,
+              `${GENERATE_BASE_URL()}/asset/${balanceData.asset}`,
             )
             const json = await response.json()
             symbol = json.symbol
@@ -160,7 +158,7 @@ export function fetchAddressTransferHistory(address: string, page = 1) {
     dispatch(requestAddressTransferHistory(address, page))
     try {
       const response = await fetch(
-        `${GENERATE_BASE_URL()}/get_transfer_history/${address}/${page}`,
+        `${GENERATE_BASE_URL()}/transfer_history/${address}/${page}`,
       )
       const json = await response.json()
       dispatch(requestAddressTransferHistorySuccess(address, page, json))
