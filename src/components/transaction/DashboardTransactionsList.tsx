@@ -10,7 +10,6 @@ import {
   Transaction,
   State as TxState,
 } from '../../reducers/transactionReducer'
-import { useHistory } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 
@@ -47,7 +46,6 @@ const returnTxListData = (
 
 const DashboardTransactionsList: React.FC<{}> = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const width = useWindowWidth()
 
   const txState = useSelector(
@@ -75,9 +73,7 @@ const DashboardTransactionsList: React.FC<{}> = () => {
     <List
       data={returnTxListData(txState.list, txState.isLoading)}
       rowId="hash"
-      handleRowClick={(data): void => {
-        history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
-      }}
+      generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
       isLoading={txState.isLoading}
       columns={columns}
       leftBorderColorOnRow="#D355E7"

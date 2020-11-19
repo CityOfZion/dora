@@ -10,7 +10,6 @@ import { State as BlockState, Block } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
-import { useHistory } from 'react-router-dom'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 
 type ParsedBlock = {
@@ -50,7 +49,6 @@ const returnBlockListData = (
 
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
 
   function loadMore(): void {
@@ -90,9 +88,7 @@ const Blocks: React.FC<{}> = () => {
         <List
           data={returnBlockListData(blockState.list, !blockState.list.length)}
           rowId="height"
-          handleRowClick={(data): void => {
-            history.push(`${ROUTES.BLOCK.url}/${data.id}`)
-          }}
+          generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
           isLoading={!blockState.list.length}
           columns={[
             {

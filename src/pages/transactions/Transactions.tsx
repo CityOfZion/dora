@@ -13,7 +13,6 @@ import {
   Transaction,
   State as TxState,
 } from '../../reducers/transactionReducer'
-import { useHistory } from 'react-router-dom'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 
@@ -54,8 +53,6 @@ const returnTxListData = (
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
-
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -100,8 +97,8 @@ const Transactions: React.FC<{}> = () => {
             !transactionState.list.length,
           )}
           rowId="hash"
-          handleRowClick={(data): void =>
-            history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
+          generateHref={(data): string =>
+            `${ROUTES.TRANSACTION.url}/${data.id}`
           }
           isLoading={!transactionState.list.length}
           columns={[

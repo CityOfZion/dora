@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
@@ -83,8 +82,6 @@ const Contracts: React.FC<{}> = () => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
-  const history = useHistory()
-
   function loadMore(): void {
     const nextPage = contractsState.page + 1
     dispatch(fetchContracts(nextPage))
@@ -123,9 +120,7 @@ const Contracts: React.FC<{}> = () => {
             !contractsState.list.length,
           )}
           rowId="hash"
-          handleRowClick={(data): void =>
-            history.push(`${ROUTES.CONTRACT.url}/${data.id}`)
-          }
+          generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.list.length}
           columns={[
             { name: 'Name', accessor: 'name' },
