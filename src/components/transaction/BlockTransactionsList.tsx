@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react'
 import moment from 'moment'
-import { useHistory } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -61,7 +60,6 @@ const BlockTransactionsList: React.FC<{
   block: DetailedBlock
   loading: boolean
 }> = ({ list, block, loading }) => {
-  const history = useHistory()
   const width = useWindowWidth()
 
   const columns =
@@ -87,9 +85,7 @@ const BlockTransactionsList: React.FC<{
       <List
         data={returnTxListData(list, block)}
         rowId="hash"
-        handleRowClick={(data): void => {
-          history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
-        }}
+        generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
         isLoading={loading}
         columns={columns}
         leftBorderColorOnRow={(

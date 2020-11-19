@@ -36,8 +36,9 @@ exports[`renders without crashing 1`] = `
     >
       Test Label 2
     </div>
-    <span
+    <a
       className=""
+      href="#"
       key="1"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -50,9 +51,10 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="2"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -66,9 +68,10 @@ exports[`renders without crashing 1`] = `
       <div>
          hello test 2 
       </div>
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="3"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -81,9 +84,10 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="4"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -97,9 +101,10 @@ exports[`renders without crashing 1`] = `
       <div>
          hello test 2 
       </div>
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="5"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -112,9 +117,10 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="6"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -128,9 +134,10 @@ exports[`renders without crashing 1`] = `
       <div>
          hello test 2 
       </div>
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="7"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -143,9 +150,10 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="8"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -159,9 +167,10 @@ exports[`renders without crashing 1`] = `
       <div>
          hello test 2 
       </div>
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="9"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -174,9 +183,10 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </span>
-    <span
+    </a>
+    <a
       className=""
+      href="#"
       key="10"
       onClick={[Function]}
       onMouseEnter={[Function]}
@@ -190,7 +200,7 @@ exports[`renders without crashing 1`] = `
       <div>
          hello test 2 
       </div>
-    </span>
+    </a>
   </div>
 </div>
 `;

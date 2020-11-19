@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks } from '../../actions/blockActions'
 import { State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
-import { useHistory } from 'react-router-dom'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import './DashboardBlockList.scss'
 
@@ -59,7 +58,6 @@ const returnBlockListData = (
 
 const DashboardBlockList: React.FC<{}> = () => {
   const dispatch = useDispatch()
-  const history = useHistory()
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
@@ -94,9 +92,7 @@ const DashboardBlockList: React.FC<{}> = () => {
     <List
       data={returnBlockListData(blockState.list, blockState.isLoading)}
       rowId="height"
-      handleRowClick={(data): void => {
-        history.push(`${ROUTES.BLOCK.url}/${data.id}`)
-      }}
+      generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
       isLoading={blockState.isLoading}
       columns={columns}
       leftBorderColorOnRow="#D355E7"
