@@ -13,9 +13,12 @@ type ColumnType = {
 type ListProps = {
   columns: Array<ColumnType>
   data: Array<{ [key: string]: string | number | React.FC<{}> }>
-  handleRowClick: (data: {
+  handleRowClick?: (data: {
     [key: string]: string | number | React.FC<{}>
   }) => void
+  generateHref?: (data: {
+    [key: string]: string | number | React.FC<{}>
+  }) => string
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
@@ -32,6 +35,7 @@ export const List: React.FC<ListProps> = ({
   columns,
   data,
   handleRowClick,
+  generateHref,
   isLoading,
   rowId,
   withoutPointer = false,
@@ -142,7 +146,8 @@ export const List: React.FC<ListProps> = ({
               const hoveredClassName = `cellhovered + ${rowClass}`
               return (
                 key !== 'id' && (
-                  <span
+                  <a
+                    href={generateHref ? generateHref(data) : '#'}
                     style={conditionalBorderRadius(i, true, data.id)}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
@@ -155,7 +160,7 @@ export const List: React.FC<ListProps> = ({
                     onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
                     {renderCellData(isLoading, data[key])}
-                  </span>
+                  </a>
                 )
               )
             }),

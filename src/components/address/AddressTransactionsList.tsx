@@ -6,7 +6,6 @@ import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import List from '../../components/list/List'
 import { ROUTES } from '../../constants'
-import { useHistory } from 'react-router-dom'
 import './AddressTransactionsList.scss'
 import tokens from '../../assets/nep5/svg'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
@@ -83,47 +82,42 @@ const AddressTransactionsList: React.FC<{
   shouldRenderLoadMore: boolean
   isLoading: boolean
   handleLoadMore: () => void
-}> = ({ transactions, shouldRenderLoadMore, handleLoadMore, isLoading }) => {
-  const history = useHistory()
-  return (
-    <>
-      <List
-        data={returnBlockListData(transactions)}
-        rowId="id"
-        handleRowClick={(data): void => {
-          history.push(`${ROUTES.TRANSACTION.url}/${data.id}`)
-        }}
-        isLoading={false}
-        columns={[
-          {
-            name: 'Transaction ID',
-            accessor: 'txid',
-          },
+}> = ({ transactions, shouldRenderLoadMore, handleLoadMore, isLoading }) => (
+  <>
+    <List
+      data={returnBlockListData(transactions)}
+      rowId="id"
+      generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
+      isLoading={false}
+      columns={[
+        {
+          name: 'Transaction ID',
+          accessor: 'txid',
+        },
 
-          {
-            name: 'Symbol',
-            accessor: 'symbol',
-          },
+        {
+          name: 'Symbol',
+          accessor: 'symbol',
+        },
 
-          { name: 'From', accessor: 'from' },
-          { name: 'To', accessor: 'to' },
-          { name: 'Amount', accessor: 'amount' },
-          { name: 'Completed on', accessor: 'time' },
-        ]}
-      />
-      {shouldRenderLoadMore && (
-        <div className="load-more-button-container">
-          <Button
-            disabled={isLoading}
-            primary={false}
-            onClick={(): void => handleLoadMore()}
-          >
-            load more
-          </Button>
-        </div>
-      )}
-    </>
-  )
-}
+        { name: 'From', accessor: 'from' },
+        { name: 'To', accessor: 'to' },
+        { name: 'Amount', accessor: 'amount' },
+        { name: 'Completed on', accessor: 'time' },
+      ]}
+    />
+    {shouldRenderLoadMore && (
+      <div className="load-more-button-container">
+        <Button
+          disabled={isLoading}
+          primary={false}
+          onClick={(): void => handleLoadMore()}
+        >
+          load more
+        </Button>
+      </div>
+    )}
+  </>
+)
 
 export default AddressTransactionsList
