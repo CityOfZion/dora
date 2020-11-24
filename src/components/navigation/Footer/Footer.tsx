@@ -74,7 +74,7 @@ const Footer: React.FC = (): ReactElement => {
               href="https://coz.io"
               target="_blank"
               rel="noopener noreferrer"
-              data-test="test"
+              data-test="test2"
             >
               COZ
             </a>
