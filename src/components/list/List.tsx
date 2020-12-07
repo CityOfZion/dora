@@ -145,7 +145,9 @@ export const List: React.FC<ListProps> = ({
             Object.keys(data).map((key, i) => {
               const hoveredClassName = `cellhovered + ${rowClass}`
               return (
-                key !== 'id' && (
+                key !== 'id' &&
+                // TODO: this should probably be using the <Link/> component
+                (generateHref ? (
                   <a
                     href={generateHref ? generateHref(data) : '#'}
                     style={conditionalBorderRadius(i, true, data.id)}
@@ -161,7 +163,23 @@ export const List: React.FC<ListProps> = ({
                   >
                     {renderCellData(isLoading, data[key])}
                   </a>
-                )
+                ) : (
+                  <div
+                    id="non-link-list-cell-container"
+                    style={conditionalBorderRadius(i, true, data.id)}
+                    onClick={(): void => handleRowClick && handleRowClick(data)}
+                    key={uniqueId()}
+                    className={
+                      currentHoveredIndex === index && !withoutPointer
+                        ? hoveredClassName
+                        : rowClass
+                    }
+                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
+                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                  >
+                    {renderCellData(isLoading, data[key])}
+                  </div>
+                ))
               )
             }),
         )}

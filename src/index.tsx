@@ -18,7 +18,13 @@ ReactDOM.render(
   document.getElementById('root'),
 )
 
+navigator.serviceWorker.getRegistrations().then(registrations => {
+  for (const registration of registrations) {
+    registration && registration.unregister()
+  }
+})
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register()
+serviceWorker.unregister()
