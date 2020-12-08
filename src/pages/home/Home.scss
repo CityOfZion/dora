@@ -28,6 +28,7 @@
   .list-column-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   .list-row-container {
     display: flex;
@@ -119,9 +120,6 @@
   }
 
   .explore-tx {
-    margin: 12px;
-  }
-  .explore-blocks {
     margin: 12px;
   }
 }

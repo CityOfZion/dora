@@ -1,0 +1,18 @@
+.DashboardBlockList {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 12px;
+
+  h4 {
+    margin-top: 0;
+  }
+
+  .explore-blocks {
+    width: 100%;
+    max-width: 550px;
+  }
+}

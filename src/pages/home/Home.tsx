@@ -27,19 +27,20 @@ const Home: React.FC<{}> = () => {
             </div>
 
             <div className="list-column-container">
-              <div className="list-row-container">
-                <div className="list-wrapper explore-blocks">
-                  <div className="label-wrapper">
-                    <label>explore blocks</label>
-                    <Button
-                      primary
-                      onClick={(): void => history.push(ROUTES.BLOCKS.url)}
-                    >
-                      view all
-                    </Button>
-                  </div>
-                  <DashboardBlockList />
+              <div>
+                <div className="label-wrapper">
+                  <label>explore blocks</label>
+                  <Button
+                    primary
+                    onClick={(): void => history.push(ROUTES.BLOCKS.url)}
+                  >
+                    view all
+                  </Button>
                 </div>
+                <DashboardBlockList />
+              </div>
+
+              <div className="list-row-container">
                 <div className="list-wrapper explore-tx">
                   <div className="label-wrapper">
                     <label>explore transactions</label>
