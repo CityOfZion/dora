@@ -22,7 +22,8 @@ type Action = {
 export type State = {
   isLoading: boolean
   cached: { [key: string]: DetailedBlock }
-  list: Block[]
+  neo2List: Block[]
+  neo3List: Block[]
   lastUpdated: Date | null
   block: DetailedBlock | null
   page: number
@@ -61,7 +62,8 @@ export type DetailedBlock = {
 export const INITIAL_STATE = {
   isLoading: false,
   cached: {},
-  list: [],
+  neo2List: [],
+  neo3List: [],
   lastUpdated: null,
   block: null,
   page: 1,
@@ -96,14 +98,16 @@ export default (
     case REQUEST_BLOCKS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: [...state.list, ...action.json.items],
+        neo2List: [...state.neo2List, ...action.json.neo2.items],
+        neo3List: [...state.neo3List, ...action.json.neo3.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
       })
     case CLEAR_BLOCKS_LIST:
       return Object.assign({}, state, {
-        list: [],
+        neo2List: [],
+        neo3List: [],
         page: 0,
       })
     case 'RESET':

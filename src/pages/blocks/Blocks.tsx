@@ -50,6 +50,7 @@ const returnBlockListData = (
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const list = blockState.neo2List
 
   function loadMore(): void {
     const nextPage = blockState.page + 1
@@ -86,10 +87,10 @@ const Blocks: React.FC<{}> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <List
-          data={returnBlockListData(blockState.list, !blockState.list.length)}
+          data={returnBlockListData(list, !list.length)}
           rowId="height"
           generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-          isLoading={!blockState.list.length}
+          isLoading={!list.length}
           columns={[
             {
               name: 'Height',
@@ -101,8 +102,7 @@ const Blocks: React.FC<{}> = () => {
           ]}
           countConfig={{
             label: 'Blocks',
-            total:
-              blockState.list && blockState.list[0] && blockState.list[0].index,
+            total: list && list[0] && list[0].index,
           }}
         />
         <div className="load-more-button-container">

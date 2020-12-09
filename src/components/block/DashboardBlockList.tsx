@@ -32,9 +32,12 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(block.time).format(),
-    )} seconds ago`,
+    time:
+      typeof block.time === 'number'
+        ? `${getDiffInSecondsFromNow(
+            moment.unix(block.time).format(),
+          )} seconds ago`
+        : 'N/A',
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
@@ -61,7 +64,8 @@ const DashboardBlockList: React.FC<{}> = () => {
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const { list } = blockState
+  const { neo2List, neo3List } = blockState
+  const list = neo2List
   useEffect(() => {
     if (!list.length) dispatch(fetchBlocks())
   }, [dispatch, list.length])
@@ -89,14 +93,36 @@ const DashboardBlockList: React.FC<{}> = () => {
         ]
 
   return (
-    <List
-      data={returnBlockListData(blockState.list, blockState.isLoading)}
-      rowId="height"
-      generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-      isLoading={blockState.isLoading}
-      columns={columns}
-      leftBorderColorOnRow="#D355E7"
-    />
+    <div className="multi-chain-dashboard-list list-row-container">
+      <div className="block-list-chain-container">
+        <h4>NEO 2</h4>
+        <div className="list-wrapper">
+          <List
+            data={returnBlockListData(neo2List, blockState.isLoading)}
+            rowId="height"
+            generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+            isLoading={blockState.isLoading}
+            columns={columns}
+            leftBorderColorOnRow="#D355E7"
+          />
+        </div>
+      </div>
+      <div className="block-list-chain-container">
+        <div>
+          <h4>NEO 3 (testnet)</h4>
+          <div className="list-wrapper">
+            <List
+              data={returnBlockListData(neo3List, blockState.isLoading)}
+              rowId="height"
+              generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+              isLoading={blockState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

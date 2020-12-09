@@ -119,19 +119,23 @@ export function fetchBlock(indexOrHash: string | number = 1) {
   }
 }
 
-export function fetchBlocks(page = 1) {
+export function fetchBlocks(page = 1, chain?: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { block: State },
   ): Promise<void> => {
     try {
-      // if (getState().block.list.length && page === 1) {
-      //   return
-      // }
       dispatch(requestBlocks(page))
-      const response = await fetch(`${GENERATE_BASE_URL()}/blocks/${page}`)
-      const json = await response.json()
-      dispatch(requestBlocksSuccess(page, json))
+
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL()}/blocks/${page}`)
+      ).json()
+
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3')}/blocks/${page}`)
+      ).json()
+
+      dispatch(requestBlocksSuccess(page, { neo2, neo3 }))
     } catch (e) {
       dispatch(requestBlockError(page, e))
     }
