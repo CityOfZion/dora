@@ -40,21 +40,17 @@ const Home: React.FC<{}> = () => {
                 <DashboardBlockList />
               </div>
 
-              <div className="list-row-container">
-                <div className="list-wrapper explore-tx">
-                  <div className="label-wrapper">
-                    <label>explore transactions</label>
-                    <Button
-                      primary
-                      onClick={(): void =>
-                        history.push(ROUTES.TRANSACTIONS.url)
-                      }
-                    >
-                      view all
-                    </Button>
-                  </div>
-                  <DashboardTransactionsList />
+              <div>
+                <div className="label-wrapper">
+                  <label>explore transactions</label>
+                  <Button
+                    primary
+                    onClick={(): void => history.push(ROUTES.TRANSACTIONS.url)}
+                  >
+                    view all
+                  </Button>
                 </div>
+                <DashboardTransactionsList />
               </div>
             </div>
           </div>

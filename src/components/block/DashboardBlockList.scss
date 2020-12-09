@@ -1,18 +1,40 @@
-.DashboardBlockList {
-  display: flex;
-  width: 100%;
-  flex: 1;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 12px;
-
+.multi-chain-dashboard-list {
   h4 {
     margin-top: 0;
   }
 
+  .list-wrapper,
   .explore-blocks {
-    width: 100%;
-    max-width: 550px;
+    margin: 12px;
   }
+
+  .block-lists {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .block-list-chain-container {
+    margin: 12px;
+    min-width: 515px;
+  }
+
+  @media only screen and (max-width: 1200px) {
+    .block-list-chain-container {
+      width: 100%;
+      max-width: 100% !important;
+    }
+
+    .DashboardBlockList {
+      .list-wrapper,
+      .block-list-chain-container {
+        max-width: 100% !important;
+      }
+    }
+  }
+}
+
+.multi-chain-dashboard-list.list-row-container {
+  justify-content: space-between !important;
 }

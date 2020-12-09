@@ -26,7 +26,7 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
       moment.unix(tx.time).format(),
     )} seconds ago`,
     txid: (): ReactElement => (
-      <div className="txid-index-cell"> {tx.txid} </div>
+      <div className="txid-index-cell"> {tx.txid || tx.hash} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     hash: tx.txid,
@@ -51,11 +51,11 @@ const DashboardTransactionsList: React.FC<{}> = () => {
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
-  const { list } = txState
+  const { neo2List } = txState
 
   useEffect(() => {
-    if (!list.length) dispatch(fetchTransactions())
-  }, [dispatch, list.length])
+    if (!neo2List.length) dispatch(fetchTransactions())
+  }, [dispatch, neo2List.length])
 
   const columns =
     width > 768
@@ -70,14 +70,40 @@ const DashboardTransactionsList: React.FC<{}> = () => {
         ]
 
   return (
-    <List
-      data={returnTxListData(txState.list, txState.isLoading)}
-      rowId="hash"
-      generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
-      isLoading={txState.isLoading}
-      columns={columns}
-      leftBorderColorOnRow="#D355E7"
-    />
+    <div className="multi-chain-dashboard-list list-row-container">
+      <div className="block-list-chain-container">
+        <h4>NEO 2</h4>
+        <div className="list-wrapper">
+          <List
+            data={returnTxListData(txState.neo2List, txState.isLoading)}
+            rowId="hash"
+            generateHref={(data): string =>
+              `${ROUTES.TRANSACTION.url}/${data.id}`
+            }
+            isLoading={txState.isLoading}
+            columns={columns}
+            leftBorderColorOnRow="#D355E7"
+          />
+        </div>
+      </div>
+      <div className="block-list-chain-container">
+        <div>
+          <h4>NEO 3 (testnet)</h4>
+          <div className="list-wrapper">
+            <List
+              data={returnTxListData(txState.neo3List, txState.isLoading)}
+              rowId="hash"
+              generateHref={(data): string =>
+                `${ROUTES.TRANSACTION.url}/${data.id}`
+              }
+              isLoading={txState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

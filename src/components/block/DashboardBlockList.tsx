@@ -93,28 +93,34 @@ const DashboardBlockList: React.FC<{}> = () => {
         ]
 
   return (
-    <div className="DashboardBlockList">
-      <div className="explore-blocks">
+    <div className="multi-chain-dashboard-list list-row-container">
+      <div className="block-list-chain-container">
         <h4>NEO 2</h4>
-        <List
-          data={returnBlockListData(neo2List, blockState.isLoading)}
-          rowId="height"
-          generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-          isLoading={blockState.isLoading}
-          columns={columns}
-          leftBorderColorOnRow="#D355E7"
-        />
+        <div className="list-wrapper">
+          <List
+            data={returnBlockListData(neo2List, blockState.isLoading)}
+            rowId="height"
+            generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+            isLoading={blockState.isLoading}
+            columns={columns}
+            leftBorderColorOnRow="#D355E7"
+          />
+        </div>
       </div>
-      <div className="explore-blocks">
-        <h4>NEO 3</h4>
-        <List
-          data={returnBlockListData(neo3List, blockState.isLoading)}
-          rowId="height"
-          generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-          isLoading={blockState.isLoading}
-          columns={columns}
-          leftBorderColorOnRow="#D355E7"
-        />
+      <div className="block-list-chain-container">
+        <div>
+          <h4>NEO 3 (testnet)</h4>
+          <div className="list-wrapper">
+            <List
+              data={returnBlockListData(neo3List, blockState.isLoading)}
+              rowId="height"
+              generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+              isLoading={blockState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

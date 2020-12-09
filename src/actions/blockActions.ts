@@ -135,8 +135,6 @@ export function fetchBlocks(page = 1, chain?: string) {
         await fetch(`${GENERATE_BASE_URL('neo3')}/blocks/${page}`)
       ).json()
 
-      console.log({ neo2, neo3 })
-
       dispatch(requestBlocksSuccess(page, { neo2, neo3 }))
     } catch (e) {
       dispatch(requestBlockError(page, e))

@@ -93,14 +93,14 @@ const Transactions: React.FC<{}> = () => {
         </div>
         <List
           data={returnTxListData(
-            transactionState.list,
-            !transactionState.list.length,
+            transactionState.neo2List,
+            !transactionState.neo2List.length,
           )}
           rowId="hash"
           generateHref={(data): string =>
             `${ROUTES.TRANSACTION.url}/${data.id}`
           }
-          isLoading={!transactionState.list.length}
+          isLoading={!transactionState.neo2List.length}
           columns={[
             { name: 'Type', accessor: 'parsedType' },
             { name: 'Transaction ID', accessor: 'txid' },
@@ -114,8 +114,8 @@ const Transactions: React.FC<{}> = () => {
             id: string | number | void | React.FC<{}>,
           ): string => {
             const listData = returnTxListData(
-              transactionState.list,
-              !transactionState.list.length,
+              transactionState.neo2List,
+              !transactionState.neo2List.length,
             )
             const transaction = listData.find(tx => tx.hash === id)
             if (transaction) {
