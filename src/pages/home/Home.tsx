@@ -1,5 +1,7 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
+import { State as NetworkState } from '../../reducers/networkReducer'
 import Button from '../../components/button/Button'
 import logo from '../../assets/icons/logo.png'
 import './Home.scss'
@@ -11,6 +13,10 @@ import DashboardTransactionsList from '../../components/transaction/DashboardTra
 
 const Home: React.FC<{}> = () => {
   const history = useHistory()
+
+  const { network } = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
 
   return (
     <div id="Home" className="page-container">
@@ -37,7 +43,7 @@ const Home: React.FC<{}> = () => {
                     view all
                   </Button>
                 </div>
-                <DashboardBlockList />
+                <DashboardBlockList network={network} />
               </div>
 
               <div>
@@ -50,7 +56,7 @@ const Home: React.FC<{}> = () => {
                     view all
                   </Button>
                 </div>
-                <DashboardTransactionsList />
+                <DashboardTransactionsList network={network} />
               </div>
             </div>
           </div>

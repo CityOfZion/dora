@@ -21,12 +21,15 @@ export const GAS_HASHES = [
 
 export const GENERATE_BASE_URL = (chain = 'neo2'): string => {
   const net = store.getState().network.network
+  const chainInState = store.getState().network.chain
 
-  if (chain !== 'neo2') {
-    return `http://54.227.25.52:8091/api/v1/${chain}/testnet`
+  const useChain = chainInState ? chainInState : chain
+
+  if (useChain !== 'neo2') {
+    return `http://54.227.25.52:8091/api/v1/${useChain}/testnet`
   }
 
-  return `https://dora.coz.io/api/v1/${chain}/${net}`
+  return `https://dora.coz.io/api/v1/${useChain}/${net}`
 }
 
 export const TRANSFER = '7472616e73666572'

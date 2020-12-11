@@ -119,7 +119,10 @@ export function fetchTransaction(hash: string) {
         ])
         const mergedResponse = {}
         for (const response of responses) {
-          const json = await response.json()
+          const json =
+            (await response.json().catch(e => {
+              console.error({ e })
+            })) || {}
           Object.assign(mergedResponse, json)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))

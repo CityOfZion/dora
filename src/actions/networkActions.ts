@@ -9,3 +9,11 @@ export const changeNetwork = (network: string) => (
     network,
   })
 }
+
+export const CHANGE_CHAIN = 'CHANGE_CHAIN'
+export const changeChain = (chain: string) => (dispatch: Dispatch): void => {
+  dispatch({
+    type: CHANGE_CHAIN,
+    chain,
+  })
+}

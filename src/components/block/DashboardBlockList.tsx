@@ -59,7 +59,7 @@ const returnBlockListData = (
   }
 }
 
-const DashboardBlockList: React.FC<{}> = () => {
+const DashboardBlockList: React.FC<{ network: string }> = () => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
 

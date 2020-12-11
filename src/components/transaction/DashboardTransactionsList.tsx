@@ -20,6 +20,10 @@ type ParsedTx = {
   hash: string
 }
 
+type Props = {
+  network: string
+}
+
 const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
     time: `${getDiffInSecondsFromNow(
@@ -29,7 +33,7 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
       <div className="txid-index-cell"> {tx.txid || tx.hash} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    hash: tx.txid,
+    hash: tx.hash || tx.txid,
   }
 }
 
@@ -44,7 +48,7 @@ const returnTxListData = (
   }
 }
 
-const DashboardTransactionsList: React.FC<{}> = () => {
+const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
 
@@ -78,7 +82,7 @@ const DashboardTransactionsList: React.FC<{}> = () => {
             data={returnTxListData(txState.neo2List, txState.isLoading)}
             rowId="hash"
             generateHref={(data): string =>
-              `${ROUTES.TRANSACTION.url}/${data.id}`
+              `${ROUTES.TRANSACTION.url}/neo2/${network}/${data.id}`
             }
             isLoading={txState.isLoading}
             columns={columns}
@@ -94,7 +98,7 @@ const DashboardTransactionsList: React.FC<{}> = () => {
               data={returnTxListData(txState.neo3List, txState.isLoading)}
               rowId="hash"
               generateHref={(data): string =>
-                `${ROUTES.TRANSACTION.url}/${data.id}`
+                `${ROUTES.TRANSACTION.url}/neo3/testnet/${data.id}`
               }
               isLoading={txState.isLoading}
               columns={columns}

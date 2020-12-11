@@ -38,9 +38,15 @@ const Router: React.FC = (): ReactElement => {
           <div className="sidebar-spacer" />
           <div className="column-container">
             <Navigation />
-            <ScrollToTop />
+
             <div className="column-container router-page-container">
+              <ScrollToTop />
               <Switch>
+                <Route
+                  path={ROUTES.HOME.url}
+                  component={(): ReactElement => <Home />}
+                  exact
+                />
                 <Route
                   path={`${ROUTES.WALLET.url}/:hash`}
                   component={(): ReactElement => <Address />}
@@ -53,10 +59,21 @@ const Router: React.FC = (): ReactElement => {
                   path={`${ROUTES.CONTRACT.url}/:hash`}
                   component={(): ReactElement => <Contract />}
                 />
+
                 <Route
-                  path={`${ROUTES.TRANSACTION.url}/:hash`}
+                  exact
+                  path={`${ROUTES.TRANSACTION.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Transaction />}
                 />
+
+                {/* <Switch>
+
+                  <Route
+                    path={`${ROUTES.TRANSACTION.url}/neo3/:network/:hash`}
+                    component={(): ReactElement => <Transaction />}
+                  />
+                </Switch> */}
+
                 <Route
                   path={ROUTES.CONTRACTS.url}
                   component={(): ReactElement => <Contracts />}
@@ -69,11 +86,7 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.BLOCKS.url}
                   component={(): ReactElement => <Blocks />}
                 />
-                <Route
-                  path={ROUTES.HOME.url}
-                  component={(): ReactElement => <Home />}
-                  exact
-                />
+
                 <Route
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
