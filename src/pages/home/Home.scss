@@ -4,6 +4,10 @@
   width: 100%;
   margin: auto;
 
+  .react-select__control {
+    border-radius: 80px;
+  }
+
   #inner-home-page-container {
     margin-top: -24px;
     padding-top: 24px;

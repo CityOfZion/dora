@@ -70,6 +70,21 @@ const Transactions: React.FC<{}> = () => {
     }
   }, [dispatch])
 
+  const sortedChainDataByDate = (): Transaction[] => {
+    const { neo2List, neo3List } = transactionState
+    const combinedList = [...neo2List, ...neo3List]
+    return combinedList.sort((b: Transaction, a: Transaction) => {
+      const formattedTime = (time: string | number): string =>
+        typeof time === 'string'
+          ? moment(time).format()
+          : moment(new Date(time * 1000)).format()
+
+      return formattedTime(a.time).localeCompare(formattedTime(b.time))
+    })
+  }
+
+  console.log(sortedChainDataByDate())
+
   return (
     <div id="Transactions" className="page-container">
       <div className="list-wrapper">

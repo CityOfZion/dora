@@ -51,10 +51,7 @@ const Router: React.FC = (): ReactElement => {
                   path={`${ROUTES.WALLET.url}/:hash`}
                   component={(): ReactElement => <Address />}
                 />
-                <Route
-                  path={`${ROUTES.BLOCK.url}/:hash`}
-                  component={(): ReactElement => <Block />}
-                />
+
                 <Route
                   path={`${ROUTES.CONTRACT.url}/:hash`}
                   component={(): ReactElement => <Contract />}
@@ -66,13 +63,11 @@ const Router: React.FC = (): ReactElement => {
                   component={(): ReactElement => <Transaction />}
                 />
 
-                {/* <Switch>
-
-                  <Route
-                    path={`${ROUTES.TRANSACTION.url}/neo3/:network/:hash`}
-                    component={(): ReactElement => <Transaction />}
-                  />
-                </Switch> */}
+                <Route
+                  exact
+                  path={`${ROUTES.BLOCK.url}/:chain/:network/:hash`}
+                  component={(): ReactElement => <Block />}
+                />
 
                 <Route
                   path={ROUTES.CONTRACTS.url}

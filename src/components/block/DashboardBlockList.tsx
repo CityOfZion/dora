@@ -59,7 +59,7 @@ const returnBlockListData = (
   }
 }
 
-const DashboardBlockList: React.FC<{ network: string }> = () => {
+const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
 
@@ -100,7 +100,9 @@ const DashboardBlockList: React.FC<{ network: string }> = () => {
           <List
             data={returnBlockListData(neo2List, blockState.isLoading)}
             rowId="height"
-            generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+            generateHref={(data): string =>
+              `${ROUTES.BLOCK.url}/neo2/${network}/${data.id}`
+            }
             isLoading={blockState.isLoading}
             columns={columns}
             leftBorderColorOnRow="#D355E7"
@@ -109,12 +111,14 @@ const DashboardBlockList: React.FC<{ network: string }> = () => {
       </div>
       <div className="block-list-chain-container">
         <div>
-          <h4>NEO 3 (testnet)</h4>
+          <h4>NEO 3 </h4>
           <div className="list-wrapper">
             <List
               data={returnBlockListData(neo3List, blockState.isLoading)}
               rowId="height"
-              generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+              generateHref={(data): string =>
+                `${ROUTES.BLOCK.url}/neo3/testnet/${data.id}`
+              }
               isLoading={blockState.isLoading}
               columns={columns}
               leftBorderColorOnRow="#D355E7"
