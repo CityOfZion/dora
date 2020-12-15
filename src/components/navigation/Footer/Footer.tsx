@@ -78,13 +78,9 @@ const Footer: React.FC = (): ReactElement => {
             >
               COZ
             </a>
-            {process.env.NODE_ENV === 'development' ? (
-              <small>
-                <code> (development) </code>
-              </small>
-            ) : (
-              ''
-            )}
+            <small>
+              <code> (development) </code>
+            </small>
           </p>
         </div>
       </div>
