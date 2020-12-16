@@ -49,11 +49,11 @@ jobs:
             unzip awscliv2.zip
             sudo ./aws/install
       - when:
-          condition: $CIRCLE_BRANCH = 'develop'
+          condition: $CIRCLE_BRANCH == 'develop'
           steps:
             - run: npm run deploy:develop
       - when:
-          condition: $CIRCLE_BRANCH = 'master'
+          condition: $CIRCLE_BRANCH == 'master'
           steps:
             - run: npm run deploy
 
