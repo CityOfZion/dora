@@ -74,17 +74,13 @@ const Footer: React.FC = (): ReactElement => {
               href="https://coz.io"
               target="_blank"
               rel="noopener noreferrer"
-              data-test="test2"
+              data-test="test400"
             >
               COZ
             </a>
-            {process.env.NODE_ENV === 'development' ? (
-              <small>
-                <code> (development) </code>
-              </small>
-            ) : (
-              ''
-            )}
+            <small>
+              <code> (development) </code>
+            </small>
           </p>
         </div>
       </div>
