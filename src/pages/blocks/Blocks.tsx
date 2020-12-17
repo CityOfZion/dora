@@ -13,6 +13,7 @@ import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import Neo2 from '../../assets/icons/neo2.svg'
 import Neo3 from '../../assets/icons/neo3.svg'
+import { State as NetworkState } from '../../reducers/networkReducer'
 
 type ParsedBlock = {
   time: string
@@ -22,6 +23,7 @@ type ParsedBlock = {
   blocktime: string
   size: string
   height: number
+  chain: string
 }
 
 const mapBlockData = (block: Block): ParsedBlock => {
@@ -45,10 +47,10 @@ const mapBlockData = (block: Block): ParsedBlock => {
       typeof block.time === 'number'
         ? `${getDiffInSecondsFromNow(
             moment.unix(block.time).format(),
-          ).toLocaleString()} seconds ago`
+          )} seconds ago`
         : `${getDiffInSecondsFromNow(
-            moment.unix(new Date(block.time).getTime() / 1000).format(),
-          ).toLocaleString()} seconds ago`,
+            moment.utc(block.time).local().format(),
+          )} seconds ago`,
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
@@ -56,6 +58,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
     transactions: block.txCount,
     blocktime: convertMilliseconds(block.blocktime),
     size: `${block.size.toLocaleString()} Bytes`,
+    chain: block.chain || '',
   }
 }
 
@@ -95,12 +98,16 @@ const Blocks: React.FC<{}> = () => {
     return combinedList.sort((b: Block, a: Block) => {
       const formattedTime = (time: string | number): string =>
         typeof time === 'string'
-          ? moment(time).format()
+          ? moment.utc(time).local().format()
           : moment(new Date(time * 1000)).format()
 
       return formattedTime(a.time).localeCompare(formattedTime(b.time))
     })
   }
+
+  const networkState = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
 
   useEffect(() => {
     dispatch(fetchBlocks())
@@ -137,7 +144,23 @@ const Blocks: React.FC<{}> = () => {
             !sortedChainDataByDate().length,
           )}
           rowId="height"
-          generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
+          generateHref={({ id }): string => {
+            if (!blockState.isLoading) {
+              const listData = returnBlockListData(
+                sortedChainDataByDate(),
+                !sortedChainDataByDate().length,
+              )
+
+              // eslint-disable-next-line
+              const block = listData.find(b => b.height == id)
+              if (block) {
+                return `${ROUTES.BLOCK.url}/${block.chain || 'neo2'}/${
+                  block.chain === 'neo3' ? 'testnet' : networkState.network
+                }/${id}`
+              }
+            }
+            return '#'
+          }}
           isLoading={!list.length}
           columns={[
             { name: 'Platform', accessor: 'platform' },
