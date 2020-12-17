@@ -25,7 +25,34 @@ jobs:
           name: test
           command: npm run test
 
-  deploy:
+  deploy-develop:
+      docker:
+        - image: circleci/node:10.16.3
+      steps:
+        - checkout
+        - restore_cache:
+            key: dependency-cache-{{ checksum "package-lock.json" }}
+        - run:
+            name: install dependencies
+            command: npm install
+        - save_cache: # special step to save the dependency cache
+            key: dependency-cache-{{ checksum "package-lock.json" }}
+            paths:
+              - ./node_modules
+        - run:
+            name: build
+            command: npm run build
+        - run:
+            name: install aws cli
+            command: |
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+              unzip awscliv2.zip
+              sudo ./aws/install
+        - run:
+            name: deploy
+            command: npm run deploy:develop
+
+  deploy-production:
     docker:
       - image: circleci/node:10.16.3
     steps:
@@ -48,25 +75,26 @@ jobs:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
-      - when:
-          condition: $CIRCLE_BRANCH = 'develop'
-          steps:
-            - run: npm run deploy:develop
-      - when:
-          condition: $CIRCLE_BRANCH = 'master'
-          steps:
-            - run: npm run deploy
+      - run:
+          name: deploy
+          command: npm run deploy
 
 workflows:
   version: 2
   build:
     jobs:
       - test
-      - deploy:
+      - deploy-develop:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - develop
+      - deploy-production:
           requires:
             - test
           filters:
             branches:
               only:
                 - master
-                - develop
