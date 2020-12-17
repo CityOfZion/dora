@@ -151,7 +151,7 @@ const Blocks: React.FC<{}> = () => {
                 !sortedChainDataByDate().length,
               )
 
-              console.log({ listData })
+              // eslint-disable-next-line
               const block = listData.find(b => b.height == id)
               console.log({ block })
               if (block) {
