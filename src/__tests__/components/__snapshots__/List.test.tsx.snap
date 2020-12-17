@@ -41,8 +41,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="1"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -57,8 +55,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="2"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderRadius": "0 3px 3px 0",
@@ -74,8 +70,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="3"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -90,8 +84,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="4"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderRadius": "0 3px 3px 0",
@@ -107,8 +99,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="5"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -123,8 +113,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="6"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderRadius": "0 3px 3px 0",
@@ -140,8 +128,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="7"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -156,8 +142,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="8"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderRadius": "0 3px 3px 0",
@@ -173,8 +157,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="9"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -189,8 +171,6 @@ exports[`renders without crashing 1`] = `
       id="non-link-list-cell-container"
       key="10"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderRadius": "0 3px 3px 0",
