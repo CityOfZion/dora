@@ -25,7 +25,7 @@ jobs:
           name: test
           command: npm run test
 
-  deploy:develop:
+  deploy-develop:
       docker:
         - image: circleci/node:10.16.3
       steps:
@@ -52,7 +52,7 @@ jobs:
             name: deploy
             command: npm run deploy:develop
 
-  deploy:production:
+  deploy-production:
     docker:
       - image: circleci/node:10.16.3
     steps:
@@ -84,14 +84,14 @@ workflows:
   build:
     jobs:
       - test
-      - deploy:develop:
+      - deploy-develop:
           requires:
             - test
           filters:
             branches:
               only:
                 - develop
-      - deploy:production:
+      - deploy-production:
           requires:
             - test
           filters:
