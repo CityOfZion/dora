@@ -146,11 +146,11 @@ export function fetchTransactions(page = 1) {
       dispatch(requestTransactions(page))
 
       const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL()}/transactions/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/transactions/${page}`)
       ).json()
 
       const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3')}/transactions/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/transactions/${page}`)
       ).json()
 
       neo3.transactions = neo3.items

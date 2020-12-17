@@ -158,8 +158,8 @@ export const List: React.FC<ListProps> = ({
                         ? hoveredClassName
                         : rowClass
                     }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    // onMouseEnter={(): void => setCurrentHoveredIndex(index)}
+                    // onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
                     {renderCellData(isLoading, data[key])}
                   </a>
@@ -174,8 +174,8 @@ export const List: React.FC<ListProps> = ({
                         ? hoveredClassName
                         : rowClass
                     }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    // onMouseEnter={(): void => setCurrentHoveredIndex(index)}
+                    // onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
                     {renderCellData(isLoading, data[key])}
                   </div>

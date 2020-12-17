@@ -37,6 +37,7 @@ export type Block = {
   blocktime: number
   hash: string
   txCount: number
+  chain?: string
 }
 
 export type DetailedBlock = {

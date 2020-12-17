@@ -15,6 +15,9 @@ import {
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
+import Neo2 from '../../assets/icons/neo2.svg'
+import Neo3 from '../../assets/icons/neo3.svg'
+import { State as NetworkState } from '../../reducers/networkReducer'
 
 type ParsedTx = {
   time: string
@@ -23,20 +26,43 @@ type ParsedTx = {
   hash: string
   type: string
   parsedType: React.FC<{}>
+  platform: React.FC<{}>
+  chain: string
 }
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(tx.time).format(),
-    ).toLocaleString()} seconds ago`,
+    platform: (): ReactElement => (
+      <div className="txid-index-cell">
+        {tx.chain === 'neo2' ? (
+          <div className="neo2-platform-cell">
+            <img src={Neo2} alt="NEO 2" />
+            <span>NEO 2</span>
+          </div>
+        ) : (
+          <div className="neo3-platform-cell">
+            <img src={Neo3} alt="NEO 3" />
+            <span>NEO 3</span>
+          </div>
+        )}
+      </div>
+    ),
+    time:
+      typeof tx.time === 'number'
+        ? `${getDiffInSecondsFromNow(
+            moment.unix(tx.time).format(),
+          ).toLocaleString()} seconds ago`
+        : `${getDiffInSecondsFromNow(moment(tx.time).format())} seconds ago`,
     txid: (): ReactElement => (
-      <div className="txid-index-cell"> {tx.txid} </div>
+      <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    hash: tx.txid,
+    hash: tx.hash || tx.txid,
     type: tx.type,
-    parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
+    parsedType: (): ReactElement => (
+      <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
+    ),
+    chain: tx.chain || '',
   }
 }
 
@@ -53,6 +79,10 @@ const returnTxListData = (
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
+
+  const networkState = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -72,7 +102,16 @@ const Transactions: React.FC<{}> = () => {
 
   const sortedChainDataByDate = (): Transaction[] => {
     const { neo2List, neo3List } = transactionState
-    const combinedList = [...neo2List, ...neo3List]
+    const combinedList = [
+      ...neo2List.map((t: Transaction) => {
+        t.chain = 'neo2'
+        return t
+      }),
+      ...neo3List.map((t: Transaction) => {
+        t.chain = 'neo3'
+        return t
+      }),
+    ]
     return combinedList.sort((b: Transaction, a: Transaction) => {
       const formattedTime = (time: string | number): string =>
         typeof time === 'string'
@@ -82,9 +121,6 @@ const Transactions: React.FC<{}> = () => {
       return formattedTime(a.time).localeCompare(formattedTime(b.time))
     })
   }
-
-  console.log(sortedChainDataByDate())
-
   return (
     <div id="Transactions" className="page-container">
       <div className="list-wrapper">
@@ -108,15 +144,26 @@ const Transactions: React.FC<{}> = () => {
         </div>
         <List
           data={returnTxListData(
-            transactionState.neo2List,
-            !transactionState.neo2List.length,
+            sortedChainDataByDate(),
+            !sortedChainDataByDate().length,
           )}
           rowId="hash"
-          generateHref={(data): string =>
-            `${ROUTES.TRANSACTION.url}/${data.id}`
-          }
+          generateHref={({ id }): string => {
+            const listData = returnTxListData(
+              sortedChainDataByDate(),
+              !sortedChainDataByDate().length,
+            )
+            const transaction = listData.find(tx => tx.hash === id)
+            if (transaction) {
+              return `${ROUTES.TRANSACTION.url}/${
+                transaction.chain || 'neo2'
+              }/${networkState.network}/${id}`
+            }
+            return '#'
+          }}
           isLoading={!transactionState.neo2List.length}
           columns={[
+            { name: 'Platform', accessor: 'platform' },
             { name: 'Type', accessor: 'parsedType' },
             { name: 'Transaction ID', accessor: 'txid' },
             { name: 'Size', accessor: 'size' },
@@ -129,24 +176,22 @@ const Transactions: React.FC<{}> = () => {
             id: string | number | void | React.FC<{}>,
           ): string => {
             const listData = returnTxListData(
-              transactionState.neo2List,
-              !transactionState.neo2List.length,
+              sortedChainDataByDate(),
+              !sortedChainDataByDate().length,
             )
             const transaction = listData.find(tx => tx.hash === id)
-            if (transaction) {
-              switch (transaction.type) {
-                case 'MinerTransaction':
-                  return '#FEDD5B'
-                case 'InvocationTransaction':
-                  return '#D355E7'
-                case 'ClaimTransaction':
-                  return '#00CBFF'
-                case 'ContractTransaction':
-                  return '#4CFFB3'
-                default:
-                  return 'transparent'
-              }
+            interface TxColorMap {
+              [key: string]: string
             }
+            const txColorMap: TxColorMap = {
+              neo2: '#A5C9C7',
+              neo3: '#4CFFB3',
+            }
+
+            if (transaction && txColorMap[transaction.chain]) {
+              return txColorMap[transaction.chain]
+            }
+
             return ''
           }}
         />

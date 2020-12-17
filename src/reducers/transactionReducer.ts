@@ -36,6 +36,7 @@ export type Transaction = {
   txid: string
   type: string
   hash?: string
+  chain?: string
 }
 
 export type Vin = {
@@ -154,7 +155,8 @@ export default (
       })
     case CLEAR_TRANSACTIONS_LIST:
       return Object.assign({}, state, {
-        list: [],
+        neo2List: [],
+        neo3List: [],
         page: 0,
       })
     case 'RESET':
