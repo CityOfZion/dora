@@ -4,6 +4,10 @@
   width: 100%;
   margin: auto;
 
+  .react-select__control {
+    border-radius: 80px;
+  }
+
   #inner-home-page-container {
     margin-top: -24px;
     padding-top: 24px;
@@ -28,6 +32,7 @@
   .list-column-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   .list-row-container {
     display: flex;
@@ -42,7 +47,8 @@
     min-width: 450px;
   }
   .label-wrapper {
-    margin-bottom: 36px;
+    padding: 0 12px;
+    margin-bottom: 24px;
     justify-content: space-between;
     display: flex;
     align-items: center;
@@ -119,9 +125,6 @@
   }
 
   .explore-tx {
-    margin: 12px;
-  }
-  .explore-blocks {
     margin: 12px;
   }
 }

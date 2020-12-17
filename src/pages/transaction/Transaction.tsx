@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
+import { uniqueId } from 'lodash'
 
 import {
   State as TransactionState,
@@ -25,7 +26,7 @@ import { convertToArbitraryDecimals } from '../../utils/formatter'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Notification from '../../components/notification/Notification'
-import { uniqueId } from 'lodash'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 
 type ParsedTransfer = {
   name: string
@@ -96,6 +97,8 @@ const parseAbstractData = async (
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
@@ -122,6 +125,8 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
     return value
   }
+
+  useUpdateNetworkState(props)
 
   useEffect(() => {
     async function computeTransfers(): Promise<void> {
@@ -244,7 +249,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 <span>{renderSkeleton(transaction && transaction.txid)}</span>
               </div>
 
-              {transaction && transaction.scripts[0] && (
+              {transaction && transaction.scripts && transaction.scripts[0] && (
                 <ExpandingPanel title="RAW SCRIPT" open={false}>
                   <div className="script-tile-row">
                     <div className="detail-tile script-tile">
@@ -273,7 +278,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 </ExpandingPanel>
               )}
 
-              {transaction && transaction.scripts[0] && (
+              {transaction && transaction.scripts && transaction.scripts[0] && (
                 <div style={{ margin: '24px 0' }}>
                   <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
                     <div className="script-tile-row">

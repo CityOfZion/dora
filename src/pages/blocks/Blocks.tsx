@@ -11,10 +11,13 @@ import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import Neo2 from '../../assets/icons/neo2.svg'
+import Neo3 from '../../assets/icons/neo3.svg'
 
 type ParsedBlock = {
   time: string
   index: React.FC<{}>
+  platform: React.FC<{}>
   transactions: number
   blocktime: string
   size: string
@@ -23,9 +26,29 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(block.time).format(),
-    )} seconds ago`,
+    platform: (): ReactElement => (
+      <div className="txid-index-cell">
+        {block.chain === 'neo2' ? (
+          <div className="neo2-platform-cell">
+            <img src={Neo2} alt="NEO 2" />
+            <span>NEO 2</span>
+          </div>
+        ) : (
+          <div className="neo3-platform-cell">
+            <img src={Neo3} alt="NEO 3" />
+            <span>NEO 3</span>
+          </div>
+        )}
+      </div>
+    ),
+    time:
+      typeof block.time === 'number'
+        ? `${getDiffInSecondsFromNow(
+            moment.unix(block.time).format(),
+          ).toLocaleString()} seconds ago`
+        : `${getDiffInSecondsFromNow(
+            moment.unix(new Date(block.time).getTime() / 1000).format(),
+          ).toLocaleString()} seconds ago`,
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
@@ -50,10 +73,33 @@ const returnBlockListData = (
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const list = blockState.neo2List
 
   function loadMore(): void {
     const nextPage = blockState.page + 1
     dispatch(fetchBlocks(nextPage))
+  }
+
+  const sortedChainDataByDate = (): Block[] => {
+    const { neo2List, neo3List } = blockState
+    const combinedList = [
+      ...neo2List.map((t: Block) => {
+        t.chain = 'neo2'
+        return t
+      }),
+      ...neo3List.map((t: Block) => {
+        t.chain = 'neo3'
+        return t
+      }),
+    ]
+    return combinedList.sort((b: Block, a: Block) => {
+      const formattedTime = (time: string | number): string =>
+        typeof time === 'string'
+          ? moment(time).format()
+          : moment(new Date(time * 1000)).format()
+
+      return formattedTime(a.time).localeCompare(formattedTime(b.time))
+    })
   }
 
   useEffect(() => {
@@ -86,11 +132,15 @@ const Blocks: React.FC<{}> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <List
-          data={returnBlockListData(blockState.list, !blockState.list.length)}
+          data={returnBlockListData(
+            sortedChainDataByDate(),
+            !sortedChainDataByDate().length,
+          )}
           rowId="height"
           generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-          isLoading={!blockState.list.length}
+          isLoading={!list.length}
           columns={[
+            { name: 'Platform', accessor: 'platform' },
             {
               name: 'Height',
               accessor: 'index',
@@ -101,8 +151,7 @@ const Blocks: React.FC<{}> = () => {
           ]}
           countConfig={{
             label: 'Blocks',
-            total:
-              blockState.list && blockState.list[0] && blockState.list[0].index,
+            // total: list && list[0] && list[0].index,
           }}
         />
         <div className="load-more-button-container">

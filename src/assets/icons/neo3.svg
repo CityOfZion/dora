@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Group 12</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop--1440-Homepage-Copy-15" transform="translate(-206.000000, -514.000000)">
+            <g id="Group-12" transform="translate(206.000000, 514.000000)">
+                <g id="neo-2-icon" transform="translate(0.000000, 5.000000)" fill-rule="nonzero">
+                    <polyline id="Path" fill="#50AF92" points="17 17.08 10.01 13.822 10.01 6.602 17 4.123"></polyline>
+                    <polygon id="Path" fill="#6BE599" points="6.823 20.5 -1.65911729e-12 17.321 -1.65911729e-12 4.458 6.823 7.638"></polygon>
+                    <polygon id="Path" fill="#6BE599" points="16.833 3.657 16.72 3.697 10.01 6.078 9.842 6.138 6.999 7.146 0.269 4.01 9.842 0.614 9.926 0.584 10.103 0.521 10.165 0.5 16.895 3.636 16.832 3.657"></polygon>
+                </g>
+                <text id="3" font-family="Helvetica" font-size="10" font-weight="normal" fill="#88FFAD">
+                    <tspan x="20" y="10">3</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
