@@ -26,9 +26,14 @@ type Props = {
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(tx.time).format(),
-    )} seconds ago`,
+    time:
+      typeof tx.time === 'number'
+        ? `${getDiffInSecondsFromNow(
+            moment.unix(tx.time).format(),
+          )} seconds ago`
+        : `${getDiffInSecondsFromNow(
+            moment.utc(tx.time).local().format(),
+          )} seconds ago`,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.txid || tx.hash} </div>
     ),

@@ -52,7 +52,9 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
         ? `${getDiffInSecondsFromNow(
             moment.unix(tx.time).format(),
           ).toLocaleString()} seconds ago`
-        : `${getDiffInSecondsFromNow(moment(tx.time).format())} seconds ago`,
+        : `${getDiffInSecondsFromNow(
+            moment.utc(tx.time).local().format(),
+          )} seconds ago`,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
@@ -115,7 +117,7 @@ const Transactions: React.FC<{}> = () => {
     return combinedList.sort((b: Transaction, a: Transaction) => {
       const formattedTime = (time: string | number): string =>
         typeof time === 'string'
-          ? moment(time).format()
+          ? moment.utc(time).local().format()
           : moment(new Date(time * 1000)).format()
 
       return formattedTime(a.time).localeCompare(formattedTime(b.time))
