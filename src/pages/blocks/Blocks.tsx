@@ -153,7 +153,6 @@ const Blocks: React.FC<{}> = () => {
 
               // eslint-disable-next-line
               const block = listData.find(b => b.height == id)
-              console.log({ block })
               if (block) {
                 return `${ROUTES.BLOCK.url}/${block.chain || 'neo2'}/${
                   block.chain === 'neo3' ? 'testnet' : networkState.network
