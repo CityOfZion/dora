@@ -98,7 +98,7 @@ export const List: React.FC<ListProps> = ({
     'data-list-column': true,
   })
 
-  const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
+  const [currentHoveredIndex] = React.useState(-1)
 
   const renderCellData = (
     isLoading: boolean,
