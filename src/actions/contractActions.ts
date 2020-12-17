@@ -194,7 +194,9 @@ export function fetchContractsInvocations() {
       dispatch(requestContractsInvocations())
 
       try {
-        const response = await fetch(`${GENERATE_BASE_URL()}/invocation_stats`)
+        const response = await fetch(
+          `${GENERATE_BASE_URL('neo2', false)}/invocation_stats`,
+        )
         const json = await response.json()
         dispatch(requestContractsInvocationsSuccess(json))
       } catch (e) {

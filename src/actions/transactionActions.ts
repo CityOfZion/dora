@@ -39,7 +39,10 @@ export const requestTransactionSuccess = (hash: string, json: {}) => (
 export const REQUEST_TRANSACTIONS_SUCCESS = 'REQUEST_TRANSACTIONS_SUCCESS'
 export const requestTransactionsSuccess = (
   page: number,
-  json: { transactions: Array<Transaction> },
+  json: {
+    neo2: { transactions: Array<Transaction> }
+    neo3: { transactions: Array<Transaction> }
+  },
 ) => (dispatch: Dispatch): void => {
   dispatch({
     type: REQUEST_TRANSACTIONS_SUCCESS,
@@ -116,7 +119,10 @@ export function fetchTransaction(hash: string) {
         ])
         const mergedResponse = {}
         for (const response of responses) {
-          const json = await response.json()
+          const json =
+            (await response.json().catch(e => {
+              console.error({ e })
+            })) || {}
           Object.assign(mergedResponse, json)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
@@ -137,15 +143,19 @@ export function fetchTransactions(page = 1) {
     getState: () => { transaction: State },
   ): Promise<void> => {
     try {
-      // if (getState().transaction.list.length && !page) {
-      //   return
-      // }
       dispatch(requestTransactions(page))
-      const response = await fetch(
-        `${GENERATE_BASE_URL()}/transactions/${page}`,
-      )
-      const json = await response.json()
-      dispatch(requestTransactionsSuccess(page, json))
+
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/transactions/${page}`)
+      ).json()
+
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/transactions/${page}`)
+      ).json()
+
+      neo3.transactions = neo3.items
+
+      dispatch(requestTransactionsSuccess(page, { neo2, neo3 }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))
     }

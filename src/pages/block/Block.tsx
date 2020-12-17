@@ -16,14 +16,18 @@ import { disassemble } from '../../utils/disassemble'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
 const Block: React.FC<Props> = (props: Props) => {
+  useUpdateNetworkState(props)
   const { hash } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
@@ -147,7 +151,7 @@ const Block: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {block && block.tx.length && (
+          {block && !!block.tx.length && (
             <div className="block-transactions-section">
               <div className="details-section">
                 <div className="section-label">TRANSACTIONS</div>
@@ -166,16 +170,18 @@ const Block: React.FC<Props> = (props: Props) => {
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>INVOCATION SCRIPT</label>{' '}
-                  <Copy text={block ? block.script.invocation : ''} />
+                  <Copy text={block ? block.script?.invocation : ''} />
                 </div>
-                <span>{!isLoading && block && block.script.invocation} </span>
+                <span>{!isLoading && block && block.script?.invocation} </span>
               </div>
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>VERIFICATION SCRIPT</label>
-                  <Copy text={block ? block.script.verification : ''} />
+                  <Copy text={block ? block.script?.verification : ''} />
                 </div>
-                <span>{!isLoading && block && block.script.verification} </span>
+                <span>
+                  {!isLoading && block && block.script?.verification}{' '}
+                </span>
               </div>
             </div>
           </ExpandingPanel>
@@ -188,7 +194,7 @@ const Block: React.FC<Props> = (props: Props) => {
                   <span>
                     {!isLoading &&
                       block &&
-                      disassemble(block.script.invocation)}{' '}
+                      disassemble(block.script?.invocation)}{' '}
                   </span>
                 </div>
                 <div className="detail-tile script-tile">
@@ -196,7 +202,7 @@ const Block: React.FC<Props> = (props: Props) => {
                   <span>
                     {!isLoading &&
                       block &&
-                      disassemble(block.script.verification)}{' '}
+                      disassemble(block.script?.verification)}{' '}
                   </span>
                 </div>
               </div>
