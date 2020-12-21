@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect } from 'react'
-import moment from 'moment'
 
-import { getDiffInSecondsFromNow } from '../../utils/time'
+import { formatSecondsAgo } from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,9 +14,7 @@ import {
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
-import Neo2 from '../../assets/icons/neo2.svg'
-import Neo3 from '../../assets/icons/neo3.svg'
-import { State as NetworkState } from '../../reducers/networkReducer'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 import Filter from '../../components/filter/Filter'
 
@@ -35,29 +32,8 @@ type ParsedTx = {
 
 const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
   return {
-    platform: (): ReactElement => (
-      <div className="txid-index-cell">
-        {tx.chain === 'neo2' ? (
-          <div className="neo2-platform-cell">
-            <img src={Neo2} alt="NEO 2" />
-            <span>NEO 2</span>
-          </div>
-        ) : (
-          <div className="neo3-platform-cell">
-            <img src={Neo3} alt="NEO 3" />
-            <span>NEO 3</span>
-          </div>
-        )}
-      </div>
-    ),
-    time:
-      typeof tx.time === 'number'
-        ? `${getDiffInSecondsFromNow(
-            moment.unix(tx.time).format(),
-          ).toLocaleString()} seconds ago`
-        : `${getDiffInSecondsFromNow(
-            moment.utc(tx.time).local().format(),
-          )} seconds ago`,
+    platform: (): ReactElement => <PlatformCell chain={tx.chain} />,
+    time: formatSecondsAgo(tx.time),
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),

@@ -11,8 +11,7 @@ import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import Filter from '../../components/filter/Filter'
-import Neo2 from '../../assets/icons/neo2.svg'
-import Neo3 from '../../assets/icons/neo3.svg'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 
 type ParsedBlock = {
@@ -28,21 +27,7 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block, network?: string): ParsedBlock => {
   return {
-    platform: (): ReactElement => (
-      <div className="txid-index-cell">
-        {block.chain === 'neo2' ? (
-          <div className="neo2-platform-cell">
-            <img src={Neo2} alt="NEO 2" />
-            <span>NEO 2</span>
-          </div>
-        ) : (
-          <div className="neo3-platform-cell">
-            <img src={Neo3} alt="NEO 3" />
-            <span>NEO 3</span>
-          </div>
-        )}
-      </div>
-    ),
+    platform: (): ReactElement => <PlatformCell chain={block.chain} />,
     time: formatSecondsAgo(block.time),
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
