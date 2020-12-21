@@ -18,6 +18,8 @@ import ParsedTransactionType from '../../components/transaction/ParsedTransactio
 import Neo2 from '../../assets/icons/neo2.svg'
 import Neo3 from '../../assets/icons/neo3.svg'
 import { State as NetworkState } from '../../reducers/networkReducer'
+import useFilterState from '../../hooks/useFilterState'
+import Filter from '../../components/filter/Filter'
 
 type ParsedTx = {
   time: string
@@ -31,7 +33,7 @@ type ParsedTx = {
   href: string
 }
 
-const mapTransactionData = (tx: Transaction): ParsedTx => {
+const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
   return {
     platform: (): ReactElement => (
       <div className="txid-index-cell">
@@ -66,27 +68,27 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
       <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
     ),
     chain: tx.chain || '',
-    href: '#',
+    href: `${ROUTES.TRANSACTION.url}/${tx.chain}/${network}/${
+      tx.hash || tx.txid
+    }`,
   }
 }
 
 const returnTxListData = (
   data: Array<Transaction>,
   returnStub: boolean,
+  network: string,
 ): Array<ParsedTx> => {
   if (returnStub) {
-    return MOCK_TX_LIST_DATA.map(mapTransactionData)
+    return MOCK_TX_LIST_DATA.map(tx => mapTransactionData(tx))
   } else {
-    return data.map(mapTransactionData)
+    return data.map(tx => mapTransactionData(tx, network))
   }
 }
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
 
-  const networkState = useSelector(
-    ({ network }: { network: NetworkState }) => network,
-  )
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -94,6 +96,19 @@ const Transactions: React.FC<{}> = () => {
   function loadMore(): void {
     const nextPage = transactionState.page + 1
     dispatch(fetchTransactions(nextPage))
+  }
+
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
+
+  const selectedData = (): Array<Transaction> => {
+    switch (selectedChain) {
+      case 'neo2':
+        return transactionState.neo2List
+      case 'neo3':
+        return transactionState.neo3List
+      default:
+        return transactionState.all
+    }
   }
 
   useEffect(() => {
@@ -104,27 +119,6 @@ const Transactions: React.FC<{}> = () => {
     }
   }, [dispatch])
 
-  const sortedChainDataByDate = (): Transaction[] => {
-    const { neo2List, neo3List } = transactionState
-    const combinedList = [
-      ...neo2List.map((t: Transaction) => {
-        t.chain = 'neo2'
-        return t
-      }),
-      ...neo3List.map((t: Transaction) => {
-        t.chain = 'neo3'
-        return t
-      }),
-    ]
-    return combinedList.sort((b: Transaction, a: Transaction) => {
-      const formattedTime = (time: string | number): string =>
-        typeof time === 'string'
-          ? moment.utc(time).local().format()
-          : moment(new Date(time * 1000)).format()
-
-      return formattedTime(a.time).localeCompare(formattedTime(b.time))
-    })
-  }
   return (
     <div id="Transactions" className="page-container">
       <div className="list-wrapper">
@@ -146,26 +140,21 @@ const Transactions: React.FC<{}> = () => {
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
+        <Filter
+          handleFilterUpdate={(option): void => {
+            handleSetFilterData({
+              selectedChain: option.value,
+            })
+          }}
+        />
         <List
           data={returnTxListData(
-            sortedChainDataByDate(),
-            !sortedChainDataByDate().length,
+            selectedData(),
+            !selectedData().length,
+            network,
           )}
           rowId="hash"
-          generateHref={({ id }): string => {
-            const listData = returnTxListData(
-              sortedChainDataByDate(),
-              !sortedChainDataByDate().length,
-            )
-            const transaction = listData.find(tx => tx.hash === id)
-            if (transaction) {
-              return `${ROUTES.TRANSACTION.url}/${
-                transaction.chain || 'neo2'
-              }/${networkState.network}/${id}`
-            }
-            return '#'
-          }}
-          isLoading={!transactionState.neo2List.length}
+          isLoading={!transactionState.all.length}
           columns={[
             { name: 'Platform', accessor: 'platform' },
             { name: 'Type', accessor: 'parsedType' },
@@ -179,10 +168,7 @@ const Transactions: React.FC<{}> = () => {
           leftBorderColorOnRow={(
             id: string | number | void | React.FC<{}>,
           ): string => {
-            const listData = returnTxListData(
-              sortedChainDataByDate(),
-              !sortedChainDataByDate().length,
-            )
+            const listData = selectedData()
             const transaction = listData.find(tx => tx.hash === id)
             interface TxColorMap {
               [key: string]: string
@@ -192,8 +178,8 @@ const Transactions: React.FC<{}> = () => {
               neo3: '#4CFFB3',
             }
 
-            if (transaction && txColorMap[transaction.chain]) {
-              return txColorMap[transaction.chain]
+            if (transaction && txColorMap[transaction.chain || 'neo2']) {
+              return txColorMap[transaction.chain || 'neo2']
             }
 
             return ''

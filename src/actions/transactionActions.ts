@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { State, Transaction } from '../reducers/transactionReducer'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction = (hash: string) => (
@@ -42,6 +43,7 @@ export const requestTransactionsSuccess = (
   json: {
     neo2: { transactions: Array<Transaction> }
     neo3: { transactions: Array<Transaction> }
+    all: { transactions: Array<Transaction> }
   },
 ) => (dispatch: Dispatch): void => {
   dispatch({
@@ -155,7 +157,14 @@ export function fetchTransactions(page = 1) {
 
       neo3.transactions = neo3.items
 
-      dispatch(requestTransactionsSuccess(page, { neo2, neo3 }))
+      const all = {
+        transactions: sortedByDate(
+          neo2.transactions,
+          neo3.transactions,
+        ) as Transaction[],
+      }
+
+      dispatch(requestTransactionsSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))
     }
