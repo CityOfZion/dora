@@ -28,6 +28,7 @@ type ParsedTx = {
   parsedType: React.FC<{}>
   platform: React.FC<{}>
   chain: string
+  href: string
 }
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
@@ -65,6 +66,7 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
       <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
     ),
     chain: tx.chain || '',
+    href: '#',
   }
 }
 

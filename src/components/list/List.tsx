@@ -12,7 +12,9 @@ type ColumnType = {
 
 type ListProps = {
   columns: Array<ColumnType>
-  data: Array<{ [key: string]: string | number | React.FC<{}> }>
+  // eslint-disable-next-line
+  // @ts-ignore
+  data: Array<{ [key: string]: string | number | React.FC<{}>; href?: string }>
   handleRowClick?: (data: {
     [key: string]: string | number | React.FC<{}>
   }) => void
@@ -45,6 +47,7 @@ export const List: React.FC<ListProps> = ({
   const sortedByAccessor = data.map(data => {
     interface Sorted {
       id: string
+      href: string
       [key: string]: string | number | React.FC<{}>
     }
 
@@ -52,6 +55,7 @@ export const List: React.FC<ListProps> = ({
     columns.forEach(column => {
       sorted[column.accessor] = data[column.accessor]
       sorted.id = String(data[rowId])
+      sorted.href = data.href || '#'
     })
     return sorted
   })
@@ -98,7 +102,7 @@ export const List: React.FC<ListProps> = ({
     'data-list-column': true,
   })
 
-  const [currentHoveredIndex] = React.useState(-1)
+  const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
 
   const renderCellData = (
     isLoading: boolean,
@@ -144,12 +148,24 @@ export const List: React.FC<ListProps> = ({
           ) =>
             Object.keys(data).map((key, i) => {
               const hoveredClassName = `cellhovered + ${rowClass}`
+
+              const conditionalHref = (): string => {
+                if (typeof data.href === 'string' && data.href !== '#') {
+                  return data.href
+                }
+                if (generateHref) {
+                  return generateHref(data)
+                }
+                return '#'
+              }
+
               return (
                 key !== 'id' &&
+                key !== 'href' &&
                 // TODO: this should probably be using the <Link/> component
-                (generateHref ? (
+                (typeof data.href === 'string' || generateHref ? (
                   <a
-                    href={generateHref ? generateHref(data) : '#'}
+                    href={conditionalHref()}
                     style={conditionalBorderRadius(i, true, data.id)}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
@@ -158,8 +174,8 @@ export const List: React.FC<ListProps> = ({
                         ? hoveredClassName
                         : rowClass
                     }
-                    // onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    // onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
+                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
                     {renderCellData(isLoading, data[key])}
                   </a>
@@ -174,8 +190,8 @@ export const List: React.FC<ListProps> = ({
                         ? hoveredClassName
                         : rowClass
                     }
-                    // onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    // onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
+                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
                   >
                     {renderCellData(isLoading, data[key])}
                   </div>

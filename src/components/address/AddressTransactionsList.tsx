@@ -19,6 +19,7 @@ type ParsedTransaction = {
   to: () => ReactElement
   time: () => ReactElement
   symbol: () => ReactElement
+  href: string
 }
 
 type Transaction = {
@@ -68,6 +69,7 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
         </div>
       </span>
     ),
+    href: '#',
   }
 }
 
