@@ -14,8 +14,6 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const useUpdateNetworkState = (props: Props): void => {
-  console.log(props.match)
-
   const networkState = useSelector(
     ({ network }: { network: NetworkState }) => network,
   )
