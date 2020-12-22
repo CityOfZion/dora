@@ -13,14 +13,18 @@ import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import InvocationGraph from '../../components/data-visualization/InvocationGraph'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
 const Contract: React.FC<Props> = (props: Props) => {
+  useUpdateNetworkState(props)
   const { hash } = props.match.params
   const dispatch = useDispatch()
   const contractsState = useSelector(

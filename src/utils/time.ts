@@ -1,6 +1,7 @@
 import moment from 'moment'
 
 import { Block } from '../reducers/blockReducer'
+import { Contract } from '../reducers/contractReducer'
 import { Transaction } from '../reducers/transactionReducer'
 
 export const convertMilliseconds = (ms: number): string => {
@@ -32,29 +33,30 @@ export const formatSecondsAgo = (time: string | number): string => {
       ).toLocaleString()} seconds ago`
 }
 
-type ListUnionType = (Block | Transaction)[]
+type ListUnionType = (Block | Transaction | Contract)[]
 
 export const sortedByDate = (
   neo2List: ListUnionType,
   neo3List: ListUnionType,
 ): ListUnionType => {
   const combinedList = [
-    ...neo2List.map((t: Block | Transaction) => {
+    ...neo2List.map((t: Block | Transaction | Contract) => {
       t.chain = 'neo2'
-
       return t
     }),
-    ...neo3List.map((t: Block | Transaction) => {
+    ...neo3List.map((t: Block | Transaction | Contract) => {
       t.chain = 'neo3'
       return t
     }),
   ]
-  return combinedList.sort((b: Block | Transaction, a: Block | Transaction) => {
-    const formattedTime = (time: string | number): string =>
-      typeof time === 'string'
-        ? moment.utc(time).local().format()
-        : moment(new Date(time * 1000)).format()
+  return combinedList.sort(
+    (b: Block | Transaction | Contract, a: Block | Transaction | Contract) => {
+      const formattedTime = (time: string | number): string =>
+        typeof time === 'string'
+          ? moment.utc(time).local().format()
+          : moment(new Date(time * 1000)).format()
 
-    return formattedTime(a.time).localeCompare(formattedTime(b.time))
-  })
+      return formattedTime(a.time).localeCompare(formattedTime(b.time))
+    },
+  )
 }

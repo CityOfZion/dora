@@ -159,6 +159,7 @@ export default (
       })
     case CLEAR_TRANSACTIONS_LIST:
       return Object.assign({}, state, {
+        all: [],
         neo2List: [],
         neo3List: [],
         page: 0,
