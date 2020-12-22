@@ -25,6 +25,7 @@ export type State = {
   cached: { [key: string]: DetailedTransaction }
   neo2List: []
   neo3List: []
+  all: []
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
   page: number
@@ -107,6 +108,7 @@ export const INITIAL_STATE = {
   cached: {},
   neo2List: [],
   neo3List: [],
+  all: [],
   lastUpdated: null,
   transaction: null,
   page: 1,
@@ -118,6 +120,7 @@ export default (
     cached: {},
     neo2List: [],
     neo3List: [],
+    all: [],
     lastUpdated: null,
     transaction: null,
     page: 1,
@@ -149,12 +152,14 @@ export default (
         isLoading: false,
         neo2List: [...state.neo2List, ...action.json.neo2.transactions],
         neo3List: [...state.neo3List, ...action.json.neo3.transactions],
+        all: [...state.all, ...action.json.all.transactions],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
       })
     case CLEAR_TRANSACTIONS_LIST:
       return Object.assign({}, state, {
+        all: [],
         neo2List: [],
         neo3List: [],
         page: 0,

@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -138,7 +139,9 @@ export function fetchBlocks(page = 1, chain?: string) {
         await fetch(`${GENERATE_BASE_URL('neo3', false)}/blocks/${page}`)
       ).json()
 
-      dispatch(requestBlocksSuccess(page, { neo2, neo3 }))
+      const all = sortedByDate(neo2.items, neo3.items)
+
+      dispatch(requestBlocksSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestBlockError(page, e))
     }

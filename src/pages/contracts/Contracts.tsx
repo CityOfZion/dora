@@ -12,6 +12,9 @@ import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
+import useFilterState from '../../hooks/useFilterState'
+import Filter from '../../components/filter/Filter'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
 
 type Contract = {
   block: number
@@ -23,19 +26,26 @@ type Contract = {
   asset_name: string
   symbol: string
   type: string
+  chain?: string
 }
 
 type ParsedContract = {
   time: React.FC<{}>
   block: React.FC<{}>
   name: React.FC<{}>
-  type: string
   symbol: string
   hash: string
+  chain: string
+  href: string
+  platform: React.FC<{}>
 }
 
-const mapContractData = (contract: Contract): ParsedContract => {
+const mapContractData = (
+  contract: Contract,
+  network?: string,
+): ParsedContract => {
   return {
+    platform: (): ReactElement => <PlatformCell chain={contract.chain} />,
     hash: contract.hash,
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
@@ -46,15 +56,19 @@ const mapContractData = (contract: Contract): ParsedContract => {
         ) : (
           <div className="contract-icon-stub"></div>
         )}
-        <div> {contract.name || contract.asset_name} </div>
+        <div> {contract.name || contract.asset_name || contract.hash} </div>
       </div>
     ),
     symbol: contract.symbol || 'N/A',
-    type: contract.type || 'N/A',
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {' '}
-        {moment.unix(contract.time).format('MM-DD-YYYY | hh:mm:ss')}{' '}
+        {typeof contract.time === 'number'
+          ? moment.unix(contract.time).format('MM-DD-YYYY | hh:mm:ss')
+          : moment
+              .utc(contract.time)
+              .local()
+              .format('MM-DD-YYYY | hh:mm:ss')}{' '}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),
@@ -63,17 +77,20 @@ const mapContractData = (contract: Contract): ParsedContract => {
         {contract.block.toLocaleString()}{' '}
       </div>
     ),
+    chain: '',
+    href: `${ROUTES.CONTRACT.url}/${contract.chain}/${network}/${contract.hash}`,
   }
 }
 
-const returnBlockListData = (
+const returnContractListData = (
   data: Array<Contract>,
   returnStub: boolean,
+  network: string,
 ): Array<ParsedContract> => {
   if (returnStub) {
-    return MOCK_CONTRACT_LIST_DATA.map(mapContractData)
+    return MOCK_CONTRACT_LIST_DATA.map(c => mapContractData(c))
   } else {
-    return data.map(mapContractData)
+    return data.map(c => mapContractData(c, network))
   }
 }
 
@@ -82,9 +99,23 @@ const Contracts: React.FC<{}> = () => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
+
   function loadMore(): void {
     const nextPage = contractsState.page + 1
     dispatch(fetchContracts(nextPage))
+  }
+
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
+
+  const selectedData = (): Array<Contract> => {
+    switch (selectedChain) {
+      case 'neo2':
+        return contractsState.neo2List
+      case 'neo3':
+        return contractsState.neo3List
+      default:
+        return contractsState.all
+    }
   }
 
   useEffect(() => {
@@ -114,15 +145,24 @@ const Contracts: React.FC<{}> = () => {
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>{ROUTES.CONTRACTS.name}</h1>
         </div>
+        <Filter
+          handleFilterUpdate={(option): void => {
+            handleSetFilterData({
+              selectedChain: option.value,
+            })
+          }}
+        />
         <List
-          data={returnBlockListData(
-            contractsState.list,
-            !contractsState.list.length,
+          data={returnContractListData(
+            selectedData(),
+            !selectedData().length,
+            network,
           )}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
-          isLoading={!contractsState.list.length}
+          isLoading={!contractsState.all.length}
           columns={[
+            { name: 'Platform', accessor: 'platform' },
             { name: 'Name', accessor: 'name' },
             { name: 'Symbol', accessor: 'symbol' },
             { name: 'Type', accessor: 'type' },
@@ -132,10 +172,6 @@ const Contracts: React.FC<{}> = () => {
           leftBorderColorOnRow="#D355E7"
           countConfig={{
             label: 'Contracts',
-            total:
-              contractsState.list &&
-              contractsState.list[0] &&
-              contractsState.totalCount,
           }}
         />
         <div className="load-more-button-container">

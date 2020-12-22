@@ -24,6 +24,7 @@ export type State = {
   cached: { [key: string]: DetailedBlock }
   neo2List: Block[]
   neo3List: Block[]
+  all: Block[]
   lastUpdated: Date | null
   block: DetailedBlock | null
   page: number
@@ -65,6 +66,7 @@ export const INITIAL_STATE = {
   cached: {},
   neo2List: [],
   neo3List: [],
+  all: [],
   lastUpdated: null,
   block: null,
   page: 1,
@@ -101,6 +103,7 @@ export default (
         isLoading: false,
         neo2List: [...state.neo2List, ...action.json.neo2.items],
         neo3List: [...state.neo3List, ...action.json.neo3.items],
+        all: [...state.all, ...action.json.all],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
@@ -109,6 +112,7 @@ export default (
       return Object.assign({}, state, {
         neo2List: [],
         neo3List: [],
+        all: [],
         page: 0,
       })
     case 'RESET':

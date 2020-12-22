@@ -53,7 +53,7 @@ const Router: React.FC = (): ReactElement => {
                 />
 
                 <Route
-                  path={`${ROUTES.CONTRACT.url}/:hash`}
+                  path={`${ROUTES.CONTRACT.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Contract />}
                 />
 
