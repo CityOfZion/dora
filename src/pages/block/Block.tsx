@@ -19,7 +19,6 @@ import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { formatDate, formatHours } from '../../utils/time'
-import Skeleton from 'react-loading-skeleton'
 
 interface MatchParams {
   hash: string
@@ -35,6 +34,10 @@ const Block: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { block, isLoading } = blockState
+
+  console.log({ chain })
+
+  console.log(block && block.witnesses && block?.witnesses[0].verification)
 
   useEffect(() => {
     dispatch(fetchBlock(hash))
@@ -75,11 +78,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>BLOCK INDEX</label>
                   <span>
-                    {isLoading ? (
-                      <Skeleton height={50} width={100} />
-                    ) : (
-                      block && block.index.toLocaleString()
-                    )}
+                    {isLoading && block && block.index.toLocaleString()}
                   </span>
                 </div>
                 <div className="detail-tile">
