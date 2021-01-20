@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import moment from 'moment'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -19,7 +18,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import { formatDate, formatTime, formatHours } from '../../utils/time'
+import { formatDate, formatHours } from '../../utils/time'
 
 interface MatchParams {
   hash: string
