@@ -244,8 +244,6 @@ export const HEX_STRING_OPTION = {
   value: 'Hexstring',
   label: 'Hexstring',
   convert: (value: string, chain?: string): string => {
-    console.log('converting')
-    console.log(chain)
     return chain === 'neo3'
       ? neo3_asciiToByteArray(value)
       : asciiToByteArray(value)
@@ -256,7 +254,6 @@ export const STRING_OPTION = {
   value: 'String',
   label: 'String',
   convert: async (value: string, chain?: string): Promise<string> => {
-    console.log('converting string')
     return chain === 'neo3' ? neo3_hexToAscii(value) : hexToAscii(value)
   },
 }

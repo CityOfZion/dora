@@ -150,7 +150,6 @@ const parseNeo3TransactionData = async (
       }
     }
   }
-  console.log({ transfers })
   return transfers
 }
 

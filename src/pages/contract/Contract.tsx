@@ -26,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Contract: React.FC<Props> = (props: Props) => {
   useUpdateNetworkState(props)
-  const { hash, chain } = props.match.params
+  const { hash } = props.match.params
   const dispatch = useDispatch()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,

@@ -114,7 +114,7 @@ const Blocks: React.FC<{}> = () => {
             network,
           )}
           rowId="height"
-          isLoading={!blockState.all.length}
+          isLoading={true}
           columns={[
             { name: 'Platform', accessor: 'platform' },
             {

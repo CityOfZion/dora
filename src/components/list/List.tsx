@@ -3,6 +3,7 @@ import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
 
 import './List.scss'
+import Skeleton from 'react-loading-skeleton'
 
 type ColumnType = {
   name: string
@@ -109,7 +110,7 @@ export const List: React.FC<ListProps> = ({
     data: string | number | React.FC<{}>,
   ): ReactText | React.ReactNode => {
     const cellProps = {}
-    if (isLoading) return undefined
+    if (isLoading) return <Skeleton duration={500} />
     if (typeof data === 'function') return data(cellProps)
     return data
   }

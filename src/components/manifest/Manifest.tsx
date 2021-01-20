@@ -42,7 +42,9 @@ export const Parameter = ({ parameter, hideComma }): ReactElement => (
 // @ts-ignore
 export const ManifestRowContents = ({ method }): ReactElement => (
   <div className="manifest-method-row-container">
-    <span>{method.name} </span>
+    <span>
+      {method.name} <span className="method-seperator">:</span>
+    </span>
     {!!method.parameters.length && (
       <React.Fragment>
         <span className="param-paren">(</span>
@@ -60,7 +62,9 @@ export const ManifestRowContents = ({ method }): ReactElement => (
 
     {method.returntype ? (
       <>
-        <span className="method-seperator">:</span>
+        {!!method.parameters.length && (
+          <span className="method-seperator">:</span>
+        )}
         <p
           style={{
             background: get(
@@ -75,7 +79,7 @@ export const ManifestRowContents = ({ method }): ReactElement => (
       </>
     ) : (
       <>
-        <p></p>
+        <p />
       </>
     )}
   </div>
