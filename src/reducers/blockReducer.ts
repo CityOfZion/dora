@@ -59,6 +59,13 @@ export type DetailedBlock = {
   time: number
   hash: string
   jsonsize: number
+
+  witnesses?: [
+    {
+      invocation: string
+      verification: string
+    },
+  ]
 }
 
 export const INITIAL_STATE = {

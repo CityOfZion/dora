@@ -94,6 +94,14 @@ export type DetailedTransaction = {
     inputs: TransactionIOAbstract[]
     outputs: TransactionIOAbstract[]
   }
+  sender?: string
+  witnesses?: [
+    {
+      invocation: string
+      verification: string
+    },
+  ]
+  notifications?: TransactionNotification[]
 }
 
 export type BlockTransaction = {

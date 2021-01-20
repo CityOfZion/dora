@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import moment from 'moment'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -14,6 +13,8 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import InvocationGraph from '../../components/data-visualization/InvocationGraph'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import { formatDate, formatHours } from '../../utils/time'
+import Manifest from '../../components/manifest/Manifest'
 
 interface MatchParams {
   hash: string
@@ -66,7 +67,7 @@ const Contract: React.FC<Props> = (props: Props) => {
         <div id="contract-details-container">
           <div id="contract-name-info">
             <div id="contract-name">
-              {contract && !isLoading && contract.name}
+              {(contract && !isLoading && contract.name) || 'N/A'}
             </div>
             <div>
               <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
@@ -88,7 +89,9 @@ const Contract: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <span>
+                    {(contract && !isLoading && contract.name) || 'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>TYPE</label>
@@ -102,11 +105,15 @@ const Contract: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>IDX</label>
-                  <span>{contract && !isLoading && contract.idx}</span>
+                  <span>
+                    {(contract && !isLoading && contract.idx) || 'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>RETURN TYPE</label>
-                  <span>{contract && !isLoading && contract.returntype}</span>
+                  <span>
+                    {(contract && !isLoading && contract.returntype) || 'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>TIME</label>
@@ -118,7 +125,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                           <DateRangeIcon
                             style={{ color: '#7698A9', fontSize: 20 }}
                           />
-                          {moment.unix(contract.time).format('MM-DD-YYYY')}
+                          {formatDate(contract.time)}
                         </>
                       )}
                     </div>
@@ -129,7 +136,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {moment.unix(contract.time).format('hh:mm:ss')}
+                          {formatHours(contract.time)}
                         </>
                       )}
                     </div>
@@ -144,6 +151,17 @@ const Contract: React.FC<Props> = (props: Props) => {
               {contract && !isLoading && contract.script}
             </div>
           </div>
+
+          {contract && contract.manifest && (
+            <div className="script-section">
+              <div className="section-label">MANIFEST</div>
+              <div id="manifest">
+                {contract && !isLoading && contract.manifest && (
+                  <Manifest manifest={contract.manifest} />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
