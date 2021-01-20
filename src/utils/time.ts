@@ -33,6 +33,18 @@ export const formatSecondsAgo = (time: string | number): string => {
       ).toLocaleString()} seconds ago`
 }
 
+export const formatDate = (time: string | number): string => {
+  return typeof time === 'number'
+    ? moment.unix(time).format('MM-DD-YYYY')
+    : moment.utc(time).local().format('MM-DD-YYYY')
+}
+
+export const formatHours = (time: string | number): string => {
+  return typeof time === 'number'
+    ? moment.unix(time).format('hh:mm:ss')
+    : moment.utc(time).local().format('hh:mm:ss')
+}
+
 type ListUnionType = (Block | Transaction | Contract)[]
 
 export const sortedByDate = (
