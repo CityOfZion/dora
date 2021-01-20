@@ -2,6 +2,7 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
+import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortedByDate } from '../utils/time'
 
@@ -108,17 +109,22 @@ export const resetTransactionState = () => (dispatch: Dispatch): void => {
 export function fetchTransaction(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { transaction: State },
+    getState: () => { transaction: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchTransaction(getState(), hash)) {
       dispatch(requestTransaction(hash))
 
-      try {
-        const responses = await Promise.all([
-          fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
-          fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
+      const transactionRequestPromises = [
+        fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
+        fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
+      ]
+      getState().network.network === 'neo2' &&
+        transactionRequestPromises.push(
           fetch(`${GENERATE_BASE_URL()}/transaction_abstracts/${hash}`),
-        ])
+        )
+
+      try {
+        const responses = await Promise.all(transactionRequestPromises)
         const mergedResponse = {}
         for (const response of responses) {
           const json =

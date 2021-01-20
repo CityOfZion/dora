@@ -7,6 +7,7 @@ import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { uniqueId } from 'lodash'
 
+import { formatDate, formatHours } from '../../utils/time'
 import {
   State as TransactionState,
   DetailedTransaction,
@@ -17,6 +18,8 @@ import {
   GENERATE_BASE_URL,
   NEO_HASHES,
   GAS_HASHES,
+  ASSETS,
+  neo3_getAddressFromSriptHash,
 } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
@@ -27,6 +30,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Notification from '../../components/notification/Notification'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import { neo3Disassemble } from '../../utils/neo3-disassemble'
 
 type ParsedTransfer = {
   name: string
@@ -39,6 +43,7 @@ const parseAbstractData = async (
   transaction: DetailedTransaction,
 ): Promise<ParsedTransfer[]> => {
   const transfers: ParsedTransfer[] = []
+
   if (transaction.items) {
     transaction.items.inputs.forEach(({ address, value, asset }) => {
       let name = ''
@@ -95,6 +100,60 @@ const parseAbstractData = async (
   return transfers
 }
 
+const parseNeo3TransactionData = async (
+  transaction: DetailedTransaction,
+): Promise<ParsedTransfer[]> => {
+  const transfers: ParsedTransfer[] = []
+  const TRANSFER = 'VHJhbnNmZXI='
+
+  if (transaction && transaction.notifications) {
+    for (const notification of transaction.notifications) {
+      if (notification.state.type === 'Array') {
+        let isTransfer = false
+        notification.state.value.forEach((value: { value: string }): void => {
+          if (value.value === TRANSFER) {
+            isTransfer = true
+          }
+        })
+        if (isTransfer) {
+          const asset = ASSETS.find(
+            asset => asset.scripthash === notification.contract,
+          ) || {
+            name: 'foo',
+          }
+
+          const integerNotfication = notification.state.value.find(
+            value => value.type === 'Integer',
+          )
+          const amount = integerNotfication ? integerNotfication.value : 0
+
+          const from_address = neo3_getAddressFromSriptHash(
+            // eslint-disable-next-line
+            // @ts-ignore
+            notification?.state?.value[1].value || '',
+          )
+          const to_address = neo3_getAddressFromSriptHash(
+            // eslint-disable-next-line
+            // @ts-ignore
+            notification?.state?.value[2].value || '',
+          )
+          transfers.push({
+            name: asset && asset.name,
+            amount:
+              asset.name === 'NEO'
+                ? amount
+                : convertToArbitraryDecimals(Number(amount), 0),
+            to: to_address,
+            from: from_address,
+          })
+        }
+      }
+    }
+  }
+  console.log({ transfers })
+  return transfers
+}
+
 interface MatchParams {
   hash: string
   chain: string
@@ -104,7 +163,7 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const Transaction: React.FC<Props> = (props: Props) => {
-  const { hash } = props.match.params
+  const { hash, chain } = props.match.params
   const dispatch = useDispatch()
   const history = useHistory()
   const transferArr: ParsedTransfer[] = []
@@ -132,7 +191,10 @@ const Transaction: React.FC<Props> = (props: Props) => {
     async function computeTransfers(): Promise<void> {
       if (transaction) {
         setLocalLoadComplete(true)
-        const transfers = await parseAbstractData(transaction)
+        const transfers =
+          chain === 'neo3'
+            ? await parseNeo3TransactionData(transaction)
+            : await parseAbstractData(transaction)
         setTransfers(transfers)
       }
     }
@@ -142,7 +204,207 @@ const Transaction: React.FC<Props> = (props: Props) => {
     return (): void => {
       setTransfers([])
     }
-  }, [dispatch, hash, transaction])
+  }, [chain, dispatch, hash, transaction])
+
+  if (chain === 'neo2')
+    return (
+      <div id="Transaction" className="page-container">
+        <div className="inner-page-container">
+          <Breadcrumbs
+            crumbs={[
+              {
+                url: ROUTES.HOME.url,
+                label: 'Home',
+              },
+              {
+                url: ROUTES.TRANSACTIONS.url,
+                label: 'Transactions',
+              },
+              {
+                url: '#',
+                label: 'Transaction info',
+                active: true,
+              },
+            ]}
+          />
+
+          <BackButton
+            url={ROUTES.TRANSACTIONS.url}
+            text="back to transactions"
+          />
+          <div className="page-title-container">
+            {ROUTES.TRANSACTIONS.renderIcon()}
+            <h1>Transaction Information</h1>
+          </div>
+
+          {!!transfers.length && (
+            <Transfer
+              transfers={transfers}
+              handleAddressClick={(address): void =>
+                history.push(`/address/${address}`)
+              }
+              networkFee={transaction ? transaction.net_fee : ''}
+              systemFee={transaction ? transaction.sys_fee : ''}
+              size={transaction ? transaction.size : ''}
+            />
+          )}
+          <div id="transaction-details-container">
+            <div className="details-section">
+              <div className="section-label">DETAILS</div>
+              <div className="inner-details-container">
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>TYPE</label>
+                    <span>
+                      {renderSkeleton(transaction && transaction.type)}
+                    </span>
+                  </div>
+
+                  <div className="detail-tile">
+                    <label>SIZE</label>
+                    <span>
+                      {renderSkeleton(
+                        transaction &&
+                          `${transaction.size.toLocaleString()} bytes`,
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>INCLUDED IN BLOCK</label>
+                    <span>
+                      {renderSkeleton(
+                        transaction && transaction.block.toLocaleString(),
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="detail-tile">
+                    <label>TIME</label>
+                    <span id="time-details-row">
+                      <div>
+                        {renderSkeleton(
+                          transaction && (
+                            <>
+                              <DateRangeIcon
+                                style={{ color: '#7698A9', fontSize: 20 }}
+                              />
+                              {moment
+                                .unix(transaction.time)
+                                .format('MM-DD-YYYY')}
+                            </>
+                          ),
+                        )}
+                      </div>
+                      <div>
+                        {renderSkeleton(
+                          transaction && (
+                            <>
+                              <Icon
+                                icon={clockIcon}
+                                style={{ color: '#7698A9', fontSize: 18 }}
+                              />
+                              {moment.unix(transaction.time).format('hh:mm:ss')}
+                            </>
+                          ),
+                        )}
+                      </div>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="transaction-hash-tile detail-tile">
+                  <label>HASH</label>
+                  <span>{renderSkeleton(transaction && transaction.txid)}</span>
+                </div>
+
+                {transaction && transaction.scripts && transaction.scripts[0] && (
+                  <ExpandingPanel title="RAW SCRIPT" open={false}>
+                    <div className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>INVOCATION SCRIPT</label>
+                        <span>
+                          {!isLoading &&
+                            transaction &&
+                            transaction.scripts[0].invocation}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label>VERIFICATION SCRIPT</label>
+                        <span>
+                          {!isLoading &&
+                            transaction &&
+                            transaction.scripts[0].verification}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label> SCRIPT</label>
+                        <span>
+                          {!isLoading && transaction && transaction.script}
+                        </span>
+                      </div>
+                    </div>
+                  </ExpandingPanel>
+                )}
+
+                {transaction && transaction.scripts && transaction.scripts[0] && (
+                  <div style={{ margin: '24px 0' }}>
+                    <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
+                      <div className="script-tile-row">
+                        <div className="detail-tile script-tile">
+                          <label>INVOCATION SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              disassemble(
+                                transaction.scripts[0].invocation,
+                              )}{' '}
+                          </span>
+                        </div>
+                        <div className="detail-tile script-tile">
+                          <label>VERIFICATION SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              transaction.scripts &&
+                              transaction.scripts[0] &&
+                              disassemble(
+                                transaction.scripts[0].verification,
+                              )}{' '}
+                          </span>
+                        </div>
+                        <div className="detail-tile script-tile">
+                          <label> SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              transaction.script &&
+                              disassemble(transaction.script)}{' '}
+                          </span>
+                        </div>
+                      </div>
+                    </ExpandingPanel>
+                  </div>
+                )}
+
+                {transaction &&
+                  transaction.Item &&
+                  transaction.Item.notifications &&
+                  transaction.Item.notifications.length &&
+                  transaction.Item.notifications.map(notification => (
+                    <Notification
+                      key={uniqueId()}
+                      notification={notification}
+                    />
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
 
   return (
     <div id="Transaction" className="page-container">
@@ -170,6 +432,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>Transaction Information</h1>
         </div>
+
         {!!transfers.length && (
           <Transfer
             transfers={transfers}
@@ -187,8 +450,14 @@ const Transaction: React.FC<Props> = (props: Props) => {
             <div className="inner-details-container">
               <div className="detail-tile-row">
                 <div className="detail-tile">
-                  <label>TYPE</label>
-                  <span>{renderSkeleton(transaction && transaction.type)}</span>
+                  <label>SENDER</label>
+                  <span className="small-pink-text">
+                    {renderSkeleton(
+                      transaction && transaction.sender
+                        ? transaction.sender
+                        : '',
+                    )}
+                  </span>
                 </div>
 
                 <div className="detail-tile">
@@ -222,7 +491,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                             <DateRangeIcon
                               style={{ color: '#7698A9', fontSize: 20 }}
                             />
-                            {moment.unix(transaction.time).format('MM-DD-YYYY')}
+                            {formatDate(transaction.time)}
                           </>
                         ),
                       )}
@@ -235,7 +504,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                               icon={clockIcon}
                               style={{ color: '#7698A9', fontSize: 18 }}
                             />
-                            {moment.unix(transaction.time).format('hh:mm:ss')}
+                            {formatHours(transaction.time)}
                           </>
                         ),
                       )}
@@ -244,50 +513,22 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 </div>
               </div>
 
-              <div id="transaction-hash-tile" className="detail-tile">
+              <div className="transaction-hash-tile detail-tile">
                 <label>HASH</label>
                 <span>{renderSkeleton(transaction && transaction.txid)}</span>
               </div>
 
-              {transaction && transaction.scripts && transaction.scripts[0] && (
-                <ExpandingPanel title="RAW SCRIPT" open={false}>
-                  <div className="script-tile-row">
-                    <div className="detail-tile script-tile">
-                      <label>INVOCATION SCRIPT</label>
-                      <span>
-                        {!isLoading &&
-                          transaction &&
-                          transaction.scripts[0].invocation}{' '}
-                      </span>
-                    </div>
-                    <div className="detail-tile script-tile">
-                      <label>VERIFICATION SCRIPT</label>
-                      <span>
-                        {!isLoading &&
-                          transaction &&
-                          transaction.scripts[0].verification}{' '}
-                      </span>
-                    </div>
-                    <div className="detail-tile script-tile">
-                      <label> SCRIPT</label>
-                      <span>
-                        {!isLoading && transaction && transaction.script}
-                      </span>
-                    </div>
-                  </div>
-                </ExpandingPanel>
-              )}
-
-              {transaction && transaction.scripts && transaction.scripts[0] && (
-                <div style={{ margin: '24px 0' }}>
-                  <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
+              {transaction &&
+                transaction.witnesses &&
+                transaction.witnesses[0] && (
+                  <ExpandingPanel title="RAW SCRIPT" open={false}>
                     <div className="script-tile-row">
                       <div className="detail-tile script-tile">
                         <label>INVOCATION SCRIPT</label>
                         <span>
                           {!isLoading &&
                             transaction &&
-                            disassemble(transaction.scripts[0].invocation)}{' '}
+                            transaction.witnesses[0].invocation}{' '}
                         </span>
                       </div>
                       <div className="detail-tile script-tile">
@@ -295,33 +536,69 @@ const Transaction: React.FC<Props> = (props: Props) => {
                         <span>
                           {!isLoading &&
                             transaction &&
-                            transaction.scripts &&
-                            transaction.scripts[0] &&
-                            disassemble(
-                              transaction.scripts[0].verification,
-                            )}{' '}
+                            transaction.witnesses[0].verification}{' '}
                         </span>
                       </div>
                       <div className="detail-tile script-tile">
                         <label> SCRIPT</label>
                         <span>
-                          {!isLoading &&
-                            transaction &&
-                            transaction.script &&
-                            disassemble(transaction.script)}{' '}
+                          {!isLoading && transaction && transaction.script}
                         </span>
                       </div>
                     </div>
                   </ExpandingPanel>
-                </div>
-              )}
+                )}
 
               {transaction &&
-                transaction.Item &&
-                transaction.Item.notifications &&
-                transaction.Item.notifications.length &&
-                transaction.Item.notifications.map(notification => (
-                  <Notification key={uniqueId()} notification={notification} />
+                transaction.witnesses &&
+                transaction.witnesses[0] && (
+                  <div style={{ margin: '24px 0' }}>
+                    <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
+                      <div className="script-tile-row">
+                        <div className="detail-tile script-tile">
+                          <label>INVOCATION SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              neo3Disassemble(
+                                transaction.witnesses[0].invocation,
+                              )}{' '}
+                          </span>
+                        </div>
+                        <div className="detail-tile script-tile">
+                          <label>VERIFICATION SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              transaction.witnesses &&
+                              transaction.witnesses[0] &&
+                              neo3Disassemble(
+                                transaction.witnesses[0].verification,
+                              )}{' '}
+                          </span>
+                        </div>
+                        <div className="detail-tile script-tile">
+                          <label> SCRIPT</label>
+                          <span>
+                            {!isLoading &&
+                              transaction &&
+                              transaction.script &&
+                              neo3Disassemble(transaction.script)}{' '}
+                          </span>
+                        </div>
+                      </div>
+                    </ExpandingPanel>
+                  </div>
+                )}
+
+              {transaction &&
+                transaction.notifications &&
+                transaction.notifications.map(notification => (
+                  <Notification
+                    chain={chain}
+                    key={uniqueId()}
+                    notification={notification}
+                  />
                 ))}
             </div>
           </div>
