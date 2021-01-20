@@ -35,10 +35,6 @@ const Block: React.FC<Props> = (props: Props) => {
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { block, isLoading } = blockState
 
-  console.log({ chain })
-
-  console.log(block && block.witnesses && block?.witnesses[0].verification)
-
   useEffect(() => {
     dispatch(fetchBlock(hash))
   }, [dispatch, hash])
@@ -78,7 +74,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>BLOCK INDEX</label>
                   <span>
-                    {isLoading && block && block.index.toLocaleString()}
+                    {!isLoading && block && block.index.toLocaleString()}
                   </span>
                 </div>
                 <div className="detail-tile">
