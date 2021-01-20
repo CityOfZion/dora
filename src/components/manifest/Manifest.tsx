@@ -106,14 +106,17 @@ const Manifest = ({ manifest }): ReactElement => {
         </ExpandingPanel>
       )}
       {!!manifest.abi.events.length && (
-        <ExpandingPanel title="Events" open={false}>
-          <div className="notification-panel methods-panel">
-            {/* @ts-ignore */}
-            {manifest.abi.events.map((method, i) => (
-              <ManifestRowContents method={method} key={i} />
-            ))}
-          </div>
-        </ExpandingPanel>
+        <>
+          <br />
+          <ExpandingPanel title="Events" open={false}>
+            <div className="notification-panel methods-panel">
+              {/* @ts-ignore */}
+              {manifest.abi.events.map((method, i) => (
+                <ManifestRowContents method={method} key={i} />
+              ))}
+            </div>
+          </ExpandingPanel>
+        </>
       )}
     </div>
   )

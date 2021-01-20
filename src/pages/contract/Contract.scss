@@ -125,7 +125,8 @@
   background: rgba(255, 255, 255, 0.07);
   border-radius: 2.4px;
   padding: 24px;
-  display: inline-block;
+  display: flex;
+  flex: 1;
   word-break: break-word;
   min-width: 90%;
 }
