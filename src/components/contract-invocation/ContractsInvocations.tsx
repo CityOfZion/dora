@@ -34,7 +34,8 @@ const mapInvocationData = (
   return {
     contract: (): ReactElement => (
       <Link
-        to={`${ROUTES.CONTRACT.url}/${invocation.hash}`}
+        // BUGBUG this should come from state or get passed as a prop
+        to={`${ROUTES.CONTRACT.url}/neo2/mainnet/${invocation.hash}`}
         className="invocation-name-container"
       >
         <div className="invocation-position">{position + 1}</div>
