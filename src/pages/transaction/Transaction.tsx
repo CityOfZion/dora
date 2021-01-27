@@ -162,7 +162,7 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const Transaction: React.FC<Props> = (props: Props) => {
-  const { hash, chain } = props.match.params
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const history = useHistory()
   const transferArr: ParsedTransfer[] = []
@@ -190,14 +190,16 @@ const Transaction: React.FC<Props> = (props: Props) => {
     async function computeTransfers(): Promise<void> {
       if (transaction) {
         setLocalLoadComplete(true)
+        console.log(transaction, chain)
         const transfers =
           chain === 'neo3'
             ? await parseNeo3TransactionData(transaction)
             : await parseAbstractData(transaction)
+
         setTransfers(transfers)
       }
     }
-    dispatch(fetchTransaction(hash))
+    dispatch(fetchTransaction(hash, chain))
     computeTransfers()
 
     return (): void => {
@@ -240,7 +242,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
             <Transfer
               transfers={transfers}
               handleAddressClick={(address): void =>
-                history.push(`/address/${address}`)
+                history.push(`/address/${chain}/${network}/${address}`)
               }
               networkFee={transaction ? transaction.net_fee : ''}
               systemFee={transaction ? transaction.sys_fee : ''}

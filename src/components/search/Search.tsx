@@ -19,26 +19,35 @@ const Search: React.FC<{}> = () => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { searchType, error, searchValue } = searchState
+  const { searchType, error, searchValue, networkInfo } = searchState
+  const { chain, network } = networkInfo
 
   useEffect(() => {
     if (searchType && searchValue) {
       switch (searchType) {
         case SEARCH_TYPES.TRANSACTION:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.TRANSACTION.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.TRANSACTION.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.CONTRACT:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.CONTRACT.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.CONTRACT.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.ADDRESS:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.WALLET.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.WALLET.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.BLOCK:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.BLOCK.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.BLOCK.url}/${chain}/${network}/${searchValue}`,
+          )
 
         default:
           break
@@ -47,7 +56,7 @@ const Search: React.FC<{}> = () => {
     if (error) {
       history.push(ROUTES.NOT_FOUND.url)
     }
-  }, [dispatch, error, history, searchType, searchValue])
+  }, [chain, dispatch, error, history, network, searchType, searchValue])
 
   function handleSearch(e: React.SyntheticEvent): void {
     e.preventDefault()
