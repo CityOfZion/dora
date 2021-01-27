@@ -59,7 +59,9 @@ const BlockTransactionsList: React.FC<{
   list: Array<BlockTransaction>
   block: DetailedBlock
   loading: boolean
-}> = ({ list, block, loading }) => {
+  network: string
+  chain: string
+}> = ({ list, block, loading, network, chain }) => {
   const width = useWindowWidth()
 
   const columns =
@@ -85,7 +87,9 @@ const BlockTransactionsList: React.FC<{
       <List
         data={returnTxListData(list, block)}
         rowId="hash"
-        generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
+        generateHref={(data): string =>
+          `${ROUTES.TRANSACTION.url}/${chain}/${network}/${data.id}`
+        }
         isLoading={loading}
         columns={columns}
         leftBorderColorOnRow={(
