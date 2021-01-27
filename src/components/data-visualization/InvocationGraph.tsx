@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryArea } from 'victory'
 
+import { ReactComponent as Warning } from '../../assets/icons/warning.svg'
 import { InvocationStat } from '../../reducers/contractReducer'
 import './InvocationGraph.scss'
+import { isEmpty } from 'lodash'
 
 type Props = {
   data: InvocationStat
@@ -35,6 +37,7 @@ const theme = {
 
 const InvocationGraph: React.FC<Props> = ({ data }) => {
   const [width, setWidth] = useState(window.innerWidth)
+  const [invocationsMade, setNoInvocationsMade] = useState(true)
   //eslint-disable-next-line
   // @ts-ignore
   const updateWidth = (ev): void => {
@@ -43,10 +46,13 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
 
   useEffect(() => {
     window.addEventListener('resize', updateWidth)
+    if (isEmpty(data)) {
+      setNoInvocationsMade(false)
+    }
     return (): void => {
       window.removeEventListener('resize', updateWidth)
     }
-  }, [])
+  }, [data])
 
   const returnFormatedGraphData = (
     data: InvocationStat,
@@ -73,6 +79,12 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
 
   return (
     <div id="InvocationGraph">
+      {!invocationsMade && (
+        <div id="no-invocations-label">
+          <Warning />
+          NO INVOCATIONS MADE
+        </div>
+      )}
       <svg
         style={{ height: 0 }}
         xmlns="http://www.w3.org/2000/svg"

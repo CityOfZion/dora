@@ -1,5 +1,6 @@
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { convertMilliseconds, formatSecondsAgo } from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
@@ -20,7 +21,7 @@ type ParsedBlock = {
   platform: React.FC<{}>
   transactions: number
   blocktime: string
-  size: string
+  size: React.FC<{}>
   height: number
   href: string
 }
@@ -35,7 +36,13 @@ const mapBlockData = (block: Block, network?: string): ParsedBlock => {
     height: block.index,
     transactions: block.txCount,
     blocktime: convertMilliseconds(block.blocktime),
-    size: `${block.size.toLocaleString()} Bytes`,
+    size: (): ReactElement => (
+      <div className="contract-time-cell">
+        {block.size.toLocaleString()} Bytes
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
+
     href: `${ROUTES.BLOCK.url}/${block.chain}/${network}/${block.index}`,
   }
 }
@@ -114,7 +121,7 @@ const Blocks: React.FC<{}> = () => {
             network,
           )}
           rowId="height"
-          isLoading={true}
+          isLoading={!blockState.all.length}
           columns={[
             { name: 'Platform', accessor: 'platform' },
             {

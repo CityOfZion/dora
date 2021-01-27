@@ -49,7 +49,7 @@ const Navigation: React.FC = (): ReactElement => {
             </div>
 
             <div className="navigation-network-toggle">
-              <NetworkToggle />
+              <NetworkToggle disabled={history.location.pathname !== '/'} />
             </div>
           </div>
         </div>

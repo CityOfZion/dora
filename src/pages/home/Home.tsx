@@ -19,6 +19,8 @@ const Home: React.FC<{}> = () => {
     ({ network }: { network: NetworkState }) => network,
   )
 
+  console.log({ network })
+
   return (
     <div id="Home" className="page-container">
       <div id="inner-home-page-container">
