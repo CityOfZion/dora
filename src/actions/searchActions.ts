@@ -128,6 +128,8 @@ export async function determineSearchType(
       ...[
         `${GENERATE_BASE_URL('neo2', false)}/balance/${search}`,
         `${GENERATE_BASE_URL('neo2', false)}/block/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/balance/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/block/${search}`,
       ],
     )
   }
@@ -168,12 +170,24 @@ export async function determineSearchType(
     const balance = results[0] as Balance[]
     const block = results[1]
 
+    const neo3Balance = results[2] as Balance[]
+    // const neo3Block = results[3]
+
     if (balance && balance.length) {
       searchResults.searchType = SEARCH_TYPES.ADDRESS
     }
     if (block) {
       searchResults.searchType = SEARCH_TYPES.BLOCK
     }
+
+    if (neo3Balance && neo3Balance.length) {
+      searchResults.searchType = SEARCH_TYPES.ADDRESS
+      searchResults.networkInfo.chain = 'neo3'
+    }
+    // if (neo3Block) {
+    //   searchResults.searchType = SEARCH_TYPES.BLOCK
+    //   searchResults.networkInfo.chain = 'neo3'
+    // }
   }
 
   return searchResults
