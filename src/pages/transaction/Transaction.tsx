@@ -391,7 +391,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 {transaction &&
                   transaction.Item &&
                   transaction.Item.notifications &&
-                  transaction.Item.notifications.length &&
+                  !!transaction.Item.notifications.length &&
                   transaction.Item.notifications.map(notification => (
                     <Notification
                       key={uniqueId()}
