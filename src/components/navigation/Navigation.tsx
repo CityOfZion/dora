@@ -21,8 +21,6 @@ const Navigation: React.FC = (): ReactElement => {
 
   const [width, setWidth] = useState(window.innerWidth)
 
-  console.log({ history })
-
   useEffect(() => {
     const handleResize = (): void => {
       setWidth(window.innerWidth)
