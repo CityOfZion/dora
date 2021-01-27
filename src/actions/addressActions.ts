@@ -119,9 +119,6 @@ export function fetchAddress(address: string, chain: string) {
             /(,)(?=(\d{3})+$)/g,
             '$1.',
           )
-          // const balance = balanceData.balance.toLocaleString(undefined, {
-          //   minimumFractionDigits: json.decimals || 8,
-          // })
           if (NEO_HASHES.includes(balanceData.asset)) {
             symbol = 'NEO'
           } else if (GAS_HASHES.includes(balanceData.asset)) {
@@ -133,13 +130,6 @@ export function fetchAddress(address: string, chain: string) {
             const json = await response.json()
             symbol = json.symbol
             name = json.name
-
-            // console.log(balance)
-
-            // balance = convertToArbitraryDecimals(
-            //   balanceData.balance,
-            //   json.decimals,
-            // )
           }
 
           balances.push({

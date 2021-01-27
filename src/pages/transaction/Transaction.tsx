@@ -196,7 +196,6 @@ const Transaction: React.FC<Props> = (props: Props) => {
             ? await parseNeo3TransactionData(transaction)
             : await parseAbstractData(transaction)
 
-        console.log({ transfers })
         setTransfers(transfers)
       }
     }
@@ -207,8 +206,6 @@ const Transaction: React.FC<Props> = (props: Props) => {
       setTransfers([])
     }
   }, [chain, dispatch, hash, transaction])
-
-  console.log({ transfers })
 
   if (chain === 'neo2')
     return (

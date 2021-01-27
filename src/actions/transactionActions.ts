@@ -134,7 +134,6 @@ export function fetchTransaction(hash: string, chain: string) {
             })) || {}
           Object.assign(mergedResponse, json)
         }
-        console.log({ mergedResponse })
         dispatch(requestTransactionSuccess(hash, mergedResponse))
       } catch (e) {
         dispatch(requestTransactionError(hash, e))

@@ -71,8 +71,6 @@ export const GENERATE_BASE_URL = (
 
   if (useChainInState) useChain = chainInState
 
-  console.log(useChain)
-
   if (useChain !== 'neo2') {
     return `https://dora.coz.io/api/v1/${useChain}/testnet`
   }
