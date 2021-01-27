@@ -27,6 +27,12 @@ type Contract = {
   symbol: string
   type: string
   chain?: string
+  manifest?: {
+    extras: {
+      name: string
+      symbol: string
+    }
+  }
 }
 
 type ParsedContract = {
@@ -56,7 +62,14 @@ const mapContractData = (
         ) : (
           <div className="contract-icon-stub"></div>
         )}
-        <div> {contract.name || contract.asset_name || contract.hash} </div>
+        <div>
+          {' '}
+          {contract.name ||
+            contract.asset_name ||
+            contract.manifest?.extras?.name ||
+            contract.manifest?.extras?.symbol ||
+            contract.hash}{' '}
+        </div>
       </div>
     ),
     symbol: contract.symbol || 'N/A',

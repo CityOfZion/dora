@@ -21,6 +21,8 @@ const Navigation: React.FC = (): ReactElement => {
 
   const [width, setWidth] = useState(window.innerWidth)
 
+  console.log({ history })
+
   useEffect(() => {
     const handleResize = (): void => {
       setWidth(window.innerWidth)
@@ -49,7 +51,7 @@ const Navigation: React.FC = (): ReactElement => {
             </div>
 
             <div className="navigation-network-toggle">
-              <NetworkToggle />
+              <NetworkToggle disabled={history.location.pathname !== '/'} />
             </div>
           </div>
         </div>

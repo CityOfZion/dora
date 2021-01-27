@@ -33,8 +33,9 @@ export const Filter: React.FC<Props> = ({
     },
   ]
 
+  // TODO: this should read redux state to set default
   const [currentOption, setCurrentOption] = useState(
-    selectedOption || options[0],
+    selectedOption || options[1],
   )
 
   const setFilter = (option: ValueType<Option>): void => {
