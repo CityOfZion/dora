@@ -18,7 +18,9 @@ type Option = {
   label: string
 }
 
-export const NetworkToggle: React.FC<{}> = (): ReactElement => {
+export const NetworkToggle: React.FC<{ disabled: boolean }> = ({
+  disabled,
+}): ReactElement => {
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -54,6 +56,7 @@ export const NetworkToggle: React.FC<{}> = (): ReactElement => {
         selectedOption={selectedNetworkOption}
         handleChange={handleChange}
         options={options}
+        disabled={disabled}
       />
     </div>
   )

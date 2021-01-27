@@ -15,7 +15,7 @@ interface FilterState {
 
 const useFilterState = (): FilterState => {
   const DEFAULT_FILTER: Filter = {
-    selectedChain: 'all',
+    selectedChain: 'neo2',
   }
 
   const networkState = useSelector(

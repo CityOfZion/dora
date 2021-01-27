@@ -1,4 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 import { formatSecondsAgo } from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
@@ -19,7 +20,7 @@ import useFilterState from '../../hooks/useFilterState'
 import Filter from '../../components/filter/Filter'
 
 type ParsedTx = {
-  time: string
+  time: React.FC<{}>
   txid: React.FC<{}>
   size: string
   hash: string
@@ -33,7 +34,12 @@ type ParsedTx = {
 const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
   return {
     platform: (): ReactElement => <PlatformCell chain={tx.chain} />,
-    time: formatSecondsAgo(tx.time),
+    time: (): ReactElement => (
+      <div className="contract-time-cell">
+        {formatSecondsAgo(tx.time)}
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
