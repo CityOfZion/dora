@@ -30,7 +30,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Block: React.FC<Props> = (props: Props) => {
   useUpdateNetworkState(props)
-  const { hash, chain } = props.match.params
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { block, isLoading } = blockState
@@ -162,6 +162,8 @@ const Block: React.FC<Props> = (props: Props) => {
                   loading={isLoading}
                   list={block.tx}
                   block={block}
+                  network={network}
+                  chain={chain}
                 />
               </div>
             </div>

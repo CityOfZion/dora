@@ -98,11 +98,13 @@ type ParsedBalanceData = {
   symbol: string
 }
 
-export function fetchAddress(address: string) {
+export function fetchAddress(address: string, chain: string) {
   return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const response = await fetch(`${GENERATE_BASE_URL()}/balance/${address}`)
+      const response = await fetch(
+        `${GENERATE_BASE_URL(chain)}/balance/${address}`,
+      )
       const json = await response.json()
 
       // TODO: see if its possible for this data to be added
@@ -113,22 +115,31 @@ export function fetchAddress(address: string) {
         for (const balanceData of json) {
           let symbol
           let name
-          let balance = balanceData.balance
+          const balance = String(balanceData.balance).replace(
+            /(,)(?=(\d{3})+$)/g,
+            '$1.',
+          )
+          // const balance = balanceData.balance.toLocaleString(undefined, {
+          //   minimumFractionDigits: json.decimals || 8,
+          // })
           if (NEO_HASHES.includes(balanceData.asset)) {
             symbol = 'NEO'
           } else if (GAS_HASHES.includes(balanceData.asset)) {
             symbol = 'GAS'
           } else {
             const response = await fetch(
-              `${GENERATE_BASE_URL()}/asset/${balanceData.asset}`,
+              `${GENERATE_BASE_URL(chain)}/asset/${balanceData.asset}`,
             )
             const json = await response.json()
             symbol = json.symbol
             name = json.name
-            balance = convertToArbitraryDecimals(
-              balanceData.balance,
-              json.decimals,
-            )
+
+            // console.log(balance)
+
+            // balance = convertToArbitraryDecimals(
+            //   balanceData.balance,
+            //   json.decimals,
+            // )
           }
 
           balances.push({
@@ -141,6 +152,7 @@ export function fetchAddress(address: string) {
         return balances
       }
 
+      console.log('fetching asset data')
       const balances = await fetchAssetData()
 
       dispatch(requestAddressSuccess(address, balances))

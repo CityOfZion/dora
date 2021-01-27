@@ -48,7 +48,7 @@ const Router: React.FC = (): ReactElement => {
                   exact
                 />
                 <Route
-                  path={`${ROUTES.WALLET.url}/:hash`}
+                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Address />}
                 />
 

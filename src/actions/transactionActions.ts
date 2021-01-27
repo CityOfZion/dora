@@ -106,7 +106,7 @@ export const resetTransactionState = () => (dispatch: Dispatch): void => {
   })
 }
 
-export function fetchTransaction(hash: string) {
+export function fetchTransaction(hash: string, chain: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { transaction: State; network: NetworkState },
@@ -118,7 +118,8 @@ export function fetchTransaction(hash: string) {
         fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
         fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
       ]
-      getState().network.network === 'neo2' &&
+
+      chain === 'neo2' &&
         transactionRequestPromises.push(
           fetch(`${GENERATE_BASE_URL()}/transaction_abstracts/${hash}`),
         )
@@ -133,6 +134,7 @@ export function fetchTransaction(hash: string) {
             })) || {}
           Object.assign(mergedResponse, json)
         }
+        console.log({ mergedResponse })
         dispatch(requestTransactionSuccess(hash, mergedResponse))
       } catch (e) {
         dispatch(requestTransactionError(hash, e))

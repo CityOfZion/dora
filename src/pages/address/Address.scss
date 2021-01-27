@@ -31,27 +31,31 @@
 
   .balance-container {
     height: 60px;
-    display: flex;
-    align-items: center;
     background: #25393e;
     margin: 4px 0;
     padding: 0 24px;
+    display: flex;
+    display: -webkit-flex;
     justify-content: space-between;
-
-    div {
-      display: flex;
-    }
-
-    span {
-      font-size: 20px;
-      color: #ffffff;
-      letter-spacing: -0.8px;
-      line-height: 81.6px;
-    }
+    -webkit-justify-content: space-between;
+    align-items: center;
+    -webkit-align-items: center;
 
     img {
       width: 25px;
       margin-right: 12px;
+    }
+
+    .balance-details {
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+    }
+
+    .balance-symbol {
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: -0.8px;
     }
 
     .balance-amount {
@@ -64,5 +68,13 @@
       font-size: 16px;
       margin-left: 8px;
     }
+  }
+}
+
+#Address {
+  .react-loading-skeleton {
+    height: 60px;
+    margin: 2px 0;
+    border-radius: 0;
   }
 }
