@@ -30,7 +30,6 @@ const Address: React.FC<Props> = (props: Props) => {
     ({ address }: { address: AddressState }) => address,
   )
   const {
-    requestedAddress,
     balance,
     transferHistory,
     isLoading,

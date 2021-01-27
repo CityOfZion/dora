@@ -36,7 +36,7 @@ const Navigation: React.FC = (): ReactElement => {
     dispatch(closeMenu())
   }
 
-  function shouldDisableNetworkToggle() {
+  function shouldDisableNetworkToggle(): boolean {
     return (
       location.pathname !== ROUTES.HOME.url &&
       location.pathname !== ROUTES.TRANSACTIONS.url &&

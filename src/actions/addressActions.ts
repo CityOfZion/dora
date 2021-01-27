@@ -3,7 +3,6 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
-import { convertToArbitraryDecimals } from '../utils/formatter'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress = (requestedAddress: string) => (
