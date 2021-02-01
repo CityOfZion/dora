@@ -110,10 +110,12 @@ export const NotificationPanel: React.FC<{
 
 const NotificationHeaderLink: React.FC<{
   notification: TransactionNotification
-}> = ({ notification }): ReactElement => (
+  chain: string
+  network: string
+}> = ({ notification, chain, network }): ReactElement => (
   <div className="NotificationHeaderLink">
     NOTIFICATIONS
-    <Link to={`/contract/${notification.contract}`}>
+    <Link to={`/contract/${chain}/${network}/${notification.contract}`}>
       {' '}
       {notification.contract}{' '}
     </Link>
@@ -122,12 +124,19 @@ const NotificationHeaderLink: React.FC<{
 
 export const Notification: React.FC<{
   notification: TransactionNotification
-  chain?: string
-}> = ({ notification, chain }): ReactElement => {
+  chain: string
+  network: string
+}> = ({ notification, chain, network }): ReactElement => {
   return (
     <div style={{ margin: '24px 0' }} className="Notification">
       <ExpandingPanel
-        title={<NotificationHeaderLink notification={notification} />}
+        title={
+          <NotificationHeaderLink
+            chain={chain}
+            network={network}
+            notification={notification}
+          />
+        }
         open={false}
       >
         <div

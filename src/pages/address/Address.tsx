@@ -24,7 +24,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Address: React.FC<Props> = (props: Props) => {
   useUpdateNetworkState(props)
-  const { hash, chain } = props.match.params
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
@@ -98,6 +98,7 @@ const Address: React.FC<Props> = (props: Props) => {
                 shouldRenderLoadMore={transferHistory.length < totalCount}
                 handleLoadMore={loadNextTransactionsPage}
                 isLoading={transferHistoryLoading}
+                networkData={{ chain, network }}
               />
             )}
           </>
