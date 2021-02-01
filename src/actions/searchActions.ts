@@ -24,12 +24,14 @@ export const searchInputEnteredSuccess = (
     chain: string
     network: string
   },
+  results?: {},
 ) => (dispatch: Dispatch): void => {
   dispatch({
     type: SEARCH_INPUT_ENTERED_SUCCESS,
     searchType,
     networkInfo,
     search,
+    results: results,
     receivedAt: Date.now(),
   })
 }
@@ -71,7 +73,7 @@ export const clearSearchInputError = () => (dispatch: Dispatch): void => {
   })
 }
 
-export function handleSearchInput(rawSearch: string) {
+export function handleSearchInput(rawSearch: string, network: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
@@ -79,11 +81,17 @@ export function handleSearchInput(rawSearch: string) {
     dispatch(searchInputEntered(search))
 
     try {
-      const { searchType, networkInfo } = await determineSearchType(search)
+      const { searchType, networkInfo, results } = await determineSearchType(
+        search,
+        network,
+      )
+
       // TODO: returning the json here would prevent duplicate requests
       // but will introduce added complexity
       if (searchType) {
-        dispatch(searchInputEnteredSuccess(search, searchType, networkInfo))
+        dispatch(
+          searchInputEnteredSuccess(search, searchType, networkInfo, results),
+        )
         return dispatch(clearSearchInputState())
       }
 
@@ -98,12 +106,14 @@ export function handleSearchInput(rawSearch: string) {
 // dispatch the appropriate success action with the appropriate JSON payload
 export async function determineSearchType(
   search: string,
+  network: string,
 ): Promise<{
   searchType: string
   networkInfo: {
     chain: string
     network: string
   }
+  results?: {}
 }> {
   const isPossibleTxOrContract = search.includes('0x')
 
@@ -144,7 +154,7 @@ export async function determineSearchType(
     searchType: '',
     networkInfo: {
       chain: 'neo2',
-      network: 'mainnet',
+      network: network || 'mainnet',
     },
   }
 
@@ -169,6 +179,7 @@ export async function determineSearchType(
   } else {
     const balance = results[0] as Balance[]
     const block = results[1]
+    const neo3Block = results[3]
 
     const neo3Balance = results[2] as Balance[]
     // const neo3Block = results[3]
@@ -176,6 +187,21 @@ export async function determineSearchType(
     if (balance && balance.length) {
       searchResults.searchType = SEARCH_TYPES.ADDRESS
     }
+
+    if (block && neo3Block) {
+      return {
+        searchType: SEARCH_TYPES.MULTIPLE_RESULTS,
+        results: {
+          block: { ...block, chain: 'neo2' },
+          neo3Block: { ...neo3Block, chain: 'neo3' },
+        },
+        networkInfo: {
+          chain: '',
+          network: network || 'mainnet',
+        },
+      }
+    }
+
     if (block) {
       searchResults.searchType = SEARCH_TYPES.BLOCK
     }

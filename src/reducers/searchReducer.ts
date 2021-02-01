@@ -19,6 +19,22 @@ export type State = {
     chain: string
     network: string
   }
+  results?: {
+    block: {
+      chain: string
+      index: string
+      size: number
+      time: string | number
+      txCount: number
+    }
+    neo3Block: {
+      chain: string
+      index: string
+      size: number
+      time: string | number
+      txCount: number
+    }
+  }
 }
 
 export type Action = {
@@ -30,6 +46,7 @@ export type Action = {
     chain: string
     network: string
   }
+  results?: {}
 }
 
 export default (
@@ -64,6 +81,7 @@ export default (
         searchValue: action.search,
         networkInfo: action.networkInfo,
         shouldClearSearch: true,
+        results: action.results,
       })
     case SEARCH_INPUT_ENTERED_ERROR:
       return Object.assign({}, state, {
