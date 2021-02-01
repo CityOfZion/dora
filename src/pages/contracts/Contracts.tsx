@@ -28,6 +28,7 @@ type Contract = {
   type: string
   chain?: string
   manifest?: {
+    name: string
     extras: {
       name: string
       symbol: string
@@ -66,8 +67,7 @@ const mapContractData = (
           {' '}
           {contract.name ||
             contract.asset_name ||
-            contract.manifest?.extras?.name ||
-            contract.manifest?.extras?.symbol ||
+            contract.manifest?.name ||
             contract.hash}{' '}
         </div>
       </div>
@@ -178,7 +178,7 @@ const Contracts: React.FC<{}> = () => {
             { name: 'Platform', accessor: 'platform' },
             { name: 'Name', accessor: 'name' },
             { name: 'Symbol', accessor: 'symbol' },
-            { name: 'Type', accessor: 'type' },
+
             { name: 'Block', accessor: 'block' },
             { name: 'Created on', accessor: 'time' },
           ]}
@@ -189,7 +189,9 @@ const Contracts: React.FC<{}> = () => {
         />
         <div className="load-more-button-container">
           <Button
-            disabled={contractsState.isLoading}
+            disabled={
+              contractsState.isLoading || selectedData().length % 15 !== 0
+            }
             primary={false}
             onClick={(): void => loadMore()}
           >

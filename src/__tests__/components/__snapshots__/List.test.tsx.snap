@@ -41,8 +41,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="1"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -57,8 +55,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="2"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
     >
       <div>
          hello test 2 
@@ -69,8 +65,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="3"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -85,8 +79,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="4"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
     >
       <div>
          hello test 2 
@@ -97,8 +89,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="5"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -113,8 +103,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="6"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
     >
       <div>
          hello test 2 
@@ -125,8 +113,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="7"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -141,8 +127,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="8"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
     >
       <div>
          hello test 2 
@@ -153,8 +137,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="9"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -169,8 +151,6 @@ exports[`renders without crashing 1`] = `
       href="#"
       key="10"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
     >
       <div>
          hello test 2 

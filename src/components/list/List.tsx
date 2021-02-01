@@ -102,7 +102,7 @@ export const List: React.FC<ListProps> = ({
     'data-list-column': true,
   })
 
-  const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
+  // const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
 
   const renderCellData = (
     isLoading: boolean,
@@ -147,8 +147,6 @@ export const List: React.FC<ListProps> = ({
             index: number,
           ) =>
             Object.keys(data).map((key, i) => {
-              const hoveredClassName = `cellhovered + ${rowClass}`
-
               const conditionalHref = (): string => {
                 if (typeof data.href === 'string' && data.href !== '#') {
                   return data.href
@@ -169,13 +167,7 @@ export const List: React.FC<ListProps> = ({
                     style={conditionalBorderRadius(i, true, data.id)}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
-                    className={
-                      currentHoveredIndex === index && !withoutPointer
-                        ? hoveredClassName
-                        : rowClass
-                    }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    className={rowClass}
                   >
                     {renderCellData(isLoading, data[key])}
                   </a>
@@ -185,13 +177,7 @@ export const List: React.FC<ListProps> = ({
                     style={conditionalBorderRadius(i, true, data.id)}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
-                    className={
-                      currentHoveredIndex === index && !withoutPointer
-                        ? hoveredClassName
-                        : rowClass
-                    }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    className={rowClass}
                   >
                     {renderCellData(isLoading, data[key])}
                   </div>
