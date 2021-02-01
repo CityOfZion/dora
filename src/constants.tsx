@@ -110,6 +110,7 @@ export const SEARCH_TYPES = {
   CONTRACT: 'CONTRACT',
   BLOCK: 'BLOCK',
   TRANSACTION: 'TRANSACTION',
+  MULTIPLE_RESULTS: 'MULTIPLE_RESULTS',
 }
 
 export const ROUTES = {
@@ -118,6 +119,12 @@ export const ROUTES = {
     name: 'Home',
     renderIcon: (): React.ReactNode => <Home />,
     target: '_self',
+  },
+  SEARCH: {
+    url: '/search',
+    name: 'Search',
+    target: '_self',
+    renderIcon: (): React.ReactNode => <Magnify />,
   },
   CONTRACTS: {
     url: '/contracts',

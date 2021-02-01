@@ -41,7 +41,8 @@ const Navigation: React.FC = (): ReactElement => {
       location.pathname !== ROUTES.HOME.url &&
       location.pathname !== ROUTES.TRANSACTIONS.url &&
       location.pathname !== ROUTES.CONTRACTS.url &&
-      location.pathname !== ROUTES.BLOCKS.url
+      location.pathname !== ROUTES.BLOCKS.url &&
+      !location.pathname.includes(ROUTES.SEARCH.url)
     )
   }
 
