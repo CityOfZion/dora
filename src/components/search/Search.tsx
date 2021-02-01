@@ -8,6 +8,7 @@ import {
   clearSearchInputState,
 } from '../../actions/searchActions'
 import { State as SearchState } from '../../reducers/searchReducer'
+import { State as NetworkState } from '../../reducers/networkReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SEARCH_TYPES, ROUTES } from '../../constants'
@@ -19,12 +20,25 @@ const Search: React.FC<{}> = () => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
+
+  const networkState = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
+
   const { searchType, error, searchValue, networkInfo } = searchState
   const { chain, network } = networkInfo
 
   useEffect(() => {
     if (searchType && searchValue) {
       switch (searchType) {
+        case SEARCH_TYPES.MULTIPLE_RESULTS:
+          dispatch(clearSearchInputState())
+          return history.push(
+            `${ROUTES.SEARCH.url}/multichain/${
+              network || 'mainnet'
+            }/${searchValue}`,
+          )
+
         case SEARCH_TYPES.TRANSACTION:
           dispatch(clearSearchInputState())
           return history.push(
@@ -60,7 +74,7 @@ const Search: React.FC<{}> = () => {
 
   function handleSearch(e: React.SyntheticEvent): void {
     e.preventDefault()
-    dispatch(handleSearchInput(searchValue || ''))
+    dispatch(handleSearchInput(searchValue || '', networkState.network))
   }
 
   function updateSearch(searchTerms: string): void {

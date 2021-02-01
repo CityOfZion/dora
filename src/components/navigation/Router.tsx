@@ -20,6 +20,7 @@ import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
 import Address from '../../pages/address/Address'
 import NotFound from '../../pages/not-found/NotFound'
+import SearchResults from '../../pages/search-results/SearchResults'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -67,6 +68,12 @@ const Router: React.FC = (): ReactElement => {
                   exact
                   path={`${ROUTES.BLOCK.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Block />}
+                />
+
+                <Route
+                  exact
+                  path={`${ROUTES.SEARCH.url}/:chain/:network/:hash`}
+                  component={(): ReactElement => <SearchResults />}
                 />
 
                 <Route
