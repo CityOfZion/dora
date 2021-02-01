@@ -396,6 +396,8 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   !!transaction.Item.notifications.length &&
                   transaction.Item.notifications.map(notification => (
                     <Notification
+                      chain={chain}
+                      network={network}
                       key={uniqueId()}
                       notification={notification}
                     />
@@ -597,6 +599,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 transaction.notifications.map(notification => (
                   <Notification
                     chain={chain}
+                    network={network}
                     key={uniqueId()}
                     notification={notification}
                   />

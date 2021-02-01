@@ -61,7 +61,9 @@ export type DetailedContract = {
   idx: number
   returntype: string
   invocationStats: InvocationStat
-  manifest?: {}
+  manifest?: {
+    name: string
+  }
 }
 
 export const INITIAL_STATE = {

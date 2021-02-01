@@ -26,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Contract: React.FC<Props> = (props: Props) => {
   useUpdateNetworkState(props)
-  const { hash } = props.match.params
+  const { hash, chain } = props.match.params
   const dispatch = useDispatch()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
@@ -67,7 +67,13 @@ const Contract: React.FC<Props> = (props: Props) => {
         <div id="contract-details-container">
           <div id="contract-name-info">
             <div id="contract-name">
-              {(contract && !isLoading && contract.name) || 'N/A'}
+              {chain === 'neo2'
+                ? (contract && !isLoading && contract.name) || 'N/A'
+                : (contract &&
+                    !isLoading &&
+                    contract.manifest &&
+                    contract?.manifest.name) ||
+                  'N/A'}
             </div>
             <div>
               <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
@@ -90,7 +96,13 @@ const Contract: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>NAME</label>
                   <span>
-                    {(contract && !isLoading && contract.name) || 'N/A'}
+                    {chain === 'neo2'
+                      ? (contract && !isLoading && contract.name) || 'N/A'
+                      : (contract &&
+                          !isLoading &&
+                          contract.manifest &&
+                          contract?.manifest.name) ||
+                        'N/A'}
                   </span>
                 </div>
                 <div className="detail-tile">

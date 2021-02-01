@@ -141,8 +141,43 @@ export function fetchAddress(address: string, chain: string) {
         return balances
       }
 
-      console.log('fetching asset data')
-      const balances = await fetchAssetData()
+      // TODO: see if its possible for this data to be added
+      // so that these requests are not necessary
+      const fetchNeo3AssetData = async (): Promise<ParsedBalanceData[]> => {
+        const balances: ParsedBalanceData[] = []
+
+        for (const balanceData of json) {
+          let symbol
+          let name
+          const balance = String(balanceData.balance).replace(
+            /(,)(?=(\d{3})+$)/g,
+            '$1.',
+          )
+          if (NEO_HASHES.includes(balanceData.scripthash)) {
+            symbol = 'NEO'
+          } else if (GAS_HASHES.includes(balanceData.scripthash)) {
+            symbol = 'GAS'
+          } else {
+            const response = await fetch(
+              `${GENERATE_BASE_URL(chain)}/contract/${balanceData.scripthash}`,
+            )
+            const json = await response.json()
+            symbol = json.symbol || 'N/A'
+            name = json.manifest.name
+          }
+
+          balances.push({
+            name,
+            symbol,
+            balance,
+          })
+        }
+
+        return balances
+      }
+
+      const balances =
+        chain === 'neo2' ? await fetchAssetData() : await fetchNeo3AssetData()
 
       dispatch(requestAddressSuccess(address, balances))
     } catch (e) {
