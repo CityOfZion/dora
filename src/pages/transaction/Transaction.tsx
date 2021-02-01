@@ -190,7 +190,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
     async function computeTransfers(): Promise<void> {
       if (transaction) {
         setLocalLoadComplete(true)
-        console.log(transaction, chain)
+
         const transfers =
           chain === 'neo3'
             ? await parseNeo3TransactionData(transaction)
