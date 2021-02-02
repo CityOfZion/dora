@@ -63,6 +63,7 @@ export type DetailedContract = {
   invocationStats: InvocationStat
   manifest?: {
     name: string
+    supportedstandards: []
   }
 }
 

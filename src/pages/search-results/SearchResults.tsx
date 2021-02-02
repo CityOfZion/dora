@@ -30,7 +30,6 @@ const SearchResults: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     if (!results) {
-      console.log('no results!')
       dispatch(handleSearchInput(hash, network))
     }
   }, [dispatch, hash, network, results])
