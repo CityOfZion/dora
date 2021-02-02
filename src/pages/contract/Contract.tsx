@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -26,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const Contract: React.FC<Props> = (props: Props) => {
   useUpdateNetworkState(props)
-  const { hash, chain } = props.match.params
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
@@ -107,11 +107,20 @@ const Contract: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className="detail-tile">
                   <label>TYPE</label>
-                  <span>NEP5</span>
+                  <span>
+                    {chain === 'neo2'
+                      ? 'NEP5'
+                      : contract?.manifest?.supportedstandards.join(', ')}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>BLOCK</label>
-                  <span>{contract && !isLoading && contract.block}</span>
+
+                  <Link
+                    to={`${ROUTES.BLOCK.url}/${chain}/${network}/${contract?.block}`}
+                  >
+                    <span>{contract && !isLoading && contract.block}</span>
+                  </Link>
                 </div>
               </div>
               <div className="detail-tile-row">

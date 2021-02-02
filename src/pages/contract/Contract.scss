@@ -1,6 +1,18 @@
 #Contract {
   display: flex;
   flex-direction: column;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    letter-spacing: 0;
+    align-self: center;
+    margin: auto;
+
+    span {
+      color: #dd4bf1 !important;
+    }
+  }
 }
 
 #contract-name-info {
