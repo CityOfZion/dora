@@ -1,7 +1,11 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
 
-import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
+import {
+  convertFromSecondsToLarger,
+  convertMilliseconds,
+  getDiffInSecondsFromNow,
+} from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,9 +36,9 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(block.time).format(),
-    )} seconds ago`,
+    time: `${convertFromSecondsToLarger(
+      getDiffInSecondsFromNow(moment.unix(block.time).format()),
+    )}`,
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),

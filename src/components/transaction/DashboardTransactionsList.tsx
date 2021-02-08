@@ -68,8 +68,8 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
     width > 768
       ? [
           { name: 'Transaction ID', accessor: 'txid' },
-          { name: 'Size', accessor: 'size' },
           { name: 'Time', accessor: 'time' },
+          { name: 'Size', accessor: 'size' },
         ]
       : [
           { name: 'Transaction ID', accessor: 'txid' },
