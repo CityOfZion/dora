@@ -76,12 +76,9 @@ const mapContractData = (
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {' '}
-        {typeof contract.time === 'number'
-          ? moment.unix(contract.time).format('MM-DD-YYYY | hh:mm:ss')
-          : moment
-              .utc(contract.time)
-              .local()
-              .format('MM-DD-YYYY | hh:mm:ss')}{' '}
+        {moment
+          .unix(Number(contract.time))
+          .format('MM-DD-YYYY | hh:mm:ss')}{' '}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),

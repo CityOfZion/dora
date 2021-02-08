@@ -1,7 +1,10 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
 
-import { getDiffInSecondsFromNow } from '../../utils/time'
+import {
+  getDiffInSecondsFromNow,
+  convertFromSecondsToLarger,
+} from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,14 +29,9 @@ type Props = {
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    time:
-      typeof tx.time === 'number'
-        ? `${getDiffInSecondsFromNow(
-            moment.unix(tx.time).format(),
-          )} seconds ago`
-        : `${getDiffInSecondsFromNow(
-            moment.utc(tx.time).local().format(),
-          )} seconds ago`,
+    time: `${convertFromSecondsToLarger(
+      getDiffInSecondsFromNow(moment.unix(tx.time).format()),
+    )}`,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.txid || tx.hash} </div>
     ),
@@ -70,8 +68,8 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
     width > 768
       ? [
           { name: 'Transaction ID', accessor: 'txid' },
-          { name: 'Size', accessor: 'size' },
           { name: 'Time', accessor: 'time' },
+          { name: 'Size', accessor: 'size' },
         ]
       : [
           { name: 'Transaction ID', accessor: 'txid' },
