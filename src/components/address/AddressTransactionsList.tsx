@@ -60,19 +60,11 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
       <span className="transaction-time-details-row">
         <div>
           <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
-          <span>
-            {typeof tx.time === 'number'
-              ? moment.unix(tx.time).format('MM-DD-YYYY')
-              : moment.utc(tx.time).local().format('MM-DD-YYYY')}
-          </span>
+          <span>{moment.unix(Number(tx.time)).format('MM-DD-YYYY')}</span>
         </div>
         <div>
           <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-          <span>
-            {typeof tx.time === 'number'
-              ? moment.unix(tx.time).format('hh:mm:ss')
-              : moment.utc(tx.time).local().format('hh:mm:ss')}
-          </span>
+          <span>{moment.unix(Number(tx.time)).format('hh:mm:ss')}</span>
         </div>
       </span>
     ),

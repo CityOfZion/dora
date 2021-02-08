@@ -17,10 +17,11 @@
 
   .block-list-chain-container {
     margin: 12px;
-    min-width: 515px;
+    width: 575px;
+    min-width: 450px;
   }
 
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: 1300px) {
     .block-list-chain-container {
       width: 100%;
       max-width: 100% !important;
