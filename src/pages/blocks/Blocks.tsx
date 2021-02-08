@@ -1,8 +1,13 @@
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import moment from 'moment'
 
-import { convertMilliseconds, formatSecondsAgo } from '../../utils/time'
+import {
+  convertFromSecondsToLarger,
+  convertMilliseconds,
+  getDiffInSecondsFromNow,
+} from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { fetchBlocks, clearList } from '../../actions/blockActions'
@@ -29,7 +34,9 @@ type ParsedBlock = {
 const mapBlockData = (block: Block, network?: string): ParsedBlock => {
   return {
     platform: (): ReactElement => <PlatformCell chain={block.chain} />,
-    time: formatSecondsAgo(block.time),
+    time: convertFromSecondsToLarger(
+      getDiffInSecondsFromNow(moment.unix(block.time).format()),
+    ),
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),

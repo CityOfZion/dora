@@ -1,7 +1,11 @@
 import React, { ReactElement, useEffect } from 'react'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import moment from 'moment'
 
-import { formatSecondsAgo } from '../../utils/time'
+import {
+  getDiffInSecondsFromNow,
+  convertFromSecondsToLarger,
+} from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,7 +40,9 @@ const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
     platform: (): ReactElement => <PlatformCell chain={tx.chain} />,
     time: (): ReactElement => (
       <div className="contract-time-cell">
-        {formatSecondsAgo(tx.time)}
+        {convertFromSecondsToLarger(
+          getDiffInSecondsFromNow(moment.unix(tx.time).format()),
+        )}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),
