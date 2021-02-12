@@ -67,8 +67,8 @@ const Home: React.FC<{}> = () => {
 
             <Select
               disabled
-              options={[{ label: 'NEO 2', value: 'neo2' }]}
-              selectedOption={{ label: 'NEO 2', value: 'neo2' }}
+              options={[{ label: 'Neo Legacy', value: 'neo2' }]}
+              selectedOption={{ label: 'Neo Legacy', value: 'neo2' }}
             />
           </div>
           <div className="invocations-list-wrapper">

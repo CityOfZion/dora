@@ -1,3 +1,9 @@
+.data-list-container {
+  img {
+    max-height: 30px;
+  }
+}
+
 .data-list > a,
 .data-list > #non-link-list-cell-container {
   padding: 0px 24px;

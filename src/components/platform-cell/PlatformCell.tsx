@@ -8,12 +8,12 @@ const PlatformCell = ({ chain }: { chain: string | void }): ReactElement => (
     {chain === 'neo2' ? (
       <div className="neo2-platform-cell">
         <img src={Neo2} alt="NEO 2" />
-        <span>NEO 2</span>
+        <span>Neo Legacy</span>
       </div>
     ) : (
       <div className="neo3-platform-cell">
         <img src={Neo3} alt="NEO 3" />
-        <span>NEO 3</span>
+        <span>Neo</span>
       </div>
     )}
   </div>
