@@ -8,8 +8,8 @@ import './SearchResults.scss'
 
 import { State as SearchState } from '../../reducers/searchReducer'
 import { handleSearchInput } from '../../actions/searchActions'
-import { ReactComponent as Neo2 } from '../../assets/icons/neo2.svg'
-import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
+import { ReactComponent as Neo2 } from '../../assets/icons/neo2-search-result.svg'
+import { ReactComponent as Neo3 } from '../../assets/icons/neo3-search-result.svg'
 import { formatDate } from '../../utils/time'
 
 interface MatchParams {
@@ -69,9 +69,7 @@ const SearchResults: React.FC<Props> = (props: Props) => {
                 >
                   <div className="search-result-container">
                     <div className="search-result-chain-info">
-                      <div id="chain-icon">
-                        {result.chain === 'neo2' ? <Neo2 /> : <Neo3 />}
-                      </div>
+                      {result.chain === 'neo2' ? <Neo2 /> : <Neo3 />}
                       <p>{network}</p>
                     </div>
 

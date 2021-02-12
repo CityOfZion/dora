@@ -79,7 +79,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   return (
     <div className="multi-chain-dashboard-list list-row-container">
       <div className="block-list-chain-container">
-        <h4>Neo Legacy</h4>
+        <h4>NEO 2</h4>
         <div className="list-wrapper">
           <List
             data={returnTxListData(txState.neo2List, txState.isLoading)}
@@ -95,7 +95,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
       </div>
       <div className="block-list-chain-container">
         <div>
-          <h4>Neo </h4>
+          <h4>NEO 3 </h4>
           <div className="list-wrapper">
             <List
               data={returnTxListData(txState.neo3List, txState.isLoading)}
