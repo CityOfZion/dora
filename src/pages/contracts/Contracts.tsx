@@ -13,6 +13,7 @@ import { fetchContracts, clearList } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
 import useFilterState from '../../hooks/useFilterState'
+import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 
@@ -109,6 +110,22 @@ const Contracts: React.FC<{}> = () => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
+  const width = useWindowWidth()
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Name', accessor: 'name' },
+          { name: 'Symbol', accessor: 'symbol' },
+
+          { name: 'Block', accessor: 'block' },
+          { name: 'Created on', accessor: 'time' },
+        ]
+      : [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Name', accessor: 'name' },
+        ]
 
   function loadMore(): void {
     const nextPage = contractsState.page + 1
@@ -171,14 +188,7 @@ const Contracts: React.FC<{}> = () => {
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.all.length}
-          columns={[
-            { name: 'Platform', accessor: 'platform' },
-            { name: 'Name', accessor: 'name' },
-            { name: 'Symbol', accessor: 'symbol' },
-
-            { name: 'Block', accessor: 'block' },
-            { name: 'Created on', accessor: 'time' },
-          ]}
+          columns={columns}
           leftBorderColorOnRow="#D355E7"
           countConfig={{
             label: 'Contracts',

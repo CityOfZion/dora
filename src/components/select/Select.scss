@@ -70,8 +70,11 @@ select:-webkit-autofill:focus {
 @media only screen and (max-width: 710px) {
   .select-container {
     flex-direction: column;
+    align-items: flex-start;
     padding-right: 0;
     background-color: transparent;
+    height: auto;
+    max-height: 100px;
 
     .inner-select-container {
       margin-right: 0;
@@ -84,7 +87,8 @@ select:-webkit-autofill:focus {
     .select-computed-value {
       word-wrap: anywhere;
       background-color: var(--secondary-color);
-      padding: 6px 12px;
+      // padding: 6px 12px;
+      margin: 6px 0;
       border-radius: 3px;
     }
   }

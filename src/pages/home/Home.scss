@@ -44,7 +44,7 @@
     flex: 1;
     max-width: 590px;
     padding: 0px;
-    min-width: 450px;
+    // min-width: 450px;
   }
   .label-wrapper {
     padding: 0 12px;
@@ -147,7 +147,7 @@
   #Home {
     #neoscan-logo-container {
       max-width: 375px !important;
-      min-width: 350px !important;
+      // min-width: 350px !important;
       padding: 12px;
       justify-content: center;
       text-align: center;
@@ -174,8 +174,8 @@
 @media only screen and (max-width: 450px) {
   #Home {
     .list-wrapper {
-      max-width: 375px !important;
-      min-width: 350px !important;
+      // max-width: 375px !important;
+      min-width: 325px !important;
     }
   }
 }

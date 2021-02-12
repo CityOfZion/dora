@@ -8,16 +8,21 @@
     display: flex;
     align-items: center;
     color: #d355e7;
+    // text-overflow: ellipsis;
+    // display: block;
+    // overflow: hidden;
+    // padding-right: 10px;
 
     .contract-icon-container {
-      width: 50px;
+      width: 36px;
+      // margin-left: -25px;
       img {
         max-width: 25px;
       }
     }
 
     .contract-icon-stub {
-      width: 50px;
+      // margin-left: -25px;
     }
   }
 }
