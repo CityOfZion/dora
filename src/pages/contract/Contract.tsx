@@ -76,12 +76,15 @@ const Contract: React.FC<Props> = (props: Props) => {
                   'N/A'}
             </div>
             <div>
-              <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
+              <span>CONTRACT:</span>{' '}
+              <div id="contract-hash">
+                {contract && !isLoading && contract.hash}
+              </div>
             </div>
           </div>
 
           {contract && contract.invocationStats && (
-            <div>
+            <div id="contract-invocations-graph-container">
               <div className="section-label" style={{ marginBottom: -20 }}>
                 LAST 30 DAYS INVOCATIONS
               </div>

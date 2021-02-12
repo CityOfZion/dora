@@ -19,6 +19,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import Filter from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedBlock = {
   time: string
@@ -69,6 +70,7 @@ const returnBlockListData = (
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const width = useWindowWidth()
 
   function loadMore(): void {
     const nextPage = blockState.page + 1
@@ -92,6 +94,28 @@ const Blocks: React.FC<{}> = () => {
       dispatch(clearList())
     }
   }, [dispatch])
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Platform', accessor: 'platform' },
+          {
+            name: 'Height',
+            accessor: 'index',
+          },
+          { name: 'Time', accessor: 'time' },
+          { name: 'Transactions', accessor: 'transactions' },
+          { name: 'Size', accessor: 'size' },
+        ]
+      : [
+          { name: 'Platform', accessor: 'platform' },
+          {
+            name: 'Height',
+            accessor: 'index',
+          },
+
+          { name: 'Transactions', accessor: 'transactions' },
+        ]
 
   return (
     <div id="Blocks" className="page-container">
@@ -129,16 +153,7 @@ const Blocks: React.FC<{}> = () => {
           )}
           rowId="height"
           isLoading={!blockState.all.length}
-          columns={[
-            { name: 'Platform', accessor: 'platform' },
-            {
-              name: 'Height',
-              accessor: 'index',
-            },
-            { name: 'Time', accessor: 'time' },
-            { name: 'Transactions', accessor: 'transactions' },
-            { name: 'Size', accessor: 'size' },
-          ]}
+          columns={columns}
           countConfig={{
             label: 'Blocks',
           }}

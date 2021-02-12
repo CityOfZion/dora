@@ -12,10 +12,12 @@ import { State as NetworkState } from '../../reducers/networkReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SEARCH_TYPES, ROUTES } from '../../constants'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 const Search: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const width = useWindowWidth()
 
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
@@ -27,6 +29,11 @@ const Search: React.FC<{}> = () => {
 
   const { searchType, error, searchValue, networkInfo } = searchState
   const { chain, network } = networkInfo
+
+  const placeholder =
+    width > 900
+      ? 'Search for block height, hash, address or transaction id...'
+      : 'Search for block height, hash or address...'
 
   useEffect(() => {
     if (searchType && searchValue) {
@@ -92,7 +99,7 @@ const Search: React.FC<{}> = () => {
 
             updateSearch(searchTerms)
           }}
-          placeholder="Search for Block Height, Hash, Address or transaction id"
+          placeholder={placeholder}
         ></input>{' '}
         <SearchIcon onClick={handleSearch} />
       </form>
