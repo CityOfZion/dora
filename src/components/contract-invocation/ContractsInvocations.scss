@@ -105,7 +105,25 @@
     .invocation-change,
     .invocation-name {
       font-size: 11px !important;
+      // width: 200px;
     }
+  }
+
+  #ContractInvocations .invocation-name-container .invocation-name {
+    width: 100%;
+  }
+
+  #ContractInvocations .invocation-name-container .invocation-position {
+    margin-right: 12px;
+  }
+
+  #ContractInvocations .data-list > a,
+  .data-list > #non-link-list-cell-container {
+    padding: 0 12px;
+  }
+
+  #ContractInvocations .data-list-column {
+    padding: 0 12px;
   }
 }
 

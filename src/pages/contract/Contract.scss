@@ -147,4 +147,25 @@
   .section-label {
     margin: 0;
   }
+
+  #contract-name-info {
+    flex-direction: column;
+    height: 98px;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    #contract-name {
+      margin-bottom: 6px;
+    }
+
+    #contract-hash {
+      font-size: 13px;
+    }
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  #contract-invocations-graph-container {
+    display: none;
+  }
 }

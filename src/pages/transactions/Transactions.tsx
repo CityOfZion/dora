@@ -22,6 +22,7 @@ import ParsedTransactionType from '../../components/transaction/ParsedTransactio
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 import Filter from '../../components/filter/Filter'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -76,6 +77,7 @@ const returnTxListData = (
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
+  const width = useWindowWidth()
 
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -106,6 +108,21 @@ const Transactions: React.FC<{}> = () => {
       dispatch(clearList())
     }
   }, [dispatch])
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Type', accessor: 'parsedType' },
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+          { name: 'Time', accessor: 'time' },
+        ]
+      : [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+        ]
 
   return (
     <div id="Transactions" className="page-container">
@@ -143,13 +160,7 @@ const Transactions: React.FC<{}> = () => {
           )}
           rowId="hash"
           isLoading={!transactionState.all.length}
-          columns={[
-            { name: 'Platform', accessor: 'platform' },
-            { name: 'Type', accessor: 'parsedType' },
-            { name: 'Transaction ID', accessor: 'txid' },
-            { name: 'Size', accessor: 'size' },
-            { name: 'Time', accessor: 'time' },
-          ]}
+          columns={columns}
           countConfig={{
             label: 'Transactions',
           }}
