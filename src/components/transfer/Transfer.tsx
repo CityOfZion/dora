@@ -74,7 +74,8 @@ const Transfer: React.FC<{
                 </div>
                 <div className="transfer-amount-container">
                   {returnTransferLogo(transfer.symbol, chain)}
-                  <div>{transfer.amount}</div>0<div>{transfer.name}</div>
+                  <div>{transfer.amount}</div>
+                  <div>{transfer.name}</div>
                 </div>
               </div>
             ),
