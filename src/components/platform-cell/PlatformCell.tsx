@@ -9,14 +9,14 @@ const PlatformCell = ({ chain }: { chain: string | void }): ReactElement => (
       <div className="neo2-platform-cell">
         <img src={Neo2} alt="NEO 2" />
         <span>
-          NEO <small>Legacy </small>
+          Neo <small>Legacy </small>
         </span>
       </div>
     ) : (
       <div className="neo3-platform-cell">
         <img src={Neo3} alt="NEO 3" />
         <span>
-          NEO <small>(Preview 5) </small>
+          Neo <small>(Preview 5) </small>
         </span>
       </div>
     )}
