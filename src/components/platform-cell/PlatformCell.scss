@@ -1,19 +1,22 @@
 @media only screen and (max-width: 450px) {
   .PlatformCell {
     display: flex;
-    width: 70px;
+    width: 250px;
     padding-left: 3px;
+    margin-right: -24px;
+    margin-left: -16px;
+    align-items: center;
 
     .neo2-platform-cell,
     .neo3-platform-cell {
       display: flex;
-      flex-direction: column;
-      padding: 2px;
+      width: 250px;
+      align-items: center;
     }
 
     span {
       margin-left: -4px;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     img {
@@ -21,7 +24,7 @@
     }
 
     small {
-      font-size: 8px;
+      font-size: 10px;
     }
   }
 }
