@@ -28,7 +28,7 @@ export const Filter: React.FC<Props> = ({
       value: 'neo2',
     },
     {
-      label: 'Neo',
+      label: 'Neo (Preview 5)',
       value: 'neo3',
     },
   ]

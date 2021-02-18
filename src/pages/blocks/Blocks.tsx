@@ -30,10 +30,12 @@ type ParsedBlock = {
   size: React.FC<{}>
   height: number
   href: string
+  chain: string
 }
 
 const mapBlockData = (block: Block, network?: string): ParsedBlock => {
   return {
+    chain: block.chain || '',
     platform: (): ReactElement => <PlatformCell chain={block.chain} />,
     time: convertFromSecondsToLarger(
       getDiffInSecondsFromNow(moment.unix(block.time).format()),
@@ -156,6 +158,27 @@ const Blocks: React.FC<{}> = () => {
           columns={columns}
           countConfig={{
             label: 'Blocks',
+          }}
+          leftBorderColorOnRow={(
+            id: string | number | void | React.FC<{}>,
+            chain: string | number | void | React.FC<{}>,
+          ): string => {
+            if (typeof chain === 'string') {
+              interface TxColorMap {
+                [key: string]: string
+              }
+
+              const txColorMap: TxColorMap = {
+                neo2: '#b0eb3c',
+                neo3: '#88ffad',
+              }
+
+              if (chain && txColorMap[chain || 'neo2']) {
+                return txColorMap[chain || 'neo2']
+              }
+            }
+
+            return ''
           }}
         />
         <div className="load-more-button-container">
