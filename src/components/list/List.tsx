@@ -26,7 +26,11 @@ type ListProps = {
   withoutPointer?: boolean
   leftBorderColorOnRow?:
     | string
-    | ((id: string | number | void | React.FC<{}>) => string)
+    | ((
+        id: string | number | void | React.FC<{}>,
+        chain?: string | number | React.FC<{}>,
+      ) => string)
+
   countConfig?: {
     total?: number
     label: string
@@ -56,6 +60,7 @@ export const List: React.FC<ListProps> = ({
       sorted[column.accessor] = data[column.accessor]
       sorted.id = String(data[rowId])
       sorted.href = data.href || '#'
+      sorted.chain = data.chain
     })
     return sorted
   })
@@ -68,6 +73,7 @@ export const List: React.FC<ListProps> = ({
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
     id?: string | number | React.FC<{}>,
+    chain?: string | number | React.FC<{}>,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -77,7 +83,7 @@ export const List: React.FC<ListProps> = ({
       if (shouldReturnBorderLeftStyle && leftBorderColorOnRow) {
         border.borderLeft = `solid 3px ${
           typeof leftBorderColorOnRow === 'function'
-            ? leftBorderColorOnRow(id)
+            ? leftBorderColorOnRow(id, chain)
             : leftBorderColorOnRow
         }`
       }
@@ -160,11 +166,17 @@ export const List: React.FC<ListProps> = ({
               return (
                 key !== 'id' &&
                 key !== 'href' &&
+                key !== 'chain' &&
                 // TODO: this should probably be using the <Link/> component
                 (typeof data.href === 'string' || generateHref ? (
                   <a
                     href={conditionalHref()}
-                    style={conditionalBorderRadius(i, true, data.id)}
+                    style={conditionalBorderRadius(
+                      i,
+                      true,
+                      data.id,
+                      data.chain,
+                    )}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
                     className={rowClass}
@@ -174,7 +186,12 @@ export const List: React.FC<ListProps> = ({
                 ) : (
                   <div
                     id="non-link-list-cell-container"
-                    style={conditionalBorderRadius(i, true, data.id)}
+                    style={conditionalBorderRadius(
+                      i,
+                      true,
+                      data.id,
+                      data.chain,
+                    )}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
                     className={rowClass}
