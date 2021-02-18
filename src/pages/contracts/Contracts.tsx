@@ -54,7 +54,6 @@ const mapContractData = (
 ): ParsedContract => {
   return {
     platform: (): ReactElement => <PlatformCell chain={contract.chain} />,
-    chain: contract.chain || '',
     hash: contract.hash,
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
@@ -89,6 +88,7 @@ const mapContractData = (
         {contract.block.toLocaleString()}{' '}
       </div>
     ),
+    chain: '',
     href: `${ROUTES.CONTRACT.url}/${contract.chain}/${network}/${contract.hash}`,
   }
 }
@@ -189,27 +189,7 @@ const Contracts: React.FC<{}> = () => {
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.all.length}
           columns={columns}
-          leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
-          ): string => {
-            if (typeof chain === 'string') {
-              interface TxColorMap {
-                [key: string]: string
-              }
-
-              const txColorMap: TxColorMap = {
-                neo2: '#b0eb3c',
-                neo3: '#88ffad',
-              }
-
-              if (chain && txColorMap[chain || 'neo2']) {
-                return txColorMap[chain || 'neo2']
-              }
-            }
-
-            return ''
-          }}
+          leftBorderColorOnRow="#D355E7"
           countConfig={{
             label: 'Contracts',
           }}

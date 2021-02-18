@@ -5,10 +5,6 @@ import { ReactComponent as TransferArrow } from '../../assets/icons/transfer-arr
 import tokens from '../../assets/nep5/svg'
 import txBackgroundCubes from '../../assets/tx_mask.svg'
 import txCube from '../../assets/tx_cube.svg'
-import Neo2 from '../../assets/icons/neo2.svg'
-import Neo3 from '../../assets/icons/neo3.svg'
-import GAS2 from '../../assets/icons/GAS_2.svg'
-import GAS3 from '../../assets/icons/GAS_3.svg'
 
 import './Transfer.scss'
 
@@ -17,30 +13,6 @@ type Transfer = {
   name: string
   to: string
   amount: string | number
-  symbol: string
-}
-
-function returnTransferLogo(
-  name: string,
-  chain: string,
-): React.ReactNode | string {
-  if (name === 'GAS') {
-    return chain === 'neo2' ? (
-      <img src={GAS2} alt="token-logo" />
-    ) : (
-      <img src={GAS3} alt="token-logo" />
-    )
-  }
-
-  if (name === 'NEO') {
-    return chain === 'neo2' ? (
-      <img src={Neo2} alt="token-logo" />
-    ) : (
-      <img src={Neo3} alt="token-logo" />
-    )
-  }
-
-  return tokens[name] && <img src={tokens[name]} alt="token-logo" />
 }
 
 const Transfer: React.FC<{
@@ -49,15 +21,7 @@ const Transfer: React.FC<{
   size: string
   networkFee: string
   systemFee: string
-  chain: string
-}> = ({
-  transfers = [],
-  handleAddressClick,
-  networkFee,
-  systemFee,
-  size,
-  chain,
-}) => (
+}> = ({ transfers = [], handleAddressClick, networkFee, systemFee, size }) => (
   <div className="transfer-container">
     <div className="transfer-column detail-tile">
       <label>SENT FROM</label>
@@ -73,8 +37,11 @@ const Transfer: React.FC<{
                   {transfer.from}
                 </div>
                 <div className="transfer-amount-container">
-                  {returnTransferLogo(transfer.symbol, chain)}
-                  <div>{transfer.amount}</div>0<div>{transfer.name}</div>
+                  {tokens[transfer.name] && (
+                    <img src={tokens[transfer.name]} alt="token-logo" />
+                  )}{' '}
+                  <div>{transfer.amount}</div>
+                  <div>{transfer.name}</div>
                 </div>
               </div>
             ),
@@ -115,7 +82,9 @@ const Transfer: React.FC<{
                   {transfer.to}
                 </div>
                 <div className="transfer-amount-container">
-                  {returnTransferLogo(transfer.symbol, chain)}
+                  {tokens[transfer.name] && (
+                    <img src={tokens[transfer.name]} alt="token-logo" />
+                  )}{' '}
                   <div>{transfer.amount}</div>
                   <div>{transfer.name}</div>
                 </div>

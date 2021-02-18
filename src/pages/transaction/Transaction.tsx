@@ -37,7 +37,6 @@ type ParsedTransfer = {
   amount: string | number
   to: string
   from: string
-  symbol: string
 }
 
 const parseAbstractData = async (
@@ -59,7 +58,6 @@ const parseAbstractData = async (
         amount: value,
         to: '',
         from: address,
-        symbol: name,
       })
     })
 
@@ -76,7 +74,6 @@ const parseAbstractData = async (
         amount: value,
         to: address,
         from: '',
-        symbol: name,
       })
     })
 
@@ -84,7 +81,7 @@ const parseAbstractData = async (
       const { scripthash, amount, to, from } = token
       const response = await fetch(`${GENERATE_BASE_URL()}/asset/${scripthash}`)
       const json = await response.json()
-      const { name, symbol } = json
+      const name = json.name
 
       const amountWithDecimals = convertToArbitraryDecimals(
         Number(amount),
@@ -96,7 +93,6 @@ const parseAbstractData = async (
         amount: amountWithDecimals,
         to,
         from,
-        symbol,
       })
     }
   }
@@ -143,7 +139,6 @@ const parseNeo3TransactionData = async (
           )
           transfers.push({
             name: asset && asset.name,
-            symbol: asset && asset.name,
             amount:
               asset.name === 'NEO'
                 ? amount
@@ -245,7 +240,6 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
           {!!transfers.length && (
             <Transfer
-              chain={'neo2'}
               transfers={transfers}
               handleAddressClick={(address): void =>
                 history.push(`/address/${chain}/${network}/${address}`)
@@ -444,7 +438,6 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
         {!!transfers.length && (
           <Transfer
-            chain={'neo3'}
             transfers={transfers}
             handleAddressClick={(address): void =>
               history.push(`/address/${address}`)

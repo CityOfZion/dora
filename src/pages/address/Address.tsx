@@ -13,33 +13,6 @@ import { State as AddressState } from '../../reducers/addressReducer'
 import tokens from '../../assets/nep5/svg'
 import AddressTransactionsList from '../../components/address/AddressTransactionsList'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import Neo2 from '../../assets/icons/neo2.svg'
-import Neo3 from '../../assets/icons/neo3.svg'
-import GAS2 from '../../assets/icons/GAS_2.svg'
-import GAS3 from '../../assets/icons/GAS_3.svg'
-
-function returnTransferLogo(
-  name: string,
-  chain: string,
-): React.ReactNode | string {
-  if (name === 'GAS') {
-    return chain === 'neo2' ? (
-      <img src={GAS2} alt="token-logo" />
-    ) : (
-      <img src={GAS3} alt="token-logo" />
-    )
-  }
-
-  if (name === 'NEO') {
-    return chain === 'neo2' ? (
-      <img src={Neo2} alt="token-logo" />
-    ) : (
-      <img src={Neo3} alt="token-logo" />
-    )
-  }
-
-  return tokens[name] && <img src={tokens[name]} alt="token-logo" />
-}
 
 interface MatchParams {
   hash: string
@@ -106,7 +79,9 @@ const Address: React.FC<Props> = (props: Props) => {
                 balance.map(balance => (
                   <div key={balance.symbol} className="balance-container">
                     <div className="balance-details">
-                      {returnTransferLogo(balance.symbol, chain)}
+                      {tokens[balance.symbol] && (
+                        <img src={tokens[balance.symbol]} alt="token-logo" />
+                      )}{' '}
                       <div className="balance-symbol">{balance.symbol}</div>
                       {balance.name && (
                         <div className="balance-name">({balance.name})</div>

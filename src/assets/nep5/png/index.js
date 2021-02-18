@@ -47,12 +47,10 @@ import WWB from './WWB.png'
 import XQTA from './XQTA.png'
 import ZPT from './ZPT.png'
 import NOS from './NOS.png'
-import FLM from './FLM.png'
 
 export const imageMap = {
   NEO,
   GAS,
-  FLM,
   ACAT,
   APH,
   APT,

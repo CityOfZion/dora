@@ -166,21 +166,19 @@ const Transactions: React.FC<{}> = () => {
           }}
           leftBorderColorOnRow={(
             id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
           ): string => {
-            if (typeof chain === 'string') {
-              interface TxColorMap {
-                [key: string]: string
-              }
+            const listData = selectedData()
+            const transaction = listData.find(tx => tx.hash === id)
+            interface TxColorMap {
+              [key: string]: string
+            }
+            const txColorMap: TxColorMap = {
+              neo2: '#A5C9C7',
+              neo3: '#4CFFB3',
+            }
 
-              const txColorMap: TxColorMap = {
-                neo2: '#b0eb3c',
-                neo3: '#88ffad',
-              }
-
-              if (chain && txColorMap[chain || 'neo2']) {
-                return txColorMap[chain || 'neo2']
-              }
+            if (transaction && txColorMap[transaction.chain || 'neo2']) {
+              return txColorMap[transaction.chain || 'neo2']
             }
 
             return ''

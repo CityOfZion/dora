@@ -47,7 +47,6 @@ import WWB from './WWB.svg'
 import XQTA from './XQTA.svg'
 import ZPT from './ZPT.svg'
 import NOS from './NOS.svg'
-import FLM from './FLM.svg'
 
 export type TokenMap = { [key: string]: string }
 
@@ -101,7 +100,6 @@ const tokens: TokenMap = {
   XQTA,
   ZPT,
   NOS,
-  FLM,
 }
 
 export default tokens
