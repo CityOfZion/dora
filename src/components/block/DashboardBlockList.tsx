@@ -112,7 +112,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
       </div>
       <div className="block-list-chain-container">
         <div>
-          <h4>Neo</h4>
+          <h4>Neo (Preview 5)</h4>
           <div className="list-wrapper">
             <List
               data={returnBlockListData(neo3List, blockState.isLoading)}

@@ -12,6 +12,7 @@
 
     img {
       margin-right: 12px;
+      max-width: 29px;
     }
     span {
       margin-bottom: -4px;
@@ -20,10 +21,10 @@
 
   .neo2-platform-cell {
     font-size: 16px;
-    color: #bbc9c7;
     letter-spacing: 0;
     display: flex;
     align-items: center;
+    color: #b0eb3c;
 
     span {
       margin-bottom: -4px;
@@ -31,6 +32,7 @@
 
     img {
       margin-right: 12px;
+      max-width: 29px;
     }
   }
 }
