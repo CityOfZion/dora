@@ -8,17 +8,17 @@ import List from '../../components/list/List'
 import { ROUTES } from '../../constants'
 import './AddressTransactionsList.scss'
 import tokens from '../../assets/nep5/svg'
-import { convertToArbitraryDecimals } from '../../utils/formatter'
 import Button from '../button/Button'
 
 type ParsedTransaction = {
-  amount: number
+  amount: string
   id: string
   txid: () => ReactElement
   from: () => ReactElement
   to: () => ReactElement
   time: () => ReactElement
   symbol: () => ReactElement
+  href: string
 }
 
 type Transaction = {
@@ -35,7 +35,7 @@ type Transaction = {
 
 const mapTransactionData = (tx: Transaction): ParsedTransaction => {
   return {
-    amount: convertToArbitraryDecimals(Number(tx.amount), tx.decimalamount),
+    amount: String(tx.amount).replace(/(,)(?=(\d{3})+$)/g, '$1.'),
     id: tx.txid,
     txid: (): ReactElement => (
       <div className="block-index-cell address-history-txid"> {tx.txid} </div>
@@ -60,14 +60,15 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
       <span className="transaction-time-details-row">
         <div>
           <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
-          <span>{moment.unix(tx.time).format('MM-DD-YYYY')}</span>
+          <span>{moment.unix(Number(tx.time)).format('MM-DD-YYYY')}</span>
         </div>
         <div>
           <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-          <span>{moment.unix(tx.time).format('hh:mm:ss')}</span>
+          <span>{moment.unix(Number(tx.time)).format('hh:mm:ss')}</span>
         </div>
       </span>
     ),
+    href: '#',
   }
 }
 
@@ -81,13 +82,25 @@ const AddressTransactionsList: React.FC<{
   transactions: Transaction[]
   shouldRenderLoadMore: boolean
   isLoading: boolean
+  networkData: {
+    chain: string
+    network: string
+  }
   handleLoadMore: () => void
-}> = ({ transactions, shouldRenderLoadMore, handleLoadMore, isLoading }) => (
+}> = ({
+  transactions,
+  shouldRenderLoadMore,
+  handleLoadMore,
+  isLoading,
+  networkData,
+}) => (
   <>
     <List
       data={returnBlockListData(transactions)}
       rowId="id"
-      generateHref={(data): string => `${ROUTES.TRANSACTION.url}/${data.id}`}
+      generateHref={(data): string =>
+        `${ROUTES.TRANSACTION.url}/${networkData.chain}/${networkData.network}/${data.id}`
+      }
       isLoading={false}
       columns={[
         {

@@ -1,3 +1,9 @@
+.data-list-container {
+  img {
+    max-height: 24px;
+  }
+}
+
 .data-list > a,
 .data-list > #non-link-list-cell-container {
   padding: 0px 24px;
@@ -60,13 +66,15 @@
   margin-bottom: 12px;
 }
 
-.cellhovered img {
-  filter: invert(0%);
-}
-
-.cellhovered {
-  opacity: 0.75;
-}
+// TODO: implement a solution that doesnt cause the list component to rerender
+// a:hover {
+//   opacity: 0.75;
+// }
+// .cellhovered img {
+//   filter: invert(0%);
+// }
+// .cellhovered {
+// }
 
 .data-list-count-stats {
   justify-content: flex-end;

@@ -1,7 +1,6 @@
 .inner-select-container {
-  min-width: 125px;
+  min-width: 150px;
   margin-right: 12px;
-  //border-right: solid 1px rgba(249, 250, 250, 0.3);
   background-color: #2f454e;
   max-height: 30px;
   height: 30px;
@@ -70,8 +69,11 @@ select:-webkit-autofill:focus {
 @media only screen and (max-width: 710px) {
   .select-container {
     flex-direction: column;
+    align-items: flex-start;
     padding-right: 0;
     background-color: transparent;
+    height: auto;
+    max-height: 100px;
 
     .inner-select-container {
       margin-right: 0;
@@ -84,7 +86,7 @@ select:-webkit-autofill:focus {
     .select-computed-value {
       word-wrap: anywhere;
       background-color: var(--secondary-color);
-      padding: 6px 12px;
+      margin: 6px 0;
       border-radius: 3px;
     }
   }

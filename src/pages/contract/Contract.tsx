@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
-import moment from 'moment'
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -13,15 +12,21 @@ import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import InvocationGraph from '../../components/data-visualization/InvocationGraph'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import { formatDate, formatHours } from '../../utils/time'
+import Manifest from '../../components/manifest/Manifest'
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
 const Contract: React.FC<Props> = (props: Props) => {
-  const { hash } = props.match.params
+  useUpdateNetworkState(props)
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
@@ -62,15 +67,24 @@ const Contract: React.FC<Props> = (props: Props) => {
         <div id="contract-details-container">
           <div id="contract-name-info">
             <div id="contract-name">
-              {contract && !isLoading && contract.name}
+              {chain === 'neo2'
+                ? (contract && !isLoading && contract.name) || 'N/A'
+                : (contract &&
+                    !isLoading &&
+                    contract.manifest &&
+                    contract?.manifest.name) ||
+                  'N/A'}
             </div>
             <div>
-              <span>CONTRACT:</span> {contract && !isLoading && contract.hash}
+              <span>CONTRACT:</span>{' '}
+              <div id="contract-hash">
+                {contract && !isLoading && contract.hash}
+              </div>
             </div>
           </div>
 
           {contract && contract.invocationStats && (
-            <div>
+            <div id="contract-invocations-graph-container">
               <div className="section-label" style={{ marginBottom: -20 }}>
                 LAST 30 DAYS INVOCATIONS
               </div>
@@ -84,25 +98,46 @@ const Contract: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>NAME</label>
-                  <span>{contract && !isLoading && contract.name}</span>
+                  <span>
+                    {chain === 'neo2'
+                      ? (contract && !isLoading && contract.name) || 'N/A'
+                      : (contract &&
+                          !isLoading &&
+                          contract.manifest &&
+                          contract?.manifest.name) ||
+                        'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>TYPE</label>
-                  <span>NEP5</span>
+                  <span>
+                    {chain === 'neo2'
+                      ? 'NEP5'
+                      : contract?.manifest?.supportedstandards.join(', ')}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>BLOCK</label>
-                  <span>{contract && !isLoading && contract.block}</span>
+
+                  <Link
+                    to={`${ROUTES.BLOCK.url}/${chain}/${network}/${contract?.block}`}
+                  >
+                    <span>{contract && !isLoading && contract.block}</span>
+                  </Link>
                 </div>
               </div>
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>IDX</label>
-                  <span>{contract && !isLoading && contract.idx}</span>
+                  <span>
+                    {(contract && !isLoading && contract.idx) || 'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>RETURN TYPE</label>
-                  <span>{contract && !isLoading && contract.returntype}</span>
+                  <span>
+                    {(contract && !isLoading && contract.returntype) || 'N/A'}
+                  </span>
                 </div>
                 <div className="detail-tile">
                   <label>TIME</label>
@@ -114,7 +149,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                           <DateRangeIcon
                             style={{ color: '#7698A9', fontSize: 20 }}
                           />
-                          {moment.unix(contract.time).format('MM-DD-YYYY')}
+                          {formatDate(contract.time)}
                         </>
                       )}
                     </div>
@@ -125,7 +160,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {moment.unix(contract.time).format('hh:mm:ss')}
+                          {formatHours(contract.time)}
                         </>
                       )}
                     </div>
@@ -140,6 +175,17 @@ const Contract: React.FC<Props> = (props: Props) => {
               {contract && !isLoading && contract.script}
             </div>
           </div>
+
+          {contract && contract.manifest && (
+            <div className="script-section">
+              <div className="section-label">MANIFEST</div>
+              <div id="manifest">
+                {contract && !isLoading && contract.manifest && (
+                  <Manifest manifest={contract.manifest} />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

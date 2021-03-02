@@ -1,7 +1,11 @@
 import React, { ReactElement, useEffect } from 'react'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import moment from 'moment'
 
-import { getDiffInSecondsFromNow } from '../../utils/time'
+import {
+  getDiffInSecondsFromNow,
+  convertFromSecondsToLarger,
+} from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,44 +19,66 @@ import {
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
+import useFilterState from '../../hooks/useFilterState'
+import Filter from '../../components/filter/Filter'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedTx = {
-  time: string
+  time: React.FC<{}>
   txid: React.FC<{}>
   size: string
   hash: string
   type: string
   parsedType: React.FC<{}>
+  platform: React.FC<{}>
+  chain: string
+  href: string
 }
 
-const mapTransactionData = (tx: Transaction): ParsedTx => {
+const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(tx.time).format(),
-    ).toLocaleString()} seconds ago`,
+    platform: (): ReactElement => <PlatformCell chain={tx.chain} />,
+    time: (): ReactElement => (
+      <div className="contract-time-cell">
+        {convertFromSecondsToLarger(
+          getDiffInSecondsFromNow(moment.unix(tx.time).format()),
+        )}
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
     txid: (): ReactElement => (
-      <div className="txid-index-cell"> {tx.txid} </div>
+      <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    hash: tx.txid,
+    hash: tx.hash || tx.txid,
     type: tx.type,
-    parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
+    parsedType: (): ReactElement => (
+      <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
+    ),
+    chain: tx.chain || '',
+    href: `${ROUTES.TRANSACTION.url}/${tx.chain}/${network}/${
+      tx.hash || tx.txid
+    }`,
   }
 }
 
 const returnTxListData = (
   data: Array<Transaction>,
   returnStub: boolean,
+  network: string,
 ): Array<ParsedTx> => {
   if (returnStub) {
-    return MOCK_TX_LIST_DATA.map(mapTransactionData)
+    return MOCK_TX_LIST_DATA.map(tx => mapTransactionData(tx))
   } else {
-    return data.map(mapTransactionData)
+    return data.map(tx => mapTransactionData(tx, network))
   }
 }
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
+  const width = useWindowWidth()
+
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -62,6 +88,19 @@ const Transactions: React.FC<{}> = () => {
     dispatch(fetchTransactions(nextPage))
   }
 
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
+
+  const selectedData = (): Array<Transaction> => {
+    switch (selectedChain) {
+      case 'neo2':
+        return transactionState.neo2List
+      case 'neo3':
+        return transactionState.neo3List
+      default:
+        return transactionState.all
+    }
+  }
+
   useEffect(() => {
     dispatch(fetchTransactions())
 
@@ -69,6 +108,21 @@ const Transactions: React.FC<{}> = () => {
       dispatch(clearList())
     }
   }, [dispatch])
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Type', accessor: 'parsedType' },
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+          { name: 'Time', accessor: 'time' },
+        ]
+      : [
+          { name: 'Platform', accessor: 'platform' },
+          { name: 'Transaction ID', accessor: 'txid' },
+          { name: 'Size', accessor: 'size' },
+        ]
 
   return (
     <div id="Transactions" className="page-container">
@@ -91,47 +145,44 @@ const Transactions: React.FC<{}> = () => {
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
+        <Filter
+          handleFilterUpdate={(option): void => {
+            handleSetFilterData({
+              selectedChain: option.value,
+            })
+          }}
+        />
         <List
           data={returnTxListData(
-            transactionState.list,
-            !transactionState.list.length,
+            selectedData(),
+            !selectedData().length,
+            network,
           )}
           rowId="hash"
-          generateHref={(data): string =>
-            `${ROUTES.TRANSACTION.url}/${data.id}`
-          }
-          isLoading={!transactionState.list.length}
-          columns={[
-            { name: 'Type', accessor: 'parsedType' },
-            { name: 'Transaction ID', accessor: 'txid' },
-            { name: 'Size', accessor: 'size' },
-            { name: 'Time', accessor: 'time' },
-          ]}
+          isLoading={!transactionState.all.length}
+          columns={columns}
           countConfig={{
             label: 'Transactions',
           }}
           leftBorderColorOnRow={(
             id: string | number | void | React.FC<{}>,
+            chain: string | number | void | React.FC<{}>,
           ): string => {
-            const listData = returnTxListData(
-              transactionState.list,
-              !transactionState.list.length,
-            )
-            const transaction = listData.find(tx => tx.hash === id)
-            if (transaction) {
-              switch (transaction.type) {
-                case 'MinerTransaction':
-                  return '#FEDD5B'
-                case 'InvocationTransaction':
-                  return '#D355E7'
-                case 'ClaimTransaction':
-                  return '#00CBFF'
-                case 'ContractTransaction':
-                  return '#4CFFB3'
-                default:
-                  return 'transparent'
+            if (typeof chain === 'string') {
+              interface TxColorMap {
+                [key: string]: string
+              }
+
+              const txColorMap: TxColorMap = {
+                neo2: '#b0eb3c',
+                neo3: '#88ffad',
+              }
+
+              if (chain && txColorMap[chain || 'neo2']) {
+                return txColorMap[chain || 'neo2']
               }
             }
+
             return ''
           }}
         />

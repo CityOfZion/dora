@@ -20,11 +20,18 @@ export const SEARCH_INPUT_ENTERED_SUCCESS = 'SEARCH_INPUT_ENTERED_SUCCESS'
 export const searchInputEnteredSuccess = (
   search: string,
   searchType: string,
+  networkInfo: {
+    chain: string
+    network: string
+  },
+  results?: {},
 ) => (dispatch: Dispatch): void => {
   dispatch({
     type: SEARCH_INPUT_ENTERED_SUCCESS,
     searchType,
+    networkInfo,
     search,
+    results: results,
     receivedAt: Date.now(),
   })
 }
@@ -66,7 +73,7 @@ export const clearSearchInputError = () => (dispatch: Dispatch): void => {
   })
 }
 
-export function handleSearchInput(rawSearch: string) {
+export function handleSearchInput(rawSearch: string, network: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
@@ -74,11 +81,17 @@ export function handleSearchInput(rawSearch: string) {
     dispatch(searchInputEntered(search))
 
     try {
-      const searchType = await determineSearchType(search)
+      const { searchType, networkInfo, results } = await determineSearchType(
+        search,
+        network,
+      )
+
       // TODO: returning the json here would prevent duplicate requests
       // but will introduce added complexity
       if (searchType) {
-        dispatch(searchInputEnteredSuccess(search, searchType))
+        dispatch(
+          searchInputEnteredSuccess(search, searchType, networkInfo, results),
+        )
         return dispatch(clearSearchInputState())
       }
 
@@ -91,7 +104,17 @@ export function handleSearchInput(rawSearch: string) {
 
 // TODO: refactor for performance optimization - we should
 // dispatch the appropriate success action with the appropriate JSON payload
-export async function determineSearchType(search: string): Promise<string> {
+export async function determineSearchType(
+  search: string,
+  network: string,
+): Promise<{
+  searchType: string
+  networkInfo: {
+    chain: string
+    network: string
+  }
+  results?: {}
+}> {
   const isPossibleTxOrContract = search.includes('0x')
 
   const invokePromiseAndIgnoreError = (url: string): Promise<{}> =>
@@ -104,15 +127,19 @@ export async function determineSearchType(search: string): Promise<string> {
   if (isPossibleTxOrContract) {
     urls.push(
       ...[
-        `${GENERATE_BASE_URL()}/transaction/${search}`,
-        `${GENERATE_BASE_URL()}/contract/${search}`,
+        `${GENERATE_BASE_URL('neo2', false)}/transaction/${search}`,
+        `${GENERATE_BASE_URL('neo2', false)}/contract/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/transaction/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/contract/${search}`,
       ],
     )
   } else {
     urls.push(
       ...[
-        `${GENERATE_BASE_URL()}/balance/${search}`,
-        `${GENERATE_BASE_URL()}/block/${search}`,
+        `${GENERATE_BASE_URL('neo2', false)}/balance/${search}`,
+        `${GENERATE_BASE_URL('neo2', false)}/block/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/balance/${search}`,
+        `${GENERATE_BASE_URL('neo3', false)}/block/${search}`,
       ],
     )
   }
@@ -123,17 +150,71 @@ export async function determineSearchType(search: string): Promise<string> {
       .map(req => req()),
   )
 
+  const searchResults = {
+    searchType: '',
+    networkInfo: {
+      chain: 'neo2',
+      network: network || 'mainnet',
+    },
+  }
+
   if (isPossibleTxOrContract) {
-    const [transaction, contract] = results
-    if (!isEmpty(transaction)) return SEARCH_TYPES.TRANSACTION
-    if (contract) return SEARCH_TYPES.CONTRACT
+    const [transaction, contract, neo3Transaction, neo3Contract] = results
+    if (!isEmpty(transaction)) {
+      searchResults.searchType = SEARCH_TYPES.TRANSACTION
+    }
+    if (contract) {
+      searchResults.searchType = SEARCH_TYPES.CONTRACT
+    }
+
+    if (!isEmpty(neo3Transaction)) {
+      searchResults.searchType = SEARCH_TYPES.TRANSACTION
+      searchResults.networkInfo.chain = 'neo3'
+    }
+
+    if (neo3Contract) {
+      searchResults.searchType = SEARCH_TYPES.CONTRACT
+      searchResults.networkInfo.chain = 'neo3'
+    }
   } else {
     const balance = results[0] as Balance[]
     const block = results[1]
+    const neo3Block = results[3]
 
-    if (balance && balance.length) return SEARCH_TYPES.ADDRESS
-    if (block) return SEARCH_TYPES.BLOCK
+    const neo3Balance = results[2] as Balance[]
+    // const neo3Block = results[3]
+
+    if (balance && balance.length) {
+      searchResults.searchType = SEARCH_TYPES.ADDRESS
+    }
+
+    if (block && neo3Block) {
+      return {
+        searchType: SEARCH_TYPES.MULTIPLE_RESULTS,
+        results: {
+          block: { ...block, chain: 'neo2' },
+          neo3Block: { ...neo3Block, chain: 'neo3' },
+        },
+        networkInfo: {
+          chain: '',
+          network: network || 'mainnet',
+        },
+      }
+    }
+
+    if (block) {
+      searchResults.searchType = SEARCH_TYPES.BLOCK
+    }
+
+    if (neo3Balance && neo3Balance.length) {
+      searchResults.searchType = SEARCH_TYPES.ADDRESS
+      searchResults.networkInfo.chain = 'neo3'
+    }
+    // if (neo3Block) {
+    //   searchResults.searchType = SEARCH_TYPES.BLOCK
+    //   searchResults.networkInfo.chain = 'neo3'
+    // }
   }
 
-  return ''
+  return searchResults
 }

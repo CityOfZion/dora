@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import './Address.scss'
 import { ROUTES } from '../../constants'
@@ -11,21 +12,51 @@ import {
 import { State as AddressState } from '../../reducers/addressReducer'
 import tokens from '../../assets/nep5/svg'
 import AddressTransactionsList from '../../components/address/AddressTransactionsList'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import Neo2 from '../../assets/icons/neo2.svg'
+import Neo3 from '../../assets/icons/neo3.svg'
+import GAS2 from '../../assets/icons/GAS_2.svg'
+import GAS3 from '../../assets/icons/GAS_3.svg'
+
+function returnTransferLogo(
+  name: string,
+  chain: string,
+): React.ReactNode | string {
+  if (name === 'GAS') {
+    return chain === 'neo2' ? (
+      <img src={GAS2} alt="token-logo" />
+    ) : (
+      <img src={GAS3} alt="token-logo" />
+    )
+  }
+
+  if (name === 'NEO') {
+    return chain === 'neo2' ? (
+      <img src={Neo2} alt="token-logo" />
+    ) : (
+      <img src={Neo3} alt="token-logo" />
+    )
+  }
+
+  return tokens[name] && <img src={tokens[name]} alt="token-logo" />
+}
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
 const Address: React.FC<Props> = (props: Props) => {
-  const { hash } = props.match.params
+  useUpdateNetworkState(props)
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
   const {
-    requestedAddress,
     balance,
     transferHistory,
     isLoading,
@@ -35,9 +66,9 @@ const Address: React.FC<Props> = (props: Props) => {
   } = addressState
 
   useEffect(() => {
-    dispatch(fetchAddress(hash))
+    dispatch(fetchAddress(hash, chain))
     dispatch(fetchAddressTransferHistory(hash))
-  }, [dispatch, hash])
+  }, [chain, dispatch, hash])
 
   const loadNextTransactionsPage = (): void => {
     dispatch(fetchAddressTransferHistory(hash, transferHistoryPage + 1))
@@ -52,8 +83,20 @@ const Address: React.FC<Props> = (props: Props) => {
         </div>
 
         <div id="address-hash-container">
-          <label>ADDRESS</label> <span>{requestedAddress}</span>
+          <label>ADDRESS</label> <span>{hash}</span>
         </div>
+
+        {isLoading && (
+          <div id="address-balance-container">
+            <div id="balance-label">BALANCE</div>{' '}
+            <SkeletonTheme
+              color="#21383d"
+              highlightColor="rgb(125 159 177 / 25%)"
+            >
+              <Skeleton count={5} />{' '}
+            </SkeletonTheme>
+          </div>
+        )}
 
         {balance && !isLoading && (
           <>
@@ -62,13 +105,11 @@ const Address: React.FC<Props> = (props: Props) => {
               {balance &&
                 balance.map(balance => (
                   <div key={balance.symbol} className="balance-container">
-                    <div>
-                      {tokens[balance.symbol] && (
-                        <img src={tokens[balance.symbol]} alt="token-logo" />
-                      )}{' '}
-                      <span className="balance-symbol">{balance.symbol}</span>
+                    <div className="balance-details">
+                      {returnTransferLogo(balance.symbol, chain)}
+                      <div className="balance-symbol">{balance.symbol}</div>
                       {balance.name && (
-                        <span className="balance-name">({balance.name})</span>
+                        <div className="balance-name">({balance.name})</div>
                       )}
                     </div>
                     <div className="balance-amount"> {balance.balance} </div>
@@ -82,6 +123,7 @@ const Address: React.FC<Props> = (props: Props) => {
                 shouldRenderLoadMore={transferHistory.length < totalCount}
                 handleLoadMore={loadNextTransactionsPage}
                 isLoading={transferHistoryLoading}
+                networkData={{ chain, network }}
               />
             )}
           </>

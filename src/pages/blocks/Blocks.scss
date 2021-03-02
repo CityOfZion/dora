@@ -4,6 +4,30 @@
   justify-content: center;
 }
 
+.neo3-platform-cell {
+  font-size: 16px;
+  color: #88ffad;
+  letter-spacing: 0;
+  display: flex;
+  align-items: center;
+
+  img {
+    margin-right: 12px;
+  }
+}
+
+.neo2-platform-cell {
+  font-size: 16px;
+  letter-spacing: 0;
+  display: flex;
+  align-items: center;
+  color: #b0eb3c !important;
+
+  img {
+    margin-right: 12px;
+  }
+}
+
 .page-title-container {
   display: flex;
   align-items: center;

@@ -1,5 +1,29 @@
 #InvocationGraph {
+  #no-invocations-label {
+    font-weight: 300;
+    background-color: #0d282e;
+    width: 225px;
+    padding: 12px;
+    border-radius: 4px;
+    margin: auto;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -150px;
+    align-items: center;
+
+    svg {
+      margin-right: 10px;
+      min-height: 24px;
+      min-width: 24px;
+
+      path {
+        fill: #d355e7 !important;
+      }
+    }
+  }
+
   @media only screen and (max-width: 450px) {
-    display: none
+    display: none;
   }
 }

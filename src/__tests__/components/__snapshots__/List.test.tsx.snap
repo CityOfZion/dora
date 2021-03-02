@@ -36,13 +36,11 @@ exports[`renders without crashing 1`] = `
     >
       Test Label 2
     </div>
-    <div
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="1"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -51,31 +49,22 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="2"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        Object {
-          "borderRadius": "0 3px 3px 0",
-        }
-      }
     >
       <div>
          hello test 2 
       </div>
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="3"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -84,31 +73,22 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="4"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        Object {
-          "borderRadius": "0 3px 3px 0",
-        }
-      }
     >
       <div>
          hello test 2 
       </div>
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="5"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -117,31 +97,22 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="6"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        Object {
-          "borderRadius": "0 3px 3px 0",
-        }
-      }
     >
       <div>
          hello test 2 
       </div>
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="7"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -150,31 +121,22 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="8"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        Object {
-          "borderRadius": "0 3px 3px 0",
-        }
-      }
     >
       <div>
          hello test 2 
       </div>
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="9"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
       style={
         Object {
           "borderLeft": "",
@@ -183,24 +145,17 @@ exports[`renders without crashing 1`] = `
       }
     >
       123423445
-    </div>
-    <div
+    </a>
+    <a
       className=""
-      id="non-link-list-cell-container"
+      href="#"
       key="10"
       onClick={[Function]}
-      onMouseEnter={[Function]}
-      onMouseLeave={[Function]}
-      style={
-        Object {
-          "borderRadius": "0 3px 3px 0",
-        }
-      }
     >
       <div>
          hello test 2 
       </div>
-    </div>
+    </a>
   </div>
 </div>
 `;

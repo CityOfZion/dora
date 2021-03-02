@@ -6,15 +6,6 @@ import './NewsFeed.scss'
 
 const parser = new Parser()
 
-type Props = {
-  feed: {
-    items: Item[]
-  }
-  loading: boolean
-  networkId: string
-  net: string
-}
-
 const News: React.FC = (): ReactElement => {
   const feed: Item[] = []
   const [items, setItems] = useState(feed)

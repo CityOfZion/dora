@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="319px" height="376px" viewBox="0 0 319 376" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Combined Shape</title>
+    <defs>
+        <linearGradient x1="58.8739453%" y1="60.7985639%" x2="25.7047215%" y2="91.2335173%" id="linearGradient-1">
+            <stop stop-color="#2AB62D" offset="0%"></stop>
+            <stop stop-color="#B0EB3C" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M5.0637207,80.2502604 L120.570007,135.610812 L120.570007,368.064871 L5.0637207,312.799953 L5.0637207,80.2502604 Z M313.311401,73.2521829 L313.311401,306.093443 L192.455078,257.791276 L192.455078,116.155966 L313.311401,73.2521829 Z M190.497913,5.41576329 L300.988236,58.7582998 L131.995535,120.321211 L20.1269625,66.7401186 L190.497913,5.41576329 Z" id="Combined-Shape" stroke="url(#linearGradient-1)" stroke-width="10"></path>
+    </g>
+</svg>

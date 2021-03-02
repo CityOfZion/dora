@@ -1,7 +1,11 @@
 import React, { ReactElement, useEffect } from 'react'
 import moment from 'moment'
 
-import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
+import {
+  convertFromSecondsToLarger,
+  convertMilliseconds,
+  getDiffInSecondsFromNow,
+} from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -32,9 +36,9 @@ type ParsedBlock = {
 
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(block.time).format(),
-    )} seconds ago`,
+    time: `${convertFromSecondsToLarger(
+      getDiffInSecondsFromNow(moment.unix(block.time).format()),
+    )}`,
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
@@ -56,12 +60,13 @@ const returnBlockListData = (
   }
 }
 
-const DashboardBlockList: React.FC<{}> = () => {
+const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const { list } = blockState
+  const { neo2List, neo3List } = blockState
+  const list = neo2List
   useEffect(() => {
     if (!list.length) dispatch(fetchBlocks())
   }, [dispatch, list.length])
@@ -89,14 +94,40 @@ const DashboardBlockList: React.FC<{}> = () => {
         ]
 
   return (
-    <List
-      data={returnBlockListData(blockState.list, blockState.isLoading)}
-      rowId="height"
-      generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-      isLoading={blockState.isLoading}
-      columns={columns}
-      leftBorderColorOnRow="#D355E7"
-    />
+    <div className="multi-chain-dashboard-list list-row-container">
+      <div className="block-list-chain-container">
+        <h4>Neo Legacy</h4>
+        <div className="list-wrapper">
+          <List
+            data={returnBlockListData(neo2List, blockState.isLoading)}
+            rowId="height"
+            generateHref={(data): string =>
+              `${ROUTES.BLOCK.url}/neo2/${network}/${data.id}`
+            }
+            isLoading={blockState.isLoading}
+            columns={columns}
+            leftBorderColorOnRow="#D355E7"
+          />
+        </div>
+      </div>
+      <div className="block-list-chain-container">
+        <div>
+          <h4>Neo (Preview 5)</h4>
+          <div className="list-wrapper">
+            <List
+              data={returnBlockListData(neo3List, blockState.isLoading)}
+              rowId="height"
+              generateHref={(data): string =>
+                `${ROUTES.BLOCK.url}/neo3/testnet/${data.id}`
+              }
+              isLoading={blockState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

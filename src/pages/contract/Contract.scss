@@ -1,6 +1,18 @@
 #Contract {
   display: flex;
   flex-direction: column;
+
+  a {
+    text-decoration: none;
+    display: flex;
+    letter-spacing: 0;
+    align-self: center;
+    margin: auto;
+
+    span {
+      color: #dd4bf1 !important;
+    }
+  }
 }
 
 #contract-name-info {
@@ -116,7 +128,8 @@
   padding: 0 12px;
 }
 
-#contract-script {
+#contract-script,
+#manifest {
   font-size: 14px;
   color: #9ab5c3;
   letter-spacing: 0;
@@ -124,12 +137,35 @@
   background: rgba(255, 255, 255, 0.07);
   border-radius: 2.4px;
   padding: 24px;
-  display: inline-block;
+  display: flex;
+  flex: 1;
   word-break: break-word;
+  min-width: 90%;
 }
 
 @media screen and (max-width: 768px) {
   .section-label {
     margin: 0;
+  }
+
+  #contract-name-info {
+    flex-direction: column;
+    height: 98px;
+    justify-content: center;
+    margin-bottom: 12px;
+
+    #contract-name {
+      margin-bottom: 6px;
+    }
+
+    #contract-hash {
+      font-size: 13px;
+    }
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  #contract-invocations-graph-container {
+    display: none;
   }
 }

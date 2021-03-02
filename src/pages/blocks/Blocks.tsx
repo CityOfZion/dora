@@ -1,68 +1,123 @@
 import React, { ReactElement, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import moment from 'moment'
 
-import { convertMilliseconds, getDiffInSecondsFromNow } from '../../utils/time'
+import {
+  convertFromSecondsToLarger,
+  convertMilliseconds,
+  getDiffInSecondsFromNow,
+} from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
-import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks, clearList } from '../../actions/blockActions'
 import { State as BlockState, Block } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import Filter from '../../components/filter/Filter'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
+import useFilterState from '../../hooks/useFilterState'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type ParsedBlock = {
   time: string
   index: React.FC<{}>
+  platform: React.FC<{}>
   transactions: number
   blocktime: string
-  size: string
+  size: React.FC<{}>
   height: number
+  href: string
+  chain: string
 }
 
-const mapBlockData = (block: Block): ParsedBlock => {
+const mapBlockData = (block: Block, network?: string): ParsedBlock => {
   return {
-    time: `${getDiffInSecondsFromNow(
-      moment.unix(block.time).format(),
-    )} seconds ago`,
+    chain: block.chain || '',
+    platform: (): ReactElement => <PlatformCell chain={block.chain} />,
+    time: convertFromSecondsToLarger(
+      getDiffInSecondsFromNow(moment.unix(block.time).format()),
+    ),
     index: (): ReactElement => (
       <div className="block-index-cell"> {block.index.toLocaleString()} </div>
     ),
     height: block.index,
     transactions: block.txCount,
     blocktime: convertMilliseconds(block.blocktime),
-    size: `${block.size.toLocaleString()} Bytes`,
+    size: (): ReactElement => (
+      <div className="contract-time-cell">
+        {block.size.toLocaleString()} Bytes
+        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
+      </div>
+    ),
+
+    href: `${ROUTES.BLOCK.url}/${block.chain}/${network}/${block.index}`,
   }
 }
 
 const returnBlockListData = (
   data: Array<Block>,
   returnStub: boolean,
+  network: string,
 ): Array<ParsedBlock> => {
   if (returnStub) {
-    return MOCK_BLOCK_LIST_DATA.map(mapBlockData)
+    return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
   } else {
-    return data.map(mapBlockData)
+    return data.map(block => mapBlockData(block, network))
   }
 }
 
 const Blocks: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const width = useWindowWidth()
 
   function loadMore(): void {
     const nextPage = blockState.page + 1
     dispatch(fetchBlocks(nextPage))
   }
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
+  const selectedData = (): Array<Block> => {
+    switch (selectedChain) {
+      case 'neo2':
+        return blockState.neo2List
+      case 'neo3':
+        return blockState.neo3List
+      default:
+        return blockState.all
+    }
+  }
 
   useEffect(() => {
     dispatch(fetchBlocks())
-
     return (): void => {
       dispatch(clearList())
     }
   }, [dispatch])
+
+  const columns =
+    width > 768
+      ? [
+          { name: 'Platform', accessor: 'platform' },
+          {
+            name: 'Height',
+            accessor: 'index',
+          },
+          { name: 'Time', accessor: 'time' },
+          { name: 'Transactions', accessor: 'transactions' },
+          { name: 'Size', accessor: 'size' },
+        ]
+      : [
+          { name: 'Platform', accessor: 'platform' },
+          {
+            name: 'Height',
+            accessor: 'index',
+          },
+
+          { name: 'Transactions', accessor: 'transactions' },
+        ]
 
   return (
     <div id="Blocks" className="page-container">
@@ -85,24 +140,45 @@ const Blocks: React.FC<{}> = () => {
           {ROUTES.BLOCKS.renderIcon()}
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
+        <Filter
+          handleFilterUpdate={(option): void => {
+            handleSetFilterData({
+              selectedChain: option.value,
+            })
+          }}
+        />
         <List
-          data={returnBlockListData(blockState.list, !blockState.list.length)}
+          data={returnBlockListData(
+            selectedData(),
+            !selectedData().length,
+            network,
+          )}
           rowId="height"
-          generateHref={(data): string => `${ROUTES.BLOCK.url}/${data.id}`}
-          isLoading={!blockState.list.length}
-          columns={[
-            {
-              name: 'Height',
-              accessor: 'index',
-            },
-            { name: 'Time', accessor: 'time' },
-            { name: 'Transactions', accessor: 'transactions' },
-            { name: 'Size', accessor: 'size' },
-          ]}
+          isLoading={!blockState.all.length}
+          columns={columns}
           countConfig={{
             label: 'Blocks',
-            total:
-              blockState.list && blockState.list[0] && blockState.list[0].index,
+          }}
+          leftBorderColorOnRow={(
+            id: string | number | void | React.FC<{}>,
+            chain: string | number | void | React.FC<{}>,
+          ): string => {
+            if (typeof chain === 'string') {
+              interface TxColorMap {
+                [key: string]: string
+              }
+
+              const txColorMap: TxColorMap = {
+                neo2: '#b0eb3c',
+                neo3: '#88ffad',
+              }
+
+              if (chain && txColorMap[chain || 'neo2']) {
+                return txColorMap[chain || 'neo2']
+              }
+            }
+
+            return ''
           }}
         />
         <div className="load-more-button-container">

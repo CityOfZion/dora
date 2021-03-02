@@ -17,14 +17,17 @@ import { TransactionNotification } from '../../reducers/transactionReducer'
 type Option = {
   value: string
   label: string
-  convert?: ((value: string) => Promise<string> | string | undefined) | null
+  convert?:
+    | ((value: string, chain?: string) => Promise<string> | string | undefined)
+    | null
 }
 
 export const NotificationRow: React.FC<{
   value: string
   type: string
   options: Option[]
-}> = ({ value, type, options = [] }): ReactElement => {
+  chain?: string
+}> = ({ value, type, options = [], chain = '' }): ReactElement => {
   const selectOptionPlaceholder: ValueType<Option> = {
     convert: null,
     value: '',
@@ -38,14 +41,14 @@ export const NotificationRow: React.FC<{
   React.useEffect(() => {
     const convert = async (): Promise<string | void> => {
       if (selectedOption && selectedOption.convert) {
-        const convertedValue = await selectedOption.convert(value)
+        const convertedValue = await selectedOption.convert(value, chain)
         convertedValue && setConvertedvalue(convertedValue)
       }
     }
     if (selectedOption) {
       convert()
     }
-  }, [selectedOption, options, value])
+  }, [selectedOption, options, value, chain])
 
   const handleChange = (selectedOption: ValueType<Option>): void => {
     selectedOption && setSelectedOption(selectedOption as Option)
@@ -72,7 +75,8 @@ export const NotificationRow: React.FC<{
 
 export const NotificationPanel: React.FC<{
   notification: TransactionNotification
-}> = ({ notification }): ReactElement => {
+  chain?: string
+}> = ({ notification, chain }): ReactElement => {
   return (
     <div className="notification-panel">
       <div className="notification-panel-header">STATE</div>
@@ -95,6 +99,7 @@ export const NotificationPanel: React.FC<{
                 value={state.value}
                 type={state.type}
                 options={TX_STATE_TYPE_MAPPINGS[state.type].options}
+                chain={chain}
               />
             )}
         </div>
@@ -105,10 +110,12 @@ export const NotificationPanel: React.FC<{
 
 const NotificationHeaderLink: React.FC<{
   notification: TransactionNotification
-}> = ({ notification }): ReactElement => (
+  chain: string
+  network: string
+}> = ({ notification, chain, network }): ReactElement => (
   <div className="NotificationHeaderLink">
     NOTIFICATIONS
-    <Link to={`/contract/${notification.contract}`}>
+    <Link to={`/contract/${chain}/${network}/${notification.contract}`}>
       {' '}
       {notification.contract}{' '}
     </Link>
@@ -117,11 +124,19 @@ const NotificationHeaderLink: React.FC<{
 
 export const Notification: React.FC<{
   notification: TransactionNotification
-}> = ({ notification }): ReactElement => {
+  chain: string
+  network: string
+}> = ({ notification, chain, network }): ReactElement => {
   return (
     <div style={{ margin: '24px 0' }} className="Notification">
       <ExpandingPanel
-        title={<NotificationHeaderLink notification={notification} />}
+        title={
+          <NotificationHeaderLink
+            chain={chain}
+            network={network}
+            notification={notification}
+          />
+        }
         open={false}
       >
         <div
@@ -130,7 +145,7 @@ export const Notification: React.FC<{
             display: 'flex',
           }}
         >
-          <NotificationPanel notification={notification} />
+          <NotificationPanel chain={chain} notification={notification} />
         </div>
       </ExpandingPanel>
     </div>

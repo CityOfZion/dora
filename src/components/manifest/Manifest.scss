@@ -1,0 +1,72 @@
+.manifest-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  .methods-panel {
+    flex-direction: column;
+    padding: 12px 0;
+  }
+
+  .expanding-panel-container {
+    margin-bottom: 12px;
+  }
+}
+
+.manifest-method-row-container {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  flex-wrap: wrap;
+
+  span {
+    font-weight: 400;
+    font-size: 14px;
+    color: #ffffff;
+    letter-spacing: 0;
+    margin-right: 12px;
+  }
+
+  p {
+    min-height: 28px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    border-radius: 3px;
+    margin: 6px 12px;
+  }
+
+  .method-seperator {
+    font-weight: 600;
+    font-size: 20px;
+    color: #ffffff;
+    letter-spacing: 0;
+  }
+}
+
+.method-parameters {
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
+  // min-height: 28px;
+
+  span {
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+  }
+
+  .parameter-name {
+    background: #262651;
+    color: #fff;
+    padding: 0 6px;
+    border-radius: 3px 0 0 3px;
+  }
+}
+
+.param-paren {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  margin: 0 12px !important;
+}

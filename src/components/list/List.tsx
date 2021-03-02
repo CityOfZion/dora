@@ -12,7 +12,9 @@ type ColumnType = {
 
 type ListProps = {
   columns: Array<ColumnType>
-  data: Array<{ [key: string]: string | number | React.FC<{}> }>
+  // eslint-disable-next-line
+  // @ts-ignore
+  data: Array<{ [key: string]: string | number | React.FC<{}>; href?: string }>
   handleRowClick?: (data: {
     [key: string]: string | number | React.FC<{}>
   }) => void
@@ -24,7 +26,11 @@ type ListProps = {
   withoutPointer?: boolean
   leftBorderColorOnRow?:
     | string
-    | ((id: string | number | void | React.FC<{}>) => string)
+    | ((
+        id: string | number | void | React.FC<{}>,
+        chain?: string | number | React.FC<{}>,
+      ) => string)
+
   countConfig?: {
     total?: number
     label: string
@@ -45,6 +51,7 @@ export const List: React.FC<ListProps> = ({
   const sortedByAccessor = data.map(data => {
     interface Sorted {
       id: string
+      href: string
       [key: string]: string | number | React.FC<{}>
     }
 
@@ -52,6 +59,8 @@ export const List: React.FC<ListProps> = ({
     columns.forEach(column => {
       sorted[column.accessor] = data[column.accessor]
       sorted.id = String(data[rowId])
+      sorted.href = data.href || '#'
+      sorted.chain = data.chain
     })
     return sorted
   })
@@ -64,6 +73,7 @@ export const List: React.FC<ListProps> = ({
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
     id?: string | number | React.FC<{}>,
+    chain?: string | number | React.FC<{}>,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -73,7 +83,7 @@ export const List: React.FC<ListProps> = ({
       if (shouldReturnBorderLeftStyle && leftBorderColorOnRow) {
         border.borderLeft = `solid 3px ${
           typeof leftBorderColorOnRow === 'function'
-            ? leftBorderColorOnRow(id)
+            ? leftBorderColorOnRow(id, chain)
             : leftBorderColorOnRow
         }`
       }
@@ -98,7 +108,7 @@ export const List: React.FC<ListProps> = ({
     'data-list-column': true,
   })
 
-  const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
+  // const [currentHoveredIndex, setCurrentHoveredIndex] = React.useState(-1)
 
   const renderCellData = (
     isLoading: boolean,
@@ -143,39 +153,48 @@ export const List: React.FC<ListProps> = ({
             index: number,
           ) =>
             Object.keys(data).map((key, i) => {
-              const hoveredClassName = `cellhovered + ${rowClass}`
+              const conditionalHref = (): string => {
+                if (typeof data.href === 'string' && data.href !== '#') {
+                  return data.href
+                }
+                if (generateHref) {
+                  return generateHref(data)
+                }
+                return '#'
+              }
+
               return (
                 key !== 'id' &&
+                key !== 'href' &&
+                key !== 'chain' &&
                 // TODO: this should probably be using the <Link/> component
-                (generateHref ? (
+                (typeof data.href === 'string' || generateHref ? (
                   <a
-                    href={generateHref ? generateHref(data) : '#'}
-                    style={conditionalBorderRadius(i, true, data.id)}
+                    href={conditionalHref()}
+                    style={conditionalBorderRadius(
+                      i,
+                      true,
+                      data.id,
+                      data.chain,
+                    )}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
-                    className={
-                      currentHoveredIndex === index && !withoutPointer
-                        ? hoveredClassName
-                        : rowClass
-                    }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    className={rowClass}
                   >
                     {renderCellData(isLoading, data[key])}
                   </a>
                 ) : (
                   <div
                     id="non-link-list-cell-container"
-                    style={conditionalBorderRadius(i, true, data.id)}
+                    style={conditionalBorderRadius(
+                      i,
+                      true,
+                      data.id,
+                      data.chain,
+                    )}
                     onClick={(): void => handleRowClick && handleRowClick(data)}
                     key={uniqueId()}
-                    className={
-                      currentHoveredIndex === index && !withoutPointer
-                        ? hoveredClassName
-                        : rowClass
-                    }
-                    onMouseEnter={(): void => setCurrentHoveredIndex(index)}
-                    onMouseLeave={(): void => setCurrentHoveredIndex(-1)}
+                    className={rowClass}
                   >
                     {renderCellData(isLoading, data[key])}
                   </div>

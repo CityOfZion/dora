@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -84,11 +85,14 @@ export function shouldFetchBlock(
   state: { block: State },
   indexOrHash: string | number,
 ): boolean {
-  const block = state.block.cached[indexOrHash]
-  if (!block) {
-    return true
-  }
-  return false
+  return true
+
+  // TODO: fix multichain caching
+  // const block = state.block.cached[indexOrHash]
+  // if (!block) {
+  //   return true
+  // }
+  // return false
 }
 
 export const RESET = 'RESET'
@@ -119,19 +123,25 @@ export function fetchBlock(indexOrHash: string | number = 1) {
   }
 }
 
-export function fetchBlocks(page = 1) {
+export function fetchBlocks(page = 1, chain?: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { block: State },
   ): Promise<void> => {
     try {
-      // if (getState().block.list.length && page === 1) {
-      //   return
-      // }
       dispatch(requestBlocks(page))
-      const response = await fetch(`${GENERATE_BASE_URL()}/blocks/${page}`)
-      const json = await response.json()
-      dispatch(requestBlocksSuccess(page, json))
+
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/blocks/${page}`)
+      ).json()
+
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/blocks/${page}`)
+      ).json()
+
+      const all = sortedByDate(neo2.items, neo3.items)
+
+      dispatch(requestBlocksSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestBlockError(page, e))
     }

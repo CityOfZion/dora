@@ -1,0 +1,30 @@
+@media only screen and (max-width: 450px) {
+  .PlatformCell {
+    display: flex;
+    width: 250px;
+    padding-left: 3px;
+    margin-right: -24px;
+    margin-left: -16px;
+    align-items: center;
+
+    .neo2-platform-cell,
+    .neo3-platform-cell {
+      display: flex;
+      width: 250px;
+      align-items: center;
+    }
+
+    span {
+      margin-left: -4px;
+      font-size: 15px;
+    }
+
+    img {
+      max-width: 16px !important;
+    }
+
+    small {
+      font-size: 10px;
+    }
+  }
+}

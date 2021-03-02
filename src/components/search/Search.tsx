@@ -8,37 +8,67 @@ import {
   clearSearchInputState,
 } from '../../actions/searchActions'
 import { State as SearchState } from '../../reducers/searchReducer'
+import { State as NetworkState } from '../../reducers/networkReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { SEARCH_TYPES, ROUTES } from '../../constants'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 const Search: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const history = useHistory()
+  const width = useWindowWidth()
 
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { searchType, error, searchValue } = searchState
+
+  const networkState = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
+
+  const { searchType, error, searchValue, networkInfo } = searchState
+  const { chain, network } = networkInfo
+
+  const placeholder =
+    width > 900
+      ? 'Search for block height, hash, address or transaction id...'
+      : 'Search for block height, hash or address...'
 
   useEffect(() => {
     if (searchType && searchValue) {
       switch (searchType) {
+        case SEARCH_TYPES.MULTIPLE_RESULTS:
+          dispatch(clearSearchInputState())
+          return history.push(
+            `${ROUTES.SEARCH.url}/multichain/${
+              network || 'mainnet'
+            }/${searchValue}`,
+          )
+
         case SEARCH_TYPES.TRANSACTION:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.TRANSACTION.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.TRANSACTION.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.CONTRACT:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.CONTRACT.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.CONTRACT.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.ADDRESS:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.WALLET.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.WALLET.url}/${chain}/${network}/${searchValue}`,
+          )
 
         case SEARCH_TYPES.BLOCK:
           dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.BLOCK.url}/${searchValue}`)
+          return history.push(
+            `${ROUTES.BLOCK.url}/${chain}/${network}/${searchValue}`,
+          )
 
         default:
           break
@@ -47,11 +77,11 @@ const Search: React.FC<{}> = () => {
     if (error) {
       history.push(ROUTES.NOT_FOUND.url)
     }
-  }, [dispatch, error, history, searchType, searchValue])
+  }, [chain, dispatch, error, history, network, searchType, searchValue])
 
   function handleSearch(e: React.SyntheticEvent): void {
     e.preventDefault()
-    dispatch(handleSearchInput(searchValue || ''))
+    dispatch(handleSearchInput(searchValue || '', networkState.network))
   }
 
   function updateSearch(searchTerms: string): void {
@@ -69,7 +99,7 @@ const Search: React.FC<{}> = () => {
 
             updateSearch(searchTerms)
           }}
-          placeholder="Search for Block Height, Hash, Address or transaction id"
+          placeholder={placeholder}
         ></input>{' '}
         <SearchIcon onClick={handleSearch} />
       </form>

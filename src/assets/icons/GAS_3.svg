@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>GAS_512_512</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="GAS_512_512" fill-rule="nonzero">
+            <rect id="Rectangle" fill="#FFFFFF" opacity="0" x="0" y="0" width="512" height="512"></rect>
+            <path d="M263.41,438.88 L91.7,377.21 L91.7,136.09 L263.86,72.91 L418.34,128.24 L419.19,382.46 L263.41,324.77 L263.41,438.88 Z M107.66,366 L247.46,416.2 L247.46,186 L387,134 L263.93,89.89 L107.65,147.24 L107.66,366 Z M263.41,307.76 L403.15,359.5 L402.44,145.27 L263.44,197.08 L263.41,307.76 Z" id="Shape" fill="#01E397"></path>
+        </g>
+    </g>
+</svg>

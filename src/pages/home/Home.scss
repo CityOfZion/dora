@@ -4,6 +4,10 @@
   width: 100%;
   margin: auto;
 
+  .react-select__control {
+    border-radius: 80px;
+  }
+
   #inner-home-page-container {
     margin-top: -24px;
     padding-top: 24px;
@@ -28,10 +32,11 @@
   .list-column-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   .list-row-container {
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
     justify-content: space-around;
   }
   .list-wrapper {
@@ -39,10 +44,11 @@
     flex: 1;
     max-width: 590px;
     padding: 0px;
-    min-width: 450px;
+    // min-width: 450px;
   }
   .label-wrapper {
-    margin-bottom: 36px;
+    padding: 0 12px;
+    margin-bottom: 24px;
     justify-content: space-between;
     display: flex;
     align-items: center;
@@ -121,9 +127,6 @@
   .explore-tx {
     margin: 12px;
   }
-  .explore-blocks {
-    margin: 12px;
-  }
 }
 
 @media only screen and (max-width: 1200px) {
@@ -134,11 +137,17 @@
   }
 }
 
+@media only screen and (max-width: 1100px) {
+  .list-row-container {
+    flex-wrap: wrap;
+  }
+}
+
 @media only screen and (max-width: 500px) {
   #Home {
     #neoscan-logo-container {
       max-width: 375px !important;
-      min-width: 350px !important;
+      // min-width: 350px !important;
       padding: 12px;
       justify-content: center;
       text-align: center;
@@ -165,8 +174,8 @@
 @media only screen and (max-width: 450px) {
   #Home {
     .list-wrapper {
-      max-width: 375px !important;
-      min-width: 350px !important;
+      // max-width: 375px !important;
+      min-width: 325px !important;
     }
   }
 }

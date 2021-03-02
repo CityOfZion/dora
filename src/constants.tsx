@@ -11,6 +11,9 @@ import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
 
+//eslint-disable-next-line
+const bs58check = require('bs58check')
+
 export const NEO_HASHES = [
   '0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
 ]
@@ -19,9 +22,60 @@ export const GAS_HASHES = [
   '0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7',
 ]
 
-export const GENERATE_BASE_URL = (): string => {
+export const ASSETS = [
+  {
+    decimals: '8',
+    name: 'TokenTest',
+    scripthash: '0x37240b1a6fe30b91d29304011dc30810f9ff56ce',
+    symbol: 'TTS',
+    firstseen: 74565,
+  },
+  {
+    decimals: '8',
+    name: 'My Token v1.0',
+    scripthash: '0xa69d9fd5b49926607e0d4da6fd47ab0fd79fbd70',
+    symbol: 'MT',
+    firstseen: 71847,
+  },
+  {
+    decimals: '8',
+    name: 'MyTokenTest',
+    scripthash: '0xa89719dd87d5336032160fb60733317dc0e45ef2',
+    symbol: 'MTT',
+    firstseen: 70983,
+  },
+  {
+    decimals: '8',
+    name: 'GAS',
+    scripthash: '0x8c23f196d8a1bfd103a9dcb1f9ccf0c611377d3b',
+    symbol: 'gas',
+    firstseen: 0,
+  },
+  {
+    decimals: '0',
+    name: 'NEO',
+    scripthash: '0x9bde8f209c88dd0e7ca3bf0af0f476cdd8207789',
+    symbol: 'neo',
+    firstseen: 0,
+  },
+]
+
+export const GENERATE_BASE_URL = (
+  chain = 'neo2',
+  useChainInState = true,
+): string => {
   const net = store.getState().network.network
-  return `https://dora.coz.io/api/v1/neo2/${net}`
+  const chainInState = store.getState().network.chain
+
+  let useChain = chain
+
+  if (useChainInState) useChain = chainInState
+
+  if (useChain !== 'neo2') {
+    return `https://dora.coz.io/api/v1/${useChain}/testnet`
+  }
+
+  return `https://dora.coz.io/api/v1/${useChain}/${net}`
 }
 
 export const TRANSFER = '7472616e73666572'
@@ -56,6 +110,7 @@ export const SEARCH_TYPES = {
   CONTRACT: 'CONTRACT',
   BLOCK: 'BLOCK',
   TRANSACTION: 'TRANSACTION',
+  MULTIPLE_RESULTS: 'MULTIPLE_RESULTS',
 }
 
 export const ROUTES = {
@@ -64,6 +119,12 @@ export const ROUTES = {
     name: 'Home',
     renderIcon: (): React.ReactNode => <Home />,
     target: '_self',
+  },
+  SEARCH: {
+    url: '/search',
+    name: 'Search',
+    target: '_self',
+    renderIcon: (): React.ReactNode => <Magnify />,
   },
   CONTRACTS: {
     url: '/contracts',
@@ -146,25 +207,62 @@ export const getAddressFromSriptHash = (hash: string): string => {
   return hash
 }
 
+export const neo3_getAddressFromSriptHash = (hash: string): string => {
+  const d = Buffer.from(hash, 'base64')
+  const inputData = Buffer.alloc(21)
+  inputData.writeInt8(0x35, 0)
+  inputData.fill(d, 1)
+  return bs58check.encode(inputData)
+}
+
 export const hexToAscii = async (str1: string): Promise<string> => {
   const output = new Buffer(str1, 'hex')
   return output.toString()
+}
+
+export const neo3_hexToAscii = async (str1: string): Promise<string> => {
+  // eslint-disable-next-line
+  // @ts-ignore
+  const size = parseInt(str1.replace(/=/g, '').length * 0.75)
+
+  if (size === 20) {
+    return neo3_getAddressFromSriptHash(str1)
+  } else {
+    const unencoded = atob(str1)
+    return unencoded
+  }
 }
 
 export const asciiToByteArray = (str: string): string => {
   return str
 }
 
+export const neo3_asciiToByteArray = (str: string): string => {
+  const utf8 = unescape(encodeURIComponent(str))
+
+  const arr = []
+  for (let i = 0; i < utf8.length; i++) {
+    arr.push(utf8.charCodeAt(i))
+  }
+  return ''
+}
+
 export const HEX_STRING_OPTION = {
   value: 'Hexstring',
   label: 'Hexstring',
-  convert: (value: string): string => asciiToByteArray(value),
+  convert: (value: string, chain?: string): string => {
+    return chain === 'neo3'
+      ? neo3_asciiToByteArray(value)
+      : asciiToByteArray(value)
+  },
 }
 
 export const STRING_OPTION = {
   value: 'String',
   label: 'String',
-  convert: async (value: string): Promise<string> => hexToAscii(value),
+  convert: async (value: string, chain?: string): Promise<string> => {
+    return chain === 'neo3' ? neo3_hexToAscii(value) : hexToAscii(value)
+  },
 }
 
 export const INTEGER_OPTION = {
@@ -175,7 +273,7 @@ export const INTEGER_OPTION = {
 export const ADDRESS_OPTION = {
   value: 'Address',
   label: 'Address',
-  convert: (value: string): Promise<string> =>
+  convert: (value: string, chain?: string): Promise<string> =>
     NeoConvertor.Address.scriptHashToAddress(value, true),
 }
 

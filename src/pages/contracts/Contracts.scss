@@ -4,27 +4,23 @@
 
   justify-content: center;
 
-  .contract-time-cell {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
   .contract-name-and-icon-row {
     display: flex;
     align-items: center;
     color: #d355e7;
 
     .contract-icon-container {
-      width: 50px;
+      width: 36px;
       img {
         max-width: 25px;
       }
     }
-
-    .contract-icon-stub {
-      width: 50px;
-    }
   }
+}
+
+.contract-time-cell {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }

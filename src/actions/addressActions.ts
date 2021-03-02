@@ -3,7 +3,6 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
-import { convertToArbitraryDecimals } from '../utils/formatter'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress = (requestedAddress: string) => (
@@ -98,11 +97,13 @@ type ParsedBalanceData = {
   symbol: string
 }
 
-export function fetchAddress(address: string) {
+export function fetchAddress(address: string, chain: string) {
   return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const response = await fetch(`${GENERATE_BASE_URL()}/balance/${address}`)
+      const response = await fetch(
+        `${GENERATE_BASE_URL(chain)}/balance/${address}`,
+      )
       const json = await response.json()
 
       // TODO: see if its possible for this data to be added
@@ -113,22 +114,21 @@ export function fetchAddress(address: string) {
         for (const balanceData of json) {
           let symbol
           let name
-          let balance = balanceData.balance
+          const balance = String(balanceData.balance).replace(
+            /(,)(?=(\d{3})+$)/g,
+            '$1.',
+          )
           if (NEO_HASHES.includes(balanceData.asset)) {
             symbol = 'NEO'
           } else if (GAS_HASHES.includes(balanceData.asset)) {
             symbol = 'GAS'
           } else {
             const response = await fetch(
-              `${GENERATE_BASE_URL()}/asset/${balanceData.asset}`,
+              `${GENERATE_BASE_URL(chain)}/asset/${balanceData.asset}`,
             )
             const json = await response.json()
             symbol = json.symbol
             name = json.name
-            balance = convertToArbitraryDecimals(
-              balanceData.balance,
-              json.decimals,
-            )
           }
 
           balances.push({
@@ -141,7 +141,43 @@ export function fetchAddress(address: string) {
         return balances
       }
 
-      const balances = await fetchAssetData()
+      // TODO: see if its possible for this data to be added
+      // so that these requests are not necessary
+      const fetchNeo3AssetData = async (): Promise<ParsedBalanceData[]> => {
+        const balances: ParsedBalanceData[] = []
+
+        for (const balanceData of json) {
+          let symbol
+          let name
+          const balance = String(balanceData.balance).replace(
+            /(,)(?=(\d{3})+$)/g,
+            '$1.',
+          )
+          if (NEO_HASHES.includes(balanceData.scripthash)) {
+            symbol = 'NEO'
+          } else if (GAS_HASHES.includes(balanceData.scripthash)) {
+            symbol = 'GAS'
+          } else {
+            const response = await fetch(
+              `${GENERATE_BASE_URL(chain)}/contract/${balanceData.scripthash}`,
+            )
+            const json = await response.json()
+            symbol = json.symbol || 'N/A'
+            name = json.manifest.name
+          }
+
+          balances.push({
+            name,
+            symbol,
+            balance,
+          })
+        }
+
+        return balances
+      }
+
+      const balances =
+        chain === 'neo2' ? await fetchAssetData() : await fetchNeo3AssetData()
 
       dispatch(requestAddressSuccess(address, balances))
     } catch (e) {

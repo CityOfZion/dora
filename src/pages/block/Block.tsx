@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
-import moment from 'moment'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
@@ -13,18 +12,25 @@ import { fetchBlock } from '../../actions/blockActions'
 import BlockTransactionsList from '../../components/transaction/BlockTransactionsList'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
 import { disassemble } from '../../utils/disassemble'
+import { neo3Disassemble } from '../../utils/neo3-disassemble'
+
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import { formatDate, formatHours } from '../../utils/time'
 
 interface MatchParams {
   hash: string
+  chain: string
+  network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
 const Block: React.FC<Props> = (props: Props) => {
-  const { hash } = props.match.params
+  useUpdateNetworkState(props)
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { block, isLoading } = blockState
@@ -92,7 +98,7 @@ const Block: React.FC<Props> = (props: Props) => {
                           <DateRangeIcon
                             style={{ color: '#7698A9', fontSize: 20 }}
                           />
-                          {moment.unix(block.time).format('MM-DD-YYYY')}
+                          {formatDate(block.time)}
                         </>
                       )}
                     </div>
@@ -103,7 +109,7 @@ const Block: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {moment.unix(block.time).format('hh:mm:ss')}
+                          {formatHours(block.time)}
                         </>
                       )}
                     </div>
@@ -147,7 +153,8 @@ const Block: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {block && block.tx.length && (
+          {/* TODO: implement the tx list component for neo3 */}
+          {block && !!block.tx.length && chain === 'neo2' && (
             <div className="block-transactions-section">
               <div className="details-section">
                 <div className="section-label">TRANSACTIONS</div>
@@ -156,6 +163,8 @@ const Block: React.FC<Props> = (props: Props) => {
                   loading={isLoading}
                   list={block.tx}
                   block={block}
+                  network={network}
+                  chain={chain}
                 />
               </div>
             </div>
@@ -166,16 +175,51 @@ const Block: React.FC<Props> = (props: Props) => {
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>INVOCATION SCRIPT</label>{' '}
-                  <Copy text={block ? block.script.invocation : ''} />
+                  {chain === 'neo2' ? (
+                    <Copy text={block ? block.script?.invocation : ''} />
+                  ) : (
+                    <Copy
+                      text={
+                        block && block.witnesses
+                          ? block.witnesses[0].invocation
+                          : ''
+                      }
+                    />
+                  )}
                 </div>
-                <span>{!isLoading && block && block.script.invocation} </span>
+                <span>
+                  {chain === 'neo2'
+                    ? !isLoading && block && block.script?.invocation
+                    : !isLoading &&
+                      block &&
+                      block.witnesses &&
+                      block.witnesses[0].invocation}
+                </span>
               </div>
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>VERIFICATION SCRIPT</label>
-                  <Copy text={block ? block.script.verification : ''} />
+
+                  {chain === 'neo2' ? (
+                    <Copy text={block ? block.script?.verification : ''} />
+                  ) : (
+                    <Copy
+                      text={
+                        block && block.witnesses
+                          ? block.witnesses[0].verification
+                          : ''
+                      }
+                    />
+                  )}
                 </div>
-                <span>{!isLoading && block && block.script.verification} </span>
+                <span>
+                  {chain === 'neo2'
+                    ? !isLoading && block && block.script?.verification
+                    : !isLoading &&
+                      block &&
+                      block.witnesses &&
+                      block.witnesses[0].verification}
+                </span>
               </div>
             </div>
           </ExpandingPanel>
@@ -186,17 +230,19 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile script-tile">
                   <label>INVOCATION SCRIPT</label>
                   <span>
-                    {!isLoading &&
-                      block &&
-                      disassemble(block.script.invocation)}{' '}
+                    {!isLoading && block && chain === 'neo2'
+                      ? disassemble(block.script?.invocation) || ''
+                      : block?.witnesses &&
+                        neo3Disassemble(block?.witnesses[0].invocation)}
                   </span>
                 </div>
                 <div className="detail-tile script-tile">
                   <label>VERIFICATION SCRIPT</label>
                   <span>
-                    {!isLoading &&
-                      block &&
-                      disassemble(block.script.verification)}{' '}
+                    {!isLoading && block && chain === 'neo2'
+                      ? disassemble(block.script?.verification) || ''
+                      : block?.witnesses &&
+                        neo3Disassemble(block?.witnesses[0].verification)}
                   </span>
                 </div>
               </div>

@@ -15,6 +15,26 @@ export type State = {
   searchValue: null | string
   shouldClearSearch: boolean
   error: boolean
+  networkInfo: {
+    chain: string
+    network: string
+  }
+  results?: {
+    block: {
+      chain: string
+      index: string
+      size: number
+      time: string | number
+      txCount: number
+    }
+    neo3Block: {
+      chain: string
+      index: string
+      size: number
+      time: string | number
+      txCount: number
+    }
+  }
 }
 
 export type Action = {
@@ -22,6 +42,11 @@ export type Action = {
   searchType: string
   receivedAt: Date
   search: string
+  networkInfo: {
+    chain: string
+    network: string
+  }
+  results?: {}
 }
 
 export default (
@@ -31,6 +56,10 @@ export default (
     searchValue: null,
     shouldClearSearch: false,
     error: false,
+    networkInfo: {
+      chain: 'neo2',
+      network: 'mainnet',
+    },
   },
   action: AnyAction | Action,
 ): State => {
@@ -50,7 +79,9 @@ export default (
         searchType: action.searchType,
         lastUpdated: action.receivedAt,
         searchValue: action.search,
+        networkInfo: action.networkInfo,
         shouldClearSearch: true,
+        results: action.results,
       })
     case SEARCH_INPUT_ENTERED_ERROR:
       return Object.assign({}, state, {
@@ -68,6 +99,7 @@ export default (
         searchType: null,
         searchValue: null,
         shouldClearSearch: false,
+        networkInfo: {},
         error: false,
       })
     default:

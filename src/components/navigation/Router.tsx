@@ -20,6 +20,7 @@ import { ROUTES } from '../../constants'
 import Block from '../../pages/block/Block'
 import Address from '../../pages/address/Address'
 import NotFound from '../../pages/not-found/NotFound'
+import SearchResults from '../../pages/search-results/SearchResults'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -38,25 +39,43 @@ const Router: React.FC = (): ReactElement => {
           <div className="sidebar-spacer" />
           <div className="column-container">
             <Navigation />
-            <ScrollToTop />
+
             <div className="column-container router-page-container">
+              <ScrollToTop />
               <Switch>
                 <Route
-                  path={`${ROUTES.WALLET.url}/:hash`}
+                  path={ROUTES.HOME.url}
+                  component={(): ReactElement => <Home />}
+                  exact
+                />
+                <Route
+                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Address />}
                 />
+
                 <Route
-                  path={`${ROUTES.BLOCK.url}/:hash`}
-                  component={(): ReactElement => <Block />}
-                />
-                <Route
-                  path={`${ROUTES.CONTRACT.url}/:hash`}
+                  path={`${ROUTES.CONTRACT.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Contract />}
                 />
+
                 <Route
-                  path={`${ROUTES.TRANSACTION.url}/:hash`}
+                  exact
+                  path={`${ROUTES.TRANSACTION.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Transaction />}
                 />
+
+                <Route
+                  exact
+                  path={`${ROUTES.BLOCK.url}/:chain/:network/:hash`}
+                  component={(): ReactElement => <Block />}
+                />
+
+                <Route
+                  exact
+                  path={`${ROUTES.SEARCH.url}/:chain/:network/:hash`}
+                  component={(): ReactElement => <SearchResults />}
+                />
+
                 <Route
                   path={ROUTES.CONTRACTS.url}
                   component={(): ReactElement => <Contracts />}
@@ -69,11 +88,7 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.BLOCKS.url}
                   component={(): ReactElement => <Blocks />}
                 />
-                <Route
-                  path={ROUTES.HOME.url}
-                  component={(): ReactElement => <Home />}
-                  exact
-                />
+
                 <Route
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}

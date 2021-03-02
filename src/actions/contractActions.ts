@@ -3,6 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract = (hash: string) => (dispatch: Dispatch): void => {
@@ -176,9 +177,18 @@ export function fetchContracts(page = 1) {
   ): Promise<void> => {
     try {
       dispatch(requestContracts(page))
-      const response = await fetch(`${GENERATE_BASE_URL()}/contracts/${page}`)
-      const json = await response.json()
-      dispatch(requestContractsSuccess(page, json))
+
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/contracts/${page}`)
+      ).json()
+
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/contracts/${page}`)
+      ).json()
+
+      const all = { items: sortedByDate(neo2.items, neo3.items) as Contract[] }
+
+      dispatch(requestContractsSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestContractsError(page, e))
     }
@@ -194,7 +204,9 @@ export function fetchContractsInvocations() {
       dispatch(requestContractsInvocations())
 
       try {
-        const response = await fetch(`${GENERATE_BASE_URL()}/invocation_stats`)
+        const response = await fetch(
+          `${GENERATE_BASE_URL('neo2', false)}/invocation_stats`,
+        )
         const json = await response.json()
         dispatch(requestContractsInvocationsSuccess(json))
       } catch (e) {

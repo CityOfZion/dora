@@ -1,5 +1,7 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
+import { State as NetworkState } from '../../reducers/networkReducer'
 import Button from '../../components/button/Button'
 import logo from '../../assets/icons/logo.png'
 import './Home.scss'
@@ -8,10 +10,14 @@ import { ROUTES } from '../../constants'
 import ContractsInvocations from '../../components/contract-invocation/ContractsInvocations'
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
+import Select from '../../components/select/Select'
 
 const Home: React.FC<{}> = () => {
   const history = useHistory()
 
+  const { network } = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
   return (
     <div id="Home" className="page-container">
       <div id="inner-home-page-container">
@@ -27,33 +33,30 @@ const Home: React.FC<{}> = () => {
             </div>
 
             <div className="list-column-container">
-              <div className="list-row-container">
-                <div className="list-wrapper explore-blocks">
-                  <div className="label-wrapper">
-                    <label>explore blocks</label>
-                    <Button
-                      primary
-                      onClick={(): void => history.push(ROUTES.BLOCKS.url)}
-                    >
-                      view all
-                    </Button>
-                  </div>
-                  <DashboardBlockList />
+              <div>
+                <div className="label-wrapper">
+                  <label>explore blocks</label>
+                  <Button
+                    primary
+                    onClick={(): void => history.push(ROUTES.BLOCKS.url)}
+                  >
+                    view all
+                  </Button>
                 </div>
-                <div className="list-wrapper explore-tx">
-                  <div className="label-wrapper">
-                    <label>explore transactions</label>
-                    <Button
-                      primary
-                      onClick={(): void =>
-                        history.push(ROUTES.TRANSACTIONS.url)
-                      }
-                    >
-                      view all
-                    </Button>
-                  </div>
-                  <DashboardTransactionsList />
+                <DashboardBlockList network={network} />
+              </div>
+
+              <div>
+                <div className="label-wrapper">
+                  <label>explore transactions</label>
+                  <Button
+                    primary
+                    onClick={(): void => history.push(ROUTES.TRANSACTIONS.url)}
+                  >
+                    view all
+                  </Button>
                 </div>
+                <DashboardTransactionsList network={network} />
               </div>
             </div>
           </div>
@@ -61,6 +64,12 @@ const Home: React.FC<{}> = () => {
         <div id="contracts-invocations-container">
           <div className="label-wrapper">
             <label>Contract Invocations in the last 24 hours</label>
+
+            <Select
+              disabled
+              options={[{ label: 'Neo Legacy', value: 'neo2' }]}
+              selectedOption={{ label: 'Neo Legacy', value: 'neo2' }}
+            />
           </div>
           <div className="invocations-list-wrapper">
             <ContractsInvocations />

@@ -23,7 +23,9 @@ type Action = {
 export type State = {
   isLoading: boolean
   cached: { [key: string]: Contract }
-  list: Contract[]
+  neo2List: Contract[]
+  neo3List: Contract[]
+  all: Contract[]
   lastUpdated: Date | null
   contract: DetailedContract | null
   contractsInvocations: []
@@ -42,6 +44,7 @@ export type Contract = {
   asset_name: string
   symbol: string
   type: string
+  chain?: string
 }
 
 export type InvocationStat = {
@@ -58,12 +61,18 @@ export type DetailedContract = {
   idx: number
   returntype: string
   invocationStats: InvocationStat
+  manifest?: {
+    name: string
+    supportedstandards: []
+  }
 }
 
 export const INITIAL_STATE = {
   isLoading: false,
   cached: {},
-  list: [],
+  neo2List: [],
+  neo3List: [],
+  all: [],
   contractsInvocations: [],
   hasFetchedContractsInvocations: false,
   lastUpdated: null,
@@ -76,7 +85,9 @@ export default (
   state: State = {
     isLoading: false,
     cached: {},
-    list: [],
+    neo2List: [],
+    neo3List: [],
+    all: [],
     contractsInvocations: [],
     hasFetchedContractsInvocations: false,
     lastUpdated: null,
@@ -109,7 +120,9 @@ export default (
     case REQUEST_CONTRACTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        list: [...state.list, ...action.json.items],
+        neo2List: [...state.neo2List, ...action.json.neo2.items],
+        neo3List: [...state.neo3List, ...action.json.neo3.items],
+        all: [...state.all, ...action.json.all.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
@@ -123,7 +136,9 @@ export default (
       })
     case CLEAR_CONTRACTS_LIST:
       return Object.assign({}, state, {
-        list: [],
+        all: [],
+        neo2List: [],
+        neo3List: [],
         page: 0,
       })
 
