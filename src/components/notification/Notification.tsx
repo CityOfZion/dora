@@ -26,7 +26,8 @@ export const NotificationRow: React.FC<{
   value: string
   type: string
   options: Option[]
-}> = ({ value, type, options = [] }): ReactElement => {
+  chain?: string
+}> = ({ value, type, options = [], chain }): ReactElement => {
   const selectOptionPlaceholder: ValueType<Option, false> = {
     convert: null,
     value: '',
