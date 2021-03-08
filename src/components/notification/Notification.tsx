@@ -26,9 +26,8 @@ export const NotificationRow: React.FC<{
   value: string
   type: string
   options: Option[]
-  chain?: string
-}> = ({ value, type, options = [], chain = '' }): ReactElement => {
-  const selectOptionPlaceholder: ValueType<Option> = {
+}> = ({ value, type, options = [] }): ReactElement => {
+  const selectOptionPlaceholder: ValueType<Option, false> = {
     convert: null,
     value: '',
     label: '',
@@ -50,7 +49,7 @@ export const NotificationRow: React.FC<{
     }
   }, [selectedOption, options, value, chain])
 
-  const handleChange = (selectedOption: ValueType<Option>): void => {
+  const handleChange = (selectedOption: ValueType<Option, false>): void => {
     selectedOption && setSelectedOption(selectedOption as Option)
   }
 
