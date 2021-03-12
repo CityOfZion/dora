@@ -38,7 +38,7 @@ export const Filter: React.FC<Props> = ({
     selectedOption || options[1],
   )
 
-  const setFilter = (option: ValueType<Option>): void => {
+  const setFilter = (option: ValueType<Option, false>): void => {
     const filterOption = option as Option
     handleFilterUpdate(filterOption)
     setCurrentOption(filterOption)
