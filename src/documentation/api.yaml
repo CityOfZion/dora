@@ -3,16 +3,16 @@ info:
   description: This is version 2 of the Dora API
   version: 2.0.0
   title: Dora
-  termsOfService: "https://dora.coz.io//terms/"
+  termsOfService: 'https://dora.coz.io//terms/'
   contact:
     email: joe@coz.io
   license:
     name: MIT
-    url: "https://opensource.org/licenses/MIT"
+    url: 'https://opensource.org/licenses/MIT'
 servers:
-  - url: "https://dora.coz.io/api/v1/neo2/mainnet"
+  - url: 'https://dora.coz.io/api/v1/neo2/mainnet'
 paths:
-  "/asset/{hash}":
+  '/asset/{hash}':
     get:
       summary: Get an asset record
       parameters:
@@ -23,7 +23,7 @@ paths:
           required: true
           description: Hash of the asset to get
       responses:
-        "200":
+        '200':
           description: Asset record
           content:
             application/json:
@@ -31,10 +31,10 @@ paths:
                 firstseen: 627498
                 name: LOCALTOKEN
                 symbol: LWTF
-                scripthash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                scripthash: '0xd7678dd97c000be3f33e9362e673101bac4ca654'
                 state:
                   author: localhuman
-                  code_version: ".4"
+                  code_version: '.4'
                   returntype: ByteArray
                   name: LOCALTOKEN PYNEP5
                   description: an NEP5 token in python
@@ -42,15 +42,15 @@ paths:
                   parameters:
                     - String
                     - Array
-                  hash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                  hash: '0xd7678dd97c000be3f33e9362e673101bac4ca654'
                   script: >-
                     013ec56b6c766b00527ac46c766b51527ac40480d43c5a6c766b52527ac40400c991596c766b53527ac40400...
                   email: tom@cityofzion.io
                   properties:
                     dynamic_invoke: false
                     storage: true
-                decimals: "8"
-  "/assets/{page}":
+                decimals: '8'
+  '/assets/{page}':
     get:
       description: Get the list of assets by page number
       summary: Get the list of assets
@@ -62,7 +62,7 @@ paths:
           required: true
           description: Numeric ID of the page to get
       responses:
-        "200":
+        '200':
           description: List of assets
           content:
             application/json:
@@ -91,80 +91,80 @@ paths:
                   - firstseen: 781137
                     name: NeoTrade Coin
                     symbol: NTC
-                    scripthash: "0x0f43f3f4c05a84cfd4618feff45421d4a015a384"
-                    decimals: "8"
+                    scripthash: '0x0f43f3f4c05a84cfd4618feff45421d4a015a384'
+                    decimals: '8'
                   - firstseen: 775781
                     name: AphelionPT5
                     symbol: APHPT5
-                    scripthash: "0xbaf253166decef2e76aa2fe631c08061a7037611"
-                    decimals: "8"
+                    scripthash: '0xbaf253166decef2e76aa2fe631c08061a7037611'
+                    decimals: '8'
                   - firstseen: 764664
                     name: AphelionPT5
                     symbol: APHPT5
-                    scripthash: "0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f"
-                    decimals: "8"
+                    scripthash: '0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f'
+                    decimals: '8'
                   - firstseen: 764462
                     name: AphelionPT4
                     symbol: APHPT4
-                    scripthash: "0xf731620b027ada4572eff8a1996cdf57ed4634df"
-                    decimals: "8"
+                    scripthash: '0xf731620b027ada4572eff8a1996cdf57ed4634df'
+                    decimals: '8'
                   - firstseen: 759289
                     name: Default result here!!
                     symbol: Default result here!!
-                    scripthash: "0x50c8042a26a2608118a43a3eeb8b6e7052815b85"
-                    decimals: "48420213067929558104055100052158650941618918942020"
+                    scripthash: '0x50c8042a26a2608118a43a3eeb8b6e7052815b85'
+                    decimals: '48420213067929558104055100052158650941618918942020'
                   - firstseen: 756602
                     name: AphelionPTest
                     symbol: APHPTest
-                    scripthash: "0x7cd0a1358415f4e3a0612da293dc3ecb07430f69"
-                    decimals: "8"
+                    scripthash: '0x7cd0a1358415f4e3a0612da293dc3ecb07430f69'
+                    decimals: '8'
                   - firstseen: 751216
                     name: AphelionMike1
                     symbol: APHMK1
-                    scripthash: "0xc6c05299d38ebab5531f21785aecb429b76744b7"
-                    decimals: "8"
+                    scripthash: '0xc6c05299d38ebab5531f21785aecb429b76744b7'
+                    decimals: '8'
                   - firstseen: 747660
                     name: Default result here!!
                     symbol: Default result here!!
-                    scripthash: "0xcfe928a70070e37d76ceaef56d8a1b4134855e79"
-                    decimals: "48420213067929558104055100052158650941618918942020"
+                    scripthash: '0xcfe928a70070e37d76ceaef56d8a1b4134855e79'
+                    decimals: '48420213067929558104055100052158650941618918942020'
                   - firstseen: 747315
                     name: AphelionAnd1267
                     symbol: APHAnd1267
-                    scripthash: "0xc3171aa5bd01a54a9870e4025ea7787277165948"
-                    decimals: "8"
+                    scripthash: '0xc3171aa5bd01a54a9870e4025ea7787277165948'
+                    decimals: '8'
                   - firstseen: 727224
                     name: NEP5 Standard
                     symbol: NEP5
-                    scripthash: "0xf8d448b227991cf07cb96a6f9c0322437f1599b9"
-                    decimals: "8"
+                    scripthash: '0xf8d448b227991cf07cb96a6f9c0322437f1599b9'
+                    decimals: '8'
                   - firstseen: 702280
                     name: name of the token
                     symbol: SymbolOfTheToken
-                    scripthash: "0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0"
-                    decimals: "8"
+                    scripthash: '0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0'
+                    decimals: '8'
                   - firstseen: 700808
                     name: Aphelion NEO CHINA
                     symbol: SymbolOfTheToken
-                    scripthash: "0xb6fddc5021622701d7ed67ff079c8ef846d083df"
-                    decimals: "8"
+                    scripthash: '0xb6fddc5021622701d7ed67ff079c8ef846d083df'
+                    decimals: '8'
                   - firstseen: 662202
                     name: name of the token
                     symbol: SymbolOfTheToken
-                    scripthash: "0xe1ab84e20dbe746e0fae0f519c402f056973d160"
-                    decimals: "8"
+                    scripthash: '0xe1ab84e20dbe746e0fae0f519c402f056973d160'
+                    decimals: '8'
                   - firstseen: 662154
                     name: name of the token
                     symbol: SymbolOfTheToken
-                    scripthash: "0x1065db6c790ac411d76bac510a46d027208ccbaf"
-                    decimals: "8"
+                    scripthash: '0x1065db6c790ac411d76bac510a46d027208ccbaf'
+                    decimals: '8'
                   - firstseen: 638484
                     name: Red Pulse Token
                     symbol: RPX
-                    scripthash: "0x5dcdd77e65134e0077247e2837e7df4e06e62315"
-                    decimals: "8"
+                    scripthash: '0x5dcdd77e65134e0077247e2837e7df4e06e62315'
+                    decimals: '8'
                 totalCount: 88
-  "/balance/{address}":
+  '/balance/{address}':
     get:
       summary: Get the balance of an address
       parameters:
@@ -175,7 +175,7 @@ paths:
           required: true
           description: Address to get the balance of
       responses:
-        "200":
+        '200':
           description: List of balances
           content:
             application/json:
@@ -189,13 +189,13 @@ paths:
                     asset:
                       type: string
               example:
-                - balance: "4"
+                - balance: '4'
                   asset: >-
                     0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
-                - balance: "10"
+                - balance: '10'
                   asset: >-
                     0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b
-  "/block/{hash}":
+  '/block/{hash}':
     get:
       summary: Get a block record
       parameters:
@@ -206,7 +206,7 @@ paths:
           required: true
           description: Hash of the block to get
       responses:
-        "200":
+        '200':
           description: Block record
           content:
             application/json:
@@ -283,14 +283,14 @@ paths:
                 nextconsensus: AdyQbbn6ENjqWDa5JNYMwN3ikNcA4JeZdk
                 oversize: 0
                 tx:
-                  - net_fee: "0"
+                  - net_fee: '0'
                     size: 10
                     txid: >-
                       0x8e3a32ba3a7e8bdb0ad9a2ad064713e45bd20eb0dab0d2e77df5b5ce985276d0
                     attributes: []
                     vin: []
                     type: MinerTransaction
-                    sys_fee: "0"
+                    sys_fee: '0'
                     scripts: []
                     version: 0
                     nonce: 679092177
@@ -313,7 +313,7 @@ paths:
                 hash: >-
                   0x0012f8566567a9d7ddf25acb5cf98286c9703297de675d01ba73fbfe6bcb841c
                 jsonsize: 1804
-  "/blocks/{page}":
+  '/blocks/{page}':
     get:
       summary: Get the list of blocks
       parameters:
@@ -324,7 +324,7 @@ paths:
           required: true
           description: Numeric ID of the page to get
       responses:
-        "200":
+        '200':
           description: List of block records
           content:
             application/json:
@@ -513,7 +513,7 @@ paths:
                       0x705d46c7cc11384f204a6d26fb444f0a67c2e17970f4ad3a31315d2614b81202
                     txCount: 1
                 totalCount: 786817
-  "/contract/{hash}":
+  '/contract/{hash}':
     get:
       summary: Get a contract record
       parameters:
@@ -524,7 +524,7 @@ paths:
           required: true
           description: Hash of the contract to get
       responses:
-        "200":
+        '200':
           description: Contract record
           content:
             application/json:
@@ -535,7 +535,7 @@ paths:
                 version: 0
                 script: >-
                   013ec56b6c766b00527ac46c766b51527ac40480d43c5a6c766b52527ac40400c991596c766b53527ac40400...
-                code_version: ".4"
+                code_version: '.4'
                 name: LOCALTOKEN PYNEP5
                 block: 627488
                 time: 1507511281
@@ -543,12 +543,12 @@ paths:
                 parameters:
                   - String
                   - Array
-                hash: "0xd7678dd97c000be3f33e9362e673101bac4ca654"
+                hash: '0xd7678dd97c000be3f33e9362e673101bac4ca654'
                 email: tom@cityofzion.io
                 properties:
                   dynamic_invoke: false
                   storage: true
-  "/contracts/{page}":
+  '/contracts/{page}':
     get:
       summary: Get the list of contracts
       parameters:
@@ -559,7 +559,7 @@ paths:
           required: true
           description: Numeric ID of the page to get
       responses:
-        "200":
+        '200':
           description: List of contract records
           content:
             application/json:
@@ -586,69 +586,69 @@ paths:
                   - block: 786238
                     time: 1510871340
                     idx: 751
-                    hash: "0x994d4b6cec1fde9d3fa93a41a09c271fc7f975fd"
+                    hash: '0x994d4b6cec1fde9d3fa93a41a09c271fc7f975fd'
                   - block: 786120
                     time: 1510868562
                     idx: 750
-                    hash: "0x6439c5b9610fbdc5294fe8f3e9835e2fbb0e62d6"
+                    hash: '0x6439c5b9610fbdc5294fe8f3e9835e2fbb0e62d6'
                   - block: 785778
                     time: 1510860403
                     idx: 746
-                    hash: "0xb84fedada6769a0e6d015e775c6171fbf4426b61"
+                    hash: '0xb84fedada6769a0e6d015e775c6171fbf4426b61'
                   - block: 784390
                     time: 1510827971
                     idx: 742
-                    hash: "0xea1945077dd871428d83ff2bbf54b40bcad6f538"
+                    hash: '0xea1945077dd871428d83ff2bbf54b40bcad6f538'
                   - block: 782993
                     time: 1510795272
                     idx: 739
-                    hash: "0x1a90add2f2dec86a37fed1cf289af3f4f90d924e"
+                    hash: '0x1a90add2f2dec86a37fed1cf289af3f4f90d924e'
                   - block: 782619
                     time: 1510787269
                     idx: 738
-                    hash: "0xf47835ee4d9785431c82a13cc65ad055acc8ed2b"
+                    hash: '0xf47835ee4d9785431c82a13cc65ad055acc8ed2b'
                   - block: 781121
                     time: 1510754457
                     idx: 735
-                    hash: "0x0f43f3f4c05a84cfd4618feff45421d4a015a384"
+                    hash: '0x0f43f3f4c05a84cfd4618feff45421d4a015a384'
                   - block: 780886
                     time: 1510748989
                     idx: 734
-                    hash: "0x3b5f41dc4107cec01bca263233f7aaac54666c75"
+                    hash: '0x3b5f41dc4107cec01bca263233f7aaac54666c75'
                   - block: 777380
                     time: 1510665047
                     idx: 723
-                    hash: "0x4bc67dbd6b374d179a9b1869add111e6a3b12ea3"
+                    hash: '0x4bc67dbd6b374d179a9b1869add111e6a3b12ea3'
                   - block: 776960
                     time: 1510654673
                     idx: 721
-                    hash: "0x0a30fdd900af656cb4eb7caabaa5ddf77355b9fc"
+                    hash: '0x0a30fdd900af656cb4eb7caabaa5ddf77355b9fc'
                   - block: 774970
                     time: 1510605819
                     idx: 717
-                    hash: "0x58c991b640b15305f060c19cba3c65e7236e8199"
+                    hash: '0x58c991b640b15305f060c19cba3c65e7236e8199'
                   - block: 774745
                     time: 1510600575
                     idx: 716
-                    hash: "0x1e66cccfed7a0a9f4bc9bf6c92b286acef65fc77"
+                    hash: '0x1e66cccfed7a0a9f4bc9bf6c92b286acef65fc77'
                   - block: 764654
                     time: 1510358990
                     idx: 704
-                    hash: "0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f"
+                    hash: '0x7d24ef61fcc517c2772ba5fdcb8038d4822f6d2f'
                   - block: 759964
                     time: 1510260825
                     idx: 693
-                    hash: "0x5e4011a7c98a204bfe86e37f59ec278de85a75cb"
+                    hash: '0x5e4011a7c98a204bfe86e37f59ec278de85a75cb'
                   - block: 758205
                     time: 1510224565
                     idx: 691
-                    hash: "0x50c8042a26a2608118a43a3eeb8b6e7052815b85"
+                    hash: '0x50c8042a26a2608118a43a3eeb8b6e7052815b85'
                 totalCount: 160
   /height/:
     get:
       summary: Get the currently indexed blockchain height
       responses:
-        "200":
+        '200':
           description: Height of the last indexed block
           content:
             application/json:
@@ -659,7 +659,7 @@ paths:
                     type: integer
               example:
                 height: 786816
-  "/log/{hash}":
+  '/log/{hash}':
     get:
       summary: Get the application log of a transaction
       parameters:
@@ -670,7 +670,7 @@ paths:
           required: true
           description: Hash of the transaction to get the log of
       responses:
-        "200":
+        '200':
           description: Application log
           content:
             application/json:
@@ -702,17 +702,17 @@ paths:
                 vmstate: HALT
                 txid: >-
                   0x0a2a717b94062fb22bbb7c2a30e2d9849409e36f3dfe0eeac0825e098271c4b4
-                gas_consumed: "2.427"
+                gas_consumed: '2.427'
                 stack:
                   - type: Integer
-                    value: "1"
+                    value: '1'
                 trigger: Application
                 notifications: []
   /stats:
     get:
       summary: Get statistics about the blockchain
       responses:
-        "200":
+        '200':
           description: Stats record
           content:
             application/json:
@@ -742,7 +742,7 @@ paths:
     get:
       summary: Get the total count of transactions
       responses:
-        "200":
+        '200':
           description: Total transaction count
           content:
             application/json:
@@ -753,7 +753,7 @@ paths:
                     type: integer
               example:
                 count: 892068
-  "/transaction/{hash}":
+  '/transaction/{hash}':
     get:
       summary: Get a transaction record
       parameters:
@@ -764,7 +764,7 @@ paths:
           required: true
           description: Hash of the transaction to get
       responses:
-        "200":
+        '200':
           description: Transaction record
           content:
             application/json:
@@ -792,7 +792,7 @@ paths:
                           type: string
                         value:
                           type: string
-                        "n":
+                        'n':
                           type: integer
                   net_fee:
                     type: string
@@ -842,11 +842,11 @@ paths:
                   - address: Ad1qkEM9oFt3TTyKxSEVDwozQVRjkucwPS
                     asset: >-
                       0x602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7
-                    value: "18"
-                    "n": 0
-                net_fee: "0"
+                    value: '18'
+                    'n': 0
+                net_fee: '0'
                 size: 413
-                gas: "1"
+                gas: '1'
                 attributes: []
                 vin:
                   - txid: >-
@@ -854,14 +854,14 @@ paths:
                     vout: 0
                 block: 771899
                 time: 1510533484
-                sys_fee: "1"
+                sys_fee: '1'
                 scripts:
                   - invocation: >-
                       40f5d1dcd5b0642caa7f35e8624777758cf8103e76e2a5d355cb9ddb32f915e417da30c9e8206fb1748e6a31d19f31541827aa63c1cbe6988fd9849e9e11a4e5ea
                     verification: >-
                       2102961ae485792dffc28cc1e022db8dd29bb8226d50552c2ca6619fecae9dd9fa11ac
                 jsonsize: 1131
-  "/transactions/{page}":
+  '/transactions/{page}':
     get:
       summary: Get the list of transactions
       parameters:
@@ -872,7 +872,7 @@ paths:
           required: true
           description: Numeric ID of the page to get
       responses:
-        "200":
+        '200':
           description: List of transaction records
           content:
             application/json:
@@ -956,7 +956,7 @@ paths:
                     time: 1510884632
                 last_evaluated_key: >-
                   eyJ0eGlkIjogIjB4YTU2MWIzMzViYmU3YzY0MDJjM2E5NjRkOTBiNDViMjNkMmE2YmI4NGVmMDc4YzM4Y2YyOTAwNTE4MzQ4OTJhNiIsICJ2ZXJzaW9uIjogMCwgInRpbWUiOiAxNTEwODg0NjMyfQ==
-  "/transfer_history/{address}/{page}":
+  '/transfer_history/{address}/{page}':
     get:
       summary: Get the history of transfers for an address
       parameters:
@@ -973,33 +973,33 @@ paths:
           required: true
           description: Numeric ID of the page to get
       responses:
-        "200":
+        '200':
           description: List of transfers for address
           content:
             application/json:
               example:
                 items:
-                  - scripthash: "0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0"
-                    amount: "3000000000000000"
-                    transferindex: "702280.0"
+                  - scripthash: '0x251a03cba05ecfac1a99e6aa53197053dd1c0bd0'
+                    amount: '3000000000000000'
+                    transferindex: '702280.0'
                     txid: >-
                       0xdac19da4f2fa9c5a79dfda64c852ec9ea113093556489c2cd13e22b2ff800445
                     from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM
                     block: 702280
                     to: AL5e5ZcqtBTKjcQ8reiePrUBMYSD88v59a
                     time: 1509066917
-                  - scripthash: "0xb6fddc5021622701d7ed67ff079c8ef846d083df"
-                    amount: "3000000000000000"
-                    transferindex: "700808.0"
+                  - scripthash: '0xb6fddc5021622701d7ed67ff079c8ef846d083df'
+                    amount: '3000000000000000'
+                    transferindex: '700808.0'
                     txid: >-
                       0xdb018a9a75b68a293bd3a2b664324ca70abf23fd1d26a6b4b31cf7fa07bcb805
                     from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM
                     block: 700808
                     to: AL5e5ZcqtBTKjcQ8reiePrUBMYSD88v59a
                     time: 1509031894
-                  - scripthash: "0xe1ab84e20dbe746e0fae0f519c402f056973d160"
-                    amount: "10000000000000"
-                    transferindex: "662204.0"
+                  - scripthash: '0xe1ab84e20dbe746e0fae0f519c402f056973d160'
+                    amount: '10000000000000'
+                    transferindex: '662204.0'
                     txid: >-
                       0x6700f509abb6b226ef8b0809ddcbe53680797fdde5de115b2077608901fc85f1
                     from: AFmseVrdL9f9oyCzZefL9tG6UbvhPbdYzM

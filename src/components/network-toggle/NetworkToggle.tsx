@@ -40,7 +40,7 @@ export const NetworkToggle: React.FC<{ disabled: boolean }> = ({
   const selectedNetworkOption =
     options.find(option => option.value === networkState.network) || options[0]
 
-  const handleChange = (option: ValueType<Option>): void => {
+  const handleChange = (option: ValueType<Option, false>): void => {
     const networkOption = option as Option
     dispatch(changeNetwork(networkOption.value))
     dispatch(resetAddressState())
