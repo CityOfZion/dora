@@ -68,7 +68,7 @@ const Footer: React.FC = (): ReactElement => {
         <div id="company-banner">
           <img className="coz-logo" alt="coz-logo" src={cozLogo} />
           <p className="copyright">
-            2020 Copyright{' '}
+            {new Date().getFullYear()} Copyright{' '}
             <a
               className="accent"
               href="https://coz.io"
