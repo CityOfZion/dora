@@ -188,7 +188,7 @@ paths:
                     blocktime: 8052081
                     jsonsize: 1804
                     txCount: 1
-      operationId: get-users-userId
+      operationId: get-block-block_hash
       description: Get a block record
   '/address_stats/{address}':
     parameters:
