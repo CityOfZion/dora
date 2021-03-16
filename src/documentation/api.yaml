@@ -188,7 +188,7 @@ paths:
                     blocktime: 8052081
                     jsonsize: 1804
                     txCount: 1
-      operationId: get-users-userId
+      operationId: /block/{block_hash}
       description: Get a block record
   "/address_stats/{address}":
     parameters:
@@ -335,7 +335,7 @@ paths:
                           balance: 300000000000
                         - date: "20180523"
                           balance: 0
-      operationId: get-address_stats-address
+      operationId: "/address_stats/{address}"
       description: Get balance changes for an address over time
   "/asset/{asset_hash}":
     parameters:
@@ -467,7 +467,7 @@ paths:
                         dynamic_invoke: false
                     type: NEP5
                     time: "1600747532.000000"
-      operationId: get-asset-asset_hash
+      operationId:  "/asset/{asset_hash}"
       description: Get an asset record
   "/assets/{page}":
     parameters:
@@ -600,7 +600,7 @@ paths:
                         symbol: NFP
                         decimals: "0"
                     totalCount: 203
-      operationId: get-assets-page
+      operationId: "/assets/{page}"
       description: Get paginated list of assets
   "/balance/{address}":
     parameters:
@@ -657,7 +657,7 @@ paths:
                       asset_name: pnWBTC NEP5
                       symbol: pnWBTC
                       balance: 0
-      operationId: get-balance-address
+      operationId: "/balance/{address}"
       description: Get balance of address
   "/blocks/{page}":
     parameters:
@@ -806,7 +806,7 @@ paths:
                         blocktime: 18
                         txCount: 61
                     totalCount: 7053840
-      operationId: get-blocks-page
+      operationId: "/blocks/{page}"
       description: Get paginated list of blocks
   "/contract/{contract_hash}":
     parameters:
@@ -907,7 +907,7 @@ paths:
                       dynamic_invoke: true
                     block: 6250879
                     time: "1601724206.000000"
-      operationId: get-contract-contract_hash
+      operationId: "/contract/{contract_hash}"
       description: Get a contract record
   "/contract_stats/{contract_hash}":
     parameters:
@@ -923,7 +923,7 @@ paths:
       responses:
         "200":
           description: OK
-      operationId: get-contract_stats-contract_hash
+      operationId: "/contract_stats/{contract_hash}"
       description: Get statistics of contract invocations
   "/contract_transfers/{contract_hash}/{page}":
     parameters:
@@ -1193,7 +1193,7 @@ paths:
                         asset_symbol: NEX
                         asset_decimals: 8
                         amount: 116900000000
-      operationId: get-contract_transfers-contract_hash-page
+      operationId: "/contract_transfers/{contract_hash}/{page}"
   "/contracts/{page}":
     parameters:
       - schema:
@@ -1379,7 +1379,7 @@ paths:
                         symbol: FLP-nNEO-pnUSDT
                         type: NEP5
                     totalCount: 268
-      operationId: get-contracts-page
+      operationId: "/contracts/{page}"
       description: Get paginated list of contracts
   /get_all_nodes:
     get:
@@ -1451,7 +1451,7 @@ paths:
                       height: 7053923
                     - url: "http://node1.edgeofneo.com:10332"
                       height: 7016446
-      operationId: get-get_all_nodes
+      operationId: /get_all_nodes
       description: Get list of public RPC nodes
   "/get_address_abstracts/{address}/{page}":
     parameters:
@@ -1540,7 +1540,7 @@ paths:
                         address_to: AMxQ79iRKPFPu6tCKSvVEcqj8WZNHQZo9x
                         address_from: AGm9qWBAGotmAoRTvhW9bHftenuXCj2gt1
                         amount: 24
-      operationId: get-get_address_abstracts-address-page
+      operationId: "/get_address_abstracts/{address}/{page}"
       description: Get abstracts of address transfers
       deprecated: true
   "/get_balance/{address}":
@@ -1761,7 +1761,7 @@ paths:
                         unspent: []
                         amount: 0
                     address: ALBkBSozrBhSjL48X2GCJSbnr3HvkbFo3Y
-      operationId: get-get_balance-address
+      operationId: "/get_balance/{address}"
       description: Get balance of address
       deprecated: true
   "/get_claimable/{address}":
@@ -2015,7 +2015,7 @@ paths:
                         unclaimed: 0.00252595
                     address: AdAzzth94wZ6b2VHAoMc87179vd3gXQjtf
                     unclaimed: 0.34207259
-      operationId: get-get_claimable-address
+      operationId: "/get_claimable/{address}"
       deprecated: true
       description: Get claimable UTXOs for an address
   "/get_unclaimed/{address}":
@@ -2054,7 +2054,7 @@ paths:
                     available: 0.34207259
                     unavailable: 0
                     unclaimed: 0.34207259
-      operationId: get-get_unclaimed-address
+      operationId: "/get_unclaimed/{address}"
       description: Get unclaimed GAS total for address
       deprecated: true
   /get_height:
@@ -2078,7 +2078,7 @@ paths:
                 Height:
                   value:
                     height: 7053963
-      operationId: get-get_height
+      operationId: /get_height
       description: Get current block height
       deprecated: true
   "/get_last_transactions_by_address/{address}/{page}":
@@ -2272,7 +2272,7 @@ paths:
                           value: "202"
                           address_hash: AXVypxi2XoBL1wXRe9ZZMXsxMJX8WxDcQU
                           txid: "0x7629f81ab7b9b9502d7a3e3e8806a5d1342ea1881b88f1714185441a31a730be"
-      operationId: get-get_last_transactions_by_address-address
+      operationId: "/get_last_transactions_by_address/{address}/{page}"
       description: Get paginated list of transactions of address
       deprecated: true
   /height:
@@ -2296,7 +2296,7 @@ paths:
                 Height:
                   value:
                     height: 7053963
-      operationId: get-height
+      operationId: /height
       description: Get current block height
   /invocation_stats:
     get:
@@ -2354,7 +2354,7 @@ paths:
                       hash: "0xa32bcf5d7082f740a4007b16e812cf66a457c3d4"
                       count: 1889
                       change: "+1.78"
-      operationId: get-invocation_stats
+      operationId: /invocation_stats
       description: Get invocation counts of top 5 contracts
   "/log/{contract_hash}":
     parameters:
@@ -2466,7 +2466,7 @@ paths:
                                 value: 4661756c743a494e53554646494349454e545f4f55545055545f414d4f554e54
                       time: "1615777161.000000"
                       logs: []
-      operationId: get-log-contract_hash
+      operationId: "/log/{contract_hash}"
       description: Get application log of contract invocation
   /stats:
     get:
@@ -2510,7 +2510,7 @@ paths:
                     contracts: 268
                     transfers: 26251263
                     height: 7054028
-      operationId: get-stats
+      operationId: /stats
       description: Get blockchain statistics
   "/storage/{block_hash}":
     parameters:
@@ -2582,7 +2582,7 @@ paths:
                         value: 8003000000147ebea9aa3278e2c5877895af414f189cef9e6dc002050004c81203
                     time: "1615201792.000000"
                     block: 7021023
-      operationId: get-storage-block_hash
+      operationId: "/storage/{block_hash}"
       description: Get storage changes for block
   "/transaction/{transaction_hash}":
     parameters:
@@ -2711,7 +2711,7 @@ paths:
                     time: "1615777161.000000"
                     block: 7053974
                     jsonsize: 956
-      operationId: get-transaction-transaction_hash
+      operationId: "/transaction/{transaction_hash}"
       description: Get transaction record
   "/transactions/{page}":
     parameters:
@@ -2843,7 +2843,7 @@ paths:
                         time: "1615779523.000000"
                         block: 7054093
                     totalCount: 59163480
-      operationId: get-transactions-page
+      operationId: "/transactions/{page}"
       description: Get paginated list of transactions
   "/transaction_abstracts/{transaction_hash}":
     parameters:
@@ -2979,7 +2979,7 @@ paths:
                           asset: string
                           value: string
                           address: string
-      operationId: get-transaction_abstracts-transaction_hash
+      operationId: "/transaction_abstracts/{transaction_hash}"
       description: Get abstracts of transaction
   "/transfer_history/{address}/{page}":
     parameters:
@@ -3212,7 +3212,7 @@ paths:
                         asset_name: GAS
                         symbol: GAS
                     totalCount: 68
-      operationId: get-transfer_history-address-page
+      operationId: "/transfer_history/{address}/{page}"
       description: Get transfer history of address
   "/utxo_history/{address}/{page}":
     parameters:
@@ -3338,7 +3338,7 @@ paths:
                               value: 5.5291499e-7
                           asset_name: GAS
                       time: "1480324358.000000"
-      operationId: get-utxo_history-address-page
+      operationId: "/utxo_history/{address}/{page}"
       description: Get paginated list of UTXOs of an address
       deprecated: true
 components:
