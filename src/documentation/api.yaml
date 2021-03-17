@@ -15,7 +15,7 @@ servers:
   - url: "https://dora.coz.io/api/v1/neo2/testnet"
     description: testnet
 paths:
-  "/block/<block_hash>":
+  "/block/{block_hash}":
     parameters:
       - schema:
           type: string
