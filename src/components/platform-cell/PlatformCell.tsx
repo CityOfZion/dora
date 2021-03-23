@@ -17,7 +17,7 @@ const PlatformCell = ({ chain }: { chain: string | void }): ReactElement => (
       <div className="neo3-platform-cell">
         <img src={Neo3} alt="NEO 3" />
         <span>
-          Neo <small>(Preview 5) </small>
+          Neo <small>(Testnet) </small>
         </span>
       </div>
     )}

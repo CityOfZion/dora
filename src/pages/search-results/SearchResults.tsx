@@ -74,7 +74,7 @@ const SearchResults: React.FC<Props> = (props: Props) => {
                       </div>
                       <p>
                         {' '}
-                        {result.chain === 'neo2' ? network : '(Preview 5)'}
+                        {result.chain === 'neo2' ? network : '(Testnet)'}
                       </p>
                     </div>
 
