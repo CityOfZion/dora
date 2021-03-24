@@ -1,0 +1,19 @@
+.page-title-container {
+    display: flex;
+    align-items: center;
+  
+    h1 {
+      letter-spacing: -1.27px;
+      margin: 48px 0;
+      font-weight: 500;
+    }
+  
+    img {
+      margin-bottom: 6px;
+      margin-right: 12px;
+  
+      g {
+        fill: #fff;
+      }
+    }
+  }

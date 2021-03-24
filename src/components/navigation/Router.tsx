@@ -21,6 +21,7 @@ import Block from '../../pages/block/Block'
 import Address from '../../pages/address/Address'
 import NotFound from '../../pages/not-found/NotFound'
 import SearchResults from '../../pages/search-results/SearchResults'
+import Monitor from '../../pages/monitor/Monitor'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -87,6 +88,11 @@ const Router: React.FC = (): ReactElement => {
                 <Route
                   path={ROUTES.BLOCKS.url}
                   component={(): ReactElement => <Blocks />}
+                />
+
+                <Route
+                  path={ROUTES.MONITOR.url}
+                  component={(): ReactElement => <Monitor />}
                 />
 
                 <Route
