@@ -4,7 +4,6 @@ import { Dispatch, Action } from 'redux'
 
 import { GENERATE_BASE_URL, SEARCH_TYPES } from '../constants'
 import { State } from '../reducers/searchReducer'
-import { Balance } from '../reducers/addressReducer'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered = (search: string) => (
@@ -115,8 +114,6 @@ export async function determineSearchType(
   }
   results?: {}
 }> {
-  const isPossibleTxOrContract = search.includes('0x')
-
   const invokePromiseAndIgnoreError = (url: string): Promise<{}> =>
     fetch(url)
       .then(result => result && result.json())
@@ -124,25 +121,18 @@ export async function determineSearchType(
 
   const urls = []
 
-  if (isPossibleTxOrContract) {
-    urls.push(
-      ...[
-        `${GENERATE_BASE_URL('neo2', false)}/transaction/${search}`,
-        `${GENERATE_BASE_URL('neo2', false)}/contract/${search}`,
-        `${GENERATE_BASE_URL('neo3', false)}/transaction/${search}`,
-        `${GENERATE_BASE_URL('neo3', false)}/contract/${search}`,
-      ],
-    )
-  } else {
-    urls.push(
-      ...[
-        `${GENERATE_BASE_URL('neo2', false)}/balance/${search}`,
-        `${GENERATE_BASE_URL('neo2', false)}/block/${search}`,
-        `${GENERATE_BASE_URL('neo3', false)}/balance/${search}`,
-        `${GENERATE_BASE_URL('neo3', false)}/block/${search}`,
-      ],
-    )
-  }
+  urls.push(
+    ...[
+      `${GENERATE_BASE_URL('neo2', false)}/transaction/${search}`,
+      `${GENERATE_BASE_URL('neo2', false)}/contract/${search}`,
+      `${GENERATE_BASE_URL('neo3', false)}/transaction/${search}`,
+      `${GENERATE_BASE_URL('neo3', false)}/contract/${search}`,
+      `${GENERATE_BASE_URL('neo2', false)}/balance/${search}`,
+      `${GENERATE_BASE_URL('neo2', false)}/block/${search}`,
+      `${GENERATE_BASE_URL('neo3', false)}/balance/${search}`,
+      `${GENERATE_BASE_URL('neo3', false)}/block/${search}`,
+    ],
+  )
 
   const results = await Promise.all(
     urls
@@ -158,62 +148,60 @@ export async function determineSearchType(
     },
   }
 
-  if (isPossibleTxOrContract) {
-    const [transaction, contract, neo3Transaction, neo3Contract] = results
-    if (!isEmpty(transaction)) {
-      searchResults.searchType = SEARCH_TYPES.TRANSACTION
-    }
-    if (contract) {
-      searchResults.searchType = SEARCH_TYPES.CONTRACT
-    }
+  const [
+    transaction,
+    contract,
+    neo3Transaction,
+    neo3Contract,
+    balance,
+    block,
+    neo3Balance,
+    neo3Block,
+  ] = results
 
-    if (!isEmpty(neo3Transaction)) {
-      searchResults.searchType = SEARCH_TYPES.TRANSACTION
-      searchResults.networkInfo.chain = 'neo3'
-    }
+  if (!isEmpty(transaction)) {
+    searchResults.searchType = SEARCH_TYPES.TRANSACTION
+  }
 
-    if (neo3Contract) {
-      searchResults.searchType = SEARCH_TYPES.CONTRACT
-      searchResults.networkInfo.chain = 'neo3'
-    }
-  } else {
-    const balance = results[0] as Balance[]
-    const block = results[1]
-    const neo3Block = results[3]
+  if (contract) {
+    searchResults.searchType = SEARCH_TYPES.CONTRACT
+  }
 
-    const neo3Balance = results[2] as Balance[]
-    // const neo3Block = results[3]
+  if (!isEmpty(neo3Transaction)) {
+    searchResults.searchType = SEARCH_TYPES.TRANSACTION
+    searchResults.networkInfo.chain = 'neo3'
+  }
 
-    if (balance && balance.length) {
-      searchResults.searchType = SEARCH_TYPES.ADDRESS
-    }
+  if (neo3Contract) {
+    searchResults.searchType = SEARCH_TYPES.CONTRACT
+    searchResults.networkInfo.chain = 'neo3'
+  }
 
-    if (block && neo3Block) {
-      return {
-        searchType: SEARCH_TYPES.MULTIPLE_RESULTS,
-        results: {
-          block: { ...block, chain: 'neo2' },
-          neo3Block: { ...neo3Block, chain: 'neo3' },
-        },
-        networkInfo: {
-          chain: '',
-          network: network || 'mainnet',
-        },
-      }
-    }
+  if (balance && !isEmpty(balance)) {
+    searchResults.searchType = SEARCH_TYPES.ADDRESS
+  }
 
-    if (block) {
-      searchResults.searchType = SEARCH_TYPES.BLOCK
+  if (block && neo3Block) {
+    return {
+      searchType: SEARCH_TYPES.MULTIPLE_RESULTS,
+      results: {
+        block: { ...block, chain: 'neo2' },
+        neo3Block: { ...neo3Block, chain: 'neo3' },
+      },
+      networkInfo: {
+        chain: '',
+        network: network || 'mainnet',
+      },
     }
+  }
 
-    if (neo3Balance && neo3Balance.length) {
-      searchResults.searchType = SEARCH_TYPES.ADDRESS
-      searchResults.networkInfo.chain = 'neo3'
-    }
-    // if (neo3Block) {
-    //   searchResults.searchType = SEARCH_TYPES.BLOCK
-    //   searchResults.networkInfo.chain = 'neo3'
-    // }
+  if (block) {
+    searchResults.searchType = SEARCH_TYPES.BLOCK
+  }
+
+  if (neo3Balance && !isEmpty(neo3Balance)) {
+    searchResults.searchType = SEARCH_TYPES.ADDRESS
+    searchResults.networkInfo.chain = 'neo3'
   }
 
   return searchResults
