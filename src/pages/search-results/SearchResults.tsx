@@ -72,7 +72,10 @@ const SearchResults: React.FC<Props> = (props: Props) => {
                       <div id="chain-icon">
                         {result.chain === 'neo2' ? <Neo2 /> : <Neo3 />}
                       </div>
-                      <p> {result.chain === 'neo2' ? network : '(Testnet)'}</p>
+                      <p>
+                        {' '}
+                        {result.chain === 'neo2' ? network : '(Preview 5)'}
+                      </p>
                     </div>
 
                     <div className="search-results-details">
