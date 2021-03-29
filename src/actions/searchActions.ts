@@ -4,7 +4,6 @@ import { Dispatch, Action } from 'redux'
 
 import { GENERATE_BASE_URL, SEARCH_TYPES } from '../constants'
 import { State } from '../reducers/searchReducer'
-import { Balance } from '../reducers/addressReducer'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered = (search: string) => (
@@ -149,7 +148,16 @@ export async function determineSearchType(
     },
   }
 
-  const [transaction, contract, neo3Transaction, neo3Contract] = results
+  const [
+    transaction,
+    contract,
+    neo3Transaction,
+    neo3Contract,
+    balance,
+    block,
+    neo3Balance,
+    neo3Block,
+  ] = results
 
   if (!isEmpty(transaction)) {
     searchResults.searchType = SEARCH_TYPES.TRANSACTION
@@ -169,13 +177,7 @@ export async function determineSearchType(
     searchResults.networkInfo.chain = 'neo3'
   }
 
-  const balance = results[0] as Balance[]
-  const block = results[1]
-  const neo3Block = results[3]
-
-  const neo3Balance = results[2] as Balance[]
-
-  if (balance && balance.length) {
+  if (balance && !isEmpty(balance)) {
     searchResults.searchType = SEARCH_TYPES.ADDRESS
   }
 
@@ -197,7 +199,7 @@ export async function determineSearchType(
     searchResults.searchType = SEARCH_TYPES.BLOCK
   }
 
-  if (neo3Balance && neo3Balance.length) {
+  if (neo3Balance && !isEmpty(neo3Balance)) {
     searchResults.searchType = SEARCH_TYPES.ADDRESS
     searchResults.networkInfo.chain = 'neo3'
   }
