@@ -6,7 +6,7 @@ export class Socket {
   get Connection(): WebSocket {
     return this.connection
   }
-  listening<T = any>(callback: (data: T) => void): void {
+  listening<T>(callback: (data: T) => void): void {
     this.connection.onmessage = (evt): void => {
       const objData: T = JSON.parse(evt.data)
       callback(objData)
