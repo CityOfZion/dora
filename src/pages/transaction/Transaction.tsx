@@ -108,7 +108,7 @@ const parseNeo3TransactionData = async (
   transaction: DetailedTransaction,
 ): Promise<ParsedTransfer[]> => {
   const transfers: ParsedTransfer[] = []
-  const TRANSFER = 'VHJhbnNmZXI='
+  const TRANSFER = 'ZpUsSbXFxHgNO3IoKB0gKKnmwuc='
 
   if (transaction && transaction.notifications) {
     for (const notification of transaction.notifications) {
@@ -120,12 +120,18 @@ const parseNeo3TransactionData = async (
           }
         })
         if (isTransfer) {
-          const asset = ASSETS.find(
-            asset => asset.scripthash === notification.contract,
-          ) || {
-            name: 'foo',
+          const response = await fetch(
+            `${GENERATE_BASE_URL('neo3')}/contract/${notification.contract}`,
+          )
+          const json = await response.json()
+          const generateSymbol = (): string => {
+            if (json.manifest.name === 'GasToken') return 'GAS'
+            if (json.manifest.name === 'NeoToken') return 'NEO'
+            return json.manifest.symbol || 'N/A'
           }
-
+          const asset = {
+            name: generateSymbol(),
+          }
           const integerNotfication = notification.state.value.find(
             value => value.type === 'Integer',
           )
