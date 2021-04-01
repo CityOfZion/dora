@@ -14,10 +14,10 @@ import Select from '../../components/select/Select'
 
 const Home: React.FC<{}> = () => {
   const history = useHistory()
-
   const { network } = useSelector(
     ({ network }: { network: NetworkState }) => network,
   )
+
   return (
     <div id="Home" className="page-container">
       <div id="inner-home-page-container">
