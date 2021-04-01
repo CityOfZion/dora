@@ -158,11 +158,21 @@ export function fetchAddress(address: string, chain: string) {
           } else if (GAS_HASHES.includes(balanceData.scripthash)) {
             symbol = 'GAS'
           } else {
+            console.log(balanceData)
             const response = await fetch(
-              `${GENERATE_BASE_URL(chain)}/contract/${balanceData.scripthash}`,
+              `${GENERATE_BASE_URL(chain)}/contract/${balanceData.asset}`,
             )
+
             const json = await response.json()
-            symbol = json.symbol || 'N/A'
+            console.log({ json })
+
+            const generateSymbol = (): string => {
+              if (json.manifest.name === 'GasToken') return 'GAS'
+              if (json.manifest.name === 'NeoToken') return 'NEO'
+              return json.manifest.symbol || 'N/A'
+            }
+
+            symbol = generateSymbol()
             name = json.manifest.name
           }
 
