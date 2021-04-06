@@ -252,7 +252,7 @@ for (let i = 0; i < methodnames.length; i++) {
   interopmethod[hash_buffer.readUInt32LE(0)] = methodnames[i]
 }
 // eslint-disable-next-line
-  // @ts-ignore
+// @ts-ignore
 export function neo3Disassemble(base64_encoded_script): string {
   let out = ''
   const script = Buffer.from(base64_encoded_script, 'base64')
@@ -262,14 +262,14 @@ export function neo3Disassemble(base64_encoded_script): string {
     const opcode = script[ip]
     if (opcodetable.hasOwnProperty(opcode)) {
       // eslint-disable-next-line
-  // @ts-ignore
+      // @ts-ignore
       const opcodedata = opcodetable[opcode]
       const inst = opcodedata.name
 
       if (opcodedata.name === 'SYSCALL') {
         const hash = script.readUInt32LE(ip + 1)
         // eslint-disable-next-line
-  // @ts-ignore
+        // @ts-ignore
         let interop_name = interopmethod[hash]
         if (interop_name == null) interop_name = hash
         out += `${inst} ${interop_name}\n`
@@ -301,7 +301,7 @@ export function neo3Disassemble(base64_encoded_script): string {
               out += `SOMEBODY MESSED UP THE PUSHDATA SIZE for ${opcodedata.name} at index ${ip} (size ${opcodedata.size})`
 
               // eslint-disable-next-line
-  // @ts-ignore
+              // @ts-ignore
               return
           }
 
