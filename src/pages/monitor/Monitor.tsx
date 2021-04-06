@@ -1,36 +1,36 @@
-import React, {ReactElement, useEffect, useState} from 'react'
-import {Socket} from '../../config/Socket'
+import React, { ReactElement, useEffect } from 'react'
+import { Socket } from '../../config/Socket'
 import { useSelector, useDispatch } from 'react-redux'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import imgMonitor from '../../assets/icons/monitor.png'
-import {State as NodeState, WSDoraData, SerializeState as SerializeNode, SerializeState} from '../../reducers/nodeReducer'
-import {setNode} from '../../actions/nodeActions'
+import {
+  State as NodeState,
+  WSDoraData,
+  SerializeState as SerializeNode,
+} from '../../reducers/nodeReducer'
+import { setNode } from '../../actions/nodeActions'
 import List from '../../components/list/List'
-import {MOCK_NODES} from '../../utils/mockData'
+import { MOCK_NODES } from '../../utils/mockData'
 import useFilterState from '../../hooks/useFilterState'
-import useWindowWidth from '../../hooks/useWindowWidth'
 const socket = new Socket('ws://54.90.238.106:8008/socket')
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
-  type: string,
-  isItUp: React.FC<{}>,
-  reliability: number,
-  stateHeight: number,
-  blockHeight: string,
-  version: string,
-  peers: number,
+  type: string
+  isItUp: React.FC<{}>
+  reliability: number
+  stateHeight: number
+  blockHeight: string
+  version: string
+  peers: number
 }
 
 type Endpoint = {
   url: string
 }
-const Endpoint: React.FC<Endpoint> = ({url}) => {
-  const selectFlag = () => {
-    //To do
-  }
+const Endpoint: React.FC<Endpoint> = ({ url }) => {
   return (
     <div className="endpoint">
       <div>#</div>
@@ -43,24 +43,20 @@ type IsItUp = {
   location: string
 }
 
-const IsItUp = () => {
-  return (
-    <div>
-     
-    </div>
-  )
+const IsItUp = (): JSX.Element => {
+  return <div></div>
 }
 
-const mapNodesData = (data: WSDoraData):ParsedNodes => {
+const mapNodesData = (data: WSDoraData): ParsedNodes => {
   return {
-    endpoint: (): ReactElement => <Endpoint url={data.url}/>,
+    endpoint: (): ReactElement => <Endpoint url={data.url} />,
     blockHeight: `#${data.height}`,
     version: data.version,
     type: data.type,
     peers: data.peers,
     reliability: data.reliability,
     stateHeight: data.stateheight,
-    isItUp: (): ReactElement => <IsItUp/>
+    isItUp: (): ReactElement => <IsItUp />,
   }
 }
 
@@ -69,41 +65,39 @@ const returnNodesListData = (
   returnStub: boolean,
   network: string,
 ): Array<ParsedNodes> => {
-  if(returnStub){
+  if (returnStub) {
     return MOCK_NODES.map(n => n)
-  }else{
+  } else {
     return data.map(data => mapNodesData(data))
   }
 }
 
 const columns = [
-  {name: "Endpoint", accessor: "endpoint"},
-  {name: "Type", accessor: "type"},
-  {name: "Is it up?", accessor: "isItUp"},
-  {name: "Reliability", accessor: "reliability"},
-  {name: "State Height", accessor: "stateHeight"},
-  {name: "Block Height", accessor: "blockHeight"},
-  {name: "Version", accessor: "version"},
-  {name: "Peers", accessor: "peers"}
+  { name: 'Endpoint', accessor: 'endpoint' },
+  { name: 'Type', accessor: 'type' },
+  { name: 'Is it up?', accessor: 'isItUp' },
+  { name: 'Reliability', accessor: 'reliability' },
+  { name: 'State Height', accessor: 'stateHeight' },
+  { name: 'Block Height', accessor: 'blockHeight' },
+  { name: 'Version', accessor: 'version' },
+  { name: 'Peers', accessor: 'peers' },
 ]
 
 const Monitor: React.FC<{}> = () => {
-  const { selectedChain, handleSetFilterData, network } = useFilterState()
-  const nodes = useSelector(
-    ({ node }: { node: NodeState }) => node,
-  )
+  const { network } = useFilterState()
+  const nodes = useSelector(({ node }: { node: NodeState }) => node)
 
   const dispatch = useDispatch()
 
-    useEffect(() => {
-      socket.listening<WSDoraData>((data) => {
-        dispatch(setNode(data))
-      })
-    }, [])
+  useEffect(() => {
+    socket.listening<WSDoraData>(data => {
+      dispatch(setNode(data))
+    })
+  }, [dispatch])
 
-    useEffect(() => {
-      console.log('print de nodes => ', SerializeState(nodes))
-    }, [nodes])
+  useEffect(() => {
+    console.log('print de nodes => ', SerializeNode(nodes))
+  }, [nodes])
 
   return (
     <div id="Monitor" className="page-container">
@@ -129,7 +123,7 @@ const Monitor: React.FC<{}> = () => {
       </div>
       <div>
         <List
-          data={returnNodesListData(SerializeState(nodes),false,network)}
+          data={returnNodesListData(SerializeNode(nodes), false, network)}
           columns={columns}
           isLoading={!Array(nodes.entries()).length}
           rowId="endpoint"
