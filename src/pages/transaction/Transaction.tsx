@@ -18,7 +18,6 @@ import {
   GENERATE_BASE_URL,
   NEO_HASHES,
   GAS_HASHES,
-  ASSETS,
   neo3_getAddressFromSriptHash,
 } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
