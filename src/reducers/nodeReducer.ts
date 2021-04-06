@@ -26,8 +26,13 @@ export type State = Map<string, WSDoraData>
 
 const INITIAL_STATE: State = new Map<string, WSDoraData>()
 
-export const SerializeState = (state: State): [string, WSDoraData][] => {
-  return Array.from(state.entries())
+export const SerializeState = (state: State): WSDoraData[] => {
+  let serializedData:WSDoraData[] = []
+  Array.from(state.entries()).forEach(([_,data]) => {
+    serializedData.push(data)
+  })
+
+  return serializedData
 }
 
 export default (state: State = INITIAL_STATE, action: NodeDTO): State => {
