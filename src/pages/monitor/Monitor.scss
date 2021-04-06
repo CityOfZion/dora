@@ -1,3 +1,23 @@
+.network-status-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.network-status-header {
+  height: 47px;
+}
+
+.network-status-title {
+  color: #ffffff;
+  font-size: 24px;
+  background-color: #1a2f34;
+}
+
+.network-status-content {
+  display: flex;
+}
+
 .page-title-container {
   display: flex;
   align-items: center;

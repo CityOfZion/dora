@@ -1,0 +1,46 @@
+.information-panel-container {
+    background-color: #25393e;
+    border-radius: 2px;
+    width: 400px;
+    height: 142px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.information-panel-header {
+    align-self: flex-start;
+    flex-direction: column;
+    padding-left: 11px;
+}
+
+.information-panel-title {
+  font-weight: 900;
+  font-size: 11px;
+  color: #7d9fb1;
+  font-family: 'Sofia Pro - Black' sans-serif;
+  letter-spacing: -0.44px;
+  line-height: 38.01px;
+  align-self: flex-start;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.information-panel-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    h1 {
+      letter-spacing: -1.27px;
+      font-weight: 500;
+    }
+  
+    svg {
+      margin-right: 12px;
+  
+      g {
+        fill: #fff;
+      }
+    }
+}
