@@ -12,10 +12,10 @@ import {
   State as NodeState,
   WSDoraData,
   SerializeState as SerializeNode,
-  SORT_OPTION
+  SORT_OPTION,
 } from '../../reducers/nodeReducer'
 import { setNode } from '../../actions/nodeActions'
-import List, {ColumnType} from '../../components/list/List'
+import List, { ColumnType } from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import useFilterState from '../../hooks/useFilterState'
 import InformationPanel from '../../components/panel/InformationPanel'
@@ -57,24 +57,31 @@ const STATUS_ICONS = [
 ]
 
 const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
-
   const LOCATIONS_FLAGS = [
     { location: 'United States', Flag: UnitedStatesSVG },
     { location: 'USA', Flag: UnitedStatesSVG },
     { location: 'Hong Kong', Flag: HongKongSVG },
     { location: 'Canada', Flag: CanadaSVG },
     { location: 'China', Flag: ChinaSVG },
-    { location: 'US', Flag: UnitedStatesSVG }
+    { location: 'US', Flag: UnitedStatesSVG },
   ]
 
   const getFlagByLocation = () => {
-    const Flag = LOCATIONS_FLAGS.find(({ location }) => location === locationEndPoint)?.Flag
+    const Flag = LOCATIONS_FLAGS.find(
+      ({ location }) => location === locationEndPoint,
+    )?.Flag
     return Flag
   }
   const Flag = getFlagByLocation()
   return (
-    <div className={disable ? "endpoint disable" : "endpoint"}>
-      {Flag ? <div className="endpoint-flag-container"><Flag /></div> : <></>}
+    <div className={disable ? 'endpoint disable' : 'endpoint'}>
+      {Flag ? (
+        <div className="endpoint-flag-container">
+          <Flag />
+        </div>
+      ) : (
+        <></>
+      )}
       <div>{url}</div>
     </div>
   )
@@ -85,23 +92,28 @@ type IsItUp = {
 }
 
 const IsItUp: React.FC<IsItUp> = ({ statusIsItUp }): JSX.Element => {
-
   const getIconByStatus = () => {
-    const Icon = STATUS_ICONS.find(({ status }) => status === statusIsItUp)?.Icon
+    const Icon = STATUS_ICONS.find(({ status }) => status === statusIsItUp)
+      ?.Icon
     return Icon ?? DisapprovedSVG
   }
 
   const Icon = getIconByStatus()
-  return (
-    <div>{<Icon />}</div>
-  )
+  return <div>{<Icon />}</div>
 }
 
 interface NegativeComponent extends AllNodes {
   useHashTag?: boolean
 }
-const NegativeComponent: React.FC<NegativeComponent> = ({ useHashTag, disable }) => {
-  return useHashTag ? <div className={disable ? "disable" : ""}># -</div> : <div className={disable ? "disable" : ""}>-</div>
+const NegativeComponent: React.FC<NegativeComponent> = ({
+  useHashTag,
+  disable,
+}) => {
+  return useHashTag ? (
+    <div className={disable ? 'disable' : ''}># -</div>
+  ) : (
+    <div className={disable ? 'disable' : ''}>-</div>
+  )
 }
 
 interface TypeNode extends AllNodes {
@@ -109,11 +121,7 @@ interface TypeNode extends AllNodes {
 }
 
 const TypeNode: React.FC<TypeNode> = ({ disable, textType }) => {
-  return (
-    <div className={disable ? "disable" : ""}>
-      {textType}
-    </div>
-  )
+  return <div className={disable ? 'disable' : ''}>{textType}</div>
 }
 
 interface Reliability extends AllNodes {
@@ -121,11 +129,7 @@ interface Reliability extends AllNodes {
 }
 
 const Reliability: React.FC<Reliability> = ({ text, disable }) => {
-  return (
-    <div className={disable ? "disable" : ""}>
-      {text}
-    </div>
-  )
+  return <div className={disable ? 'disable' : ''}>{text}</div>
 }
 
 interface StateHeight extends AllNodes {
@@ -133,18 +137,16 @@ interface StateHeight extends AllNodes {
 }
 
 const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
-  return (
-    <div className={disable ? "disable" : ""}>
-      {text}
-    </div>
-  )
+  return <div className={disable ? 'disable' : ''}>{text}</div>
 }
 
-
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
-
   const isPositive = () => {
-    if (data.status === 'ok' || data.status === 'stateheight stalled' || data.status === 'stateheight lagging') {
+    if (
+      data.status === 'ok' ||
+      data.status === 'stateheight stalled' ||
+      data.status === 'stateheight lagging'
+    ) {
       return true
     } else {
       return false
@@ -152,15 +154,49 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
   }
 
   return {
-    endpoint: (): ReactElement => <Endpoint url={data.url} locationEndPoint={data.location} disable={!isPositive() ? true : false} />,
-    blockHeight: isPositive() ? `#${data.height}` : (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
-    version: isPositive() ? data.version : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    type: (): ReactElement => <TypeNode textType={data.type} disable={!isPositive() ? true : false} />,
-    peers: isPositive() ? data.peers : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    reliability: isPositive() ? `${data.reliability}%` : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    stateHeight: isPositive() ? `#${data.stateheight}` : (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
+    endpoint: (): ReactElement => (
+      <Endpoint
+        url={data.url}
+        locationEndPoint={data.location}
+        disable={!isPositive() ? true : false}
+      />
+    ),
+    blockHeight: isPositive()
+      ? `#${data.height}`
+      : (): ReactElement => (
+          <NegativeComponent
+            useHashTag={true}
+            disable={!isPositive() ? true : false}
+          />
+        ),
+    version: isPositive()
+      ? data.version
+      : (): ReactElement => (
+          <NegativeComponent disable={!isPositive() ? true : false} />
+        ),
+    type: (): ReactElement => (
+      <TypeNode textType={data.type} disable={!isPositive() ? true : false} />
+    ),
+    peers: isPositive()
+      ? data.peers
+      : (): ReactElement => (
+          <NegativeComponent disable={!isPositive() ? true : false} />
+        ),
+    reliability: isPositive()
+      ? `${data.reliability}%`
+      : (): ReactElement => (
+          <NegativeComponent disable={!isPositive() ? true : false} />
+        ),
+    stateHeight: isPositive()
+      ? `#${data.stateheight}`
+      : (): ReactElement => (
+          <NegativeComponent
+            useHashTag={true}
+            disable={!isPositive() ? true : false}
+          />
+        ),
     isItUp: (): ReactElement => <IsItUp statusIsItUp={data.status} />,
-    chain: data.status || ''
+    chain: data.status || '',
   }
 }
 
@@ -254,7 +290,9 @@ const NetworkStatus: React.FC<{}> = () => {
       <div className="network-status-content">
         <InformationPanel
           title={BEST_BLOCK}
-          data={`#${bestBlock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
+          data={`#${bestBlock
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}
           icon={<Cube />}
         />
         <InformationPanel
@@ -273,7 +311,6 @@ const NetworkStatus: React.FC<{}> = () => {
 }
 
 const Monitor: React.FC<{}> = () => {
-
   const { network } = useFilterState()
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const [dataList, setDataList] = useState<Array<ParsedNodes>>([])
@@ -292,7 +329,9 @@ const Monitor: React.FC<{}> = () => {
   }, [dispatch])
 
   useEffect(() => {
-    setDataList(returnNodesListData(SerializeNode(nodes, sortDataList), false, network))
+    setDataList(
+      returnNodesListData(SerializeNode(nodes, sortDataList), false, network),
+    )
   }, [nodes, sortDataList])
 
   return (
@@ -328,7 +367,8 @@ const Monitor: React.FC<{}> = () => {
           isLoading={!Array(nodes.entries()).length}
           rowId="endpoint"
           leftBorderColorOnRow={(_, chain) => {
-            const color = STATUS_ICONS.find(({ status }) => status === chain)?.color
+            const color = STATUS_ICONS.find(({ status }) => status === chain)
+              ?.color
             return color ?? '#de4c85'
           }}
           orderData={true}

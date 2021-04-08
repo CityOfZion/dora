@@ -1,35 +1,45 @@
 import React, { ReactText, useRef } from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
-import {ReactComponent as ArrowSortSVG} from '../../assets/icons/arrow-sort.svg'
-import {SORT_OPTION} from '../../reducers/nodeReducer'
+import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
+import { SORT_OPTION } from '../../reducers/nodeReducer'
 import './List.scss'
 
 interface HeaderCell {
-  styleHeader?:React.CSSProperties
+  styleHeader?: React.CSSProperties
   classNameHeader?: string
-  nameColumn?:React.Key | null
+  nameColumn?: React.Key | null
   isLoading?: boolean
   orderData?: boolean
   sortOpt?: SORT_OPTION
   callbalOrderData?: (field: SORT_OPTION) => void
 }
-const HeaderCell:React.FC<HeaderCell> = ({styleHeader, classNameHeader, nameColumn, isLoading, orderData, sortOpt, callbalOrderData}) => {
+const HeaderCell: React.FC<HeaderCell> = ({
+  styleHeader,
+  classNameHeader,
+  nameColumn,
+  isLoading,
+  orderData,
+  sortOpt,
+  callbalOrderData,
+}) => {
   return (
-    <div
-            style={styleHeader}
-            className={classNameHeader}
-            key={nameColumn}
-          >
-            {isLoading ? '' : nameColumn}
-            {orderData ? <button onClick={(e) => {
-              e.preventDefault();
-              callbalOrderData && sortOpt && callbalOrderData(sortOpt)
-              
-            }} className="data-list-arrow-sort">
-              <ArrowSortSVG/>
-            </button> : <></>}
-          </div>
+    <div style={styleHeader} className={classNameHeader} key={nameColumn}>
+      {isLoading ? '' : nameColumn}
+      {orderData ? (
+        <button
+          onClick={e => {
+            e.preventDefault()
+            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+          }}
+          className="data-list-arrow-sort"
+        >
+          <ArrowSortSVG />
+        </button>
+      ) : (
+        <></>
+      )}
+    </div>
   )
 }
 
@@ -80,7 +90,7 @@ export const List: React.FC<ListProps> = ({
   leftBorderColorOnRow = '',
   countConfig,
   orderData,
-  callbalOrderData
+  callbalOrderData,
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -168,8 +178,8 @@ export const List: React.FC<ListProps> = ({
       <div className="data-list" style={gridstyle}>
         {columns.map((column, i) => (
           <HeaderCell
-          classNameHeader={headerRowClass}
-          styleHeader={{
+            classNameHeader={headerRowClass}
+            styleHeader={{
               ...conditionalBorderRadius(i),
               ...(column.style || {}),
             }}
@@ -179,7 +189,7 @@ export const List: React.FC<ListProps> = ({
             orderData={orderData}
             sortOpt={column.sortOpt}
             callbalOrderData={callbalOrderData}
-            />
+          />
         ))}
 
         {sortedByAccessor.map(
