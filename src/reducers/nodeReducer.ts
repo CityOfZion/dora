@@ -50,6 +50,10 @@ export const SerializeState = (
 
 const orderNodes = (field: SORT_OPTION, nodes: WSDoraData[]) => {
   switch (field) {
+    case 'endpoint':
+      return nodes.sort((node1, node2) => {
+        return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+      })
     case 'blockHeight':
       return nodes.sort((node1, node2) => {
         return node1.height > node2.height
@@ -66,14 +70,55 @@ const orderNodes = (field: SORT_OPTION, nodes: WSDoraData[]) => {
           ? 1
           : 0
       })
-    // case 'isItUp':
-    //   return nodes.sort((node1, node2) => {
-    //     // return node1.status > node2.status
-    //     //   ? -1
-    //     //   : node2.status > node1.status
-    //     //   ? 1
-    //     //   : 0
-    //   })
+    case 'isItUp':
+      const greenCheck = nodes
+        .filter(nodes => {
+          return nodes.status === 'ok' || nodes.status === 'stateheight lagging'
+        })
+        .sort((node1, node2) => {
+          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+        })
+        .sort((node1, node2) => {
+          return node1.peers > node2.peers
+            ? -1
+            : node2.peers > node1.peers
+            ? 1
+            : 0
+        })
+      const yellowCheck = nodes
+        .filter(nodes => {
+          return nodes.status === 'stateheight stalled'
+        })
+        .sort((node1, node2) => {
+          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+        })
+        .sort((node1, node2) => {
+          return node1.peers > node2.peers
+            ? -1
+            : node2.peers > node1.peers
+            ? 1
+            : 0
+        })
+      const redX = nodes
+        .filter(nodes => {
+          return (
+            nodes.status !== 'ok' &&
+            nodes.status !== 'stateheight lagging' &&
+            nodes.status !== 'stateheight stalled'
+          )
+        })
+        .sort((node1, node2) => {
+          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+        })
+        .sort((node1, node2) => {
+          return node1.peers > node2.peers
+            ? -1
+            : node2.peers > node1.peers
+            ? 1
+            : 0
+        })
+      return greenCheck.concat(yellowCheck, redX)
+
     case 'stateHeight':
       return nodes.sort((node1, node2) => {
         return node1.stateheight > node2.stateheight

@@ -236,7 +236,7 @@ const NetworkStatus: React.FC<{}> = () => {
 
   const getBestBlock = (): number => {
     const sortedList = SerializeNode(nodes).sort((data1, data2) => {
-      if (data1.height > data2.height) {
+      if (data1.height <= data2.height) {
         return 0
       } else return 1
     })
