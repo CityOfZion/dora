@@ -18,49 +18,148 @@ import List from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import useFilterState from '../../hooks/useFilterState'
 import InformationPanel from '../../components/panel/InformationPanel'
+import { ReactComponent as CanadaSVG } from '../../assets/icons/flags/ca.svg'
+import { ReactComponent as ChinaSVG } from '../../assets/icons/flags/cn.svg'
+import { ReactComponent as HongKongSVG } from '../../assets/icons/flags/hk.svg'
+import { ReactComponent as UnitedStatesSVG } from '../../assets/icons/flags/usa.svg'
+import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
+import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
+import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
 const socket = new Socket('ws://54.90.238.106:8008/socket')
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
-  type: string
+  type: React.FC<{}>
   isItUp: React.FC<{}>
-  reliability: number
-  stateHeight: number
-  blockHeight: string
-  version: string
-  peers: number
+  reliability: string | React.FC<{}>
+  stateHeight: string | React.FC<{}>
+  blockHeight: string | React.FC<{}>
+  version: string | React.FC<{}>
+  peers: number | React.FC<{}>
+  chain: string
 }
 
-type Endpoint = {
-  url: string
+interface AllNodes{
+  disable?: boolean
 }
-const Endpoint: React.FC<Endpoint> = ({ url }) => {
+
+interface Endpoint extends AllNodes{
+  url: string
+  locationEndPoint: string
+}
+
+const STATUS_ICONS = [
+  { status: 'ok', Icon: ApprovedSVG, color: '#4cffb3' },
+  { status: 'stateheight stalled', Icon: OnHoldSVG, color: '#ffc24c' },
+  { status: 'stateheight lagging', Icon: ApprovedSVG, color: '#4cffb3' },
+  { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
+]
+
+const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
+
+  const LOCATIONS_FLAGS = [
+    { location: 'United States', Flag: UnitedStatesSVG },
+    { location: 'USA', Flag: UnitedStatesSVG },
+    { location: 'Hong Kong', Flag: HongKongSVG },
+    { location: 'Canada', Flag: CanadaSVG },
+    { location: 'China', Flag: ChinaSVG },
+    { location: 'US', Flag: UnitedStatesSVG }
+  ]
+
+  const getFlagByLocation = () => {
+    const Flag = LOCATIONS_FLAGS.find(({ location }) => location === locationEndPoint)?.Flag
+    return Flag
+  }
+  const Flag = getFlagByLocation()
   return (
-    <div className="endpoint">
-      <div>#</div>
+    <div className={disable ? "endpoint disable": "endpoint"}>
+      {Flag ? <div className="endpoint-flag-container"><Flag /></div> : <></>}
       <div>{url}</div>
     </div>
   )
 }
 
 type IsItUp = {
-  location: string
+  statusIsItUp: string
 }
 
-const IsItUp = (): JSX.Element => {
-  return <div></div>
+const IsItUp: React.FC<IsItUp> = ({ statusIsItUp }): JSX.Element => {
+
+  const getIconByStatus = () => {
+    const Icon = STATUS_ICONS.find(({ status }) => status === statusIsItUp)?.Icon
+    return Icon ?? DisapprovedSVG
+  }
+
+  const Icon = getIconByStatus()
+  return (
+    <div>{<Icon />}</div>
+  )
 }
+
+interface NegativeComponent extends AllNodes {
+  useHashTag?: boolean
+}
+const NegativeComponent: React.FC<NegativeComponent> = ({ useHashTag, disable }) => {
+  return useHashTag ? <div className={disable ? "disable" : ""}># -</div> : <div className={disable ? "disable" : ""}>-</div>
+}
+
+interface TypeNode extends AllNodes{
+  textType: string
+}
+
+const TypeNode: React.FC<TypeNode> = ({disable, textType}) => {
+  return (
+    <div className={disable ? "disable" : ""}>
+        {textType}
+    </div>
+  )
+}
+
+interface Reliability extends AllNodes {
+  text: string
+}
+
+const Reliability: React.FC<Reliability> = ({text, disable}) => {
+  return (
+    <div className={disable ? "disable" : ""}>
+      {text}
+    </div>
+  )
+}
+
+interface StateHeight extends AllNodes {
+  text: string
+}
+
+const StateHeight: React.FC<StateHeight> = ({text, disable}) => {
+  return (
+     <div className={disable ? "disable" : ""}>
+      {text}
+    </div>
+  )
+}
+
 
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
+
+  const isPositive = () => {
+    if (data.status === 'ok' || data.status === 'stateheight stalled' || data.status === 'stateheight lagging') {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return {
-    endpoint: (): ReactElement => <Endpoint url={data.url} />,
-    blockHeight: `#${data.height}`,
-    version: data.version,
-    type: data.type,
-    peers: data.peers,
-    reliability: data.reliability,
-    stateHeight: data.stateheight,
-    isItUp: (): ReactElement => <IsItUp />,
+    endpoint: (): ReactElement => <Endpoint url={data.url} locationEndPoint={data.location} disable={!isPositive() ? true : false} />,
+    blockHeight: isPositive() ? `#${data.height}` : (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
+    version: isPositive() ? data.version : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
+    type: (): ReactElement => <TypeNode textType={data.type} disable={!isPositive() ? true : false}/>,
+    peers: isPositive() ? data.peers : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
+    reliability: isPositive() ? `${data.reliability}%`: (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
+    stateHeight: isPositive() ? `#${data.stateheight}`: (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
+    isItUp: (): ReactElement => <IsItUp statusIsItUp={data.status} />,
+    chain: data.status || ''
   }
 }
 
@@ -119,19 +218,16 @@ const NetworkStatus: React.FC<{}> = () => {
     }, 1000)
   }
 
+  const handleAvgBlockCounter = () => {
+    setListAvgBlockTime(prevState => [...prevState, lastBlockCounter])
+  }
+
   useEffect(() => {
-    setListAvgBlockTime(prevState => {
-      const newList = prevState
-      newList.push(lastBlockCounter)
-      console.log("print", newList)
-      return newList
-    })
+    handleAvgBlockCounter()
     setLastBlockCounter(0)
   }, [bestBlock])
 
   useEffect(() => {
-    console.log("AQUI!!!!!!!!")
-    console.log(listAvgBlockTime)
     const sumBlockTime = listAvgBlockTime.reduce((avg, time) => {
       avg = avg + time
       return avg
@@ -144,19 +240,20 @@ const NetworkStatus: React.FC<{}> = () => {
   }, [])
 
   useEffect(() => {
-    //console.log('print de nodes => ', SerializeNode(nodes))
     setBestBlock(getBestBlock())
   }, [nodes])
 
   return (
     <div className="network-status-container">
       <div className="network-status-header">
-        <div className="network-status-title">Network status</div>
+        <div className="network-status-title">
+          <span>Network status</span>
+        </div>
       </div>
       <div className="network-status-content">
         <InformationPanel
           title={BEST_BLOCK}
-          data={`#${String(bestBlock)}`}
+          data={`#${bestBlock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
           icon={<Cube />}
         />
         <InformationPanel
@@ -218,6 +315,11 @@ const Monitor: React.FC<{}> = () => {
           columns={columns}
           isLoading={!Array(nodes.entries()).length}
           rowId="endpoint"
+          leftBorderColorOnRow={(_, chain) => {
+            const color = STATUS_ICONS.find(({ status }) => status === chain)?.color
+            return color ?? '#de4c85'
+          }}
+          orderData={true}
         />
       </div>
     </div>

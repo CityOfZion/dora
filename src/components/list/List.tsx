@@ -1,7 +1,7 @@
-import React, { ReactText } from 'react'
+import React, { ReactText, useRef } from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
-
+import {ReactComponent as ArrowSortSVG} from '../../assets/icons/arrow-sort.svg'
 import './List.scss'
 
 type ColumnType = {
@@ -35,6 +35,7 @@ type ListProps = {
     total?: number
     label: string
   }
+  orderData?: boolean
 }
 
 export const List: React.FC<ListProps> = ({
@@ -47,6 +48,7 @@ export const List: React.FC<ListProps> = ({
   withoutPointer = false,
   leftBorderColorOnRow = '',
   countConfig,
+  orderData
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -120,6 +122,12 @@ export const List: React.FC<ListProps> = ({
     return data
   }
 
+  const refArrowButton = useRef<HTMLButtonElement>(null)
+
+  const handleArrowButton = () => {
+    alert(refArrowButton.current?.value)
+  }
+
   return (
     <div className="data-list-container">
       {countConfig && (
@@ -142,6 +150,12 @@ export const List: React.FC<ListProps> = ({
             key={column.name}
           >
             {isLoading ? '' : column.name}
+            {orderData ? <button ref={refArrowButton} id={column.name} onClick={(e) => {
+              e.preventDefault();
+              handleArrowButton()
+            }} className="data-list-arrow-sort">
+              <ArrowSortSVG/>
+            </button> : <></>}
           </div>
         ))}
 
