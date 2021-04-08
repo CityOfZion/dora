@@ -12,9 +12,10 @@ import {
   State as NodeState,
   WSDoraData,
   SerializeState as SerializeNode,
+  SORT_OPTION
 } from '../../reducers/nodeReducer'
 import { setNode } from '../../actions/nodeActions'
-import List from '../../components/list/List'
+import List, {ColumnType} from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import useFilterState from '../../hooks/useFilterState'
 import InformationPanel from '../../components/panel/InformationPanel'
@@ -39,11 +40,11 @@ type ParsedNodes = {
   chain: string
 }
 
-interface AllNodes{
+interface AllNodes {
   disable?: boolean
 }
 
-interface Endpoint extends AllNodes{
+interface Endpoint extends AllNodes {
   url: string
   locationEndPoint: string
 }
@@ -72,7 +73,7 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
   }
   const Flag = getFlagByLocation()
   return (
-    <div className={disable ? "endpoint disable": "endpoint"}>
+    <div className={disable ? "endpoint disable" : "endpoint"}>
       {Flag ? <div className="endpoint-flag-container"><Flag /></div> : <></>}
       <div>{url}</div>
     </div>
@@ -103,14 +104,14 @@ const NegativeComponent: React.FC<NegativeComponent> = ({ useHashTag, disable })
   return useHashTag ? <div className={disable ? "disable" : ""}># -</div> : <div className={disable ? "disable" : ""}>-</div>
 }
 
-interface TypeNode extends AllNodes{
+interface TypeNode extends AllNodes {
   textType: string
 }
 
-const TypeNode: React.FC<TypeNode> = ({disable, textType}) => {
+const TypeNode: React.FC<TypeNode> = ({ disable, textType }) => {
   return (
     <div className={disable ? "disable" : ""}>
-        {textType}
+      {textType}
     </div>
   )
 }
@@ -119,7 +120,7 @@ interface Reliability extends AllNodes {
   text: string
 }
 
-const Reliability: React.FC<Reliability> = ({text, disable}) => {
+const Reliability: React.FC<Reliability> = ({ text, disable }) => {
   return (
     <div className={disable ? "disable" : ""}>
       {text}
@@ -131,9 +132,9 @@ interface StateHeight extends AllNodes {
   text: string
 }
 
-const StateHeight: React.FC<StateHeight> = ({text, disable}) => {
+const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
   return (
-     <div className={disable ? "disable" : ""}>
+    <div className={disable ? "disable" : ""}>
       {text}
     </div>
   )
@@ -154,10 +155,10 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
     endpoint: (): ReactElement => <Endpoint url={data.url} locationEndPoint={data.location} disable={!isPositive() ? true : false} />,
     blockHeight: isPositive() ? `#${data.height}` : (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
     version: isPositive() ? data.version : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    type: (): ReactElement => <TypeNode textType={data.type} disable={!isPositive() ? true : false}/>,
+    type: (): ReactElement => <TypeNode textType={data.type} disable={!isPositive() ? true : false} />,
     peers: isPositive() ? data.peers : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    reliability: isPositive() ? `${data.reliability}%`: (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
-    stateHeight: isPositive() ? `#${data.stateheight}`: (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
+    reliability: isPositive() ? `${data.reliability}%` : (): ReactElement => <NegativeComponent disable={!isPositive() ? true : false} />,
+    stateHeight: isPositive() ? `#${data.stateheight}` : (): ReactElement => <NegativeComponent useHashTag={true} disable={!isPositive() ? true : false} />,
     isItUp: (): ReactElement => <IsItUp statusIsItUp={data.status} />,
     chain: data.status || ''
   }
@@ -175,15 +176,15 @@ const returnNodesListData = (
   }
 }
 
-const columns = [
-  { name: 'Endpoint', accessor: 'endpoint' },
-  { name: 'Type', accessor: 'type' },
-  { name: 'Is it up?', accessor: 'isItUp' },
-  { name: 'Reliability', accessor: 'reliability' },
-  { name: 'State Height', accessor: 'stateHeight' },
-  { name: 'Block Height', accessor: 'blockHeight' },
-  { name: 'Version', accessor: 'version' },
-  { name: 'Peers', accessor: 'peers' },
+const columns: ColumnType[] = [
+  { name: 'Endpoint', accessor: 'endpoint', sortOpt: 'endpoint' },
+  { name: 'Type', accessor: 'type', sortOpt: 'type' },
+  { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
+  { name: 'Reliability', accessor: 'reliability', sortOpt: 'reliability' },
+  { name: 'State Height', accessor: 'stateHeight', sortOpt: 'stateHeight' },
+  { name: 'Block Height', accessor: 'blockHeight', sortOpt: 'blockHeight' },
+  { name: 'Version', accessor: 'version', sortOpt: 'version' },
+  { name: 'Peers', accessor: 'peers', sortOpt: 'peers' },
 ]
 
 const NetworkStatus: React.FC<{}> = () => {
@@ -199,7 +200,7 @@ const NetworkStatus: React.FC<{}> = () => {
 
   const getBestBlock = (): number => {
     const sortedList = SerializeNode(nodes).sort((data1, data2) => {
-      if (data1.height - data2.height) {
+      if (data1.height > data2.height) {
         return 0
       } else return 1
     })
@@ -272,8 +273,15 @@ const NetworkStatus: React.FC<{}> = () => {
 }
 
 const Monitor: React.FC<{}> = () => {
+
   const { network } = useFilterState()
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
+  const [dataList, setDataList] = useState<Array<ParsedNodes>>([])
+  const [sortDataList, setSortDataList] = useState<SORT_OPTION>('isItUp')
+
+  const handleSortDataList = (option: SORT_OPTION) => {
+    setSortDataList(option)
+  }
 
   const dispatch = useDispatch()
 
@@ -282,6 +290,10 @@ const Monitor: React.FC<{}> = () => {
       dispatch(setNode(data))
     })
   }, [dispatch])
+
+  useEffect(() => {
+    setDataList(returnNodesListData(SerializeNode(nodes, sortDataList), false, network))
+  }, [nodes, sortDataList])
 
   return (
     <div id="Monitor" className="page-container">
@@ -311,7 +323,7 @@ const Monitor: React.FC<{}> = () => {
       </div>
       <div>
         <List
-          data={returnNodesListData(SerializeNode(nodes), false, network)}
+          data={dataList}
           columns={columns}
           isLoading={!Array(nodes.entries()).length}
           rowId="endpoint"
@@ -320,6 +332,7 @@ const Monitor: React.FC<{}> = () => {
             return color ?? '#de4c85'
           }}
           orderData={true}
+          callbalOrderData={handleSortDataList}
         />
       </div>
     </div>

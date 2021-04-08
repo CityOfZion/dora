@@ -26,13 +26,34 @@ export type State = Map<string, WSDoraData>
 
 const INITIAL_STATE: State = new Map<string, WSDoraData>()
 
-export const SerializeState = (state: State): WSDoraData[] => {
+export type SORT_OPTION = 'endpoint' | 'type' | 'isItUp' | 'reliability' | 'stateHeight' | 'blockHeight' | 'version' | 'peers'
+
+export const SerializeState = (state: State, orderBy?: SORT_OPTION, asc?: boolean): WSDoraData[] => {
   const serializedData: WSDoraData[] = []
   Array.from(state.entries()).forEach(([_, data]) => {
     serializedData.push(data)
   })
+return orderBy ? orderNodes(orderBy,serializedData) : serializedData
+  
+}
 
-  return serializedData
+const orderNodes = (field: SORT_OPTION, nodes: WSDoraData[]) => {
+  switch (field) {
+    case 'blockHeight':
+        return nodes.sort((node1, node2) => {
+          return (node1.height > node2.height) ? -1 : ((node2.height > node1.height) ? 1 : 0);
+        })
+        case 'reliability':
+          return nodes.sort((node1, node2) => {
+            return (node1.reliability > node2.reliability) ? -1 : ((node2.reliability > node1.reliability) ? 1 : 0);
+          })
+        case 'isItUp':
+          return nodes.sort((node1, node2) => {
+            return (node1.status > node2.status) ? -1 : ((node2.status > node1.status) ? 1 : 0);
+          })  
+    default:
+      return nodes
+  }
 }
 
 export default (state: State = INITIAL_STATE, action: NodeDTO): State => {

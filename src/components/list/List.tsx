@@ -2,12 +2,42 @@ import React, { ReactText, useRef } from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
 import {ReactComponent as ArrowSortSVG} from '../../assets/icons/arrow-sort.svg'
+import {SORT_OPTION} from '../../reducers/nodeReducer'
 import './List.scss'
 
-type ColumnType = {
+interface HeaderCell {
+  styleHeader?:React.CSSProperties
+  classNameHeader?: string
+  nameColumn?:React.Key | null
+  isLoading?: boolean
+  orderData?: boolean
+  sortOpt?: SORT_OPTION
+  callbalOrderData?: (field: SORT_OPTION) => void
+}
+const HeaderCell:React.FC<HeaderCell> = ({styleHeader, classNameHeader, nameColumn, isLoading, orderData, sortOpt, callbalOrderData}) => {
+  return (
+    <div
+            style={styleHeader}
+            className={classNameHeader}
+            key={nameColumn}
+          >
+            {isLoading ? '' : nameColumn}
+            {orderData ? <button onClick={(e) => {
+              e.preventDefault();
+              callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+              
+            }} className="data-list-arrow-sort">
+              <ArrowSortSVG/>
+            </button> : <></>}
+          </div>
+  )
+}
+
+export type ColumnType = {
   name: string
   accessor: string
   style?: {}
+  sortOpt?: SORT_OPTION
 }
 
 type ListProps = {
@@ -36,6 +66,7 @@ type ListProps = {
     label: string
   }
   orderData?: boolean
+  callbalOrderData?: (nameColumn: SORT_OPTION) => void
 }
 
 export const List: React.FC<ListProps> = ({
@@ -48,7 +79,8 @@ export const List: React.FC<ListProps> = ({
   withoutPointer = false,
   leftBorderColorOnRow = '',
   countConfig,
-  orderData
+  orderData,
+  callbalOrderData
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -122,12 +154,6 @@ export const List: React.FC<ListProps> = ({
     return data
   }
 
-  const refArrowButton = useRef<HTMLButtonElement>(null)
-
-  const handleArrowButton = () => {
-    alert(refArrowButton.current?.value)
-  }
-
   return (
     <div className="data-list-container">
       {countConfig && (
@@ -141,22 +167,19 @@ export const List: React.FC<ListProps> = ({
       )}
       <div className="data-list" style={gridstyle}>
         {columns.map((column, i) => (
-          <div
-            style={{
+          <HeaderCell
+          classNameHeader={headerRowClass}
+          styleHeader={{
               ...conditionalBorderRadius(i),
               ...(column.style || {}),
             }}
-            className={headerRowClass}
             key={column.name}
-          >
-            {isLoading ? '' : column.name}
-            {orderData ? <button ref={refArrowButton} id={column.name} onClick={(e) => {
-              e.preventDefault();
-              handleArrowButton()
-            }} className="data-list-arrow-sort">
-              <ArrowSortSVG/>
-            </button> : <></>}
-          </div>
+            nameColumn={column.name}
+            isLoading={isLoading}
+            orderData={orderData}
+            sortOpt={column.sortOpt}
+            callbalOrderData={callbalOrderData}
+            />
         ))}
 
         {sortedByAccessor.map(
