@@ -66,7 +66,13 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
     { location: 'US', Flag: UnitedStatesSVG },
   ]
 
-  const getFlagByLocation = () => {
+  const getFlagByLocation = ():
+    | React.FunctionComponent<
+        React.SVGProps<SVGSVGElement> & {
+          title?: string | undefined
+        }
+      >
+    | undefined => {
     const Flag = LOCATIONS_FLAGS.find(
       ({ location }) => location === locationEndPoint,
     )?.Flag
@@ -92,7 +98,11 @@ type IsItUp = {
 }
 
 const IsItUp: React.FC<IsItUp> = ({ statusIsItUp }): JSX.Element => {
-  const getIconByStatus = () => {
+  const getIconByStatus = (): React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string | undefined
+    }
+  > => {
     const Icon = STATUS_ICONS.find(({ status }) => status === statusIsItUp)
       ?.Icon
     return Icon ?? DisapprovedSVG
@@ -141,7 +151,7 @@ const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
 }
 
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
-  const isPositive = () => {
+  const isPositive = (): boolean => {
     if (
       data.status === 'ok' ||
       data.status === 'stateheight stalled' ||
@@ -255,13 +265,13 @@ const NetworkStatus: React.FC<{}> = () => {
     }, 1000)
   }
 
-  const handleAvgBlockCounter = () => {
+  const handleAvgBlockCounter = (): void => {
     setListAvgBlockTime(prevState => [...prevState, lastBlockCounter])
   }
 
   useEffect(() => {
     handleAvgBlockCounter()
-    setLastBlockCounter(0)
+    setLastBlockCounter(0) //eslint-disable-next-line
   }, [bestBlock])
 
   useEffect(() => {
@@ -277,7 +287,7 @@ const NetworkStatus: React.FC<{}> = () => {
   }, [])
 
   useEffect(() => {
-    setBestBlock(getBestBlock())
+    setBestBlock(getBestBlock()) //eslint-disable-next-line
   }, [nodes])
 
   return (
@@ -314,10 +324,13 @@ const Monitor: React.FC<{}> = () => {
   const { network } = useFilterState()
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const [dataList, setDataList] = useState<Array<ParsedNodes>>([])
-  const [sortDataList, setSortDataList] = useState<SORT_OPTION>('isItUp')
+  const [sortDataList, setSortDataList] = useState<{
+    desc: boolean
+    sort: SORT_OPTION
+  }>({ desc: false, sort: 'isItUp' })
 
-  const handleSortDataList = (option: SORT_OPTION) => {
-    setSortDataList(option)
+  const handleSortDataList = (option: SORT_OPTION): void => {
+    setSortDataList({ sort: option, desc: !sortDataList.desc })
   }
 
   const dispatch = useDispatch()
@@ -330,8 +343,12 @@ const Monitor: React.FC<{}> = () => {
 
   useEffect(() => {
     setDataList(
-      returnNodesListData(SerializeNode(nodes, sortDataList), false, network),
-    )
+      returnNodesListData(
+        SerializeNode(nodes, sortDataList.sort, sortDataList.desc),
+        false,
+        network,
+      ),
+    ) //eslint-disable-next-line
   }, [nodes, sortDataList])
 
   return (
@@ -366,7 +383,7 @@ const Monitor: React.FC<{}> = () => {
           columns={columns}
           isLoading={!Array(nodes.entries()).length}
           rowId="endpoint"
-          leftBorderColorOnRow={(_, chain) => {
+          leftBorderColorOnRow={(_, chain): string => {
             const color = STATUS_ICONS.find(({ status }) => status === chain)
               ?.color
             return color ?? '#de4c85'

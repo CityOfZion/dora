@@ -1,4 +1,4 @@
-import React, { ReactText, useRef } from 'react'
+import React, { ReactText } from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
 import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
@@ -28,7 +28,7 @@ const HeaderCell: React.FC<HeaderCell> = ({
       {isLoading ? '' : nameColumn}
       {orderData ? (
         <button
-          onClick={e => {
+          onClick={(e): void => {
             e.preventDefault()
             callbalOrderData && sortOpt && callbalOrderData(sortOpt)
           }}

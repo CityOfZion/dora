@@ -39,110 +39,213 @@ export type SORT_OPTION =
 export const SerializeState = (
   state: State,
   orderBy?: SORT_OPTION,
-  asc?: boolean,
+  desc?: boolean,
 ): WSDoraData[] => {
   const serializedData: WSDoraData[] = []
   Array.from(state.entries()).forEach(([_, data]) => {
     serializedData.push(data)
   })
-  return orderBy ? orderNodes(orderBy, serializedData) : serializedData
+  return orderBy ? orderNodes(orderBy, serializedData, desc) : serializedData
 }
 
-const orderNodes = (field: SORT_OPTION, nodes: WSDoraData[]) => {
+const orderNodes = (
+  field: SORT_OPTION,
+  nodes: WSDoraData[],
+  desc?: boolean,
+): WSDoraData[] => {
   switch (field) {
     case 'endpoint':
-      return nodes.sort((node1, node2) => {
-        return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.url < node2.url ? -1 : node2.url < node1.url ? 1 : 0
+          })
     case 'blockHeight':
-      return nodes.sort((node1, node2) => {
-        return node1.height > node2.height
-          ? -1
-          : node2.height > node1.height
-          ? 1
-          : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.height > node2.height
+              ? -1
+              : node2.height > node1.height
+              ? 1
+              : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.height < node2.height
+              ? -1
+              : node2.height < node1.height
+              ? 1
+              : 0
+          })
     case 'reliability':
-      return nodes.sort((node1, node2) => {
-        return node1.reliability > node2.reliability
-          ? -1
-          : node2.reliability > node1.reliability
-          ? 1
-          : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.reliability > node2.reliability
+              ? -1
+              : node2.reliability > node1.reliability
+              ? 1
+              : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.reliability < node2.reliability
+              ? -1
+              : node2.reliability < node1.reliability
+              ? 1
+              : 0
+          })
     case 'isItUp':
-      const greenCheck = nodes
-        .filter(nodes => {
-          return nodes.status === 'ok' || nodes.status === 'stateheight lagging'
-        })
-        .sort((node1, node2) => {
-          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
-        })
-        .sort((node1, node2) => {
-          return node1.peers > node2.peers
-            ? -1
-            : node2.peers > node1.peers
-            ? 1
-            : 0
-        })
-      const yellowCheck = nodes
-        .filter(nodes => {
-          return nodes.status === 'stateheight stalled'
-        })
-        .sort((node1, node2) => {
-          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
-        })
-        .sort((node1, node2) => {
-          return node1.peers > node2.peers
-            ? -1
-            : node2.peers > node1.peers
-            ? 1
-            : 0
-        })
-      const redX = nodes
-        .filter(nodes => {
-          return (
-            nodes.status !== 'ok' &&
-            nodes.status !== 'stateheight lagging' &&
-            nodes.status !== 'stateheight stalled'
-          )
-        })
-        .sort((node1, node2) => {
-          return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
-        })
-        .sort((node1, node2) => {
-          return node1.peers > node2.peers
-            ? -1
-            : node2.peers > node1.peers
-            ? 1
-            : 0
-        })
-      return greenCheck.concat(yellowCheck, redX)
+      const greenCheck = !desc
+        ? nodes
+            .filter(nodes => {
+              return (
+                nodes.status === 'ok' || nodes.status === 'stateheight lagging'
+              )
+            })
+            .sort((node1, node2) => {
+              return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers > node2.peers
+                ? -1
+                : node2.peers > node1.peers
+                ? 1
+                : 0
+            })
+        : nodes
+            .filter(nodes => {
+              return (
+                nodes.status === 'ok' || nodes.status === 'stateheight lagging'
+              )
+            })
+            .sort((node1, node2) => {
+              return node1.url < node2.url ? -1 : node2.url < node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers < node2.peers
+                ? -1
+                : node2.peers < node1.peers
+                ? 1
+                : 0
+            })
+      const yellowCheck = !desc
+        ? nodes
+            .filter(nodes => {
+              return nodes.status === 'stateheight stalled'
+            })
+            .sort((node1, node2) => {
+              return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers > node2.peers
+                ? -1
+                : node2.peers > node1.peers
+                ? 1
+                : 0
+            })
+        : nodes
+            .filter(nodes => {
+              return nodes.status === 'stateheight stalled'
+            })
+            .sort((node1, node2) => {
+              return node1.url < node2.url ? -1 : node2.url < node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers < node2.peers
+                ? -1
+                : node2.peers < node1.peers
+                ? 1
+                : 0
+            })
+      const redX = !desc
+        ? nodes
+            .filter(nodes => {
+              return (
+                nodes.status !== 'ok' &&
+                nodes.status !== 'stateheight lagging' &&
+                nodes.status !== 'stateheight stalled'
+              )
+            })
+            .sort((node1, node2) => {
+              return node1.url > node2.url ? -1 : node2.url > node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers > node2.peers
+                ? -1
+                : node2.peers > node1.peers
+                ? 1
+                : 0
+            })
+        : nodes
+            .filter(nodes => {
+              return (
+                nodes.status !== 'ok' &&
+                nodes.status !== 'stateheight lagging' &&
+                nodes.status !== 'stateheight stalled'
+              )
+            })
+            .sort((node1, node2) => {
+              return node1.url < node2.url ? -1 : node2.url < node1.url ? 1 : 0
+            })
+            .sort((node1, node2) => {
+              return node1.peers < node2.peers
+                ? -1
+                : node2.peers < node1.peers
+                ? 1
+                : 0
+            })
+      return !desc
+        ? greenCheck.concat(yellowCheck, redX)
+        : redX.concat(yellowCheck, greenCheck)
 
     case 'stateHeight':
-      return nodes.sort((node1, node2) => {
-        return node1.stateheight > node2.stateheight
-          ? -1
-          : node2.stateheight > node1.stateheight
-          ? 1
-          : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.stateheight > node2.stateheight
+              ? -1
+              : node2.stateheight > node1.stateheight
+              ? 1
+              : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.stateheight < node2.stateheight
+              ? -1
+              : node2.stateheight < node1.stateheight
+              ? 1
+              : 0
+          })
     case 'version':
-      return nodes.sort((node1, node2) => {
-        return node1.version > node2.version
-          ? -1
-          : node2.version > node1.version
-          ? 1
-          : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.version > node2.version
+              ? -1
+              : node2.version > node1.version
+              ? 1
+              : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.version < node2.version
+              ? -1
+              : node2.version < node1.version
+              ? 1
+              : 0
+          })
     case 'peers':
-      return nodes.sort((node1, node2) => {
-        return node1.peers > node2.peers
-          ? -1
-          : node2.peers > node1.peers
-          ? 1
-          : 0
-      })
+      return !desc
+        ? nodes.sort((node1, node2) => {
+            return node1.peers > node2.peers
+              ? -1
+              : node2.peers > node1.peers
+              ? 1
+              : 0
+          })
+        : nodes.sort((node1, node2) => {
+            return node1.peers < node2.peers
+              ? -1
+              : node2.peers < node1.peers
+              ? 1
+              : 0
+          })
     default:
       return nodes
   }
