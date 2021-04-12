@@ -176,21 +176,34 @@ export const List: React.FC<ListProps> = ({
         </div>
       )}
       <div className="data-list" style={gridstyle}>
-        {columns.map((column, i) => (
-          <HeaderCell
-            classNameHeader={headerRowClass}
-            styleHeader={{
-              ...conditionalBorderRadius(i),
-              ...(column.style || {}),
-            }}
-            key={column.name}
-            nameColumn={column.name}
-            isLoading={isLoading}
-            orderData={orderData}
-            sortOpt={column.sortOpt}
-            callbalOrderData={callbalOrderData}
-          />
-        ))}
+        {columns.map((column, i) => {
+          return orderData ? (
+            <HeaderCell
+              classNameHeader={headerRowClass}
+              styleHeader={{
+                ...conditionalBorderRadius(i),
+                ...(column.style || {}),
+              }}
+              key={column.name}
+              nameColumn={column.name}
+              isLoading={isLoading}
+              orderData={orderData}
+              sortOpt={column.sortOpt}
+              callbalOrderData={callbalOrderData}
+            />
+          ) : (
+            <div
+              style={{
+                ...conditionalBorderRadius(i),
+                ...(column.style || {}),
+              }}
+              className={headerRowClass}
+              key={column.name}
+            >
+              {isLoading ? '' : column.name}
+            </div>
+          )
+        })}
 
         {sortedByAccessor.map(
           (

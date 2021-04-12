@@ -151,17 +151,10 @@ const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
 }
 
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
-  const isPositive = (): boolean => {
-    if (
-      data.status === 'ok' ||
-      data.status === 'stateheight stalled' ||
-      data.status === 'stateheight lagging'
-    ) {
-      return true
-    } else {
-      return false
-    }
-  }
+  const isPositive = (): boolean =>
+    data.status === 'ok' ||
+    data.status === 'stateheight stalled' ||
+    data.status === 'stateheight lagging'
 
   return {
     endpoint: (): ReactElement => (
