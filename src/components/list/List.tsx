@@ -1,13 +1,53 @@
 import React, { ReactText } from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
-
+import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
+import { SORT_OPTION } from '../../reducers/nodeReducer'
 import './List.scss'
 
-type ColumnType = {
+interface HeaderCell {
+  styleHeader?: React.CSSProperties
+  classNameHeader?: string
+  nameColumn?: React.Key | null
+  isLoading?: boolean
+  orderData?: boolean
+  sortOpt?: SORT_OPTION
+  callbalOrderData?: (field: SORT_OPTION) => void
+}
+const HeaderCell: React.FC<HeaderCell> = ({
+  styleHeader,
+  classNameHeader,
+  nameColumn,
+  isLoading,
+  orderData,
+  sortOpt,
+  callbalOrderData,
+}) => {
+  return (
+    <div style={styleHeader} className={classNameHeader} key={nameColumn}>
+      {isLoading ? '' : nameColumn}
+      {orderData ? (
+        <button
+          onClick={(e): void => {
+            e.preventDefault()
+            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+          }}
+          className="data-list-arrow-sort"
+        >
+          <ArrowSortSVG />
+        </button>
+      ) : (
+        <></>
+      )}
+    </div>
+  )
+}
+
+export type ColumnType = {
   name: string
   accessor: string
   style?: {}
+  sortOpt?: SORT_OPTION
 }
 
 type ListProps = {
@@ -35,6 +75,8 @@ type ListProps = {
     total?: number
     label: string
   }
+  orderData?: boolean
+  callbalOrderData?: (nameColumn: SORT_OPTION) => void
 }
 
 export const List: React.FC<ListProps> = ({
@@ -47,6 +89,8 @@ export const List: React.FC<ListProps> = ({
   withoutPointer = false,
   leftBorderColorOnRow = '',
   countConfig,
+  orderData,
+  callbalOrderData,
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -132,18 +176,34 @@ export const List: React.FC<ListProps> = ({
         </div>
       )}
       <div className="data-list" style={gridstyle}>
-        {columns.map((column, i) => (
-          <div
-            style={{
-              ...conditionalBorderRadius(i),
-              ...(column.style || {}),
-            }}
-            className={headerRowClass}
-            key={column.name}
-          >
-            {isLoading ? '' : column.name}
-          </div>
-        ))}
+        {columns.map((column, i) => {
+          return orderData ? (
+            <HeaderCell
+              classNameHeader={headerRowClass}
+              styleHeader={{
+                ...conditionalBorderRadius(i),
+                ...(column.style || {}),
+              }}
+              key={column.name}
+              nameColumn={column.name}
+              isLoading={isLoading}
+              orderData={orderData}
+              sortOpt={column.sortOpt}
+              callbalOrderData={callbalOrderData}
+            />
+          ) : (
+            <div
+              style={{
+                ...conditionalBorderRadius(i),
+                ...(column.style || {}),
+              }}
+              className={headerRowClass}
+              key={column.name}
+            >
+              {isLoading ? '' : column.name}
+            </div>
+          )
+        })}
 
         {sortedByAccessor.map(
           (

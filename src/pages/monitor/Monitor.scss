@@ -1,0 +1,56 @@
+.network-status-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.network-status-header {
+  height: 47px;
+  background-color: #ffffff07;
+  margin-bottom: 5px;
+}
+
+.network-status-title {
+  color: #ffffff;
+  font-size: 24px;
+  padding-top: 5px;
+  padding-left: 11px;
+}
+
+.network-status-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page-title-container {
+  display: flex;
+  align-items: center;
+
+  h1 {
+    letter-spacing: -1.27px;
+    margin: 48px 0;
+    font-weight: 500;
+  }
+
+  img {
+    margin-bottom: 6px;
+    margin-right: 12px;
+
+    g {
+      fill: #fff;
+    }
+  }
+}
+
+.endpoint {
+  display: flex;
+  padding: 2;
+}
+
+.endpoint-flag-container {
+  margin-right: 7px;
+}
+
+.disable {
+  color: #7d9fb1;
+}
