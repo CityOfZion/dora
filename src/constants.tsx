@@ -11,7 +11,7 @@ import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
 import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
-import Monitor from './assets/icons/monitor.png'
+import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
 
 //eslint-disable-next-line
 const bs58check = require('bs58check')
@@ -183,12 +183,7 @@ export const ROUTES = {
   MONITOR: {
     url: '/monitor',
     name: 'Monitor',
-    renderIcon: (): React.ReactNode => (
-      <div className="sidebar-route-container-img">
-        {''}
-        <img src={Monitor} alt={''} />
-      </div>
-    ),
+    renderIcon: (): React.ReactNode => <Monitor />,
     target: '_self',
   },
   NOT_FOUND: {
