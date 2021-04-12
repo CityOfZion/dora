@@ -114,24 +114,15 @@ const parseNeo3TransactionData = async (
         const isTransfer = notification.event_name === 'Transfer'
 
         if (isTransfer) {
-          const response = await fetch(
-            `${GENERATE_BASE_URL('neo3')}/contract/${notification.contract}`,
+          const assetResponse = await fetch(
+            `${GENERATE_BASE_URL('neo3')}/asset/${notification.contract}`,
           )
-          const json = await response.json()
-          const generateSymbol = (): string => {
-            if (json.manifest.name === 'GasToken') return 'GAS'
-            if (json.manifest.name === 'NeoToken') return 'NEO'
-            return json.manifest.symbol || json.manifest.name || 'N/A'
-          }
-          const asset = {
-            name: generateSymbol(),
-          }
+          const assetJson = await assetResponse.json()
+          const { symbol, decimals, name } = assetJson
           const integerNotfication = notification.state.value.find(
             value => value.type === 'Integer',
           )
-
           const amount = integerNotfication ? integerNotfication.value : 0
-
           const from_address = neo3_getAddressFromSriptHash(
             // eslint-disable-next-line
             // @ts-ignore
@@ -143,12 +134,9 @@ const parseNeo3TransactionData = async (
             notification?.state?.value[2].value || '',
           )
           transfers.push({
-            name: asset && asset.name,
-            symbol: asset && asset.name,
-            amount:
-              asset.name === 'NEO'
-                ? amount
-                : convertToArbitraryDecimals(Number(amount), 8),
+            name,
+            symbol,
+            amount: convertToArbitraryDecimals(Number(amount), decimals),
             to: to_address,
             from: from_address,
           })
