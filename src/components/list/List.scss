@@ -75,7 +75,9 @@
 // }
 // .cellhovered {
 // }
-
+.header-cell-container {
+  cursor: pointer;
+}
 .data-list-count-stats {
   justify-content: flex-end;
   display: flex;
@@ -87,6 +89,7 @@
   background-color: inherit;
   border: none;
   margin-left: 2px;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {

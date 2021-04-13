@@ -383,6 +383,7 @@ const Monitor: React.FC<{}> = () => {
           }}
           orderData={true}
           callbalOrderData={handleSortDataList}
+          paddingCell={{ paddingValue: '0 0 0 21px', indexesColumns: [0] }}
         />
       </div>
     </div>
