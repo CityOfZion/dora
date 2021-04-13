@@ -24,18 +24,20 @@ const HeaderCell: React.FC<HeaderCell> = ({
   callbalOrderData,
 }) => {
   return (
-    <div style={styleHeader} className={classNameHeader} key={nameColumn}>
+    <div
+      style={styleHeader}
+      className={`${classNameHeader} header-cell-container`}
+      key={nameColumn}
+      onClick={(e): void => {
+        e.preventDefault()
+        callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+      }}
+    >
       {isLoading ? '' : nameColumn}
       {orderData ? (
-        <button
-          onClick={(e): void => {
-            e.preventDefault()
-            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
-          }}
-          className="data-list-arrow-sort"
-        >
+        <div className="data-list-arrow-sort">
           <ArrowSortSVG />
-        </button>
+        </div>
       ) : (
         <></>
       )}
@@ -77,6 +79,7 @@ type ListProps = {
   }
   orderData?: boolean
   callbalOrderData?: (nameColumn: SORT_OPTION) => void
+  paddingCell?: { paddingValue: string; indexesColumns: number[] }
 }
 
 export const List: React.FC<ListProps> = ({
@@ -91,6 +94,7 @@ export const List: React.FC<ListProps> = ({
   countConfig,
   orderData,
   callbalOrderData,
+  paddingCell,
 }) => {
   const sortedByAccessor = data.map(data => {
     interface Sorted {
@@ -140,6 +144,25 @@ export const List: React.FC<ListProps> = ({
       return border
     }
     return undefined
+  }
+
+  const adjustPaddingStyle = (
+    index: number,
+  ):
+    | {
+        padding: string
+      }
+    | undefined => {
+    if (paddingCell) {
+      const verify = paddingCell.indexesColumns.find(
+        indexColumn => indexColumn === index,
+      )
+      if (typeof verify !== 'undefined' && verify >= 0) {
+        return {
+          padding: paddingCell.paddingValue,
+        }
+      }
+    }
   }
 
   const rowClass = classNames({
@@ -223,43 +246,88 @@ export const List: React.FC<ListProps> = ({
                 return '#'
               }
 
-              return (
-                key !== 'id' &&
-                key !== 'href' &&
-                key !== 'chain' &&
-                // TODO: this should probably be using the <Link/> component
-                (typeof data.href === 'string' || generateHref ? (
-                  <a
-                    href={conditionalHref()}
-                    style={conditionalBorderRadius(
-                      i,
-                      true,
-                      data.id,
-                      data.chain,
-                    )}
-                    onClick={(): void => handleRowClick && handleRowClick(data)}
-                    key={uniqueId()}
-                    className={rowClass}
-                  >
-                    {renderCellData(isLoading, data[key])}
-                  </a>
-                ) : (
-                  <div
-                    id="non-link-list-cell-container"
-                    style={conditionalBorderRadius(
-                      i,
-                      true,
-                      data.id,
-                      data.chain,
-                    )}
-                    onClick={(): void => handleRowClick && handleRowClick(data)}
-                    key={uniqueId()}
-                    className={rowClass}
-                  >
-                    {renderCellData(isLoading, data[key])}
-                  </div>
-                ))
-              )
+              return !paddingCell
+                ? key !== 'id' &&
+                    key !== 'href' &&
+                    key !== 'chain' &&
+                    // TODO: this should probably be using the <Link/> component
+                    (typeof data.href === 'string' || generateHref ? (
+                      <a
+                        href={conditionalHref()}
+                        style={conditionalBorderRadius(
+                          i,
+                          true,
+                          data.id,
+                          data.chain,
+                        )}
+                        onClick={(): void =>
+                          handleRowClick && handleRowClick(data)
+                        }
+                        key={uniqueId()}
+                        className={rowClass}
+                      >
+                        {renderCellData(isLoading, data[key])}
+                      </a>
+                    ) : (
+                      <div
+                        id="non-link-list-cell-container"
+                        style={conditionalBorderRadius(
+                          i,
+                          true,
+                          data.id,
+                          data.chain,
+                        )}
+                        onClick={(): void =>
+                          handleRowClick && handleRowClick(data)
+                        }
+                        key={uniqueId()}
+                        className={rowClass}
+                      >
+                        {renderCellData(isLoading, data[key])}
+                      </div>
+                    ))
+                : key !== 'id' &&
+                    key !== 'href' &&
+                    key !== 'chain' &&
+                    // TODO: this should probably be using the <Link/> component
+                    (typeof data.href === 'string' || generateHref ? (
+                      <a
+                        href={conditionalHref()}
+                        style={{
+                          ...conditionalBorderRadius(
+                            i,
+                            true,
+                            data.id,
+                            data.chain,
+                          ),
+                          ...adjustPaddingStyle(i),
+                        }}
+                        onClick={(): void =>
+                          handleRowClick && handleRowClick(data)
+                        }
+                        key={uniqueId()}
+                        className={rowClass}
+                      >
+                        {renderCellData(isLoading, data[key])}
+                      </a>
+                    ) : (
+                      <div
+                        id="non-link-list-cell-container"
+                        style={conditionalBorderRadius(
+                          i,
+                          true,
+                          data.id,
+                          data.chain,
+                        )}
+                        onClick={(): void =>
+                          handleRowClick && handleRowClick(data)
+                        }
+                        key={uniqueId()}
+                        className={rowClass}
+                      >
+                        {renderCellData(isLoading, data[key])}
+                      </div>
+                    ))
             }),
         )}
       </div>
