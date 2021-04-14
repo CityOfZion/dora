@@ -25,7 +25,7 @@ import { ReactComponent as UnitedStatesSVG } from '../../assets/icons/flags/usa.
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
-const socket = new Socket('ws://54.90.238.106:8008/socket')
+const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
