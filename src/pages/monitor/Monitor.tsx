@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import imgMonitor from '../../assets/icons/monitor.png'
 import { ReactComponent as Cube } from '../../assets/icons/cube.svg'
 import { ReactComponent as Graphic } from '../../assets/icons/graphic.svg'
 import { ReactComponent as Hourglass } from '../../assets/icons/hourglass.svg'
@@ -362,7 +361,7 @@ const Monitor: React.FC<{}> = () => {
         />
 
         <div className="page-title-container">
-          <img src={imgMonitor} alt="" />
+          {ROUTES.MONITOR.renderIcon()}
           <h1>{ROUTES.MONITOR.name}</h1>
         </div>
       </div>
