@@ -81,8 +81,8 @@ const orderNodes = (
     case 'reliability':
       return !desc
         ? nodes.sort((node1, node2) => {
-            const nodeValidated1 = node1.reliability ? node1.reliability : node1.availability
-            const nodeValidated2 = node2.reliability ? node2.reliability : node2.availability
+            const nodeValidated1 = node1.reliability ?? node1.availability
+            const nodeValidated2 = node2.reliability ?? node2.availability
             return nodeValidated1 > nodeValidated2
               ? -1
               : nodeValidated2 > nodeValidated1
@@ -90,8 +90,8 @@ const orderNodes = (
               : 0
           })
         : nodes.sort((node1, node2) => {
-          const nodeValidated1 = node1.reliability ? node1.reliability : node1.availability
-            const nodeValidated2 = node2.reliability ? node2.reliability : node2.availability
+            const nodeValidated1 = node1.reliability ?? node1.availability
+            const nodeValidated2 = node2.reliability ?? node2.availability
             return nodeValidated1 < nodeValidated2
               ? -1
               : nodeValidated2 < nodeValidated1
@@ -259,7 +259,12 @@ export default (state: State = INITIAL_STATE, action: NodeDTO): State => {
   switch (action.type) {
     case SET_NODE:
       const newState = new Map<string, WSDoraData>(state)
-      newState.set(action.data.url, {...action.data,reliability: action.data.reliability ? action.data.reliability : action.data.availability})
+      newState.set(action.data.url, {
+        ...action.data,
+        reliability: action.data.reliability
+          ? action.data.reliability
+          : action.data.availability,
+      })
       return newState
     default:
       return state
