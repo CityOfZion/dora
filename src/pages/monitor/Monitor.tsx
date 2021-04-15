@@ -1,6 +1,8 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { Socket } from '../../config/Socket'
+import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
+
+import { Socket } from '../../config/Socket'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
@@ -18,13 +20,10 @@ import List, { ColumnType } from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import useFilterState from '../../hooks/useFilterState'
 import InformationPanel from '../../components/panel/InformationPanel'
-import { ReactComponent as CanadaSVG } from '../../assets/icons/flags/ca.svg'
-import { ReactComponent as ChinaSVG } from '../../assets/icons/flags/cn.svg'
-import { ReactComponent as HongKongSVG } from '../../assets/icons/flags/hk.svg'
-import { ReactComponent as UnitedStatesSVG } from '../../assets/icons/flags/usa.svg'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
+
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
 type ParsedNodes = {
@@ -57,36 +56,33 @@ const STATUS_ICONS = [
 
 const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
   const LOCATIONS_FLAGS = [
-    { location: 'United States', Flag: UnitedStatesSVG },
-    { location: 'USA', Flag: UnitedStatesSVG },
-    { location: 'Hong Kong', Flag: HongKongSVG },
-    { location: 'Canada', Flag: CanadaSVG },
-    { location: 'China', Flag: ChinaSVG },
-    { location: 'US', Flag: UnitedStatesSVG },
+    { location: 'United States', countryCode: 'US' },
+    { location: 'USA', countryCode: 'US' },
+    { location: 'Hong Kong', countryCode: 'HK' },
+    { location: 'Canada', countryCode: 'CA' },
+    { location: 'China', countryCode: 'CN' },
+    { location: 'US', countryCode: 'US' },
+    { location: 'Singapore', countryCode: 'SG' },
   ]
 
-  const getFlagByLocation = ():
-    | React.FunctionComponent<
-        React.SVGProps<SVGSVGElement> & {
-          title?: string | undefined
-        }
-      >
-    | undefined => {
-    const Flag = LOCATIONS_FLAGS.find(
-      ({ location }) => location === locationEndPoint,
-    )?.Flag
-    return Flag
-  }
-  const Flag = getFlagByLocation()
+  console.log({ url, locationEndPoint })
+
   return (
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
-      {Flag ? (
-        <div className="endpoint-flag-container">
-          <Flag />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div className="endpoint-flag-container">
+        <ReactCountryFlag
+          style={{
+            fontSize: '1.5em',
+            lineHeight: '1.5em',
+          }}
+          countryCode={
+            LOCATIONS_FLAGS.find(
+              ({ location }) => location === locationEndPoint,
+            )?.countryCode
+          }
+        />
+      </div>
+
       <div>{url}</div>
     </div>
   )
