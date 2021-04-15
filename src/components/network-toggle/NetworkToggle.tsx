@@ -16,8 +16,6 @@ import {
   fetchTransactions,
   resetTransactionState,
 } from '../../actions/transactionActions'
-import { useHistory } from 'react-router-dom'
-import { ROUTES } from '../../constants'
 
 type Option = {
   value: string
@@ -28,7 +26,6 @@ export const NetworkToggle: React.FC<{ disabled: boolean }> = ({
   disabled,
 }): ReactElement => {
   const dispatch = useDispatch()
-  const history = useHistory()
 
   const options: Option[] = [
     {
