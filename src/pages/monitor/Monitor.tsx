@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState, useContext } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -24,7 +24,6 @@ import InformationPanel from '../../components/panel/InformationPanel'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
-import { MonitorContext } from '../../contexts/MonitorContext'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -57,15 +56,6 @@ const STATUS_ICONS = [
 ]
 
 const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
-  const { setMessage, setShowMessage } = useContext(MonitorContext)
-  const handleClickEndpoint = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ): void => {
-    e.preventDefault()
-    navigator.clipboard.writeText(url)
-    setMessage('Copied to Clipboard!')
-    setShowMessage(true)
-  }
   const LOCATIONS_FLAGS = [
     { location: 'United States', countryCode: 'US' },
     { location: 'USA', countryCode: 'US' },
@@ -77,12 +67,7 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
   ]
 
   return (
-    <div
-      className={
-        disable ? 'endpoint disable cursor-pointer' : 'endpoint cursor-pointer'
-      }
-      onClick={handleClickEndpoint}
-    >
+    <div className={disable ? 'endpoint disable' : 'endpoint'}>
       <div className="endpoint-flag-container">
         <ReactCountryFlag
           style={{
@@ -171,7 +156,6 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
         url={data.url}
         locationEndPoint={data.location}
         disable={!isPositive() ? true : false}
-        key={data.url}
       />
     ),
     blockHeight: isPositive()
@@ -333,7 +317,6 @@ const Monitor: React.FC<{}> = () => {
     desc: boolean
     sort: SORT_OPTION
   }>({ desc: false, sort: 'isItUp' })
-  const { message, showMessage, setShowMessage } = useContext(MonitorContext)
 
   const handleSortDataList = (option: SORT_OPTION): void => {
     setSortDataList({ sort: option, desc: !sortDataList.desc })
@@ -408,18 +391,6 @@ const Monitor: React.FC<{}> = () => {
           paddingCell={{ paddingValue: '0 0 0 21px', indexesColumns: [0] }}
         />
       </div>
-      <Snackbar
-        title={message}
-        open={showMessage}
-        autoHideDuration={1000}
-        onClose={(): void => {
-          setShowMessage(false)
-        }}
-      >
-        <div className="copy-clipboard">
-          <span>Copied to Clipboard!</span>
-        </div>
-      </Snackbar>
     </div>
   )
 }

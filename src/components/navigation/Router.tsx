@@ -23,8 +23,6 @@ import NotFound from '../../pages/not-found/NotFound'
 import SearchResults from '../../pages/search-results/SearchResults'
 import Monitor from '../../pages/monitor/Monitor'
 
-import { MonitorProvider } from '../../contexts/MonitorContext'
-
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
   useEffect(() => window.scrollTo(0, 0), [pathname])
@@ -94,11 +92,7 @@ const Router: React.FC = (): ReactElement => {
 
                 <Route
                   path={ROUTES.MONITOR.url}
-                  component={(): ReactElement => (
-                    <MonitorProvider>
-                      <Monitor />
-                    </MonitorProvider>
-                  )}
+                  component={(): ReactElement => <Monitor />}
                 />
 
                 <Route
