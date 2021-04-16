@@ -46,6 +46,10 @@
   display: flex;
   padding: 2;
   align-items: center;
+
+  span {
+    margin-top: 2px;
+  }
 }
 
 .endpoint-flag-container {
@@ -55,4 +59,3 @@
 .disable {
   color: #7d9fb1;
 }
-
