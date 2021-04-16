@@ -65,8 +65,6 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
     { location: 'Singapore', countryCode: 'SG' },
   ]
 
-  console.log({ url, locationEndPoint })
-
   return (
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
       <div className="endpoint-flag-container">
