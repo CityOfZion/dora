@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
 
+import { State as NetworkState } from '../../reducers/networkReducer'
 import { Socket } from '../../config/Socket'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
@@ -18,7 +19,6 @@ import {
 import { setNode } from '../../actions/nodeActions'
 import List, { ColumnType } from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
-import useFilterState from '../../hooks/useFilterState'
 import InformationPanel from '../../components/panel/InformationPanel'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
@@ -307,7 +307,9 @@ const NetworkStatus: React.FC<{}> = () => {
 }
 
 const Monitor: React.FC<{}> = () => {
-  const { network } = useFilterState()
+  const { network } = useSelector(
+    ({ network }: { network: NetworkState }) => network,
+  )
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const [dataList, setDataList] = useState<Array<ParsedNodes>>([])
   const [sortDataList, setSortDataList] = useState<{
@@ -330,7 +332,16 @@ const Monitor: React.FC<{}> = () => {
   useEffect(() => {
     setDataList(
       returnNodesListData(
-        SerializeNode(nodes, sortDataList.sort, sortDataList.desc),
+        SerializeNode(nodes, sortDataList.sort, sortDataList.desc).filter(
+          nodes => {
+            if (network === 'testnet') {
+              return (
+                nodes.network === 'TestNet' || nodes.network === 'N3 TestNet'
+              )
+            } else return nodes.network === 'MainNet'
+          },
+        ),
+
         false,
         network,
       ),
