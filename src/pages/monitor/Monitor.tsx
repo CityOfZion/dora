@@ -30,7 +30,7 @@ type ParsedNodes = {
   endpoint: React.FC<{}>
   type: React.FC<{}>
   isItUp: React.FC<{}>
-  reliability: string | React.FC<{}>
+  availability: string | React.FC<{}>
   stateHeight: string | React.FC<{}>
   blockHeight: string | React.FC<{}>
   version: string | React.FC<{}>
@@ -127,11 +127,11 @@ const TypeNode: React.FC<TypeNode> = ({ disable, textType }) => {
   return <div className={disable ? 'disable' : ''}>{textType}</div>
 }
 
-interface Reliability extends AllNodes {
+interface Availability extends AllNodes {
   text: string
 }
 
-const Reliability: React.FC<Reliability> = ({ text, disable }) => {
+const Availability: React.FC<Availability> = ({ text, disable }) => {
   return <div className={disable ? 'disable' : ''}>{text}</div>
 }
 
@@ -178,7 +178,7 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
       : (): ReactElement => (
           <NegativeComponent disable={!isPositive() ? true : false} />
         ),
-    reliability: isPositive()
+    availability: isPositive()
       ? `${data.reliability}%`
       : (): ReactElement => (
           <NegativeComponent disable={!isPositive() ? true : false} />
@@ -212,7 +212,7 @@ const columns: ColumnType[] = [
   { name: 'Endpoint', accessor: 'endpoint', sortOpt: 'endpoint' },
   { name: 'Type', accessor: 'type', sortOpt: 'type' },
   { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
-  { name: 'Reliability', accessor: 'reliability', sortOpt: 'reliability' },
+  { name: 'Availability', accessor: 'availability', sortOpt: 'availability' },
   { name: 'State Height', accessor: 'stateHeight', sortOpt: 'stateHeight' },
   { name: 'Block Height', accessor: 'blockHeight', sortOpt: 'blockHeight' },
   { name: 'Version', accessor: 'version', sortOpt: 'version' },

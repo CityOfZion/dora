@@ -30,7 +30,7 @@ export type SORT_OPTION =
   | 'endpoint'
   | 'type'
   | 'isItUp'
-  | 'reliability'
+  | 'availability'
   | 'stateHeight'
   | 'blockHeight'
   | 'version'
@@ -78,7 +78,7 @@ const orderNodes = (
               ? 1
               : 0
           })
-    case 'reliability':
+    case 'availability':
       return !desc
         ? nodes.sort((node1, node2) => {
             const nodeValidated1 = node1.reliability ?? node1.availability
