@@ -290,7 +290,7 @@ export const List: React.FC<ListProps> = ({
                     key !== 'href' &&
                     key !== 'chain' &&
                     // TODO: this should probably be using the <Link/> component
-                    (typeof data.href === 'string' || generateHref ? (
+                    (!data.href.toString().startsWith('#') || generateHref ? (
                       <a
                         href={conditionalHref()}
                         style={{
