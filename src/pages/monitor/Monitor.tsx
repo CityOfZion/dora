@@ -25,6 +25,7 @@ import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
 import { MonitorContext } from '../../contexts/MonitorContext'
+import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -77,12 +78,10 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
   ]
 
   return (
-    <div
-      className={
-        disable ? 'endpoint disable cursor-pointer' : 'endpoint cursor-pointer'
-      }
-      onClick={handleClickEndpoint}
-    >
+    <div className={disable ? 'endpoint disable' : 'endpoint'}>
+      <div className="cursor-pointer" onClick={handleClickEndpoint}>
+        <CopyIcon className="endpoint-copy-icon" />
+      </div>
       <div className="endpoint-flag-container">
         <ReactCountryFlag
           style={{
@@ -417,7 +416,7 @@ const Monitor: React.FC<{}> = () => {
         }}
       >
         <div className="copy-clipboard">
-          <span>Copied to Clipboard!</span>
+          <span>{message}</span>
         </div>
       </Snackbar>
     </div>

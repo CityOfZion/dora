@@ -46,7 +46,7 @@
   display: flex;
   padding: 2;
   align-items: center;
-
+  margin-left: -15px;
   span {
     margin-top: 2px;
   }
@@ -73,4 +73,10 @@
   color: #fff;
   background-color: #00000099;
   border-radius: 15px;
+}
+
+.endpoint-copy-icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
 }
