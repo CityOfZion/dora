@@ -24,8 +24,12 @@ import InformationPanel from '../../components/panel/InformationPanel'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
-import { MonitorContext } from '../../contexts/MonitorContext'
+import { MonitorContext, TFilterName } from '../../contexts/MonitorContext'
 import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
+import ToggleDropdown, {
+  Option,
+} from '../../components/toggleDropdown/ToggleDropdown'
+import { ValueType } from 'react-select'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -245,6 +249,12 @@ const NetworkStatus: React.FC<{}> = () => {
   const [lastBlockCounter, setLastBlockCounter] = useState<number>(0)
   const [listAvgBlockTime, setListAvgBlockTime] = useState<number[]>([])
   const [avgBlockTime, setAvgBlockTime] = useState<string>('')
+  const [selectedOption, setSelectedOption] = useState<Option>({
+    label: 'All',
+    value: 'all',
+  })
+
+  const { setFilterName } = useContext(MonitorContext)
 
   const getBestBlock = (): number => {
     const sortedList = SerializeNode(nodes).sort((data1, data2) => {
@@ -292,11 +302,28 @@ const NetworkStatus: React.FC<{}> = () => {
     setBestBlock(getBestBlock()) //eslint-disable-next-line
   }, [nodes])
 
+  const handleChangeChain = (option: ValueType<Option, false>): void => {
+    setSelectedOption(option || selectedOption)
+    setFilterName((option?.value as TFilterName) || 'Default')
+  }
+
   return (
     <div className="network-status-container">
       <div className="network-status-header">
         <div className="network-status-title">
           <span>Network status</span>
+        </div>
+        <div>
+          <ToggleDropdown
+            disabled={false}
+            options={[
+              { label: 'All', value: 'all' },
+              { label: 'Neo Legacy', value: 'N2' },
+              { label: 'Neo (Testnet)', value: 'N3' },
+            ]}
+            selectedOption={selectedOption}
+            handleChange={handleChangeChain}
+          />
         </div>
       </div>
       <div className="network-status-content">
@@ -332,7 +359,13 @@ const Monitor: React.FC<{}> = () => {
     desc: boolean
     sort: SORT_OPTION
   }>({ desc: false, sort: 'isItUp' })
-  const { message, showMessage, setShowMessage } = useContext(MonitorContext)
+  const {
+    message,
+    showMessage,
+    filterName,
+    setShowMessage,
+    setFilterName,
+  } = useContext(MonitorContext)
 
   const handleSortDataList = (option: SORT_OPTION): void => {
     setSortDataList({ sort: option, desc: !sortDataList.desc })
@@ -346,24 +379,57 @@ const Monitor: React.FC<{}> = () => {
     })
   }, [dispatch])
 
-  useEffect(() => {
-    setDataList(
-      returnNodesListData(
-        SerializeNode(nodes, sortDataList.sort, sortDataList.desc).filter(
-          nodes => {
-            if (network === 'testnet') {
-              return (
-                nodes.network === 'TestNet' || nodes.network === 'N3 TestNet'
-              )
-            } else return nodes.network === 'MainNet'
-          },
-        ),
+  const handleSetDataList = (): WSDoraData[] => {
+    switch (filterName) {
+      case 'testnet':
+        return SerializeNode(
+          nodes,
+          sortDataList.sort,
+          sortDataList.desc,
+        ).filter(nodes => {
+          return nodes.network === 'TestNet' || nodes.network === 'N3 TestNet'
+        })
 
-        false,
-        network,
-      ),
-    ) //eslint-disable-next-line
+      case 'N3':
+        return SerializeNode(
+          nodes,
+          sortDataList.sort,
+          sortDataList.desc,
+        ).filter(nodes => {
+          return nodes.network.startsWith(filterName)
+        })
+
+      case 'N2':
+        return SerializeNode(
+          nodes,
+          sortDataList.sort,
+          sortDataList.desc,
+        ).filter(nodes => {
+          return !nodes.network.startsWith(filterName)
+        })
+
+      default:
+        return SerializeNode(
+          nodes,
+          sortDataList.sort,
+          sortDataList.desc,
+        ).filter(nodes => {
+          return nodes.network === 'MainNet'
+        })
+    }
+  }
+
+  useEffect(() => {
+    setDataList(returnNodesListData(handleSetDataList(), false, network)) //eslint-disable-next-line
   }, [nodes, sortDataList])
+
+  useEffect(() => {
+    setFilterName(network as TFilterName)
+  }, [network, setFilterName])
+
+  useEffect(() => {
+    setDataList(returnNodesListData(handleSetDataList(), false, network)) //eslint-disable-next-line
+  }, [filterName])
 
   return (
     <div id="Monitor" className="page-container">
