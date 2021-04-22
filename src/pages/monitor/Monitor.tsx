@@ -79,6 +79,8 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
     { location: 'China', countryCode: 'CN' },
     { location: 'US', countryCode: 'US' },
     { location: 'Singapore', countryCode: 'SG' },
+    { location: 'France', countryCode: 'FR' },
+    { location: 'Russia', countryCode: 'RU' },
   ]
 
   return (
