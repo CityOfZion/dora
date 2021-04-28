@@ -30,7 +30,6 @@ import ToggleDropdown, {
   Option,
 } from '../../components/toggleDropdown/ToggleDropdown'
 import { ValueType } from 'react-select'
-import useWindowWidth from '../../hooks/useWindowWidth'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -86,6 +85,9 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
 
   return (
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
+      <div className="cursor-pointer" onClick={handleClickEndpoint}>
+        <CopyIcon className="endpoint-copy-icon" />
+      </div>
       <div className="endpoint-flag-container">
         <ReactCountryFlag
           style={{
@@ -99,10 +101,8 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
           }
         />
       </div>
-      <div className="endpoint-url">{url}</div>
-      <div className="cursor-pointer" onClick={handleClickEndpoint}>
-        <CopyIcon className="endpoint-copy-icon" />
-      </div>
+
+      <div>{url}</div>
     </div>
   )
 }
@@ -239,17 +239,6 @@ const columns: ColumnType[] = [
   { name: 'Block Height', accessor: 'blockHeight', sortOpt: 'blockHeight' },
   { name: 'Version', accessor: 'version', sortOpt: 'version' },
   { name: 'Peers', accessor: 'peers', sortOpt: 'peers' },
-]
-
-const mobileColumns: ColumnType[] = [
-  {
-    name: 'Endpoint',
-    accessor: 'endpoint',
-    sortOpt: 'endpoint',
-    style: { minWidth: '100px' },
-  },
-  { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
-  { name: 'Availability', accessor: 'availability', sortOpt: 'availability' },
 ]
 
 const NetworkStatus: React.FC<{}> = () => {
@@ -444,10 +433,6 @@ const Monitor: React.FC<{}> = () => {
     setDataList(returnNodesListData(handleSetDataList(), false, network)) //eslint-disable-next-line
   }, [filterName])
 
-  const width = useWindowWidth()
-
-  const conditionalColumns = width > 1000 ? columns : mobileColumns
-
   return (
     <div id="Monitor" className="page-container">
       <div className="list-wrapper">
@@ -469,38 +454,39 @@ const Monitor: React.FC<{}> = () => {
           {ROUTES.MONITOR.renderIcon()}
           <h1>{ROUTES.MONITOR.name}</h1>
         </div>
-
-        <NetworkStatus />
-
-        <div>
-          <List
-            data={dataList}
-            columns={conditionalColumns}
-            isLoading={!Array(nodes.entries()).length}
-            rowId="endpoint"
-            leftBorderColorOnRow={(_, chain): string => {
-              const color = STATUS_ICONS.find(({ status }) => status === chain)
-                ?.color
-              return color ?? '#de4c85'
-            }}
-            orderData={true}
-            callbalOrderData={handleSortDataList}
-            paddingCell={{ paddingValue: '0 0 0 21px', indexesColumns: [0] }}
-          />
-        </div>
-        <Snackbar
-          title={message}
-          open={showMessage}
-          autoHideDuration={1000}
-          onClose={(): void => {
-            setShowMessage(false)
-          }}
-        >
-          <div className="copy-clipboard">
-            <span>{message}</span>
-          </div>
-        </Snackbar>
       </div>
+      <div className=""></div>
+      <div>
+        <NetworkStatus />
+      </div>
+      <div>
+        <List
+          data={dataList}
+          columns={columns}
+          isLoading={!Array(nodes.entries()).length}
+          rowId="endpoint"
+          leftBorderColorOnRow={(_, chain): string => {
+            const color = STATUS_ICONS.find(({ status }) => status === chain)
+              ?.color
+            return color ?? '#de4c85'
+          }}
+          orderData={true}
+          callbalOrderData={handleSortDataList}
+          paddingCell={{ paddingValue: '0 0 0 21px', indexesColumns: [0] }}
+        />
+      </div>
+      <Snackbar
+        title={message}
+        open={showMessage}
+        autoHideDuration={1000}
+        onClose={(): void => {
+          setShowMessage(false)
+        }}
+      >
+        <div className="copy-clipboard">
+          <span>{message}</span>
+        </div>
+      </Snackbar>
     </div>
   )
 }
