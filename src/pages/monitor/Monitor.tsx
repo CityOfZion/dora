@@ -231,7 +231,12 @@ const returnNodesListData = (
 }
 
 const columns: ColumnType[] = [
-  { name: 'Endpoint', accessor: 'endpoint', sortOpt: 'endpoint' },
+  {
+    name: 'Endpoint',
+    accessor: 'endpoint',
+    sortOpt: 'endpoint',
+    style: { minWidth: '250px' },
+  },
   { name: 'Type', accessor: 'type', sortOpt: 'type' },
   { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
   { name: 'Availability', accessor: 'availability', sortOpt: 'availability' },
