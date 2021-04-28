@@ -47,9 +47,22 @@
 
 .endpoint {
   display: flex;
-  padding: 2;
+
   align-items: center;
   margin-left: -15px;
+
+  min-width: 300px;
+  width: 300px;
+  margin-left: 2px;
+
+  .endpoint-url {
+    width: 200px;
+    min-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
   span {
     margin-top: 2px;
   }
@@ -81,5 +94,69 @@
 .endpoint-copy-icon {
   width: 15px;
   height: 15px;
-  margin-right: 5px;
+  margin-left: 5px;
+  margin-right: 20px;
+}
+
+#Monitor {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  @media only screen and (max-width: 1300px) {
+    .network-status-content :first-child {
+      margin-left: 0;
+    }
+    .network-status-content :last-child {
+      margin-right: 0;
+    }
+
+    .information-panel-container {
+      width: 100%;
+      margin: 2px;
+      min-width: 200px;
+      margin-bottom: 50px;
+
+      .information-panel-data {
+        height: 100%;
+        margin-top: -24px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 1000px) {
+    .endpoint {
+      min-width: 100px;
+      width: 100px;
+
+      .endpoint-url {
+        font-size: 10px;
+        min-width: 100px;
+      }
+    }
+  }
+
+  @media only screen and (max-width: 850px) {
+    .network-status-content {
+      flex-direction: column;
+
+      .information-panel-container {
+        margin: 2px 0;
+      }
+    }
+
+    .data-list-container {
+      margin-top: 50px;
+    }
+  }
+
+  @media only screen and (max-width: 710px) {
+    .select-container {
+      align-items: center;
+      max-height: 30px;
+    }
+  }
 }
