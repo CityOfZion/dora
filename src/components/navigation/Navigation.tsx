@@ -42,6 +42,7 @@ const Navigation: React.FC = (): ReactElement => {
       location.pathname !== ROUTES.TRANSACTIONS.url &&
       location.pathname !== ROUTES.CONTRACTS.url &&
       location.pathname !== ROUTES.BLOCKS.url &&
+      location.pathname !== ROUTES.MONITOR.url &&
       !location.pathname.includes(ROUTES.SEARCH.url)
     )
   }
@@ -217,6 +218,32 @@ const Navigation: React.FC = (): ReactElement => {
             >
               {ROUTES.BLOCKS.renderIcon()}
               {ROUTES.BLOCKS.name}
+            </NavLink>
+            <NavLink
+              onClick={(): void => {
+                dispatch(closeMenu())
+              }}
+              key={ROUTES.MONITOR.name}
+              className="mobile-route-container"
+              activeClassName="active-mobile-route"
+              isActive={(match, location): boolean => {
+                if (
+                  location.pathname.includes(
+                    ROUTES.MONITOR.name.slice(0, -1).toLowerCase(),
+                  ) &&
+                  location.pathname !== '/'
+                ) {
+                  return true
+                }
+                if (location.pathname === '/' && match) {
+                  return true
+                }
+                return false
+              }}
+              to={ROUTES.MONITOR.url}
+            >
+              {ROUTES.MONITOR.renderIcon()}
+              {ROUTES.MONITOR.name}
             </NavLink>
           </div>
         </div>
