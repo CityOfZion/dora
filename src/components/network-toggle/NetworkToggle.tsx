@@ -7,17 +7,13 @@ import { changeNetwork } from '../../actions/networkActions'
 
 import './NetworkToggle.scss'
 import { resetAddressState } from '../../actions/addressActions'
-import {
-  fetchContracts,
-  resetContractState,
-} from '../../actions/contractActions'
-import { fetchBlocks, resetBlockState } from '../../actions/blockActions'
-import {
-  fetchTransactions,
-  resetTransactionState,
-} from '../../actions/transactionActions'
+import { resetContractState } from '../../actions/contractActions'
+import { resetBlockState } from '../../actions/blockActions'
+import { resetTransactionState } from '../../actions/transactionActions'
+import { useHistory } from 'react-router-dom'
+import { ROUTES } from '../../constants'
 
-export type Option = {
+type Option = {
   value: string
   label: string
 }
@@ -26,6 +22,7 @@ export const NetworkToggle: React.FC<{ disabled: boolean }> = ({
   disabled,
 }): ReactElement => {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const options: Option[] = [
     {
@@ -50,9 +47,7 @@ export const NetworkToggle: React.FC<{ disabled: boolean }> = ({
     dispatch(resetBlockState())
     dispatch(resetContractState())
     dispatch(resetTransactionState())
-    dispatch(fetchContracts())
-    dispatch(fetchBlocks())
-    dispatch(fetchTransactions())
+    history.push(ROUTES.HOME.url)
   }
 
   return (

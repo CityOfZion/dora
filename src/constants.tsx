@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
 
-import './components/navigation/Sidebar.scss'
 import { store } from './store'
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
@@ -11,7 +10,6 @@ import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
 import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
-import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
 
 //eslint-disable-next-line
 const bs58check = require('bs58check')
@@ -180,12 +178,6 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Api />,
     target: '_blank',
   },
-  MONITOR: {
-    url: '/monitor',
-    name: 'Monitor',
-    renderIcon: (): React.ReactNode => <Monitor />,
-    target: '_self',
-  },
   NOT_FOUND: {
     url: '/not-found',
     name: 'No Results found',
@@ -200,7 +192,6 @@ export const SIDEBAR_ROUTES = [
   ROUTES.TRANSACTIONS,
   ROUTES.BLOCKS,
   // ROUTES.WALLETS,
-  ROUTES.MONITOR,
   ROUTES.API,
 ]
 

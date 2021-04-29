@@ -520,5 +520,3 @@ export const MOCK_CONTRACTS_INVOCATIONS_DATA = [
     change: '0.00',
   },
 ]
-
-export const MOCK_NODES = []
