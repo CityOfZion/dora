@@ -31,6 +31,7 @@ import ToggleDropdown, {
 } from '../../components/toggleDropdown/ToggleDropdown'
 import { ValueType } from 'react-select'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import NetworkToggle from '../../components/network-toggle/NetworkToggle'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -272,6 +273,7 @@ const mobileColumns: ColumnType[] = [
 ]
 
 const NetworkStatus: React.FC<{}> = () => {
+  const width = useWindowWidth()
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const BEST_BLOCK = 'Best Block'
   const LAST_BLOCK = 'Last Block'
@@ -342,10 +344,8 @@ const NetworkStatus: React.FC<{}> = () => {
   return (
     <div className="network-status-container">
       <div className="network-status-header">
-        <div className="network-status-title">
-          <span>Network status</span>
-        </div>
-        <div>
+        <span className="network-status-title">Network status</span>
+        <div className="network-status-toggle">
           <ToggleDropdown
             disabled={false}
             options={[
@@ -356,6 +356,7 @@ const NetworkStatus: React.FC<{}> = () => {
             selectedOption={selectedOption}
             handleChange={handleChangeChain}
           />
+          {width < 768 && <NetworkToggle disabled={false} />}
         </div>
       </div>
       <div className="network-status-content">
