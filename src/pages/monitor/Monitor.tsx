@@ -246,6 +246,20 @@ const columns: ColumnType[] = [
   { name: 'Peers', accessor: 'peers', sortOpt: 'peers' },
 ]
 
+const tabletColumns: ColumnType[] = [
+  {
+    name: 'Endpoint',
+    accessor: 'endpoint',
+    sortOpt: 'endpoint',
+    style: { minWidth: '200px' },
+  },
+  { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
+
+  { name: 'Block Height', accessor: 'blockHeight', sortOpt: 'blockHeight' },
+  { name: 'Version', accessor: 'version', sortOpt: 'version' },
+  { name: 'Peers', accessor: 'peers', sortOpt: 'peers' },
+]
+
 const mobileColumns: ColumnType[] = [
   {
     name: 'Endpoint',
@@ -451,7 +465,14 @@ const Monitor: React.FC<{}> = () => {
 
   const width = useWindowWidth()
 
-  const conditionalColumns = width > 1000 ? columns : mobileColumns
+  const conditionalColumns =
+    width > 1000
+      ? width < 1200
+        ? tabletColumns
+        : columns
+      : width < 768
+      ? mobileColumns
+      : tabletColumns
 
   return (
     <div id="Monitor" className="page-container">
