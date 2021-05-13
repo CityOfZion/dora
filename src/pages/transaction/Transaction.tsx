@@ -126,12 +126,12 @@ const parseNeo3TransactionData = async (
           const from_address = neo3_getAddressFromSriptHash(
             // eslint-disable-next-line
             // @ts-ignore
-            notification?.state?.value[1].value || '',
+            notification?.state?.value[0].value || '',
           )
           const to_address = neo3_getAddressFromSriptHash(
             // eslint-disable-next-line
             // @ts-ignore
-            notification?.state?.value[2].value || '',
+            notification?.state?.value[1].value || '',
           )
           transfers.push({
             name,
@@ -436,7 +436,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
             chain={'neo3'}
             transfers={transfers}
             handleAddressClick={(address): void =>
-              history.push(`/address/${address}`)
+              history.push(`/address/${chain}/${network}/${address}`)
             }
             networkFee={transaction ? transaction.net_fee : ''}
             systemFee={transaction ? transaction.sys_fee : ''}
