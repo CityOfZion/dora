@@ -1,9 +1,10 @@
 .information-panel-container {
   background-color: #25393e;
   border-radius: 2px;
-  width: 398px;
+  max-width: 398px;
+  min-width: 33%;
   height: 142px;
-  margin-bottom: 50px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
 }
@@ -42,5 +43,12 @@
     g {
       fill: #fff;
     }
+  }
+}
+
+@media only screen and (max-width: 975px) {
+  .information-panel-container {
+    width: 100%;
+    max-width: none;
   }
 }

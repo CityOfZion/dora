@@ -119,6 +119,7 @@ const NotificationHeaderLink: React.FC<{
       {' '}
       {notification.contract}{' '}
     </Link>
+    {chain === 'neo3' && <code> ({notification.event_name}) </code>}
   </div>
 )
 
