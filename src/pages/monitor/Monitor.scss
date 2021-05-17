@@ -190,6 +190,18 @@
     }
   }
 
+  @media only screen and (max-width: 400px) {
+    .endpoint {
+      min-width: 100px;
+      width: 100px;
+
+      .endpoint-url {
+        font-size: 10px;
+        min-width: 70px;
+      }
+    }
+  }
+
   @media only screen and (max-width: 710px) {
     .select-container {
       align-items: center;
@@ -221,6 +233,7 @@
   .network-status-toggle {
     padding-top: 13px;
     padding-bottom: 17px;
+    padding-right: 17px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
