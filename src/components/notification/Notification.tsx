@@ -47,6 +47,12 @@ export const NotificationRow: React.FC<{
     }
     if (selectedOption) {
       convert()
+      if (
+        selectedOption.label === HEX_STRING_OPTION.label ||
+        selectedOption.label === STRING_OPTION.label
+      ) {
+        setConvertedvalue(value)
+      }
     }
   }, [selectedOption, options, value, chain])
 
