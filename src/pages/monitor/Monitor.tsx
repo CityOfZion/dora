@@ -89,6 +89,7 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
       <div className="endpoint-flag-container">
         <ReactCountryFlag
+          svg
           style={{
             fontSize: '1.5em',
             lineHeight: '1.5em',
