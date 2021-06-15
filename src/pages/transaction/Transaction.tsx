@@ -625,15 +625,32 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 </ExpandingPanel>
               )}
 
+              {transaction && transaction.exception && (
+                <div style={{ margin: '24px 0' }}>
+                  <ExpandingPanel title="EXCEPTION" open={false}>
+                    <div className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>EXCEPTION</label>
+                        <span>
+                          {!isLoading && transaction && transaction.exception}
+                        </span>
+                      </div>
+                    </div>
+                  </ExpandingPanel>
+                </div>
+              )}
+
               {transaction &&
                 transaction.notifications &&
                 transaction.notifications.map(notification => (
-                  <Notification
-                    chain={chain}
-                    network={network}
-                    key={uniqueId()}
-                    notification={notification}
-                  />
+                  <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
+                    <Notification
+                      chain={chain}
+                      network={network}
+                      key={uniqueId()}
+                      notification={notification}
+                    />
+                  </div>
                 ))}
             </div>
           </div>

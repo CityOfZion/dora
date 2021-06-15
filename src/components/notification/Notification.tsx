@@ -11,6 +11,7 @@ import {
   ADDRESS_OPTION,
   HEX_STRING_OPTION,
   STRING_OPTION,
+  BYTE_STRING_OPTION,
 } from '../../constants'
 import { TransactionNotification } from '../../reducers/transactionReducer'
 
@@ -69,11 +70,15 @@ export const NotificationRow: React.FC<{
     filteredOptions = [HEX_STRING_OPTION, STRING_OPTION]
   }
 
+  if (type === 'ByteString' && value.length !== 28) {
+    filteredOptions = [BYTE_STRING_OPTION]
+  }
+
   return (
     <Select
       selectedOption={(selectedOption.label && selectedOption) || options[0]}
       handleChange={handleChange}
-      options={filteredOptions || options}
+      options={(filteredOptions.length && filteredOptions) || options}
       computedDisplayValue={convertedValue || value}
     />
   )
