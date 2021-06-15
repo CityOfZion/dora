@@ -604,6 +604,27 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   </div>
                 )}
 
+              {transaction && transaction.signers && transaction.signers[0] && (
+                <ExpandingPanel title="SIGNERS" open={false}>
+                  {transaction.signers.map(signer => (
+                    <div key={signer.account} className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>ACCOUNT</label>
+                        <span>
+                          {!isLoading && transaction && signer.account}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label>SCOPES</label>
+                        <span>
+                          {!isLoading && transaction && signer.scopes}{' '}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </ExpandingPanel>
+              )}
+
               {transaction &&
                 transaction.notifications &&
                 transaction.notifications.map(notification => (
