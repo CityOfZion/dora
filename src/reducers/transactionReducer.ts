@@ -90,6 +90,8 @@ export type DetailedTransaction = {
   vout: Vout[]
   net_fee: string
   sys_fee: string
+  netfee: string
+  sysfee: string
   items: {
     tokens: TransactionTokenAbstract[]
     inputs: TransactionIOAbstract[]

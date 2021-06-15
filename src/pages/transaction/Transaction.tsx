@@ -438,8 +438,22 @@ const Transaction: React.FC<Props> = (props: Props) => {
             handleAddressClick={(address): void =>
               history.push(`/address/${chain}/${network}/${address}`)
             }
-            networkFee={transaction ? transaction.net_fee : ''}
-            systemFee={transaction ? transaction.sys_fee : ''}
+            networkFee={
+              transaction
+                ? convertToArbitraryDecimals(
+                    Number(transaction.netfee),
+                    8,
+                  ).toString()
+                : ''
+            }
+            systemFee={
+              transaction
+                ? convertToArbitraryDecimals(
+                    Number(transaction.sysfee),
+                    8,
+                  ).toString()
+                : ''
+            }
             size={transaction ? transaction.size : ''}
           />
         )}
