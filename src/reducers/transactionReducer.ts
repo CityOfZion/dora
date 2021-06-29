@@ -75,6 +75,7 @@ export type TransactionNotification = {
   event_name: string
 }
 
+// TODO: create different types for the chains instead of this generic one
 export type DetailedTransaction = {
   type: string
   size: string
@@ -90,6 +91,8 @@ export type DetailedTransaction = {
   vout: Vout[]
   net_fee: string
   sys_fee: string
+  netfee: string
+  sysfee: string
   items: {
     tokens: TransactionTokenAbstract[]
     inputs: TransactionIOAbstract[]
@@ -102,7 +105,14 @@ export type DetailedTransaction = {
       verification: string
     },
   ]
+  signers?: Signer[]
   notifications?: TransactionNotification[]
+  exception?: string
+}
+
+export type Signer = {
+  account: string
+  scopes: string
 }
 
 export type BlockTransaction = {

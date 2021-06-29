@@ -274,9 +274,22 @@ export const STRING_OPTION = {
   },
 }
 
+export const BYTE_STRING_OPTION = {
+  value: 'ByteString',
+  label: 'ByteString',
+  convert: async (value: string, chain?: string): Promise<string> => {
+    return chain === 'neo3' ? neo3_hexToAscii(value) : hexToAscii(value)
+  },
+}
+
 export const INTEGER_OPTION = {
   value: 'Integer',
   label: 'Integer',
+}
+
+export const BUFFER_OPTION = {
+  value: 'Buffer',
+  label: 'Buffer',
 }
 
 export const ADDRESS_OPTION = {
@@ -336,9 +349,17 @@ export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
     color: '#67DD8B',
     options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
   },
+  ByteString: {
+    color: '#67DD8B',
+    options: [BYTE_STRING_OPTION, STRING_OPTION],
+  },
   Array: {
     color: '#F28F00',
     options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  Buffer: {
+    color: '#F28F00',
+    options: [BUFFER_OPTION],
   },
   InteropInterface: {
     color: '#A50000',
