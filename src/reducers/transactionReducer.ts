@@ -107,6 +107,7 @@ export type DetailedTransaction = {
   ]
   signers?: Signer[]
   notifications?: TransactionNotification[]
+  exception?: string
 }
 
 export type Signer = {
