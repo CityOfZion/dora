@@ -130,6 +130,38 @@ const TypeNode: React.FC<TypeNode> = ({ disable, textType }) => {
   return <div className={disable ? 'disable' : ''}>{textType}</div>
 }
 
+interface Availability extends AllNodes {
+  text: string
+}
+
+const Availability: React.FC<Availability> = ({ text, disable }) => {
+  return <div className={disable ? 'disable' : ''}>{text}</div>
+}
+
+interface StateHeight extends AllNodes {
+  text: number
+}
+
+const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
+  return <div className={disable ? 'disable' : ''}>{`#${text}`}</div>
+}
+
+interface Version extends AllNodes {
+  text: string
+}
+
+const Version: React.FC<Version> = ({ text, disable }) => {
+  return <div className={disable ? 'disable' : ''}>{text}</div>
+}
+
+interface Peers extends AllNodes {
+  text: number
+}
+
+const Peers: React.FC<Peers> = ({ text, disable }) => {
+  return <div className={disable ? 'disable' : ''}>{text}</div>
+}
+
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
   const isPositive = (): boolean =>
     data.status === 'ok' ||
@@ -150,23 +182,21 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
       : (): ReactElement => (
           <NegativeComponent useHashTag={true} disable={!isPositive()} />
         ),
-    version: isPositive()
-      ? data.version
-      : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
+    version: (): ReactElement => (
+      <Version disable={!isPositive()} text={data.version} />
+    ),
     type: (): ReactElement => (
       <TypeNode textType={data.type} disable={!isPositive()} />
     ),
-    peers: isPositive()
-      ? data.peers
-      : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
+    peers: (): ReactElement => (
+      <Peers disable={!isPositive()} text={data.peers} />
+    ),
     availability: isPositive()
-      ? `${data.availability}%`
+      ? `${data.reliability}%`
       : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
-    stateHeight: isPositive()
-      ? `#${data.stateheight}`
-      : (): ReactElement => (
-          <NegativeComponent useHashTag={true} disable={!isPositive()} />
-        ),
+    stateHeight: (): ReactElement => (
+      <StateHeight disable={!isPositive()} text={data.stateheight} />
+    ),
     isItUp: (): ReactElement => <IsItUp statusIsItUp={data.status} />,
     chain: data.status || '',
   }
