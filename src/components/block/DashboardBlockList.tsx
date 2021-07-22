@@ -96,7 +96,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   return (
     <div className="multi-chain-dashboard-list list-row-container">
       <div className="block-list-chain-container">
-        <h4>Neo Legacy</h4>
+        <h4>Neo Legacy (Mainnet)</h4>
         <div className="list-wrapper">
           <List
             data={returnBlockListData(neo2List, blockState.isLoading)}
