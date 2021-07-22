@@ -92,3 +92,16 @@ export const sortedByDate = (
     },
   )
 }
+
+export const sortedByDateRemix = (
+  list: ListUnionType,
+): ListUnionType => {
+  return list.sort(
+    (b: Block | Transaction | Contract, a: Block | Transaction | Contract) => {
+      const formattedTime = (time: string | number): string =>
+        moment(new Date(Number(time) * 1000)).format()
+
+      return formattedTime(a.time).localeCompare(formattedTime(b.time))
+    },
+  )
+}

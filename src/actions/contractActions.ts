@@ -3,7 +3,8 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
-import { sortedByDate } from '../utils/time'
+import { sortedByDate, sortedByDateRemix } from '../utils/time'
+import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract = (hash: string) => (dispatch: Dispatch): void => {
@@ -178,17 +179,29 @@ export function fetchContracts(page = 1) {
     try {
       dispatch(requestContracts(page))
 
-      const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', 'mainnet',false)}/contracts/${page}`)
-      ).json()
+      const options = [
+        {protocol: 'neo2', network: 'mainnet'},
+        {protocol: 'neo2', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet_rc4'},
+      ]
 
-      const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', 'testnet', false)}/contracts/${page}`)
-      ).json()
+      const res = await Promise.all(options.map((async ({ network, protocol }) => {
+        let res
+        if (protocol === 'neo2') {
+          res = await NeoLegacyREST.contracts(page, network)
+        } else if (protocol === 'neo3') {
+          res = await NeoRest.contracts(page, network)
+        }
+        res.items.map(d => ({...d, network: network, protocol: protocol}))
+        return res
+      })))
 
-      const all = { items: sortedByDate(neo2.items, neo3.items) as Contract[] }
+      const all = {
+        items: sortedByDateRemix(res.map(r => { return r.items}).flat()) as Contract[]
+      }
 
-      dispatch(requestContractsSuccess(page, { neo2, neo3, all }))
+      dispatch(requestContractsSuccess(page, { all }))
     } catch (e) {
       dispatch(requestContractsError(page, e))
     }
