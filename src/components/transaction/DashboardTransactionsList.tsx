@@ -95,7 +95,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
       </div>
       <div className="block-list-chain-container">
         <div>
-          <h4>Neo (Testnet) </h4>
+          <h4>Neo N3 (RC4 Testnet) </h4>
           <div className="list-wrapper">
             <List
               data={returnTxListData(txState.neo3List, txState.isLoading)}
