@@ -179,11 +179,11 @@ export function fetchContracts(page = 1) {
       dispatch(requestContracts(page))
 
       const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', false)}/contracts/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo2', 'mainnet',false)}/contracts/${page}`)
       ).json()
 
       const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', false)}/contracts/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo3', 'testnet', false)}/contracts/${page}`)
       ).json()
 
       const all = { items: sortedByDate(neo2.items, neo3.items) as Contract[] }
@@ -205,7 +205,7 @@ export function fetchContractsInvocations() {
 
       try {
         const response = await fetch(
-          `${GENERATE_BASE_URL('neo2', false)}/invocation_stats`,
+          `${GENERATE_BASE_URL('neo2', 'mainnet',false)}/invocation_stats`,
         )
         const json = await response.json()
         dispatch(requestContractsInvocationsSuccess(json))

@@ -132,11 +132,11 @@ export function fetchBlocks(page = 1, chain?: string) {
       dispatch(requestBlocks(page))
 
       const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', false)}/blocks/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo2', 'mainnet',false)}/blocks/${page}`)
       ).json()
 
       const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', false)}/blocks/${page}`)
+        await fetch(`${GENERATE_BASE_URL('neo3', 'testnet', false)}/blocks/${page}`)
       ).json()
 
       const all = sortedByDate(neo2.items, neo3.items)

@@ -123,14 +123,14 @@ export async function determineSearchType(
 
   urls.push(
     ...[
-      `${GENERATE_BASE_URL('neo2', false)}/transaction/${search}`,
-      `${GENERATE_BASE_URL('neo2', false)}/contract/${search}`,
-      `${GENERATE_BASE_URL('neo3', false)}/transaction/${search}`,
-      `${GENERATE_BASE_URL('neo3', false)}/contract/${search}`,
-      `${GENERATE_BASE_URL('neo2', false)}/balance/${search}`,
-      `${GENERATE_BASE_URL('neo2', false)}/block/${search}`,
-      `${GENERATE_BASE_URL('neo3', false)}/balance/${search}`,
-      `${GENERATE_BASE_URL('neo3', false)}/block/${search}`,
+      `${GENERATE_BASE_URL('neo2', 'mainnet', false)}/transaction/${search}`,
+      `${GENERATE_BASE_URL('neo2', 'mainnet', false)}/contract/${search}`,
+      `${GENERATE_BASE_URL('neo3', 'testnet', false)}/transaction/${search}`,
+      `${GENERATE_BASE_URL('neo3', 'testnet', false)}/contract/${search}`,
+      `${GENERATE_BASE_URL('neo2', 'mainnet', false)}/balance/${search}`,
+      `${GENERATE_BASE_URL('neo2', 'mainnet', false)}/block/${search}`,
+      `${GENERATE_BASE_URL('neo3', 'testnet', false)}/balance/${search}`,
+      `${GENERATE_BASE_URL('neo3', 'testnet', false)}/block/${search}`,
     ],
   )
 
