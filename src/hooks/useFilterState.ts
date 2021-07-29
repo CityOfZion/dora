@@ -4,18 +4,20 @@ import { useSelector } from 'react-redux'
 import { State as NetworkState } from '../reducers/networkReducer'
 
 type Filter = {
-  selectedChain: string
+  protocol: string
+  network: string
 }
 
 interface FilterState {
-  selectedChain: string
+  protocol: string
   handleSetFilterData: (filter: Filter) => void
   network: string
 }
 
 const useFilterState = (): FilterState => {
   const DEFAULT_FILTER: Filter = {
-    selectedChain: 'neo2',
+    protocol: 'all',
+    network: 'all'
   }
 
   const networkState = useSelector(
@@ -24,16 +26,14 @@ const useFilterState = (): FilterState => {
 
   const [filterData, setFilterData] = useState(DEFAULT_FILTER)
 
-  const { selectedChain } = filterData
-
   function handleSetFilterData(filter: Filter): void {
     setFilterData(filter)
   }
 
   return {
-    selectedChain,
+    protocol: filterData.protocol,
     handleSetFilterData,
-    network: networkState.network,
+    network: filterData.network,
   }
 }
 

@@ -5,7 +5,7 @@ import { ValueType } from 'react-select'
 import './Filter.scss'
 
 type Option = {
-  value: string
+  value: any //TODO type this
   label: string
 }
 
@@ -21,21 +21,44 @@ export const Filter: React.FC<Props> = ({
   const options: Option[] = [
     {
       label: 'All',
-      value: 'all',
+      value: {
+        protocol: 'all',
+        network: 'all'
+      }
     },
     {
-      label: 'Neo Legacy',
-      value: 'neo2',
+      label: 'Neo Legacy (Mainnet)',
+      value: {
+        protocol: 'neo2',
+        network: 'mainnet'
+      },
     },
     {
-      label: 'Neo (Testnet)',
-      value: 'neo3',
+      label: 'Neo Legacy (Testnet)',
+      value: {
+        protocol: 'neo2',
+        network: 'testnet'
+      },
+    },
+    {
+      label: 'Neo N3 (RC3 Testnet)',
+      value: {
+        protocol: 'neo3',
+        network: 'testnet'
+      },
+    },
+    {
+      label: 'Neo N3 (RC4 Testnet)',
+      value: {
+        protocol: 'neo3',
+        network: 'testnet_rc4'
+      },
     },
   ]
 
   // TODO: this should read redux state to set default
   const [currentOption, setCurrentOption] = useState(
-    selectedOption || options[1],
+    selectedOption || options[0],
   )
 
   const setFilter = (option: ValueType<Option, false>): void => {

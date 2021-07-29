@@ -65,11 +65,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const { neo2List, neo3List } = blockState
-  const list = neo2List
+  const neo2List = blockState.all.filter(d => (d.protocol === 'neo2' && d.network === 'mainnet'))
+  const neo3List = blockState.all.filter(d => (d.protocol === 'neo3' && d.network === 'testnet_rc4'))
+
   useEffect(() => {
-    if (!list.length) dispatch(fetchBlocks())
-  }, [dispatch, list.length])
+    if (!neo2List.length) dispatch(fetchBlocks())
+  }, [dispatch, neo2List.length])
 
   const columns =
     width > 768
@@ -118,7 +119,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
               data={returnBlockListData(neo3List, blockState.isLoading)}
               rowId="height"
               generateHref={(data): string =>
-                `${ROUTES.BLOCK.url}/neo3/testnet/${data.id}`
+                `${ROUTES.BLOCK.url}/neo3/testnet_rc4/${data.id}`
               }
               isLoading={blockState.isLoading}
               columns={columns}

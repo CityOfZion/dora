@@ -3,7 +3,9 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { GENERATE_BASE_URL } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
-import { sortedByDate } from '../utils/time'
+import { sortedByDate, sortedByDateRemix } from '../utils/time'
+import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { Transaction } from '../reducers/transactionReducer'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -131,17 +133,29 @@ export function fetchBlocks(page = 1, chain?: string) {
     try {
       dispatch(requestBlocks(page))
 
-      const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', 'mainnet',false)}/blocks/${page}`)
-      ).json()
+      const options = [
+        {protocol: 'neo2', network: 'mainnet'},
+        {protocol: 'neo2', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet_rc4'},
+      ]
 
-      const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', 'testnet', false)}/blocks/${page}`)
-      ).json()
+      const res = await Promise.all(options.map((async ({ network, protocol }) => {
+        let res
+        if (protocol === 'neo2') {
+          res = await NeoLegacyREST.blocks(page, network)
+        } else if (protocol === 'neo3') {
+          res = await NeoRest.blocks(page, network)
+        }
+        res.items = res.items.map(d => ({...d, network: network, protocol: protocol}))
+        return res
+      })))
 
-      const all = sortedByDate(neo2.items, neo3.items)
-
-      dispatch(requestBlocksSuccess(page, { neo2, neo3, all }))
+      const all = {
+        items: sortedByDateRemix(res.map(r => { return r.items}).flat()) as Transaction[]
+      }
+      console.log(all)
+      dispatch(requestBlocksSuccess(page, { all }))
     } catch (e) {
       dispatch(requestBlockError(page, e))
     }

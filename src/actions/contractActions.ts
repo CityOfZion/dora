@@ -193,10 +193,9 @@ export function fetchContracts(page = 1) {
         } else if (protocol === 'neo3') {
           res = await NeoRest.contracts(page, network)
         }
-        res.items.map(d => ({...d, network: network, protocol: protocol}))
+        res.items = res.items.map(d => ({...d, network: network, protocol: protocol}))
         return res
       })))
-
       const all = {
         items: sortedByDateRemix(res.map(r => { return r.items}).flat()) as Contract[]
       }

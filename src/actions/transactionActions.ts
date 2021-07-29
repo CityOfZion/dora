@@ -4,7 +4,9 @@ import { ThunkDispatch } from 'redux-thunk'
 import { GENERATE_BASE_URL } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
-import { sortedByDate } from '../utils/time'
+import { sortedByDate, sortedByDateRemix } from '../utils/time'
+import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { Contract } from '../reducers/contractReducer'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction = (hash: string) => (
@@ -42,8 +44,6 @@ export const REQUEST_TRANSACTIONS_SUCCESS = 'REQUEST_TRANSACTIONS_SUCCESS'
 export const requestTransactionsSuccess = (
   page: number,
   json: {
-    neo2: { transactions: Array<Transaction> }
-    neo3: { transactions: Array<Transaction> }
     all: { transactions: Array<Transaction> }
   },
 ) => (dispatch: Dispatch): void => {
@@ -154,24 +154,31 @@ export function fetchTransactions(page = 1) {
     try {
       dispatch(requestTransactions(page))
 
-      const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', 'mainnet', false)}/transactions/${page}`)
-      ).json()
 
-      const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', 'testnet', false)}/transactions/${page}`)
-      ).json()
+      const options = [
+        {protocol: 'neo2', network: 'mainnet'},
+        {protocol: 'neo2', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet'},
+        {protocol: 'neo3', network: 'testnet_rc4'},
+      ]
 
-      neo3.transactions = neo3.items
+      const res = await Promise.all(options.map((async ({ network, protocol }) => {
+        let res
+        if (protocol === 'neo2') {
+          res = await NeoLegacyREST.transactions(page, network)
+          res.items = res.transactions
+        } else if (protocol === 'neo3') {
+          res = await NeoRest.transactions(page, network)
+        }
+        res.items = res.items.map(d => ({...d, network: network, protocol: protocol}))
+        return res
+      })))
 
       const all = {
-        transactions: sortedByDate(
-          neo2.transactions,
-          neo3.transactions,
-        ) as Transaction[],
+        items: sortedByDateRemix(res.map(r => { return r.items}).flat()) as Transaction[]
       }
 
-      dispatch(requestTransactionsSuccess(page, { neo2, neo3, all }))
+      dispatch(requestTransactionsSuccess(page, { all }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))
     }

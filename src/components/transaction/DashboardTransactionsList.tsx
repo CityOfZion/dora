@@ -58,9 +58,13 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
-  const { neo2List } = txState
+  const { all } = txState
+  const neo2List = all.filter(d => (d.protocol === 'neo2' && d.network === 'mainnet'))
+  const neo3List = all.filter(d => (d.protocol === 'neo3' && d.network === 'testnet_rc4'))
 
   useEffect(() => {
+
+
     if (!neo2List.length) dispatch(fetchTransactions())
   }, [dispatch, neo2List.length])
 
@@ -82,7 +86,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
         <h4>Neo Legacy (Mainnet)</h4>
         <div className="list-wrapper">
           <List
-            data={returnTxListData(txState.neo2List, txState.isLoading)}
+            data={returnTxListData(neo2List, txState.isLoading)}
             rowId="hash"
             generateHref={(data): string =>
               `${ROUTES.TRANSACTION.url}/neo2/${network}/${data.id}`
@@ -98,7 +102,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
           <h4>Neo N3 (RC4 Testnet) </h4>
           <div className="list-wrapper">
             <List
-              data={returnTxListData(txState.neo3List, txState.isLoading)}
+              data={returnTxListData(neo3List, txState.isLoading)}
               rowId="hash"
               generateHref={(data): string =>
                 `${ROUTES.TRANSACTION.url}/neo3/testnet/${data.id}`
