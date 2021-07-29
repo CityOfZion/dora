@@ -154,7 +154,6 @@ export function fetchBlocks(page = 1, chain?: string) {
       const all = {
         items: sortedByDateRemix(res.map(r => { return r.items}).flat()) as Transaction[]
       }
-      console.log(all)
       dispatch(requestBlocksSuccess(page, { all }))
     } catch (e) {
       dispatch(requestBlockError(page, e))

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 
@@ -13,26 +13,53 @@ import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
 import { formatDate } from '../../utils/time'
 
 interface MatchParams {
-  hash: string
-  chain: string
+  search: string
+  protocol: string
   network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
+const PlatformElement = ({ protocol, network }: { protocol: string | void, network: string | void }): ReactElement => (
+  <div className="search-result-chain-info">
+      <div id="chain-icon">
+        {protocol === 'neo2' ? <Neo2 /> : <Neo3 />}
+      </div>
+      <p>
+        {protocol === 'neo2' ? 'Neo Legacy' : 'Neo N3'}
+      </p>
+      <p>
+        <small>
+        {(() => {
+          if (protocol === 'neo2' && network === 'mainnet') {
+            return ('Mainnet')
+          } else if (protocol === 'neo2' && network === 'testnet') {
+            return ('Testnet')
+          } else if (protocol === 'neo3' && network === 'testnet') {
+            return ('RC3 Testnet')
+          } else if (protocol === 'neo3' && network === 'testnet_rc4') {
+            return ('RC4 Testnet')
+          }
+        })()}
+        </small>
+      </p>
+  </div>
+  )
+
+
 const SearchResults: React.FC<Props> = (props: Props) => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { hash, network } = props.match.params
+  const { search, network } = props.match.params
   const { results } = searchState
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!results) {
-      dispatch(handleSearchInput(hash, network))
+      dispatch(handleSearchInput(search))
     }
-  }, [dispatch, hash, network, results])
+  }, [dispatch, search, network, results])
 
   return (
     <div id="SearchResults" className="page-container">
@@ -57,7 +84,7 @@ const SearchResults: React.FC<Props> = (props: Props) => {
         </div>
 
         <div className="results-explanation">
-          Showing results for <div className="results">"{hash}"</div>
+          Showing results for <div className="results">"{search}"</div>
         </div>
 
         <div className="results">
@@ -65,16 +92,10 @@ const SearchResults: React.FC<Props> = (props: Props) => {
             Object.values(results).map(result => {
               return (
                 <Link
-                  to={`${ROUTES.BLOCK.url}/${result.chain}/${network}/${result.index}`}
+                  to={`${ROUTES.BLOCK.url}/${result.protocol}/${result.network}/${result.index}`}
                 >
                   <div className="search-result-container">
-                    <div className="search-result-chain-info">
-                      <div id="chain-icon">
-                        {result.chain === 'neo2' ? <Neo2 /> : <Neo3 />}
-                      </div>
-                      <p> {result.chain === 'neo2' ? network : '(Testnet)'}</p>
-                    </div>
-
+                    <PlatformElement protocol={result.protocol} network={result.network}/>
                     <div className="search-results-details">
                       <div className="search-result-type">
                         {ROUTES.BLOCKS.renderIcon()} Block
