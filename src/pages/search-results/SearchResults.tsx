@@ -20,32 +20,34 @@ interface MatchParams {
 
 type Props = RouteComponentProps<MatchParams>
 
-const PlatformElement = ({ protocol, network }: { protocol: string | void, network: string | void }): ReactElement => (
+const PlatformElement = ({
+  protocol,
+  network,
+}: {
+  protocol: string | void
+  network: string | void
+}): ReactElement => (
   <div className="search-result-chain-info">
-      <div id="chain-icon">
-        {protocol === 'neo2' ? <Neo2 /> : <Neo3 />}
-      </div>
-      <p>
-        {protocol === 'neo2' ? 'Neo Legacy' : 'Neo N3'}
-      </p>
-      <p>
-        <small>
-        {(() => {
+    <div id="chain-icon">{protocol === 'neo2' ? <Neo2 /> : <Neo3 />}</div>
+    <p>{protocol === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</p>
+    <p>
+      <small>
+        {((): string => {
           if (protocol === 'neo2' && network === 'mainnet') {
-            return ('Mainnet')
+            return 'Mainnet'
           } else if (protocol === 'neo2' && network === 'testnet') {
-            return ('Testnet')
+            return 'Testnet'
           } else if (protocol === 'neo3' && network === 'testnet') {
-            return ('RC3 Testnet')
+            return 'RC3 Testnet'
           } else if (protocol === 'neo3' && network === 'testnet_rc4') {
-            return ('RC4 Testnet')
+            return 'RC4 Testnet'
           }
+          return ''
         })()}
-        </small>
-      </p>
+      </small>
+    </p>
   </div>
-  )
-
+)
 
 const SearchResults: React.FC<Props> = (props: Props) => {
   const searchState = useSelector(
@@ -95,7 +97,10 @@ const SearchResults: React.FC<Props> = (props: Props) => {
                   to={`${ROUTES.BLOCK.url}/${result.protocol}/${result.network}/${result.index}`}
                 >
                   <div className="search-result-container">
-                    <PlatformElement protocol={result.protocol} network={result.network}/>
+                    <PlatformElement
+                      protocol={result.protocol}
+                      network={result.network}
+                    />
                     <div className="search-results-details">
                       <div className="search-result-type">
                         {ROUTES.BLOCKS.renderIcon()} Block

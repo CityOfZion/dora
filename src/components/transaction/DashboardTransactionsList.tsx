@@ -59,12 +59,14 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
     ({ transaction }: { transaction: TxState }) => transaction,
   )
   const { all } = txState
-  const neo2List = all.filter(d => (d.protocol === 'neo2' && d.network === 'mainnet'))
-  const neo3List = all.filter(d => (d.protocol === 'neo3' && d.network === 'testnet_rc4'))
+  const neo2List = all.filter(
+    d => d.protocol === 'neo2' && d.network === 'mainnet',
+  )
+  const neo3List = all.filter(
+    d => d.protocol === 'neo3' && d.network === 'testnet_rc4',
+  )
 
   useEffect(() => {
-
-
     if (!neo2List.length) dispatch(fetchTransactions())
   }, [dispatch, neo2List.length])
 

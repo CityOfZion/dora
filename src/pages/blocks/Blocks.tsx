@@ -36,7 +36,9 @@ type ParsedBlock = {
 const mapBlockData = (block: Block): ParsedBlock => {
   return {
     chain: block.protocol || '',
-    platform: (): ReactElement => <PlatformCell protocol={block.protocol} network={block.network}/>,
+    platform: (): ReactElement => (
+      <PlatformCell protocol={block.protocol} network={block.network} />
+    ),
     time: convertFromSecondsToLarger(
       getDiffInSecondsFromNow(moment.unix(block.time).format()),
     ),
@@ -82,12 +84,14 @@ const Blocks: React.FC<{}> = () => {
   const selectedData = (): Array<Block> => {
     if (protocol === 'all' && network === 'all') {
       return blockState.all
-    } else if (protocol === 'all' && network != 'all') {
-      return blockState.all.filter(d => (d.network === network))
-    } else if (protocol != 'all' && network === 'all') {
-      return blockState.all.filter(d => (d.protocol === protocol))
+    } else if (protocol === 'all' && network !== 'all') {
+      return blockState.all.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return blockState.all.filter(d => d.protocol === protocol)
     } else {
-      return blockState.all.filter(d => (d.protocol === protocol && d.network === network))
+      return blockState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
     }
   }
 

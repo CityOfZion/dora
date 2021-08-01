@@ -1,8 +1,5 @@
-import isEmpty from 'lodash/isEmpty'
 import { ThunkDispatch } from 'redux-thunk'
 import { Dispatch, Action } from 'redux'
-
-import { GENERATE_BASE_URL, SEARCH_TYPES } from '../constants'
 import { State } from '../reducers/searchReducer'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
 
@@ -78,9 +75,7 @@ export function handleSearchInput(rawSearch: string) {
       const { searchResults, searchType } = await executeSearch(search)
 
       if (searchResults.length > 0) {
-        dispatch(
-          searchInputEnteredSuccess(search, searchType, searchResults),
-        )
+        dispatch(searchInputEnteredSuccess(search, searchType, searchResults))
         return dispatch(clearSearchInputState())
       }
       return dispatch(searchInputEnteredError('No results found.'))
@@ -92,44 +87,106 @@ export function handleSearchInput(rawSearch: string) {
 
 // TODO: refactor for performance optimization - we should
 // dispatch the appropriate success action with the appropriate JSON payload
-export async function executeSearch(search: string): Promise<{searchResults: object[], searchType: string}> {
-
+export async function executeSearch(
+  search: string,
+): Promise<{ searchResults: object[]; searchType: string }> {
   //define the search scope
   const options = [
-    {protocol: 'neo2', network: 'mainnet', ctx: NeoLegacyREST, method: 'block'},
-    {protocol: 'neo2', network: 'mainnet', ctx: NeoLegacyREST, method: 'balance'},
-    {protocol: 'neo2', network: 'mainnet', ctx: NeoLegacyREST, method: 'contract'},
-    {protocol: 'neo2', network: 'mainnet', ctx: NeoLegacyREST, method: 'transaction'},
-    {protocol: 'neo2', network: 'testnet', ctx: NeoLegacyREST, method: 'block'},
-    {protocol: 'neo2', network: 'testnet', ctx: NeoLegacyREST, method: 'balance'},
-    {protocol: 'neo2', network: 'testnet', ctx: NeoLegacyREST, method: 'contract'},
-    {protocol: 'neo2', network: 'testnet', ctx: NeoLegacyREST, method: 'transaction'},
-    {protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'block'},
-    {protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'balance'},
-    {protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'contract'},
-    {protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'transaction'},
-    {protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'block'},
-    {protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'balance'},
-    {protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'contract'},
-    {protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'transaction'},
+    {
+      protocol: 'neo2',
+      network: 'mainnet',
+      ctx: NeoLegacyREST,
+      method: 'block',
+    },
+    {
+      protocol: 'neo2',
+      network: 'mainnet',
+      ctx: NeoLegacyREST,
+      method: 'balance',
+    },
+    {
+      protocol: 'neo2',
+      network: 'mainnet',
+      ctx: NeoLegacyREST,
+      method: 'contract',
+    },
+    {
+      protocol: 'neo2',
+      network: 'mainnet',
+      ctx: NeoLegacyREST,
+      method: 'transaction',
+    },
+    {
+      protocol: 'neo2',
+      network: 'testnet',
+      ctx: NeoLegacyREST,
+      method: 'block',
+    },
+    {
+      protocol: 'neo2',
+      network: 'testnet',
+      ctx: NeoLegacyREST,
+      method: 'balance',
+    },
+    {
+      protocol: 'neo2',
+      network: 'testnet',
+      ctx: NeoLegacyREST,
+      method: 'contract',
+    },
+    {
+      protocol: 'neo2',
+      network: 'testnet',
+      ctx: NeoLegacyREST,
+      method: 'transaction',
+    },
+    { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'block' },
+    { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'balance' },
+    { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'contract' },
+    {
+      protocol: 'neo3',
+      network: 'testnet',
+      ctx: NeoRest,
+      method: 'transaction',
+    },
+    { protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'block' },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'balance',
+    },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'contract',
+    },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'transaction',
+    },
   ]
 
   //execute the search across the search scope
-  let searchResults = await Promise.all(options.map((async ({ network, protocol , ctx, method}) => {
-    try {
-      let res = await ctx[method].call(ctx, search, network)
-      if (res && res.length !== 0) { //consider removing the length check since and address may have 0 balance
-        res = { ...res, network: network, protocol: protocol, type:  method}
-        return res
+  let searchResults = await Promise.all(
+    options.map(async ({ network, protocol, ctx, method }) => {
+      try {
+        let res = await ctx[method].call(ctx, search, network)
+        if (res && res.length !== 0) {
+          //consider removing the length check since and address may have 0 balance
+          res = { ...res, network: network, protocol: protocol, type: method }
+          return res
+        }
+        return undefined
+      } catch (e) {
+        return undefined
       }
-      return undefined
-    } catch (e) {
-      return undefined
-    }
-  })))
-  searchResults = searchResults.filter( (res) => res !== undefined)
+    }),
+  )
+  searchResults = searchResults.filter(res => res !== undefined)
 
-
-  return {searchResults, searchType: searchResults.length.toString()}
-
+  return { searchResults, searchType: searchResults.length.toString() }
 }

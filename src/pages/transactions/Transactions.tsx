@@ -36,11 +36,11 @@ type ParsedTx = {
   href: string
 }
 
-const mapTransactionData = (
-  tx: Transaction,
-): ParsedTx => {
+const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    platform: (): ReactElement => <PlatformCell protocol={tx.protocol}  network={tx.network}/>,
+    platform: (): ReactElement => (
+      <PlatformCell protocol={tx.protocol} network={tx.network} />
+    ),
     time: (): ReactElement => (
       <div className="contract-time-cell">
         {convertFromSecondsToLarger(
@@ -94,12 +94,14 @@ const Transactions: React.FC<{}> = () => {
   const selectedData = (): Array<Transaction> => {
     if (protocol === 'all' && network === 'all') {
       return transactionState.all
-    } else if (protocol === 'all' && network != 'all') {
-      return transactionState.all.filter(d => (d.network === network))
-    } else if (protocol != 'all' && network === 'all') {
-      return transactionState.all.filter(d => (d.protocol === protocol))
+    } else if (protocol === 'all' && network !== 'all') {
+      return transactionState.all.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return transactionState.all.filter(d => d.protocol === protocol)
     } else {
-      return transactionState.all.filter(d => (d.protocol === protocol && d.network === network))
+      return transactionState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
     }
   }
 
@@ -156,10 +158,7 @@ const Transactions: React.FC<{}> = () => {
           }}
         />
         <List
-          data={returnTxListData(
-            selectedData(),
-            !selectedData().length,
-          )}
+          data={returnTxListData(selectedData(), !selectedData().length)}
           rowId="hash"
           isLoading={!transactionState.all.length}
           columns={columns}

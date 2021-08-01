@@ -4,8 +4,13 @@ import { ValueType } from 'react-select'
 
 import './Filter.scss'
 
+interface Platform {
+  protocol: string
+  network: string
+}
+
 type Option = {
-  value: any //TODO type this
+  value: Platform | string
   label: string
 }
 
@@ -23,35 +28,35 @@ export const Filter: React.FC<Props> = ({
       label: 'All',
       value: {
         protocol: 'all',
-        network: 'all'
-      }
+        network: 'all',
+      },
     },
     {
       label: 'Neo Legacy (Mainnet)',
       value: {
         protocol: 'neo2',
-        network: 'mainnet'
+        network: 'mainnet',
       },
     },
     {
       label: 'Neo Legacy (Testnet)',
       value: {
         protocol: 'neo2',
-        network: 'testnet'
+        network: 'testnet',
       },
     },
     {
       label: 'Neo N3 (RC3 Testnet)',
       value: {
         protocol: 'neo3',
-        network: 'testnet'
+        network: 'testnet',
       },
     },
     {
       label: 'Neo N3 (RC4 Testnet)',
       value: {
         protocol: 'neo3',
-        network: 'testnet_rc4'
+        network: 'testnet_rc4',
       },
     },
   ]

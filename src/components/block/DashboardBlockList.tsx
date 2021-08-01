@@ -65,8 +65,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const neo2List = blockState.all.filter(d => (d.protocol === 'neo2' && d.network === 'mainnet'))
-  const neo3List = blockState.all.filter(d => (d.protocol === 'neo3' && d.network === 'testnet_rc4'))
+  const neo2List = blockState.all.filter(
+    d => d.protocol === 'neo2' && d.network === 'mainnet',
+  )
+  const neo3List = blockState.all.filter(
+    d => d.protocol === 'neo3' && d.network === 'testnet_rc4',
+  )
 
   useEffect(() => {
     if (!neo2List.length) dispatch(fetchBlocks())

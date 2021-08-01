@@ -93,9 +93,7 @@ export const sortedByDate = (
   )
 }
 
-export const sortedByDateRemix = (
-  list: ListUnionType,
-): ListUnionType => {
+export const sortSingleListByDate = (list: ListUnionType): ListUnionType => {
   return list.sort(
     (b: Block | Transaction | Contract, a: Block | Transaction | Contract) => {
       const formattedTime = (time: string | number): string =>

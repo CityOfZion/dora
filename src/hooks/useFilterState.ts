@@ -1,7 +1,4 @@
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
-
-import { State as NetworkState } from '../reducers/networkReducer'
 
 type Filter = {
   protocol: string
@@ -17,12 +14,8 @@ interface FilterState {
 const useFilterState = (): FilterState => {
   const DEFAULT_FILTER: Filter = {
     protocol: 'all',
-    network: 'all'
+    network: 'all',
   }
-
-  const networkState = useSelector(
-    ({ network }: { network: NetworkState }) => network,
-  )
 
   const [filterData, setFilterData] = useState(DEFAULT_FILTER)
 

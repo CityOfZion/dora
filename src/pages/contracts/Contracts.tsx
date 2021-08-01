@@ -49,11 +49,11 @@ type ParsedContract = {
   platform: React.FC<{}>
 }
 
-const mapContractData = (
-  contract: Contract,
-): ParsedContract => {
+const mapContractData = (contract: Contract): ParsedContract => {
   return {
-    platform: (): ReactElement => <PlatformCell protocol={contract.protocol} network={contract.network} />,
+    platform: (): ReactElement => (
+      <PlatformCell protocol={contract.protocol} network={contract.network} />
+    ),
     chain: contract.protocol || '',
     hash: contract.hash,
     name: (): ReactElement => (
@@ -135,12 +135,14 @@ const Contracts: React.FC<{}> = () => {
   const selectedData = (): Array<Contract> => {
     if (protocol === 'all' && network === 'all') {
       return contractsState.all
-    } else if (protocol === 'all' && network != 'all') {
-      return contractsState.all.filter(d => (d.network === network))
-    } else if (protocol != 'all' && network === 'all') {
-      return contractsState.all.filter(d => (d.protocol === protocol))
+    } else if (protocol === 'all' && network !== 'all') {
+      return contractsState.all.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return contractsState.all.filter(d => d.protocol === protocol)
     } else {
-      return contractsState.all.filter(d => (d.protocol === protocol && d.network === network))
+      return contractsState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
     }
   }
 
@@ -180,10 +182,7 @@ const Contracts: React.FC<{}> = () => {
           }}
         />
         <List
-          data={returnContractListData(
-            selectedData(),
-            !selectedData().length,
-          )}
+          data={returnContractListData(selectedData(), !selectedData().length)}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.all.length}
