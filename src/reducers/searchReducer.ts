@@ -15,7 +15,7 @@ export type State = {
   searchValue: null | string
   shouldClearSearch: boolean
   error: boolean
-  results?: []
+  results: any[]
 }
 
 export type Action = {
@@ -33,6 +33,7 @@ export default (
     searchValue: null,
     shouldClearSearch: false,
     error: false,
+    results: [],
   },
   action: AnyAction | Action,
 ): State => {

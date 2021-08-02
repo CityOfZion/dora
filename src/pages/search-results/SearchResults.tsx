@@ -41,7 +41,10 @@ const PlatformElement = ({
             return 'RC3 Testnet'
           } else if (protocol === 'neo3' && network === 'testnet_rc4') {
             return 'RC4 Testnet'
+          } else if (protocol === 'neo3' && network === 'mainnet') {
+            return 'Mainnet'
           }
+
           return ''
         })()}
       </small>

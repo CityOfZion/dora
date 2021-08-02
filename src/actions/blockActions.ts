@@ -5,7 +5,8 @@ import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { Transaction } from '../reducers/transactionReducer'
+import { BlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { BlocksResponse as NLBlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -135,29 +136,33 @@ export function fetchBlocks(page = 1, chain?: string) {
 
       const res = await Promise.all(
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let res
+          let result: BlocksResponse | NLBlocksResponse | undefined = undefined
           if (protocol === 'neo2') {
-            res = await NeoLegacyREST.blocks(page, network)
+            result = await NeoLegacyREST.blocks(page, network)
           } else if (protocol === 'neo3') {
-            res = await NeoRest.blocks(page, network)
+            result = await NeoRest.blocks(page, network)
           }
-          res.items = res.items.map(d => ({
-            ...d,
-            network: network,
-            protocol: protocol,
-          }))
-          return res
+          if (result) {
+            return result.items.map(d => {
+              const parsed: Block = {
+                blocktime: d.blocktime,
+                hash: d.hash,
+                index: d.index,
+                size: d.size,
+                network,
+                protocol,
+                time: parseInt(d.time),
+                txCount: d.txCount,
+              }
+              return parsed
+            })
+          }
         }),
       )
 
+      const cleanedBlocks = res.flat().filter(r => r !== undefined) as Block[]
       const all = {
-        items: sortSingleListByDate(
-          res
-            .map(r => {
-              return r.items
-            })
-            .flat(),
-        ) as Transaction[],
+        items: sortSingleListByDate(cleanedBlocks) as Block[],
       }
       dispatch(requestBlocksSuccess(page, { all }))
     } catch (e) {

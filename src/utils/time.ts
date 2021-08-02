@@ -75,11 +75,11 @@ export const sortedByDate = (
 ): ListUnionType => {
   const combinedList = [
     ...neo2List.map((t: Block | Transaction | Contract) => {
-      t.chain = 'neo2'
+      t.protocol = 'neo2'
       return t
     }),
     ...neo3List.map((t: Block | Transaction | Contract) => {
-      t.chain = 'neo3'
+      t.protocol = 'neo3'
       return t
     }),
   ]

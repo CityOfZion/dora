@@ -6,6 +6,8 @@ import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { TransactionsResponse as NLTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { TransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction = (hash: string) => (
@@ -43,7 +45,7 @@ export const REQUEST_TRANSACTIONS_SUCCESS = 'REQUEST_TRANSACTIONS_SUCCESS'
 export const requestTransactionsSuccess = (
   page: number,
   json: {
-    all: { transactions: Array<Transaction> }
+    all: { items: Array<Transaction> }
   },
 ) => (dispatch: Dispatch): void => {
   dispatch({
@@ -153,34 +155,45 @@ export function fetchTransactions(page = 1) {
     try {
       dispatch(requestTransactions(page))
 
-      const res = await Promise.all(
+      interface TransactionsResponseShunt extends NLTransactionsResponse {
+        items: any[]
+      }
+      let res = await Promise.all(
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let res
-          if (protocol === 'neo2') {
-            res = await NeoLegacyREST.transactions(page, network)
-            res.items = res.transactions
-          } else if (protocol === 'neo3') {
-            res = await NeoRest.transactions(page, network)
+          let result:
+            | TransactionsResponseShunt
+            | TransactionsResponse
+            | undefined = undefined
+          if (protocol === 'neo3') {
+            result = await NeoRest.transactions(page, network)
+          } else if (protocol === 'neo2') {
+            const oldResult = await NeoLegacyREST.transactions(page, network)
+            result = oldResult as TransactionsResponseShunt
+            result.items = oldResult.transactions
           }
-          res.items = res.items.map(d => ({
-            ...d,
-            network: network,
-            protocol: protocol,
-          }))
-          return res
+
+          if (result) {
+            result.items = result.items.map(d => ({
+              ...d,
+              network: network,
+              protocol: protocol,
+            }))
+          }
+          return result
         }),
       )
 
+      res = res.flat().filter(r => r !== undefined)
       const all = {
         items: sortSingleListByDate(
           res
             .map(r => {
-              return r.items
+              return r!.items
             })
             .flat(),
         ) as Transaction[],
       }
-
+      console.log('all transactions:', all)
       dispatch(requestTransactionsSuccess(page, { all }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))

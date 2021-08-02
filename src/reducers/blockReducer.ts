@@ -32,7 +32,7 @@ export type Block = {
   index: number
   time: number
   size: number
-  tx: Array<string>
+  tx?: Array<string>
   blocktime: number
   hash: string
   txCount: number

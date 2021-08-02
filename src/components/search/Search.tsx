@@ -35,7 +35,7 @@ const Search: React.FC<{}> = () => {
       if (results && results.length > 1) {
         dispatch(clearSearchInputState())
         return history.push(`${ROUTES.SEARCH.url}/all/all/${searchValue}`)
-      } else {
+      } else if (results && results[0]) {
         dispatch(clearSearchInputState())
         let url = ''
         switch (results[0].type) {

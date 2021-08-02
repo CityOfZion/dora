@@ -5,6 +5,11 @@ import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { ContractsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import {
+  ContractsResponse as NLContractsResponse,
+  InvocationStatsResponse,
+} from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract = (hash: string) => (dispatch: Dispatch): void => {
@@ -181,28 +186,39 @@ export function fetchContracts(page = 1) {
 
       const res = await Promise.all(
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let res
+          let result:
+            | ContractsResponse
+            | NLContractsResponse
+            | undefined = undefined //TODO: Fix the typing
           if (protocol === 'neo2') {
-            res = await NeoLegacyREST.contracts(page, network)
+            result = await NeoLegacyREST.contracts(page, network)
           } else if (protocol === 'neo3') {
-            res = await NeoRest.contracts(page, network)
+            result = await NeoRest.contracts(page, network)
           }
-          res.items = res.items.map(d => ({
-            ...d,
-            network: network,
-            protocol: protocol,
-          }))
-          return res
+          if (result) {
+            return result.items.map(d => {
+              const parsed: Contract = {
+                block: d.block,
+                time: parseInt(d.time),
+                asset_name: d.asset_name,
+                hash: d.hash,
+                type: d.type,
+                symbol: d.symbol,
+                network,
+                protocol,
+              }
+              return parsed
+            })
+          }
         }),
       )
+
+      const cleanedContracts = res
+        .flat()
+        .filter(r => r !== undefined) as Contract[]
+
       const all = {
-        items: sortSingleListByDate(
-          res
-            .map(r => {
-              return r.items
-            })
-            .flat(),
-        ) as Contract[],
+        items: sortSingleListByDate(cleanedContracts) as Contract[],
       }
 
       dispatch(requestContractsSuccess(page, { all }))
@@ -219,13 +235,28 @@ export function fetchContractsInvocations() {
   ): Promise<void> => {
     if (shouldFetchContractsInvocations(getState())) {
       dispatch(requestContractsInvocations())
-
       try {
-        const response = await fetch(
-          `${GENERATE_BASE_URL('neo2', 'mainnet', false)}/invocation_stats`,
+        const res = await Promise.all(
+          SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
+            let result: InvocationStatsResponse | undefined = undefined
+            if (protocol === 'neo2') {
+              result = await NeoLegacyREST.invocationStats(network)
+            } else if (protocol === 'neo3') {
+              //const result = await NeoRest.invocationStats(network)
+            }
+
+            if (result) {
+              return result.map(d => ({
+                ...d,
+                network,
+                protocol,
+              }))
+            }
+          }),
         )
-        const json = await response.json()
-        dispatch(requestContractsInvocationsSuccess(json))
+        const cleanedContracts = res.flat().filter(r => r !== undefined)
+
+        dispatch(requestContractsInvocationsSuccess(cleanedContracts.flat()))
       } catch (e) {
         dispatch(requestContractsInvocationsError(e))
       }

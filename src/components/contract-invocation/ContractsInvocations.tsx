@@ -11,6 +11,8 @@ import { fetchContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
+import Filter, { Platform } from '../filter/Filter'
+import useFilterState from '../../hooks/useFilterState'
 
 type Invocation = {
   name: string
@@ -93,6 +95,22 @@ const ContractsInvocations: React.FC<{}> = () => {
   const { contractsInvocations, isLoading } = contractState
   const width = useWindowWidth()
 
+  const { protocol, handleSetFilterData, network } = useFilterState()
+  const selectedData = (): Array<any> => {
+    console.log('filtering', contractsInvocations)
+    if (protocol === 'all' && network === 'all') {
+      return contractsInvocations
+    } else if (protocol === 'all' && network !== 'all') {
+      return contractsInvocations.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return contractsInvocations.filter(d => d.protocol === protocol)
+    } else {
+      return contractsInvocations.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
+    }
+  }
+
   useEffect(() => {
     if (!contractsInvocations.length) dispatch(fetchContractsInvocations())
   }, [contractsInvocations, dispatch])
@@ -116,17 +134,30 @@ const ContractsInvocations: React.FC<{}> = () => {
         ]
 
   return (
-    <div
-      id="ContractInvocations"
-      className={width > 768 ? '' : 'mobile-contract-invocations'}
-    >
-      <List
-        data={returnBlockListData(contractsInvocations, isLoading)}
-        rowId="index"
-        withoutPointer
-        isLoading={isLoading}
-        columns={columns}
-      />
+    <div>
+      <div className="label-wrapper">
+        <label>Contract Invocations in the last 24 hours</label>
+        <Filter
+          handleFilterUpdate={(option): void => {
+            handleSetFilterData({
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
+            })
+          }}
+        />
+      </div>
+      <div
+        id="ContractInvocations"
+        className={width > 768 ? '' : 'mobile-contract-invocations'}
+      >
+        <List
+          data={returnBlockListData(selectedData(), isLoading)}
+          rowId="index"
+          withoutPointer
+          isLoading={isLoading}
+          columns={columns}
+        />
+      </div>
     </div>
   )
 }

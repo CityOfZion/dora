@@ -16,7 +16,7 @@ import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import Filter from '../../components/filter/Filter'
+import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -148,8 +148,8 @@ const Blocks: React.FC<{}> = () => {
         <Filter
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              protocol: option.value.protocol,
-              network: option.value.network,
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
             })
           }}
         />

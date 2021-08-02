@@ -9,6 +9,7 @@ import {
   REQUEST_CONTRACTS_INVOCATIONS,
   REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
 } from '../actions/contractActions'
+import { InvocationStatsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 
 type Action = {
   type: string
@@ -20,13 +21,18 @@ type Action = {
   page: number
 }
 
+export interface InvocationStats extends InvocationStatsResponse {
+  network: string
+  protocol: string
+}
+
 export type State = {
   isLoading: boolean
   cached: { [key: string]: Contract }
   all: Contract[]
   lastUpdated: Date | null
   contract: DetailedContract | null
-  contractsInvocations: []
+  contractsInvocations: InvocationStats[]
   page: number
   hasFetchedContractsInvocations: boolean
   totalCount: number
@@ -37,7 +43,7 @@ export type Contract = {
   time: number
   name?: string
   hash: string
-  idx: number
+  idx?: number
   author?: string
   asset_name: string
   symbol: string

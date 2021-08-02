@@ -91,7 +91,14 @@ export async function executeSearch(
   search: string,
 ): Promise<{ searchResults: object[]; searchType: string }> {
   //define the search scope
-  const options = [
+  interface SearchOptions {
+    protocol: string
+    network: string
+    ctx: any
+    method: string
+  }
+
+  const options: SearchOptions[] = [
     {
       protocol: 'neo2',
       network: 'mainnet',
@@ -168,10 +175,29 @@ export async function executeSearch(
       ctx: NeoRest,
       method: 'transaction',
     },
+    { protocol: 'neo3', network: 'mainnet', ctx: NeoRest, method: 'block' },
+    {
+      protocol: 'neo3',
+      network: 'mainnet',
+      ctx: NeoRest,
+      method: 'balance',
+    },
+    {
+      protocol: 'neo3',
+      network: 'mainnet',
+      ctx: NeoRest,
+      method: 'contract',
+    },
+    {
+      protocol: 'neo3',
+      network: 'mainnet',
+      ctx: NeoRest,
+      method: 'transaction',
+    },
   ]
 
   //execute the search across the search scope
-  let searchResults = await Promise.all(
+  let searchResults: any[] = await Promise.all(
     options.map(async ({ network, protocol, ctx, method }) => {
       try {
         let res = await ctx[method].call(ctx, search, network)

@@ -10,7 +10,6 @@ import { ROUTES } from '../../constants'
 import ContractsInvocations from '../../components/contract-invocation/ContractsInvocations'
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
-import Select from '../../components/select/Select'
 
 const Home: React.FC<{}> = () => {
   const history = useHistory()
@@ -62,15 +61,6 @@ const Home: React.FC<{}> = () => {
           </div>
         </div>
         <div id="contracts-invocations-container">
-          <div className="label-wrapper">
-            <label>Contract Invocations in the last 24 hours</label>
-
-            <Select
-              disabled
-              options={[{ label: 'Neo Legacy', value: 'neo2' }]}
-              selectedOption={{ label: 'Neo Legacy', value: 'neo2' }}
-            />
-          </div>
           <div className="invocations-list-wrapper">
             <ContractsInvocations />
           </div>

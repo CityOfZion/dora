@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
 import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import Filter from '../../components/filter/Filter'
+import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 
 type Contract = {
@@ -134,15 +134,17 @@ const Contracts: React.FC<{}> = () => {
   const { protocol, handleSetFilterData, network } = useFilterState()
   const selectedData = (): Array<Contract> => {
     if (protocol === 'all' && network === 'all') {
-      return contractsState.all
+      return contractsState.all as Contract[]
     } else if (protocol === 'all' && network !== 'all') {
-      return contractsState.all.filter(d => d.network === network)
+      return contractsState.all.filter(d => d.network === network) as Contract[]
     } else if (protocol !== 'all' && network === 'all') {
-      return contractsState.all.filter(d => d.protocol === protocol)
+      return contractsState.all.filter(
+        d => d.protocol === protocol,
+      ) as Contract[]
     } else {
       return contractsState.all.filter(
         d => d.protocol === protocol && d.network === network,
-      )
+      ) as Contract[]
     }
   }
 
@@ -176,8 +178,8 @@ const Contracts: React.FC<{}> = () => {
         <Filter
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              protocol: option.value.protocol,
-              network: option.value.network,
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
             })
           }}
         />

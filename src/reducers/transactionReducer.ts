@@ -23,7 +23,7 @@ type Action = {
 export type State = {
   isLoading: boolean
   cached: { [key: string]: DetailedTransaction }
-  all: []
+  all: Transaction[]
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
   page: number
@@ -131,14 +131,7 @@ export const INITIAL_STATE = {
 }
 
 export default (
-  state: State = {
-    isLoading: false,
-    cached: {},
-    all: [],
-    lastUpdated: null,
-    transaction: null,
-    page: 1,
-  },
+  state: State = INITIAL_STATE,
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {

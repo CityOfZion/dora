@@ -14,9 +14,10 @@ import {
   BYTE_STRING_OPTION,
 } from '../../constants'
 import { TransactionNotification } from '../../reducers/transactionReducer'
+import { Platform } from '../filter/Filter'
 
 type Option = {
-  value: string
+  value: Platform | string
   label: string
   convert?:
     | ((value: string, chain?: string) => Promise<string> | string | undefined)
