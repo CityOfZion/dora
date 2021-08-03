@@ -19,6 +19,8 @@ type Invocation = {
   hash: string
   count: number
   change: string
+  network?: string
+  protocol?: string
 }
 
 type ParsedInvocation = {
@@ -37,7 +39,7 @@ const mapInvocationData = (
     contract: (): ReactElement => (
       <Link
         // BUGBUG this should come from state or get passed as a prop
-        to={`${ROUTES.CONTRACT.url}/neo2/mainnet/${invocation.hash}`}
+        to={`${ROUTES.CONTRACT.url}/${invocation.protocol}/${invocation.network}/${invocation.hash}`}
         className="invocation-name-container"
       >
         <div className="invocation-position">{position + 1}</div>

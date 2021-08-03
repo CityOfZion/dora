@@ -1201,10 +1201,10 @@
   "resolved" "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz"
   "version" "0.2.3"
 
-"@cityofzion/dora-ts@^0.0.5":
-  "integrity" "sha512-3KtOg91z+kOquuWDfSzxOKVKPlnD1dt1QMlsdF/slhrTK1jCNTZRzXdKJVAnUfn9oAEAg1QguwnFvtmja0mYkQ=="
-  "resolved" "https://registry.npmjs.org/@cityofzion/dora-ts/-/dora-ts-0.0.5.tgz"
-  "version" "0.0.5"
+"@cityofzion/dora-ts@^0.0.6":
+  "integrity" "sha512-yrSwc/AUAZcQ8T0HKjzgdrtXmbk3x1ivPSzywRckevNOFUF+gfCsWT2qcEPtq/8DETglaUFkS5llQv9c4U4pzA=="
+  "resolved" "https://registry.npmjs.org/@cityofzion/dora-ts/-/dora-ts-0.0.6.tgz"
+  "version" "0.0.6"
   dependencies:
     "axios" "^0.21.1"
 

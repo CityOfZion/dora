@@ -242,9 +242,8 @@ export function fetchContractsInvocations() {
             if (protocol === 'neo2') {
               result = await NeoLegacyREST.invocationStats(network)
             } else if (protocol === 'neo3') {
-              //const result = await NeoRest.invocationStats(network)
+              result = await NeoRest.invocationStats(network)
             }
-
             if (result) {
               return result.map(d => ({
                 ...d,
