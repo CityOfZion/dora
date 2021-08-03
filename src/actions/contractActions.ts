@@ -254,8 +254,10 @@ export function fetchContractsInvocations() {
           }),
         )
         const cleanedContracts = res.flat().filter(r => r !== undefined)
-
-        dispatch(requestContractsInvocationsSuccess(cleanedContracts.flat()))
+        const sortedContract = cleanedContracts
+          .flat()
+          .sort((a, b) => (a!.count < b!.count ? 1 : -1))
+        dispatch(requestContractsInvocationsSuccess(sortedContract))
       } catch (e) {
         dispatch(requestContractsInvocationsError(e))
       }
