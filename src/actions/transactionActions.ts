@@ -193,7 +193,6 @@ export function fetchTransactions(page = 1) {
             .flat(),
         ) as Transaction[],
       }
-      console.log('all transactions:', all)
       dispatch(requestTransactionsSuccess(page, { all }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))

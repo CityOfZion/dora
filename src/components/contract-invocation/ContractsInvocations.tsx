@@ -99,7 +99,6 @@ const ContractsInvocations: React.FC<{}> = () => {
 
   const { protocol, handleSetFilterData, network } = useFilterState()
   const selectedData = (): Array<any> => {
-    console.log('filtering', contractsInvocations)
     if (protocol === 'all' && network === 'all') {
       return contractsInvocations
     } else if (protocol === 'all' && network !== 'all') {
