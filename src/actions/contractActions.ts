@@ -197,6 +197,12 @@ export function fetchContracts(page = 1) {
           }
           if (result) {
             return result.items.map(d => {
+              if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
+                d.asset_name = d.manifest.name
+              } else if (d.asset_name === '' && 'name' in d) {
+                d.asset_name = d.name
+              }
+
               const parsed: Contract = {
                 block: d.block,
                 time: parseInt(d.time),
