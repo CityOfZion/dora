@@ -1,8 +1,6 @@
 import React, { ReactElement, useEffect, useState, useContext } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
-
-import { State as NetworkState } from '../../reducers/networkReducer'
 import Snackbar from '@material-ui/core/Snackbar'
 import { Socket } from '../../config/Socket'
 import './Monitor.scss'
@@ -14,8 +12,8 @@ import { ReactComponent as Hourglass } from '../../assets/icons/hourglass.svg'
 import {
   State as NodeState,
   WSDoraData,
-  SerializeState as SerializeNode,
   SORT_OPTION,
+  OrderNodes,
 } from '../../reducers/nodeReducer'
 import { setNode } from '../../actions/nodeActions'
 import List, { ColumnType } from '../../components/list/List'
@@ -24,14 +22,11 @@ import InformationPanel from '../../components/panel/InformationPanel'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
 import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
 import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
-import { MonitorContext, TFilterName } from '../../contexts/MonitorContext'
+import { MonitorContext } from '../../contexts/MonitorContext'
 import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
-import ToggleDropdown, {
-  Option,
-} from '../../components/toggleDropdown/ToggleDropdown'
-import { ValueType } from 'react-select'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import NetworkToggle from '../../components/network-toggle/NetworkToggle'
+import Filter, { Platform } from '../../components/filter/Filter'
+import useFilterState from '../../hooks/useFilterState'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -53,7 +48,7 @@ interface AllNodes {
 
 interface Endpoint extends AllNodes {
   url: string
-  locationEndPoint: string
+  locale: string
 }
 
 const STATUS_ICONS = [
@@ -63,7 +58,7 @@ const STATUS_ICONS = [
   { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
 ]
 
-const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
+const Endpoint: React.FC<Endpoint> = ({ url, locale, disable }) => {
   const { setMessage, setShowMessage } = useContext(MonitorContext)
   const handleClickEndpoint = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -73,17 +68,6 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
     setMessage('Copied to Clipboard!')
     setShowMessage(true)
   }
-  const LOCATIONS_FLAGS = [
-    { location: 'United States', countryCode: 'US' },
-    { location: 'USA', countryCode: 'US' },
-    { location: 'Hong Kong', countryCode: 'HK' },
-    { location: 'Canada', countryCode: 'CA' },
-    { location: 'China', countryCode: 'CN' },
-    { location: 'US', countryCode: 'US' },
-    { location: 'Singapore', countryCode: 'SG' },
-    { location: 'France', countryCode: 'FR' },
-    { location: 'Russia', countryCode: 'RU' },
-  ]
 
   return (
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
@@ -94,11 +78,7 @@ const Endpoint: React.FC<Endpoint> = ({ url, locationEndPoint, disable }) => {
             fontSize: '1.5em',
             lineHeight: '1.5em',
           }}
-          countryCode={
-            LOCATIONS_FLAGS.find(
-              ({ location }) => location === locationEndPoint,
-            )?.countryCode
-          }
+          countryCode={locale}
         />
       </div>
       <div className="endpoint-url">{url}</div>
@@ -150,22 +130,6 @@ const TypeNode: React.FC<TypeNode> = ({ disable, textType }) => {
   return <div className={disable ? 'disable' : ''}>{textType}</div>
 }
 
-interface Availability extends AllNodes {
-  text: string
-}
-
-const Availability: React.FC<Availability> = ({ text, disable }) => {
-  return <div className={disable ? 'disable' : ''}>{text}</div>
-}
-
-interface StateHeight extends AllNodes {
-  text: string
-}
-
-const StateHeight: React.FC<StateHeight> = ({ text, disable }) => {
-  return <div className={disable ? 'disable' : ''}>{text}</div>
-}
-
 const mapNodesData = (data: WSDoraData): ParsedNodes => {
   const isPositive = (): boolean =>
     data.status === 'ok' ||
@@ -176,44 +140,32 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
     endpoint: (): ReactElement => (
       <Endpoint
         url={data.url}
-        locationEndPoint={data.location}
-        disable={!isPositive() ? true : false}
+        locale={data.locale}
+        disable={!isPositive()}
         key={data.url}
       />
     ),
     blockHeight: isPositive()
       ? `#${data.height}`
       : (): ReactElement => (
-          <NegativeComponent
-            useHashTag={true}
-            disable={!isPositive() ? true : false}
-          />
+          <NegativeComponent useHashTag={true} disable={!isPositive()} />
         ),
     version: isPositive()
       ? data.version
-      : (): ReactElement => (
-          <NegativeComponent disable={!isPositive() ? true : false} />
-        ),
+      : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
     type: (): ReactElement => (
-      <TypeNode textType={data.type} disable={!isPositive() ? true : false} />
+      <TypeNode textType={data.type} disable={!isPositive()} />
     ),
     peers: isPositive()
       ? data.peers
-      : (): ReactElement => (
-          <NegativeComponent disable={!isPositive() ? true : false} />
-        ),
+      : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
     availability: isPositive()
-      ? `${data.reliability}%`
-      : (): ReactElement => (
-          <NegativeComponent disable={!isPositive() ? true : false} />
-        ),
+      ? `${data.availability}%`
+      : (): ReactElement => <NegativeComponent disable={!isPositive()} />,
     stateHeight: isPositive()
       ? `#${data.stateheight}`
       : (): ReactElement => (
-          <NegativeComponent
-            useHashTag={true}
-            disable={!isPositive() ? true : false}
-          />
+          <NegativeComponent useHashTag={true} disable={!isPositive()} />
         ),
     isItUp: (): ReactElement => <IsItUp statusIsItUp={data.status} />,
     chain: data.status || '',
@@ -223,7 +175,6 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
 const returnNodesListData = (
   data: Array<WSDoraData>,
   returnStub: boolean,
-  network: string,
 ): Array<ParsedNodes> => {
   if (returnStub) {
     return MOCK_NODES.map(n => n)
@@ -273,9 +224,10 @@ const mobileColumns: ColumnType[] = [
   { name: 'Availability', accessor: 'availability', sortOpt: 'availability' },
 ]
 
-const NetworkStatus: React.FC<{}> = () => {
-  const width = useWindowWidth()
-  const nodes = useSelector(({ node }: { node: NodeState }) => node)
+interface NetworkStatus {
+  data: WSDoraData[]
+}
+const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   const BEST_BLOCK = 'Best Block'
   const LAST_BLOCK = 'Last Block'
   const AVG_BLOCK_TIME = 'Avg Block Time'
@@ -284,15 +236,9 @@ const NetworkStatus: React.FC<{}> = () => {
   const [lastBlockCounter, setLastBlockCounter] = useState<number>(0)
   const [listAvgBlockTime, setListAvgBlockTime] = useState<number[]>([])
   const [avgBlockTime, setAvgBlockTime] = useState<string>('')
-  const [selectedOption, setSelectedOption] = useState<Option>({
-    label: 'All',
-    value: 'all',
-  })
-
-  const { setFilterName } = useContext(MonitorContext)
 
   const getBestBlock = (): number => {
-    const sortedList = SerializeNode(nodes).sort((data1, data2) => {
+    const sortedList = data.sort((data1, data2) => {
       if (data1.height <= data2.height) {
         return 0
       } else return 1
@@ -306,14 +252,19 @@ const NetworkStatus: React.FC<{}> = () => {
   const handleLastBlock = (): void => {
     setInterval(() => {
       setLastBlockCounter(prevState => {
-        const newCounter = prevState + 1
-        return newCounter
+        return prevState + 1
       })
     }, 1000)
   }
 
   const handleAvgBlockCounter = (): void => {
-    setListAvgBlockTime(prevState => [...prevState, lastBlockCounter])
+    //workaround for integrator wind-up
+    if (
+      listAvgBlockTime.length > 0 ||
+      (listAvgBlockTime.length === 0 && lastBlockCounter > 2)
+    ) {
+      setListAvgBlockTime(prevState => [...prevState, lastBlockCounter])
+    }
   }
 
   useEffect(() => {
@@ -335,71 +286,67 @@ const NetworkStatus: React.FC<{}> = () => {
 
   useEffect(() => {
     setBestBlock(getBestBlock()) //eslint-disable-next-line
-  }, [nodes])
-
-  const handleChangeChain = (option: ValueType<Option, false>): void => {
-    setSelectedOption(option || selectedOption)
-    setFilterName((option?.value as TFilterName) || 'Default')
-  }
+  }, [data])
 
   return (
-    <div className="network-status-container">
-      <div className="network-status-header">
-        <span className="network-status-title">Network status</span>
-        <div className="network-status-toggle">
-          <ToggleDropdown
-            disabled={false}
-            options={[
-              { label: 'All', value: 'all' },
-              { label: 'Neo Legacy', value: 'N2' },
-              { label: 'Neo (Testnet)', value: 'N3' },
-            ]}
-            selectedOption={selectedOption}
-            handleChange={handleChangeChain}
-          />
-          {width < 768 && <NetworkToggle disabled={false} />}
-        </div>
-      </div>
-      <div className="network-status-content">
-        <InformationPanel
-          title={BEST_BLOCK}
-          data={`#${bestBlock
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}
-          icon={<Cube />}
-        />
-        <InformationPanel
-          title={LAST_BLOCK}
-          data={`${String(lastBlockCounter)} seconds ago`}
-          icon={<Hourglass />}
-        />
-        <InformationPanel
-          title={AVG_BLOCK_TIME}
-          data={`${avgBlockTime} seconds`}
-          icon={<Graphic />}
-        />
-      </div>
+    <div className="network-status-content">
+      <InformationPanel
+        title={BEST_BLOCK}
+        data={`#${bestBlock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}
+        icon={<Cube />}
+      />
+      <InformationPanel
+        title={LAST_BLOCK}
+        data={`${String(lastBlockCounter)} seconds ago`}
+        icon={<Hourglass />}
+      />
+      <InformationPanel
+        title={AVG_BLOCK_TIME}
+        data={`${avgBlockTime} seconds`}
+        icon={<Graphic />}
+      />
     </div>
   )
 }
 
 const Monitor: React.FC<{}> = () => {
-  const { network } = useSelector(
-    ({ network }: { network: NetworkState }) => network,
-  )
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const [dataList, setDataList] = useState<Array<ParsedNodes>>([])
+  const { protocol, handleSetFilterData, network } = useFilterState()
   const [sortDataList, setSortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION
   }>({ desc: false, sort: 'isItUp' })
-  const {
-    message,
-    showMessage,
-    filterName,
-    setShowMessage,
-    setFilterName,
-  } = useContext(MonitorContext)
+
+  const { message, showMessage, setShowMessage } = useContext(MonitorContext)
+
+  const selectedData = (): WSDoraData[] => {
+    const sortedNodes = OrderNodes(
+      sortDataList.sort,
+      nodes.nodesArray,
+      sortDataList.desc,
+    )
+
+    if (protocol === 'all' && network === 'all') {
+      return sortedNodes
+    } else if (protocol === 'all' && network !== 'all') {
+      return sortedNodes.filter(node => node.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return sortedNodes.filter(node => node.protocol === protocol)
+    } else {
+      //temporary state, remove when api cuts over
+      let mutableNetwork = network
+      if (protocol === 'neo3' && mutableNetwork === 'testnet') {
+        mutableNetwork = 'testnet_rc3'
+      }
+      if (mutableNetwork === 'testnet_rc4') {
+        mutableNetwork = 'testnet'
+      }
+
+      return sortedNodes.filter(
+        node => node.protocol === protocol && node.network === mutableNetwork,
+      )
+    }
+  }
 
   const handleSortDataList = (option: SORT_OPTION): void => {
     setSortDataList({ sort: option, desc: !sortDataList.desc })
@@ -407,63 +354,14 @@ const Monitor: React.FC<{}> = () => {
 
   const dispatch = useDispatch()
 
+  /**
+   * Configures and begins listening to the socket
+   */
   useEffect(() => {
     socket.listening<WSDoraData>(data => {
       dispatch(setNode(data))
     })
-  }, [dispatch])
-
-  const handleSetDataList = (): WSDoraData[] => {
-    switch (filterName) {
-      case 'testnet':
-        return SerializeNode(
-          nodes,
-          sortDataList.sort,
-          sortDataList.desc,
-        ).filter(nodes => {
-          return nodes.network === 'TestNet' || nodes.network === 'N3 TestNet'
-        })
-
-      case 'N3':
-        return SerializeNode(
-          nodes,
-          sortDataList.sort,
-          sortDataList.desc,
-        ).filter(nodes => {
-          return nodes.network.startsWith(filterName)
-        })
-
-      case 'N2':
-        return SerializeNode(
-          nodes,
-          sortDataList.sort,
-          sortDataList.desc,
-        ).filter(nodes => {
-          return !nodes.network.startsWith(filterName)
-        })
-
-      default:
-        return SerializeNode(
-          nodes,
-          sortDataList.sort,
-          sortDataList.desc,
-        ).filter(nodes => {
-          return nodes.network === 'MainNet'
-        })
-    }
-  }
-
-  useEffect(() => {
-    setDataList(returnNodesListData(handleSetDataList(), false, network)) //eslint-disable-next-line
-  }, [nodes, sortDataList])
-
-  useEffect(() => {
-    setFilterName(network as TFilterName)
-  }, [network, setFilterName])
-
-  useEffect(() => {
-    setDataList(returnNodesListData(handleSetDataList(), false, network)) //eslint-disable-next-line
-  }, [filterName])
+  }, [dispatch, sortDataList])
 
   const width = useWindowWidth()
 
@@ -497,14 +395,27 @@ const Monitor: React.FC<{}> = () => {
           {ROUTES.MONITOR.renderIcon()}
           <h1>{ROUTES.MONITOR.name}</h1>
         </div>
-
-        <NetworkStatus />
-
+        <div className="network-status-container">
+          <div className="network-status-header">
+            <span className="network-status-title">Network status</span>
+            <div className="network-status-toggle">
+              <Filter
+                handleFilterUpdate={(option): void => {
+                  handleSetFilterData({
+                    protocol: (option.value as Platform).protocol,
+                    network: (option.value as Platform).network,
+                  })
+                }}
+              />
+            </div>
+          </div>
+          <NetworkStatus data={selectedData()} />
+        </div>
         <div>
           <List
-            data={dataList}
+            data={returnNodesListData(selectedData(), !selectedData().length)}
             columns={conditionalColumns}
-            isLoading={!Array(nodes.entries()).length}
+            isLoading={nodes.isLoading}
             rowId="endpoint"
             leftBorderColorOnRow={(_, chain): string => {
               const color = STATUS_ICONS.find(({ status }) => status === chain)

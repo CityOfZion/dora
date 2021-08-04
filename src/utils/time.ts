@@ -75,15 +75,26 @@ export const sortedByDate = (
 ): ListUnionType => {
   const combinedList = [
     ...neo2List.map((t: Block | Transaction | Contract) => {
-      t.chain = 'neo2'
+      t.protocol = 'neo2'
       return t
     }),
     ...neo3List.map((t: Block | Transaction | Contract) => {
-      t.chain = 'neo3'
+      t.protocol = 'neo3'
       return t
     }),
   ]
   return combinedList.sort(
+    (b: Block | Transaction | Contract, a: Block | Transaction | Contract) => {
+      const formattedTime = (time: string | number): string =>
+        moment(new Date(Number(time) * 1000)).format()
+
+      return formattedTime(a.time).localeCompare(formattedTime(b.time))
+    },
+  )
+}
+
+export const sortSingleListByDate = (list: ListUnionType): ListUnionType => {
+  return list.sort(
     (b: Block | Transaction | Contract, a: Block | Transaction | Contract) => {
       const formattedTime = (time: string | number): string =>
         moment(new Date(Number(time) * 1000)).format()

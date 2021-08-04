@@ -1,9 +1,12 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL } from '../constants'
+import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
-import { sortedByDate } from '../utils/time'
+import { sortSingleListByDate } from '../utils/time'
+import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { BlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { BlocksResponse as NLBlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -131,17 +134,37 @@ export function fetchBlocks(page = 1, chain?: string) {
     try {
       dispatch(requestBlocks(page))
 
-      const neo2 = await (
-        await fetch(`${GENERATE_BASE_URL('neo2', false)}/blocks/${page}`)
-      ).json()
+      const res = await Promise.all(
+        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
+          let result: BlocksResponse | NLBlocksResponse | undefined = undefined
+          if (protocol === 'neo2') {
+            result = await NeoLegacyREST.blocks(page, network)
+          } else if (protocol === 'neo3') {
+            result = await NeoRest.blocks(page, network)
+          }
+          if (result) {
+            return result.items.map(d => {
+              const parsed: Block = {
+                blocktime: d.blocktime,
+                hash: d.hash,
+                index: d.index,
+                size: d.size,
+                network,
+                protocol,
+                time: parseInt(d.time),
+                txCount: d.txCount,
+              }
+              return parsed
+            })
+          }
+        }),
+      )
 
-      const neo3 = await (
-        await fetch(`${GENERATE_BASE_URL('neo3', false)}/blocks/${page}`)
-      ).json()
-
-      const all = sortedByDate(neo2.items, neo3.items)
-
-      dispatch(requestBlocksSuccess(page, { neo2, neo3, all }))
+      const cleanedBlocks = res.flat().filter(r => r !== undefined) as Block[]
+      const all = {
+        items: sortSingleListByDate(cleanedBlocks) as Block[],
+      }
+      dispatch(requestBlocksSuccess(page, { all }))
     } catch (e) {
       dispatch(requestBlockError(page, e))
     }

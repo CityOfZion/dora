@@ -2,9 +2,10 @@ import React, { ReactElement } from 'react'
 import Select from '../select/Select'
 import { ValueType } from 'react-select'
 import './ToggleDropdown.scss'
+import { Platform } from '../filter/Filter'
 
 export type Option = {
-  value: string
+  value: Platform | string
   label: string
 }
 
