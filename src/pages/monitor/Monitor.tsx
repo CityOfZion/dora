@@ -259,7 +259,6 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
   const handleAvgBlockCounter = (): void => {
     //workaround for integrator wind-up
-    console.log(listAvgBlockTime)
     if (
       listAvgBlockTime.length > 0 ||
       (listAvgBlockTime.length === 0 && lastBlockCounter > 2)

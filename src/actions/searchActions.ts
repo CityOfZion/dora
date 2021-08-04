@@ -203,7 +203,14 @@ export async function executeSearch(
         let res = await ctx[method].call(ctx, search, network)
         if (res && res.length !== 0) {
           //consider removing the length check since and address may have 0 balance
+          if (method === 'balance') {
+            res = {
+              address: search,
+              balances: res,
+            }
+          }
           res = { ...res, network: network, protocol: protocol, type: method }
+
           return res
         }
         return undefined
@@ -213,6 +220,5 @@ export async function executeSearch(
     }),
   )
   searchResults = searchResults.filter(res => res !== undefined)
-
   return { searchResults, searchType: searchResults.length.toString() }
 }
