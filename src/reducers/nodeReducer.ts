@@ -3,6 +3,7 @@ export type WSDoraData = {
   locale: string
   location: string
   network: string
+  protocol: string
   type: string
   height: number
   last_seen: number
@@ -10,7 +11,7 @@ export type WSDoraData = {
   stateheight: number
   status: string
   version: string
-  reliability?: number
+  reliability: number
   plugins: {
     name: string
     version: string
@@ -22,9 +23,25 @@ export type WSDoraData = {
   url: string
 }
 
-export type State = Map<string, WSDoraData>
+export type State = {
+  bestBlock: number | null
+  lastBlock: number | null
+  averageBlockTime: number | null
+  nodesArray: WSDoraData[]
+  nodesMap: Map<string, WSDoraData>
+  isLoading: boolean
+  totalCount: number
+}
 
-const INITIAL_STATE: State = new Map<string, WSDoraData>()
+export const INITIAL_STATE: State = {
+  bestBlock: null,
+  lastBlock: null,
+  averageBlockTime: null,
+  nodesArray: [],
+  nodesMap: new Map<string, WSDoraData>(),
+  isLoading: true,
+  totalCount: 0,
+}
 
 export type SORT_OPTION =
   | 'endpoint'
@@ -36,19 +53,7 @@ export type SORT_OPTION =
   | 'version'
   | 'peers'
 
-export const SerializeState = (
-  state: State,
-  orderBy?: SORT_OPTION,
-  desc?: boolean,
-): WSDoraData[] => {
-  const serializedData: WSDoraData[] = []
-  Array.from(state.entries()).forEach(([_, data]) => {
-    serializedData.push(data)
-  })
-  return orderBy ? orderNodes(orderBy, serializedData, desc) : serializedData
-}
-
-const orderNodes = (
+export const OrderNodes = (
   field: SORT_OPTION,
   nodes: WSDoraData[],
   desc?: boolean,
@@ -258,14 +263,22 @@ const orderNodes = (
 export default (state: State = INITIAL_STATE, action: NodeDTO): State => {
   switch (action.type) {
     case SET_NODE:
-      const newState = new Map<string, WSDoraData>(state)
-      newState.set(action.data.url, {
-        ...action.data,
-        reliability: action.data.reliability
-          ? action.data.reliability
-          : action.data.availability,
+      let found = false
+      const nodeList = state.nodesArray.map(node => {
+        if (node.url === action.data.url) {
+          found = true
+          return action.data
+        }
+        return node
       })
-      return newState
+      if (!found) {
+        nodeList.push(action.data)
+      }
+      return Object.assign({}, state, {
+        nodesArray: nodeList,
+        totalCount: nodeList.length,
+        isLoading: false,
+      })
     default:
       return state
   }

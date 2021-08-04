@@ -75,7 +75,7 @@ const Router: React.FC = (): ReactElement => {
 
                 <Route
                   exact
-                  path={`${ROUTES.SEARCH.url}/:chain/:network/:hash`}
+                  path={`${ROUTES.SEARCH.url}/:protocol/:network/:search`}
                   component={(): ReactElement => <SearchResults />}
                 />
 
