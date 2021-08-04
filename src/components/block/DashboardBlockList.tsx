@@ -10,12 +10,11 @@ import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks } from '../../actions/blockActions'
-import { Block, State as BlockState } from '../../reducers/blockReducer'
+import { State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import './DashboardBlockList.scss'
 
-/*
 type Block = {
   index: number
   time: number
@@ -25,8 +24,6 @@ type Block = {
   hash: string
   txCount: number
 }
-
- */
 
 type ParsedBlock = {
   time: string
@@ -68,16 +65,11 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const width = useWindowWidth()
 
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const neo2List = blockState.all.filter(
-    d => d.protocol === 'neo2' && d.network === 'mainnet',
-  )
-  const neo3List = blockState.all.filter(
-    d => d.protocol === 'neo3' && d.network === 'mainnet',
-  )
-
+  const { neo2List, neo3List } = blockState
+  const list = neo2List
   useEffect(() => {
-    if (!neo2List.length) dispatch(fetchBlocks())
-  }, [dispatch, neo2List.length])
+    if (!list.length) dispatch(fetchBlocks())
+  }, [dispatch, list.length])
 
   const columns =
     width > 768
@@ -104,24 +96,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   return (
     <div className="multi-chain-dashboard-list list-row-container">
       <div className="block-list-chain-container">
-        <div>
-          <h4>Neo N3 (Mainnet)</h4>
-          <div className="list-wrapper">
-            <List
-              data={returnBlockListData(neo3List, blockState.isLoading)}
-              rowId="height"
-              generateHref={(data): string =>
-                `${ROUTES.BLOCK.url}/neo3/mainnet/${data.id}`
-              }
-              isLoading={blockState.isLoading}
-              columns={columns}
-              leftBorderColorOnRow="#D355E7"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="block-list-chain-container">
-        <h4>Neo Legacy (Mainnet)</h4>
+        <h4>Neo Legacy</h4>
         <div className="list-wrapper">
           <List
             data={returnBlockListData(neo2List, blockState.isLoading)}
@@ -133,6 +108,23 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
             columns={columns}
             leftBorderColorOnRow="#D355E7"
           />
+        </div>
+      </div>
+      <div className="block-list-chain-container">
+        <div>
+          <h4>Neo (Testnet)</h4>
+          <div className="list-wrapper">
+            <List
+              data={returnBlockListData(neo3List, blockState.isLoading)}
+              rowId="height"
+              generateHref={(data): string =>
+                `${ROUTES.BLOCK.url}/neo3/testnet/${data.id}`
+              }
+              isLoading={blockState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
         </div>
       </div>
     </div>

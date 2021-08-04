@@ -16,7 +16,7 @@ import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import Filter, { Platform } from '../../components/filter/Filter'
+import Filter from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -33,12 +33,10 @@ type ParsedBlock = {
   chain: string
 }
 
-const mapBlockData = (block: Block): ParsedBlock => {
+const mapBlockData = (block: Block, network?: string): ParsedBlock => {
   return {
-    chain: block.protocol || '',
-    platform: (): ReactElement => (
-      <PlatformCell protocol={block.protocol} network={block.network} />
-    ),
+    chain: block.chain || '',
+    platform: (): ReactElement => <PlatformCell chain={block.chain} />,
     time: convertFromSecondsToLarger(
       getDiffInSecondsFromNow(moment.unix(block.time).format()),
     ),
@@ -55,7 +53,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
       </div>
     ),
 
-    href: `${ROUTES.BLOCK.url}/${block.protocol}/${block.network}/${block.index}`,
+    href: `${ROUTES.BLOCK.url}/${block.chain}/${network}/${block.index}`,
   }
 }
 
@@ -67,7 +65,7 @@ const returnBlockListData = (
   if (returnStub) {
     return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
   } else {
-    return data.map(block => mapBlockData(block))
+    return data.map(block => mapBlockData(block, network))
   }
 }
 
@@ -80,18 +78,15 @@ const Blocks: React.FC<{}> = () => {
     const nextPage = blockState.page + 1
     dispatch(fetchBlocks(nextPage))
   }
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
   const selectedData = (): Array<Block> => {
-    if (protocol === 'all' && network === 'all') {
-      return blockState.all
-    } else if (protocol === 'all' && network !== 'all') {
-      return blockState.all.filter(d => d.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return blockState.all.filter(d => d.protocol === protocol)
-    } else {
-      return blockState.all.filter(
-        d => d.protocol === protocol && d.network === network,
-      )
+    switch (selectedChain) {
+      case 'neo2':
+        return blockState.neo2List
+      case 'neo3':
+        return blockState.neo3List
+      default:
+        return blockState.all
     }
   }
 
@@ -148,8 +143,7 @@ const Blocks: React.FC<{}> = () => {
         <Filter
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
+              selectedChain: option.value,
             })
           }}
         />

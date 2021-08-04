@@ -58,13 +58,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
-  const { all } = txState
-  const neo2List = all.filter(
-    d => d.protocol === 'neo2' && d.network === 'mainnet',
-  )
-  const neo3List = all.filter(
-    d => d.protocol === 'neo3' && d.network === 'mainnet',
-  )
+  const { neo2List } = txState
 
   useEffect(() => {
     if (!neo2List.length) dispatch(fetchTransactions())
@@ -85,27 +79,10 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   return (
     <div className="multi-chain-dashboard-list list-row-container">
       <div className="block-list-chain-container">
-        <div>
-          <h4>Neo N3 (Mainnet) </h4>
-          <div className="list-wrapper">
-            <List
-              data={returnTxListData(neo3List, txState.isLoading)}
-              rowId="hash"
-              generateHref={(data): string =>
-                `${ROUTES.TRANSACTION.url}/neo3/mainnet/${data.id}`
-              }
-              isLoading={txState.isLoading}
-              columns={columns}
-              leftBorderColorOnRow="#D355E7"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="block-list-chain-container">
-        <h4>Neo Legacy (Mainnet)</h4>
+        <h4>Neo Legacy</h4>
         <div className="list-wrapper">
           <List
-            data={returnTxListData(neo2List, txState.isLoading)}
+            data={returnTxListData(txState.neo2List, txState.isLoading)}
             rowId="hash"
             generateHref={(data): string =>
               `${ROUTES.TRANSACTION.url}/neo2/${network}/${data.id}`
@@ -114,6 +91,23 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
             columns={columns}
             leftBorderColorOnRow="#D355E7"
           />
+        </div>
+      </div>
+      <div className="block-list-chain-container">
+        <div>
+          <h4>Neo (Testnet) </h4>
+          <div className="list-wrapper">
+            <List
+              data={returnTxListData(txState.neo3List, txState.isLoading)}
+              rowId="hash"
+              generateHref={(data): string =>
+                `${ROUTES.TRANSACTION.url}/neo3/testnet/${data.id}`
+              }
+              isLoading={txState.isLoading}
+              columns={columns}
+              leftBorderColorOnRow="#D355E7"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
-/* eslint-disable */
-import React, { ReactElement, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
 
@@ -14,145 +13,26 @@ import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
 import { formatDate } from '../../utils/time'
 
 interface MatchParams {
-  search: string
-  protocol: string
+  hash: string
+  chain: string
   network: string
 }
 
 type Props = RouteComponentProps<MatchParams>
 
-const PlatformElement = ({
-  protocol,
-  network,
-}: {
-  protocol: string | void
-  network: string | void
-}): ReactElement => (
-  <div className="search-result-chain-info">
-    <div id="chain-icon">{protocol === 'neo2' ? <Neo2 /> : <Neo3 />}</div>
-    <p>{protocol === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</p>
-    <p>
-      <small>
-        {((): string => {
-          if (protocol === 'neo2' && network === 'mainnet') {
-            return 'Mainnet'
-          } else if (protocol === 'neo2' && network === 'testnet') {
-            return 'Testnet'
-          } else if (protocol === 'neo3' && network === 'testnet') {
-            return 'RC3 Testnet'
-          } else if (protocol === 'neo3' && network === 'testnet_rc4') {
-            return 'RC4 Testnet'
-          } else if (protocol === 'neo3' && network === 'mainnet') {
-            return 'Mainnet'
-          }
-
-          return ''
-        })()}
-      </small>
-    </p>
-  </div>
-)
-
-const BlockResult = (result: any): ReactElement => (
-  <Link
-    to={`${ROUTES.BLOCK.url}/${result.protocol}/${result.network}/${result.index}`}
-  >
-    <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
-      <div className="search-results-details">
-        <div className="search-result-type">
-          {ROUTES.BLOCKS.renderIcon()} Block
-        </div>
-        <div className="search-result-info">
-          <div className="search-result-detail">
-            <label>Height</label>
-            {result.index}
-          </div>
-          <div className="search-result-detail">
-            <label>Size</label>
-            {result.size.toLocaleString()} Bytes
-          </div>
-          <div className="search-result-detail">
-            <label>Date</label>
-            {formatDate(result.time)}
-          </div>
-
-          <div className="search-result-detail">
-            <label>Transaction count</label>
-            {result.txCount}
-          </div>
-        </div>
-      </div>
-    </div>
-  </Link>
-)
-
-const AddressResult = (result: any): ReactElement => (
-  <Link
-    to={`${ROUTES.WALLET.url}/${result.protocol}/${result.network}/${result.address}`}
-  >
-    <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
-      <div className="search-results-details">
-        <div className="search-result-type">
-          {ROUTES.WALLETS.renderIcon()} Address
-        </div>
-        <div className="search-result-info">
-          <div className="search-result-detail">
-            <label>Address</label>
-            {result.address}
-          </div>
-          <div className="search-result-detail">
-            <label>Asset Types</label>
-            {result.balances.length}
-          </div>
-        </div>
-      </div>
-    </div>
-  </Link>
-)
-
-const TransactionResult = (result: any): ReactElement => (
-  <Link
-    to={`${ROUTES.TRANSACTION.url}/${result.protocol}/${result.network}/${result.hash}`}
-  >
-    <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
-      <div className="search-results-details">
-        <div className="search-result-type">
-          {ROUTES.TRANSACTIONS.renderIcon()} Transaction
-        </div>
-        <div className="search-result-info"></div>
-      </div>
-    </div>
-  </Link>
-)
-
-const SearchResult = ({ result }: { result: any }): ReactElement => {
-  switch (result.type) {
-    case 'block':
-      return BlockResult(result)
-    case 'balance':
-      return AddressResult(result)
-    case 'transaction':
-      return TransactionResult(result)
-  }
-  return <div />
-}
-
 const SearchResults: React.FC<Props> = (props: Props) => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { search, network } = props.match.params
+  const { hash, network } = props.match.params
   const { results } = searchState
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (!results) {
-      dispatch(handleSearchInput(search))
+      dispatch(handleSearchInput(hash, network))
     }
-  }, [dispatch, search, network, results])
+  }, [dispatch, hash, network, results])
 
   return (
     <div id="SearchResults" className="page-container">
@@ -177,13 +57,51 @@ const SearchResults: React.FC<Props> = (props: Props) => {
         </div>
 
         <div className="results-explanation">
-          Showing results for <div className="results">"{search}"</div>
+          Showing results for <div className="results">"{hash}"</div>
         </div>
 
         <div className="results">
           {results &&
             Object.values(results).map(result => {
-              return <SearchResult result={result} />
+              return (
+                <Link
+                  to={`${ROUTES.BLOCK.url}/${result.chain}/${network}/${result.index}`}
+                >
+                  <div className="search-result-container">
+                    <div className="search-result-chain-info">
+                      <div id="chain-icon">
+                        {result.chain === 'neo2' ? <Neo2 /> : <Neo3 />}
+                      </div>
+                      <p> {result.chain === 'neo2' ? network : '(Testnet)'}</p>
+                    </div>
+
+                    <div className="search-results-details">
+                      <div className="search-result-type">
+                        {ROUTES.BLOCKS.renderIcon()} Block
+                      </div>
+                      <div className="search-result-info">
+                        <div className="search-result-detail">
+                          <label>Height</label>
+                          {result.index}
+                        </div>
+                        <div className="search-result-detail">
+                          <label>Size</label>
+                          {result.size.toLocaleString()} Bytes
+                        </div>
+                        <div className="search-result-detail">
+                          <label>Date</label>
+                          {formatDate(result.time)}
+                        </div>
+
+                        <div className="search-result-detail">
+                          <label>Transaction count</label>
+                          {result.txCount}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              )
             })}
         </div>
       </div>

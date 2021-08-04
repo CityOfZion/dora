@@ -7,13 +7,15 @@ import { ReactComponent as MobileLogo } from '../../assets/icons/mobile-logo.svg
 import { ReactComponent as BurgerMenu } from '../../assets/icons/burger-menu.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import Search from '../search/Search'
-import { NavLink, useHistory } from 'react-router-dom'
+import { useLocation, NavLink, useHistory } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import { useSelector, useDispatch } from 'react-redux'
 import { State as MenuState } from '../../reducers/menuReducer'
 import { openMenu, closeMenu } from '../../actions/menuActions'
+import NetworkToggle from '../network-toggle/NetworkToggle'
 
 const Navigation: React.FC = (): ReactElement => {
+  const location = useLocation()
   const history = useHistory()
   const dispatch = useDispatch()
   const menuState = useSelector(({ menu }: { menu: MenuState }) => menu)
@@ -34,6 +36,17 @@ const Navigation: React.FC = (): ReactElement => {
     dispatch(closeMenu())
   }
 
+  function shouldDisableNetworkToggle(): boolean {
+    return (
+      location.pathname !== ROUTES.HOME.url &&
+      location.pathname !== ROUTES.TRANSACTIONS.url &&
+      location.pathname !== ROUTES.CONTRACTS.url &&
+      location.pathname !== ROUTES.BLOCKS.url &&
+      location.pathname !== ROUTES.MONITOR.url &&
+      !location.pathname.includes(ROUTES.SEARCH.url)
+    )
+  }
+
   return (
     <>
       <div id="navigation-container">
@@ -45,6 +58,10 @@ const Navigation: React.FC = (): ReactElement => {
 
             <div className="navigation-search-container">
               <Search />
+            </div>
+
+            <div className="navigation-network-toggle">
+              <NetworkToggle disabled={shouldDisableNetworkToggle()} />
             </div>
           </div>
         </div>

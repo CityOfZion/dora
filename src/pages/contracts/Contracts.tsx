@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
 import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import Filter, { Platform } from '../../components/filter/Filter'
+import Filter from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 
 type Contract = {
@@ -27,8 +27,7 @@ type Contract = {
   asset_name: string
   symbol: string
   type: string
-  protocol?: string
-  network?: string
+  chain?: string
   manifest?: {
     name: string
     extras: {
@@ -49,12 +48,13 @@ type ParsedContract = {
   platform: React.FC<{}>
 }
 
-const mapContractData = (contract: Contract): ParsedContract => {
+const mapContractData = (
+  contract: Contract,
+  network?: string,
+): ParsedContract => {
   return {
-    platform: (): ReactElement => (
-      <PlatformCell protocol={contract.protocol} network={contract.network} />
-    ),
-    chain: contract.protocol || '',
+    platform: (): ReactElement => <PlatformCell chain={contract.chain} />,
+    chain: contract.chain || '',
     hash: contract.hash,
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
@@ -89,18 +89,19 @@ const mapContractData = (contract: Contract): ParsedContract => {
         {contract.block.toLocaleString()}{' '}
       </div>
     ),
-    href: `${ROUTES.CONTRACT.url}/${contract.protocol}/${contract.network}/${contract.hash}`,
+    href: `${ROUTES.CONTRACT.url}/${contract.chain}/${network}/${contract.hash}`,
   }
 }
 
 const returnContractListData = (
   data: Array<Contract>,
   returnStub: boolean,
+  network: string,
 ): Array<ParsedContract> => {
   if (returnStub) {
     return MOCK_CONTRACT_LIST_DATA.map(c => mapContractData(c))
   } else {
-    return data.map(c => mapContractData(c))
+    return data.map(c => mapContractData(c, network))
   }
 }
 
@@ -131,20 +132,16 @@ const Contracts: React.FC<{}> = () => {
     dispatch(fetchContracts(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { selectedChain, handleSetFilterData, network } = useFilterState()
+
   const selectedData = (): Array<Contract> => {
-    if (protocol === 'all' && network === 'all') {
-      return contractsState.all as Contract[]
-    } else if (protocol === 'all' && network !== 'all') {
-      return contractsState.all.filter(d => d.network === network) as Contract[]
-    } else if (protocol !== 'all' && network === 'all') {
-      return contractsState.all.filter(
-        d => d.protocol === protocol,
-      ) as Contract[]
-    } else {
-      return contractsState.all.filter(
-        d => d.protocol === protocol && d.network === network,
-      ) as Contract[]
+    switch (selectedChain) {
+      case 'neo2':
+        return contractsState.neo2List
+      case 'neo3':
+        return contractsState.neo3List
+      default:
+        return contractsState.all
     }
   }
 
@@ -178,13 +175,16 @@ const Contracts: React.FC<{}> = () => {
         <Filter
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
+              selectedChain: option.value,
             })
           }}
         />
         <List
-          data={returnContractListData(selectedData(), !selectedData().length)}
+          data={returnContractListData(
+            selectedData(),
+            !selectedData().length,
+            network,
+          )}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.all.length}

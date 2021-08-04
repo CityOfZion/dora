@@ -15,14 +15,6 @@
   "rules": {
     "prettier/prettier": 1,
     "@typescript-eslint/member-delimiter-style": 0,
-    "@typescript-eslint/camelcase": 0,
-    "@typescript-eslint/ban-types": "off",  //work to remove this
-    "@typescript-eslint/ban-ts-comment": "off",  //work to remove this
-    "@typescript-eslint/no-explicit-any": "off", //work to remove this
-    "@typescript-eslint/no-non-null-assertion": "off", //work to remove this
-    "@typescript-eslint/explicit-module-boundary-types": "off", //work to remove this
-    "@typescript-eslint/no-redeclare": "off", //work to remove this
-    "import/no-anonymous-default-export": "off", //work to remove this
-    "react-hooks/exhaustive-deps": "off" //work to remove this
+    "@typescript-eslint/camelcase": 0
   }
 }

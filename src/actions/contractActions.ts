@@ -1,15 +1,9 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
+import { GENERATE_BASE_URL } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
-import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { ContractsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import {
-  ContractsResponse as NLContractsResponse,
-  InvocationStatsResponse,
-} from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract = (hash: string) => (dispatch: Dispatch): void => {
@@ -184,50 +178,17 @@ export function fetchContracts(page = 1) {
     try {
       dispatch(requestContracts(page))
 
-      const res = await Promise.all(
-        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let result:
-            | ContractsResponse
-            | NLContractsResponse
-            | undefined = undefined //TODO: Fix the typing
-          if (protocol === 'neo2') {
-            result = await NeoLegacyREST.contracts(page, network)
-          } else if (protocol === 'neo3') {
-            result = await NeoRest.contracts(page, network)
-          }
-          if (result) {
-            return result.items.map(d => {
-              if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
-                d.asset_name = d.manifest.name
-              } else if (d.asset_name === '' && 'name' in d) {
-                d.asset_name = d.name
-              }
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/contracts/${page}`)
+      ).json()
 
-              const parsed: Contract = {
-                block: d.block,
-                time: parseInt(d.time),
-                asset_name: d.asset_name,
-                hash: d.hash,
-                type: d.type,
-                symbol: d.symbol,
-                network,
-                protocol,
-              }
-              return parsed
-            })
-          }
-        }),
-      )
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/contracts/${page}`)
+      ).json()
 
-      const cleanedContracts = res
-        .flat()
-        .filter(r => r !== undefined) as Contract[]
+      const all = { items: sortedByDate(neo2.items, neo3.items) as Contract[] }
 
-      const all = {
-        items: sortSingleListByDate(cleanedContracts) as Contract[],
-      }
-
-      dispatch(requestContractsSuccess(page, { all }))
+      dispatch(requestContractsSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestContractsError(page, e))
     }
@@ -241,29 +202,13 @@ export function fetchContractsInvocations() {
   ): Promise<void> => {
     if (shouldFetchContractsInvocations(getState())) {
       dispatch(requestContractsInvocations())
+
       try {
-        const res = await Promise.all(
-          SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-            let result: InvocationStatsResponse | undefined = undefined
-            if (protocol === 'neo2') {
-              result = await NeoLegacyREST.invocationStats(network)
-            } else if (protocol === 'neo3') {
-              result = await NeoRest.invocationStats(network)
-            }
-            if (result) {
-              return result.map(d => ({
-                ...d,
-                network,
-                protocol,
-              }))
-            }
-          }),
+        const response = await fetch(
+          `${GENERATE_BASE_URL('neo2', false)}/invocation_stats`,
         )
-        const cleanedContracts = res.flat().filter(r => r !== undefined)
-        const sortedContract = cleanedContracts
-          .flat()
-          .sort((a, b) => (a!.count < b!.count ? 1 : -1))
-        dispatch(requestContractsInvocationsSuccess(sortedContract))
+        const json = await response.json()
+        dispatch(requestContractsInvocationsSuccess(json))
       } catch (e) {
         dispatch(requestContractsInvocationsError(e))
       }

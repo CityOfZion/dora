@@ -63,25 +63,22 @@ export const ASSETS = [
 ]
 
 export const GENERATE_BASE_URL = (
-  protocol = 'neo2',
-  network = 'mainnet',
-  useState = true,
+  chain = 'neo2',
+  useChainInState = true,
 ): string => {
-  if (useState) {
-    network = store.getState().network.network
-    protocol = store.getState().network.chain
+  const net = store.getState().network.network
+  const chainInState = store.getState().network.chain
+
+  let useChain = chain
+
+  if (useChainInState) useChain = chainInState
+
+  if (useChain !== 'neo2') {
+    return `https://dora.coz.io/api/v1/${useChain}/testnet`
   }
 
-  return `https://dora.coz.io/api/v1/${protocol}/${network}`
+  return `https://dora.coz.io/api/v1/${useChain}/${net}`
 }
-
-export const SUPPORTED_PLATFORMS = [
-  { protocol: 'neo3', network: 'mainnet' },
-  { protocol: 'neo3', network: 'testnet' },
-  { protocol: 'neo3', network: 'testnet_rc4' },
-  { protocol: 'neo2', network: 'mainnet' },
-  { protocol: 'neo2', network: 'testnet' },
-]
 
 export const TRANSFER = '7472616e73666572'
 
@@ -240,7 +237,8 @@ export const neo3_hexToAscii = async (str1: string): Promise<string> => {
   if (size === 20) {
     return neo3_getAddressFromSriptHash(str1)
   } else {
-    return atob(str1)
+    const unencoded = atob(str1)
+    return unencoded
   }
 }
 

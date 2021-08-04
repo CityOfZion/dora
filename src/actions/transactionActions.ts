@@ -1,13 +1,10 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
+import { GENERATE_BASE_URL } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
-import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { TransactionsResponse as NLTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
-import { TransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { sortedByDate } from '../utils/time'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction = (hash: string) => (
@@ -45,7 +42,9 @@ export const REQUEST_TRANSACTIONS_SUCCESS = 'REQUEST_TRANSACTIONS_SUCCESS'
 export const requestTransactionsSuccess = (
   page: number,
   json: {
-    all: { items: Array<Transaction> }
+    neo2: { transactions: Array<Transaction> }
+    neo3: { transactions: Array<Transaction> }
+    all: { transactions: Array<Transaction> }
   },
 ) => (dispatch: Dispatch): void => {
   dispatch({
@@ -155,45 +154,24 @@ export function fetchTransactions(page = 1) {
     try {
       dispatch(requestTransactions(page))
 
-      interface TransactionsResponseShunt extends NLTransactionsResponse {
-        items: any[]
-      }
-      let res = await Promise.all(
-        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let result:
-            | TransactionsResponseShunt
-            | TransactionsResponse
-            | undefined = undefined
-          if (protocol === 'neo3') {
-            result = await NeoRest.transactions(page, network)
-          } else if (protocol === 'neo2') {
-            const oldResult = await NeoLegacyREST.transactions(page, network)
-            result = oldResult as TransactionsResponseShunt
-            result.items = oldResult.transactions
-          }
+      const neo2 = await (
+        await fetch(`${GENERATE_BASE_URL('neo2', false)}/transactions/${page}`)
+      ).json()
 
-          if (result) {
-            result.items = result.items.map(d => ({
-              ...d,
-              network: network,
-              protocol: protocol,
-            }))
-          }
-          return result
-        }),
-      )
+      const neo3 = await (
+        await fetch(`${GENERATE_BASE_URL('neo3', false)}/transactions/${page}`)
+      ).json()
 
-      res = res.flat().filter(r => r !== undefined)
+      neo3.transactions = neo3.items
+
       const all = {
-        items: sortSingleListByDate(
-          res
-            .map(r => {
-              return r!.items
-            })
-            .flat(),
+        transactions: sortedByDate(
+          neo2.transactions,
+          neo3.transactions,
         ) as Transaction[],
       }
-      dispatch(requestTransactionsSuccess(page, { all }))
+
+      dispatch(requestTransactionsSuccess(page, { neo2, neo3, all }))
     } catch (e) {
       dispatch(requestTransactionsError(page, e))
     }

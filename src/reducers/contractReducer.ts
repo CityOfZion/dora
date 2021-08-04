@@ -9,7 +9,6 @@ import {
   REQUEST_CONTRACTS_INVOCATIONS,
   REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
 } from '../actions/contractActions'
-import { InvocationStatsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 
 type Action = {
   type: string
@@ -21,18 +20,15 @@ type Action = {
   page: number
 }
 
-export interface InvocationStats extends InvocationStatsResponse {
-  network: string
-  protocol: string
-}
-
 export type State = {
   isLoading: boolean
   cached: { [key: string]: Contract }
+  neo2List: Contract[]
+  neo3List: Contract[]
   all: Contract[]
   lastUpdated: Date | null
   contract: DetailedContract | null
-  contractsInvocations: InvocationStats[]
+  contractsInvocations: []
   page: number
   hasFetchedContractsInvocations: boolean
   totalCount: number
@@ -43,13 +39,12 @@ export type Contract = {
   time: number
   name?: string
   hash: string
-  idx?: number
+  idx: number
   author?: string
   asset_name: string
   symbol: string
   type: string
-  protocol?: string
-  network?: string
+  chain?: string
 }
 
 export type InvocationStat = {
@@ -75,6 +70,8 @@ export type DetailedContract = {
 export const INITIAL_STATE = {
   isLoading: false,
   cached: {},
+  neo2List: [],
+  neo3List: [],
   all: [],
   contractsInvocations: [],
   hasFetchedContractsInvocations: false,
@@ -88,6 +85,8 @@ export default (
   state: State = {
     isLoading: false,
     cached: {},
+    neo2List: [],
+    neo3List: [],
     all: [],
     contractsInvocations: [],
     hasFetchedContractsInvocations: false,
@@ -121,6 +120,8 @@ export default (
     case REQUEST_CONTRACTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
+        neo2List: [...state.neo2List, ...action.json.neo2.items],
+        neo3List: [...state.neo3List, ...action.json.neo3.items],
         all: [...state.all, ...action.json.all.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
@@ -136,6 +137,8 @@ export default (
     case CLEAR_CONTRACTS_LIST:
       return Object.assign({}, state, {
         all: [],
+        neo2List: [],
+        neo3List: [],
         page: 0,
       })
 

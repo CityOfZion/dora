@@ -4,13 +4,8 @@ import { ValueType } from 'react-select'
 
 import './Filter.scss'
 
-export interface Platform {
-  protocol: string
-  network: string
-}
-
-export interface Option {
-  value: Platform | string
+type Option = {
+  value: string
   label: string
 }
 
@@ -26,51 +21,21 @@ export const Filter: React.FC<Props> = ({
   const options: Option[] = [
     {
       label: 'All',
-      value: {
-        protocol: 'all',
-        network: 'all',
-      },
+      value: 'all',
     },
     {
-      label: 'Neo N3 (Mainnet)',
-      value: {
-        protocol: 'neo3',
-        network: 'mainnet',
-      },
+      label: 'Neo Legacy',
+      value: 'neo2',
     },
     {
-      label: 'Neo N3 (Testnet)',
-      value: {
-        protocol: 'neo3',
-        network: 'testnet_rc4',
-      },
-    },
-    {
-      label: 'Neo N3 (RC3 Testnet)',
-      value: {
-        protocol: 'neo3',
-        network: 'testnet',
-      },
-    },
-    {
-      label: 'Neo Legacy (Mainnet)',
-      value: {
-        protocol: 'neo2',
-        network: 'mainnet',
-      },
-    },
-    {
-      label: 'Neo Legacy (Testnet)',
-      value: {
-        protocol: 'neo2',
-        network: 'testnet',
-      },
+      label: 'Neo (Testnet)',
+      value: 'neo3',
     },
   ]
 
   // TODO: this should read redux state to set default
   const [currentOption, setCurrentOption] = useState(
-    selectedOption || options[0],
+    selectedOption || options[1],
   )
 
   const setFilter = (option: ValueType<Option, false>): void => {
