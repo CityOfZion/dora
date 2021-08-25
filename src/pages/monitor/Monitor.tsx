@@ -232,11 +232,6 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   const LAST_BLOCK = 'Last Block'
   const AVG_BLOCK_TIME = 'Avg Block Time'
 
-  const [bestBlock, setBestBlock] = useState<number>(0)
-  const [lastBlockCounter, setLastBlockCounter] = useState<number>(0)
-  const [listAvgBlockTime, setListAvgBlockTime] = useState<number[]>([])
-  const [avgBlockTime, setAvgBlockTime] = useState<string>('')
-
   const getBestBlock = (): number => {
     const sortedList = data.sort((data1, data2) => {
       if (data1.height <= data2.height) {
@@ -248,6 +243,11 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
       return sortedList[0].height
     } else return 0
   }
+
+  const [bestBlock, setBestBlock] = useState<number>(getBestBlock())
+  const [lastBlockCounter, setLastBlockCounter] = useState<number>(0)
+  const [listAvgBlockTime, setListAvgBlockTime] = useState<number[]>([])
+  const [avgBlockTime, setAvgBlockTime] = useState<string>('')
 
   const handleLastBlock = (): void => {
     setInterval(() => {
@@ -277,7 +277,11 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
       avg = avg + time
       return avg
     }, 0)
-    setAvgBlockTime((sumBlockTime / listAvgBlockTime.length).toFixed(1))
+    if (listAvgBlockTime.length !== 0) {
+      setAvgBlockTime((sumBlockTime / listAvgBlockTime.length).toFixed(1))
+    } else {
+      setAvgBlockTime('0')
+    }
   }, [listAvgBlockTime])
 
   useEffect(() => {
