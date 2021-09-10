@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
@@ -33,11 +33,20 @@ const Block: React.FC<Props> = (props: Props) => {
   const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const [blockTimeState, setBlockTimeState] = useState('')
   const { block, isLoading } = blockState
 
   useEffect(() => {
     dispatch(fetchBlock(hash))
   }, [dispatch, hash])
+
+  useEffect(() => {
+    const { block } = blockState
+    if (block?.blocktime && block?.blocktime > 0) {
+      const blockTimeInSeconds = (block.blocktime / 1000).toFixed(3)
+      setBlockTimeState(blockTimeInSeconds)
+    }
+  }, [blockState])
 
   return (
     <div id="Block" className="page-container">
@@ -121,7 +130,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className="detail-tile">
                   <label>BLOCK TIME</label>
-                  <span>{!isLoading && block && block.blocktime} seconds</span>
+                  <span>{!isLoading && block && blockTimeState} seconds</span>
                 </div>
               </div>
               <div
