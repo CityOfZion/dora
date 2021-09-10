@@ -93,7 +93,7 @@ const Contract: React.FC<Props> = (props: Props) => {
           )}
 
           <div className="details-section">
-            <div className="section-label">DETAILS</div>
+            <div className="section-label">CONTRACT INFORMATION</div>
             <div className="inner-details-container">
               <div className="detail-tile-row">
                 <div className="detail-tile">
@@ -109,11 +109,14 @@ const Contract: React.FC<Props> = (props: Props) => {
                   </span>
                 </div>
                 <div className="detail-tile">
-                  <label>TYPE</label>
+                  <label>
+                    {chain === 'neo2' ? 'TYPE' : 'SUPPORTED STANDARDS'}
+                  </label>
                   <span>
                     {chain === 'neo2'
                       ? 'NEP5'
-                      : contract?.manifest?.supportedstandards.join(', ')}
+                      : contract?.manifest?.supportedstandards.join(', ') ||
+                        'N/A'}
                   </span>
                 </div>
                 <div className="detail-tile">
@@ -169,6 +172,35 @@ const Contract: React.FC<Props> = (props: Props) => {
               </div>
             </div>
           </div>
+          {chain === 'neo3' && (
+            <div className="details-section">
+              <div className="section-label">DETAILS</div>
+              <div className="inner-details-container">
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>AUTHOR</label>
+                    <span>{contract?.manifest?.extra['Author'] || ''}</span>
+                  </div>
+                  <div className="detail-tile">
+                    <label>EMAIL</label>
+                    <span>{contract?.manifest?.extra['Email'] || ''}</span>
+                  </div>
+                </div>
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>DESCRIPTION</label>
+                    <span>
+                      {contract?.manifest?.extra['Description'] || ''}
+                    </span>
+                  </div>
+                  <div className="detail-tile">
+                    <label>COMPILER</label>
+                    <span>{contract?.nef?.compiler || 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="script-section">
             <div className="section-label">SCRIPT</div>
             <div id="contract-script">
