@@ -1,8 +1,5 @@
 import React, { ReactElement } from 'react'
-import moment from 'moment'
-import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
-import clockIcon from '@iconify/icons-simple-line-icons/clock'
+
 
 import { DetailedBlock } from '../../reducers/blockReducer'
 import List from '../list/List'
@@ -11,6 +8,7 @@ import { BlockTransaction } from '../../reducers/transactionReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import ParsedTransactionType from './ParsedTransactionType'
+import TransactionTime from './TransactionTime'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -26,18 +24,7 @@ const mapTransactionData = (
   block: DetailedBlock,
 ): ParsedTx => {
   return {
-    time: (): ReactElement => (
-      <span className="transaction-time-details-row">
-        <div>
-          <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
-          <span>{moment.unix(block.time).format('MM-DD-YYYY')}</span>
-        </div>
-        <div>
-          <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-          <span>{moment.unix(block.time).format('hh:mm:ss')}</span>
-        </div>
-      </span>
-    ),
+    time: (): ReactElement => <TransactionTime block_time={block.time}/>,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.txid} </div>
     ),
