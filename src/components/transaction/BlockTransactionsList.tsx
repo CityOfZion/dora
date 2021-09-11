@@ -44,7 +44,7 @@ const mapTransactionData = (
     size: `${tx.size.toLocaleString()} Bytes`,
     parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
     type: tx.type,
-    hash: tx.txid,
+    hash: tx.hash ? tx.hash: tx.txid,
   }
 }
 
