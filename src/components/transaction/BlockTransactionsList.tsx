@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react'
 
-
 import { DetailedBlock } from '../../reducers/blockReducer'
 import List from '../list/List'
 import './BlockTransactionsList.scss'
@@ -24,14 +23,14 @@ const mapTransactionData = (
   block: DetailedBlock,
 ): ParsedTx => {
   return {
-    time: (): ReactElement => <TransactionTime block_time={block.time}/>,
+    time: (): ReactElement => <TransactionTime block_time={block.time} />,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.txid} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
-    type: tx.type || "contract",
-    hash: tx.hash ? tx.hash: tx.txid,
+    type: tx.type || 'contract',
+    hash: tx.hash ? tx.hash : tx.txid,
   }
 }
 

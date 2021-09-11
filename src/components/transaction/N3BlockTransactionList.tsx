@@ -1,8 +1,4 @@
 import React, { ReactElement } from 'react'
-import moment from 'moment'
-import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
-import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import { DetailedBlock } from '../../reducers/blockReducer'
 import List from '../list/List'
@@ -13,8 +9,6 @@ import useWindowWidth from '../../hooks/useWindowWidth'
 import ParsedTransactionType from './ParsedTransactionType'
 import TransactionTime, { TransactionTimeProps } from './TransactionTime'
 
-
-
 type ParsedTx = {
   time: React.FC<TransactionTimeProps>
   txid: React.FC<{}>
@@ -23,18 +17,17 @@ type ParsedTx = {
   hash: string
 }
 
-
 const mapTransactionData = (
   tx: BlockTransaction,
   block: DetailedBlock,
 ): ParsedTx => {
   return {
-    time: (): ReactElement => <TransactionTime block_time={block.time}/>,
+    time: (): ReactElement => <TransactionTime block_time={block.time} />,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    parsedType: (): ReactElement => <ParsedTransactionType type={"contract"} />,
+    parsedType: (): ReactElement => <ParsedTransactionType type={'contract'} />,
     hash: tx.hash,
   }
 }
@@ -75,7 +68,7 @@ const N3BlockTransactionsList: React.FC<{
 
   return (
     <div id="BlockTransactionsList">
-      <List 
+      <List
         data={returnTxListData(list, block)}
         rowId="hash"
         generateHref={(data): string =>
@@ -83,7 +76,7 @@ const N3BlockTransactionsList: React.FC<{
         }
         isLoading={loading}
         columns={columns}
-        leftBorderColorOnRow={"#4CFFB3"}
+        leftBorderColorOnRow={'#4CFFB3'}
       />
     </div>
   )
