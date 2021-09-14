@@ -88,13 +88,25 @@ workflows:
           requires:
             - test
           filters:
-            branches:
+            tags:
               only:
-                - develop
-      - deploy-production:
+                - dev
+            branches:
+              ignore: /.*/
+      - approve-release:
+          type: approval
           requires:
             - test
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
+      - deploy-production:
+          requires:
+            - approve-release
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
