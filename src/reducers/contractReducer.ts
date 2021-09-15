@@ -70,6 +70,9 @@ export type DetailedContract = {
   manifest?: {
     name: string
     supportedstandards: []
+    extra: {
+      [key: string]: string
+    }
   }
   nef: NEF
 }
