@@ -174,7 +174,9 @@ const Contract: React.FC<Props> = (props: Props) => {
           <div className="script-section">
             <div className="section-label">SCRIPT</div>
             <div id="contract-script">
-              {contract && !isLoading && contract.script}
+              {chain === 'neo2'
+                ? contract?.script || 'NA'
+                : contract?.nef.script || 'NA'}
             </div>
           </div>
 

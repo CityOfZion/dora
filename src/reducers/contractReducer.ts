@@ -10,6 +10,7 @@ import {
   REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
 } from '../actions/contractActions'
 import { InvocationStatsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { NEF } from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
 
 type Action = {
   type: string
@@ -70,6 +71,7 @@ export type DetailedContract = {
     name: string
     supportedstandards: []
   }
+  nef: NEF
 }
 
 export const INITIAL_STATE = {
