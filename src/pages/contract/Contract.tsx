@@ -109,7 +109,9 @@ const Contract: React.FC<Props> = (props: Props) => {
                   </span>
                 </div>
                 <div className="detail-tile">
-                  <label>TYPE</label>
+                  <label>
+                    {chain === 'neo2' ? 'TYPE' : 'SUPPORTED STANDARDS'}
+                  </label>
                   <span>
                     {chain === 'neo2'
                       ? 'NEP5'
