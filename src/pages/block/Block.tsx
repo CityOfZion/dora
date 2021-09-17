@@ -154,7 +154,6 @@ const Block: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {/* TODO: implement the tx list com22ponent for neo3 */}
           {block && !!block.tx.length && chain === 'neo2' && (
             <div className="block-transactions-section">
               <div className="details-section">
