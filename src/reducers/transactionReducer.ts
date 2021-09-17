@@ -118,7 +118,8 @@ export type BlockTransaction = {
   size: number
   time: number
   txid: string
-  type: string
+  type?: string
+  hash: string
 }
 
 export const INITIAL_STATE = {

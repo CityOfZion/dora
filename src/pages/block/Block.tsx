@@ -19,6 +19,7 @@ import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { formatDate, formatHours } from '../../utils/time'
+import N3BlockTransactionsList from '../../components/transaction/N3BlockTransactionList'
 
 interface MatchParams {
   hash: string
@@ -162,13 +163,27 @@ const Block: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {/* TODO: implement the tx list component for neo3 */}
           {block && !!block.tx.length && chain === 'neo2' && (
             <div className="block-transactions-section">
               <div className="details-section">
                 <div className="section-label">TRANSACTIONS</div>
 
                 <BlockTransactionsList
+                  loading={isLoading}
+                  list={block.tx}
+                  block={block}
+                  network={network}
+                  chain={chain}
+                />
+              </div>
+            </div>
+          )}
+          {block && !!block.tx.length && chain === 'neo3' && (
+            <div className="block-transactions-section">
+              <div className="details-section">
+                <div className="section-label">TRANSACTIONS</div>
+
+                <N3BlockTransactionsList
                   loading={isLoading}
                   list={block.tx}
                   block={block}

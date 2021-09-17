@@ -7,13 +7,12 @@ import { BlockTransaction } from '../../reducers/transactionReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import ParsedTransactionType from './ParsedTransactionType'
-import TransactionTime from './TransactionTime'
+import TransactionTime, { TransactionTimeProps } from './TransactionTime'
 
 type ParsedTx = {
-  time: React.FC<{}>
+  time: React.FC<TransactionTimeProps>
   txid: React.FC<{}>
   size: string
-  type: string
   parsedType: React.FC<{}>
   hash: string
 }
@@ -25,12 +24,11 @@ const mapTransactionData = (
   return {
     time: (): ReactElement => <TransactionTime block_time={block.time} />,
     txid: (): ReactElement => (
-      <div className="txid-index-cell"> {tx.txid} </div>
+      <div className="txid-index-cell"> {tx.hash} </div>
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
-    parsedType: (): ReactElement => <ParsedTransactionType type={tx.type} />,
-    type: tx.type || 'contract',
-    hash: tx.hash ? tx.hash : tx.txid,
+    parsedType: (): ReactElement => <ParsedTransactionType type={'contract'} />,
+    hash: tx.hash,
   }
 }
 
@@ -41,7 +39,7 @@ const returnTxListData = (
   return data.map(tx => mapTransactionData(tx, block))
 }
 
-const BlockTransactionsList: React.FC<{
+const N3BlockTransactionsList: React.FC<{
   list: Array<BlockTransaction>
   block: DetailedBlock
   loading: boolean
@@ -78,30 +76,10 @@ const BlockTransactionsList: React.FC<{
         }
         isLoading={loading}
         columns={columns}
-        leftBorderColorOnRow={(
-          id: string | number | void | React.FC<{}>,
-        ): string => {
-          const listData = returnTxListData(list, block)
-          const transaction = listData.find(tx => tx.hash === id)
-          if (transaction) {
-            switch (transaction.type) {
-              case 'MinerTransaction':
-                return '#FEDD5B'
-              case 'InvocationTransaction':
-                return '#D355E7'
-              case 'ClaimTransaction':
-                return '#00CBFF'
-              case 'ContractTransaction':
-                return '#4CFFB3'
-              default:
-                return ''
-            }
-          }
-          return ''
-        }}
+        leftBorderColorOnRow={'#4CFFB3'}
       />
     </div>
   )
 }
 
-export default BlockTransactionsList
+export default N3BlockTransactionsList
