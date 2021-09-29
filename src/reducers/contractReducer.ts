@@ -70,7 +70,7 @@ export type DetailedContract = {
   manifest?: {
     name: string
     supportedstandards: []
-    extra: {
+    extra?: {
       [key: string]: string
     }
   }

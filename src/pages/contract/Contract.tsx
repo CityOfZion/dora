@@ -179,18 +179,20 @@ const Contract: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile-row">
                   <div className="detail-tile">
                     <label>AUTHOR</label>
-                    <span>{contract?.manifest?.extra['Author'] || ''}</span>
+                    <span>
+                      {contract?.manifest?.extra ? ['Author'] : 'N/A'}
+                    </span>
                   </div>
                   <div className="detail-tile">
                     <label>EMAIL</label>
-                    <span>{contract?.manifest?.extra['Email'] || ''}</span>
+                    <span>{contract?.manifest?.extra ? ['Email'] : 'N/A'}</span>
                   </div>
                 </div>
                 <div className="detail-tile-row">
                   <div className="detail-tile">
                     <label>DESCRIPTION</label>
                     <span>
-                      {contract?.manifest?.extra['Description'] || ''}
+                      {contract?.manifest?.extra ? ['Description'] : 'N/A'}
                     </span>
                   </div>
                   <div className="detail-tile">
