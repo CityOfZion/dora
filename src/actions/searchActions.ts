@@ -69,7 +69,7 @@ export function handleSearchInput(rawSearch: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
-    const search = rawSearch.replace(',', '')
+    const search = rawSearch.replace(',', '').trim()
     dispatch(searchInputEntered(search))
     try {
       const { searchResults, searchType } = await executeSearch(search)
