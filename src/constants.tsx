@@ -78,7 +78,6 @@ export const GENERATE_BASE_URL = (
 export const SUPPORTED_PLATFORMS = [
   { protocol: 'neo3', network: 'mainnet' },
   { protocol: 'neo3', network: 'testnet' },
-  { protocol: 'neo3', network: 'testnet_rc4' },
   { protocol: 'neo2', network: 'mainnet' },
   { protocol: 'neo2', network: 'testnet' },
 ]
