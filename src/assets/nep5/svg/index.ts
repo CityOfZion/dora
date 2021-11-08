@@ -48,6 +48,7 @@ import XQTA from './XQTA.svg'
 import ZPT from './ZPT.svg'
 import NOS from './NOS.svg'
 import FLM from './FLM.svg'
+import GHOST from './GHOST.svg'
 
 export type TokenMap = { [key: string]: string }
 
@@ -102,6 +103,7 @@ const tokens: TokenMap = {
   ZPT,
   NOS,
   FLM,
+  GHOST
 }
 
 export default tokens
