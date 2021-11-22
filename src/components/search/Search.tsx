@@ -27,7 +27,7 @@ const Search: React.FC<{}> = () => {
   const chain = 'neo2'
   const placeholder =
     width > 900
-      ? 'Search for block height, hash, address or transaction id...'
+      ? 'Search for block height, hash, address, or transaction ID'
       : 'Search for block height, hash or address...'
 
   useEffect(() => {
