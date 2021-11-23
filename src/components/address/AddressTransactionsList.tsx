@@ -50,7 +50,6 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
     symbol: (): ReactElement => (
       <div className="tx-symbol-and-icon-column">
         <div> {tx.symbol === 'unknown' || !tx.symbol ? 'N/A' : tx.symbol} </div>
-        {console.log(tx.symbol)}
         {tokens[tx.symbol] && (
           <div className="symbol-icon-container">
             <img src={tokens[tx.symbol]} alt="token-logo" />
