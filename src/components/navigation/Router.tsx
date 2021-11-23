@@ -31,6 +31,8 @@ const ScrollToTop = (): null => {
   return null
 }
 
+const reload = (): void => window.location.reload()
+
 const Router: React.FC = (): ReactElement => {
   return (
     <>
@@ -103,7 +105,7 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
                 />
-                <Route path={`${ROUTES.API.url}`} />
+                <Route path={`${ROUTES.API.url}`} onEnter={reload} />
                 <Route component={(): ReactElement => <NotFound />} />
               </Switch>
             </div>
