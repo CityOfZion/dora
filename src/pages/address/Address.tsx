@@ -17,6 +17,7 @@ import Neo2 from '../../assets/icons/neo2.svg'
 import Neo3 from '../../assets/icons/neo3.svg'
 import GAS2 from '../../assets/icons/GAS_2.svg'
 import GAS3 from '../../assets/icons/GAS_3.svg'
+import { toBigNumber } from '../../utils/formatter'
 
 function returnTransferLogo(
   name: string,
@@ -112,7 +113,10 @@ const Address: React.FC<Props> = (props: Props) => {
                         <div className="balance-name">({balance.name})</div>
                       )}
                     </div>
-                    <div className="balance-amount"> {balance.balance} </div>
+                    <div className="balance-amount">
+                      {' '}
+                      {toBigNumber(balance.balance).toString()}{' '}
+                    </div>
                   </div>
                 ))}
             </div>

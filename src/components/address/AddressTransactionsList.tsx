@@ -7,8 +7,9 @@ import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import List from '../../components/list/List'
 import { ROUTES } from '../../constants'
 import './AddressTransactionsList.scss'
-import tokens from '../../assets/nep5/svg'
+import tokens from '../../assets/nep5/png'
 import Button from '../button/Button'
+import { toBigNumber } from '../../utils/formatter'
 
 type ParsedTransaction = {
   amount: string
@@ -35,7 +36,7 @@ type Transaction = {
 
 const mapTransactionData = (tx: Transaction): ParsedTransaction => {
   return {
-    amount: String(tx.amount).replace(/(,)(?=(\d{3})+$)/g, '$1.'),
+    amount: toBigNumber(tx.amount).toString(),
     id: tx.txid,
     txid: (): ReactElement => (
       <div className="block-index-cell address-history-txid"> {tx.txid} </div>
@@ -49,6 +50,7 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
     symbol: (): ReactElement => (
       <div className="tx-symbol-and-icon-column">
         <div> {tx.symbol === 'unknown' || !tx.symbol ? 'N/A' : tx.symbol} </div>
+        {console.log(tx.symbol)}
         {tokens[tx.symbol] && (
           <div className="symbol-icon-container">
             <img src={tokens[tx.symbol]} alt="token-logo" />

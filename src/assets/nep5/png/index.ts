@@ -49,7 +49,9 @@ import ZPT from './ZPT.png'
 import NOS from './NOS.png'
 import FLM from './FLM.png'
 
-export const imageMap = {
+export type TokenMap = { [key: string]: string }
+
+const tokens: TokenMap = {
   NEO,
   GAS,
   FLM,
@@ -101,3 +103,5 @@ export const imageMap = {
   ZPT,
   NOS,
 }
+
+export default tokens
