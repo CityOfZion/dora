@@ -4,68 +4,66 @@ import { State } from '../reducers/searchReducer'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
-export const searchInputEntered =
-  (search: string) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: SEARCH_INPUT_ENTERED,
-      search,
-    })
-  }
+export const searchInputEntered = (search: string) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: SEARCH_INPUT_ENTERED,
+    search,
+  })
+}
 
 export const SEARCH_INPUT_ENTERED_SUCCESS = 'SEARCH_INPUT_ENTERED_SUCCESS'
-export const searchInputEnteredSuccess =
-  (search: string, searchType: string, results?: {}) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: SEARCH_INPUT_ENTERED_SUCCESS,
-      searchType,
-      search,
-      results,
-      receivedAt: Date.now(),
-    })
-  }
+export const searchInputEnteredSuccess = (
+  search: string,
+  searchType: string,
+  results?: {},
+) => (dispatch: Dispatch): void => {
+  dispatch({
+    type: SEARCH_INPUT_ENTERED_SUCCESS,
+    searchType,
+    search,
+    results,
+    receivedAt: Date.now(),
+  })
+}
 
 export const UPDATE_SEARCH_INPUT = 'UPDATE_SEARCH_INPUT'
-export const updateSearchInput =
-  (search: string) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: UPDATE_SEARCH_INPUT,
-      search,
-      receivedAt: Date.now(),
-    })
-  }
+export const updateSearchInput = (search: string) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: UPDATE_SEARCH_INPUT,
+    search,
+    receivedAt: Date.now(),
+  })
+}
 
 export const SEARCH_INPUT_ENTERED_ERROR = 'SEARCH_INPUT_ENTERED_ERROR'
-export const searchInputEnteredError =
-  (errorMessage: string) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: SEARCH_INPUT_ENTERED_ERROR,
-      errorMessage,
-      receivedAt: Date.now(),
-    })
-  }
+export const searchInputEnteredError = (errorMessage: string) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: SEARCH_INPUT_ENTERED_ERROR,
+    errorMessage,
+    receivedAt: Date.now(),
+  })
+}
 
 export const CLEAR_SEARCH_INPUT_STATE = 'CLEAR_SEARCH_INPUT'
-export const clearSearchInputState =
-  () =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: CLEAR_SEARCH_INPUT_STATE,
-    })
-  }
+export const clearSearchInputState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: CLEAR_SEARCH_INPUT_STATE,
+  })
+}
 
 export const CLEAR_SEARCH_INPUT_ENTERED_ERROR =
   'CLEAR_SEARCH_INPUT_ENTERED_ERROR'
-export const clearSearchInputError =
-  () =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: CLEAR_SEARCH_INPUT_ENTERED_ERROR,
-    })
-  }
+export const clearSearchInputError = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: CLEAR_SEARCH_INPUT_ENTERED_ERROR,
+  })
+}
 
 export function handleSearchInput(rawSearch: string) {
   return async (

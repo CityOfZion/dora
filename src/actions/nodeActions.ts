@@ -6,11 +6,11 @@ export interface NodeDTO extends Action<string> {
 }
 
 export const SET_NODE = 'SET_NODE'
-export const setNode =
-  (nodeData: WSDoraData) =>
-  (dispatch: Dispatch<NodeDTO>): void => {
-    dispatch({
-      type: SET_NODE,
-      data: nodeData,
-    })
-  }
+export const setNode = (nodeData: WSDoraData) => (
+  dispatch: Dispatch<NodeDTO>,
+): void => {
+  dispatch({
+    type: SET_NODE,
+    data: nodeData,
+  })
+}

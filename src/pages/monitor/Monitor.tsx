@@ -99,9 +99,8 @@ const IsItUp: React.FC<IsItUp> = ({ statusIsItUp }): JSX.Element => {
       title?: string | undefined
     }
   > => {
-    const Icon = STATUS_ICONS.find(
-      ({ status }) => status === statusIsItUp,
-    )?.Icon
+    const Icon = STATUS_ICONS.find(({ status }) => status === statusIsItUp)
+      ?.Icon
     return Icon ?? DisapprovedSVG
   }
 
@@ -423,9 +422,8 @@ const Monitor: React.FC<{}> = () => {
             isLoading={nodes.isLoading}
             rowId="endpoint"
             leftBorderColorOnRow={(_, chain): string => {
-              const color = STATUS_ICONS.find(
-                ({ status }) => status === chain,
-              )?.color
+              const color = STATUS_ICONS.find(({ status }) => status === chain)
+                ?.color
               return color ?? '#de4c85'
             }}
             orderData={true}
