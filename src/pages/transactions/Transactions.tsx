@@ -1,11 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
-import moment from 'moment'
 
-import {
-  getDiffInSecondsFromNow,
-  convertFromSecondsToLarger,
-} from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +17,7 @@ import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useFilterState from '../../hooks/useFilterState'
 import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import TransactionTime from '../../components/transaction/TransactionTime'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -41,14 +36,7 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
     platform: (): ReactElement => (
       <PlatformCell protocol={tx.protocol} network={tx.network} />
     ),
-    time: (): ReactElement => (
-      <div className="contract-time-cell">
-        {convertFromSecondsToLarger(
-          getDiffInSecondsFromNow(moment.unix(tx.time).format()),
-        )}
-        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
-      </div>
-    ),
+    time: (): ReactElement => <TransactionTime block_time={tx.time} />,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
@@ -120,7 +108,7 @@ const Transactions: React.FC<{}> = () => {
           { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
-          { name: 'Time', accessor: 'time' },
+          { name: 'Completed on', accessor: 'time' },
         ]
       : [
           { name: 'Platform', accessor: 'platform' },
