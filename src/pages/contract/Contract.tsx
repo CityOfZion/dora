@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { State as ContractState } from '../../reducers/contractReducer'
 import './Contract.scss'
-import { ROUTES } from '../../constants'
+import { neo3_getAddressFromSriptHash, ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
@@ -32,6 +32,15 @@ const Contract: React.FC<Props> = (props: Props) => {
     ({ contract }: { contract: ContractState }) => contract,
   )
   const { contract, isLoading } = contractsState
+
+  function getAddressLink(): string {
+    if (contract) {
+      if (chain === 'neo3') {
+        return neo3_getAddressFromSriptHash(hash)
+      }
+    }
+    return ''
+  }
 
   useEffect(() => {
     dispatch(fetchContract(hash))
@@ -75,11 +84,16 @@ const Contract: React.FC<Props> = (props: Props) => {
                     contract?.manifest.name) ||
                   'N/A'}
             </div>
-            <div>
-              <span>CONTRACT:</span>{' '}
-              <div id="contract-hash">
+            <div id="contract-hash-box">
+              <span id="contract-hash-label">CONTRACT:</span>
+              <Link
+                id="contract-hash"
+                to={`${
+                  ROUTES.WALLET.url
+                }/${chain}/${network}/${getAddressLink()}`}
+              >
                 {contract && !isLoading && contract.hash}
-              </div>
+              </Link>
             </div>
           </div>
 
