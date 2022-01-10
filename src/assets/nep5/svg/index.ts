@@ -1,5 +1,7 @@
 import NEO from './NEO.svg'
+import NEO2 from './NEO2.svg'
 import GAS from './GAS.svg'
+import GAS2 from './GAS2.svg'
 import ACAT from './ACAT.svg'
 import APH from './APH.svg'
 import APT from './APT.svg'
@@ -48,12 +50,17 @@ import XQTA from './XQTA.svg'
 import ZPT from './ZPT.svg'
 import NOS from './NOS.svg'
 import FLM from './FLM.svg'
+import EPN from './EPN.svg'
+import EXT from './EXT.svg'
+import GHOST from './GHOST.svg'
 
 export type TokenMap = { [key: string]: string }
 
 const tokens: TokenMap = {
   NEO,
+  NEO2,
   GAS,
+  GAS2,
   ACAT,
   APH,
   APT,
@@ -102,6 +109,9 @@ const tokens: TokenMap = {
   ZPT,
   NOS,
   FLM,
+  EPN,
+  EXT,
+  GHOST,
 }
 
 export default tokens
