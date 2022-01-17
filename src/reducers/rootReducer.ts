@@ -7,9 +7,11 @@ import search from './searchReducer'
 import menu from './menuReducer'
 import network from './networkReducer'
 import node from './nodeReducer'
+import nft from './nftReducer'
 export default combineReducers({
   block,
   transaction,
+  nft,
   contract,
   address,
   search,
