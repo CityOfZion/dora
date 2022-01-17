@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import './Address.scss'
-import { ROUTES } from '../../constants'
 import {
   fetchAddress,
   fetchAddressTransferHistory,
@@ -18,6 +17,7 @@ import Neo3 from '../../assets/icons/neo3.svg'
 import GAS2 from '../../assets/icons/GAS_2.svg'
 import GAS3 from '../../assets/icons/GAS_3.svg'
 import { toBigNumber } from '../../utils/formatter'
+import AddressHeader from './fragments/AddressHeader'
 
 function returnTransferLogo(
   name: string,
@@ -78,14 +78,7 @@ const Address: React.FC<Props> = (props: Props) => {
   return (
     <div id="Address" className="page-container">
       <div className="inner-page-container">
-        <div className="page-title-container">
-          {ROUTES.WALLETS.renderIcon()}
-          <h1>Address Information</h1>
-        </div>
-
-        <div id="address-hash-container">
-          <label>ADDRESS</label> <span>{hash}</span>
-        </div>
+        <AddressHeader {...props} />
 
         {isLoading && (
           <div id="address-balance-container">
