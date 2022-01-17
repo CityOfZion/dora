@@ -24,7 +24,7 @@ import SearchResults from '../../pages/search-results/SearchResults'
 import Monitor from '../../pages/monitor/Monitor'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
-import AddressNft from '../../pages/address/fragments/AddressNft'
+import AddressNft from '../../pages/address/fragments/nfts/AddressNFTS'
 import AddressTransactions from '../../pages/address/fragments/transactions/AddressTransactions'
 
 const ScrollToTop = (): null => {

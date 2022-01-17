@@ -75,6 +75,35 @@ export const GENERATE_BASE_URL = (
   return `https://dora.coz.io/api/v1/${protocol}/${network}`
 }
 
+export const BUILD_GHOST_MARKET_URL = ({
+  chain = 'n3',
+  network = 'mainnet',
+  path,
+  params,
+}: {
+  path: string
+  chain?: string
+  network?: string
+  params?: Record<string, string | number>
+}): string => {
+  const baseUrl =
+    network === 'mainnet'
+      ? 'https://api.ghostmarket.io/api/v1'
+      : 'https://api3.ghostmarket.io:7061/api/v1'
+
+  const parameters =
+    params && Object.keys(params).length > 0
+      ? Object.keys(params).reduce(
+          (acc, item) => acc + `&${item}=${params[item]}`,
+          '',
+        )
+      : ''
+
+  const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
+
+  return url
+}
+
 export const SUPPORTED_PLATFORMS = [
   { protocol: 'neo3', network: 'mainnet' },
   { protocol: 'neo3', network: 'testnet' },
