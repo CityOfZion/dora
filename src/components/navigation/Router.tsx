@@ -24,8 +24,8 @@ import SearchResults from '../../pages/search-results/SearchResults'
 import Monitor from '../../pages/monitor/Monitor'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
-import AddressTransactions from '../../pages/address/fragments/AddressTransactions'
 import AddressNft from '../../pages/address/fragments/AddressNft'
+import AddressTransactions from '../../pages/address/fragments/transactions/AddressTransactions'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
