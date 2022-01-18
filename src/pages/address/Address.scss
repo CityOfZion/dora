@@ -103,19 +103,14 @@
 }
 
 #address-balance-container {
+  display: flex;
+  flex-direction: column;
   margin: 48px 0;
-
-  #balance-label {
-    font-size: 18px;
-    color: #ffffff;
-    letter-spacing: -0.72px;
-    line-height: 48px;
-  }
+  row-gap: 4px;
 
   .balance-container {
     height: 60px;
     background: #25393e;
-    margin: 4px 0;
     padding: 0 24px;
     display: flex;
     display: -webkit-flex;
@@ -123,22 +118,26 @@
     -webkit-justify-content: space-between;
     align-items: center;
     -webkit-align-items: center;
-
-    img {
-      width: 25px;
-      margin-right: 12px;
-    }
+    border-radius: 4px;
 
     .balance-details {
       display: flex;
       display: -webkit-flex;
       align-items: center;
+      column-gap: 16px;
+    }
+
+    .balance-infos {
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: column;
     }
 
     .balance-symbol {
-      font-size: 20px;
+      font-size: 18px;
       color: #ffffff;
       letter-spacing: -0.8px;
+      font-weight: 700;
     }
 
     .balance-amount {
@@ -148,8 +147,21 @@
     }
 
     .balance-name {
-      font-size: 16px;
-      margin-left: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #7d9fb1;
+    }
+
+    .icon-container {
+      width: 25px;
+    }
+
+    .icon {
+      width: 100%;
+    }
+
+    .icon-not-found {
+      font-size: 14px;
     }
   }
 }
