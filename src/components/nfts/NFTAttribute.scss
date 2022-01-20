@@ -1,0 +1,25 @@
+.nft-attribute {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  background-color: #000000;
+  height: 30px;
+  border-radius: 15px;
+  column-gap: 4px;
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+
+  .parameter-value {
+    color: #d355e7;
+  }
+
+  .parameter-without-value,
+  .parameter-without-key {
+    color: #88a2b3;
+  }
+}
