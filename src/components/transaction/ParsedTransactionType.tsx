@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react'
 
-import Invocation from '../../assets/icons/invocation.svg'
-import Contract from '../../assets/icons/contract-transaction.svg'
-import Claim from '../../assets/icons/gas-claim-transaction.svg'
+import Invocation from '../../assets/icons/colored-invocation.svg'
+import Contract from '../../assets/icons/colored-contract-transaction.svg'
+import Claim from '../../assets/icons/colored-gas-claim-transaction.svg'
 import Miner from '../../assets/icons/miner-transaction.svg'
 import './ParsedTransactionType.scss'
 
