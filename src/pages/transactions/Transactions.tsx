@@ -1,7 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { withRouter, useHistory } from 'react-router-dom'
-import moment from 'moment'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
