@@ -80,7 +80,9 @@ export const NotificationRow: React.FC<{
       selectedOption={(selectedOption.label && selectedOption) || options[0]}
       handleChange={handleChange}
       options={(filteredOptions.length && filteredOptions) || options}
-      computedDisplayValue={convertedValue || value}
+      computedDisplayValue={
+        selectedOption.label === STRING_OPTION.label ? convertedValue : value
+      }
     />
   )
 }
