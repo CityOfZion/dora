@@ -18,8 +18,9 @@ import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
+import { useHistory } from 'react-router-dom'
 
 type ParsedBlock = {
   time: string
@@ -80,7 +81,10 @@ const Blocks: React.FC<{}> = () => {
     const nextPage = blockState.page + 1
     dispatch(fetchBlocks(nextPage))
   }
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const history = useHistory()
+  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
+    history,
+  )
   const selectedData = (): Array<Block> => {
     if (protocol === 'all' && network === 'all') {
       return blockState.all
@@ -146,6 +150,13 @@ const Blocks: React.FC<{}> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,

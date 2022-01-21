@@ -26,7 +26,8 @@ import { MonitorContext } from '../../contexts/MonitorContext'
 import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
-import useFilterState from '../../hooks/useFilterState'
+import { useHistory } from 'react-router-dom'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -316,7 +317,10 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
 const Monitor: React.FC<{}> = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const history = useHistory()
+  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
+    history,
+  )
   const [sortDataList, setSortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION
@@ -405,6 +409,13 @@ const Monitor: React.FC<{}> = () => {
             <span className="network-status-title">Network status</span>
             <div className="network-status-toggle">
               <Filter
+                selectedOption={{
+                  label: '',
+                  value: {
+                    protocol,
+                    network,
+                  },
+                }}
                 handleFilterUpdate={(option): void => {
                   handleSetFilterData({
                     protocol: (option.value as Platform).protocol,

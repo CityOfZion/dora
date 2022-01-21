@@ -12,10 +12,11 @@ import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
-import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
+import { useHistory } from 'react-router-dom'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 
 type Contract = {
   block: number
@@ -110,6 +111,7 @@ const Contracts: React.FC<{}> = () => {
     ({ contract }: { contract: ContractState }) => contract,
   )
   const width = useWindowWidth()
+  const history = useHistory()
 
   const columns =
     width > 768
@@ -131,7 +133,9 @@ const Contracts: React.FC<{}> = () => {
     dispatch(fetchContracts(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
+    history,
+  )
   const selectedData = (): Array<Contract> => {
     if (protocol === 'all' && network === 'all') {
       return contractsState.all as Contract[]
@@ -176,6 +180,13 @@ const Contracts: React.FC<{}> = () => {
           <h1>{ROUTES.CONTRACTS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,
