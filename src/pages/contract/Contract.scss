@@ -42,20 +42,20 @@
   }
 }
 
-#contract-hash-box{
+.contract-hash-box{
   display: flex;
   flex-direction: row;
 }
 
-#contract-hash-label{
+.contract-hash-label{
   margin-right: 5px;
 }
 
-#contract-hash {
+.contract-hash {
   font-weight: 600;
   font-size: 16px;
   margin-inside: 10px;
-  color: #dd4bf1;
+  color: var(--pink);
   letter-spacing: 0;
   display: flex;
   align-items: center;

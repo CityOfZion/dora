@@ -34,10 +34,8 @@ const Contract: React.FC<Props> = (props: Props) => {
   const { contract, isLoading } = contractsState
 
   function getAddressLink(): string {
-    if (contract) {
-      if (chain === 'neo3') {
-        return neo3_getAddressFromSriptHash(hash)
-      }
+    if (contract && chain === 'neo3') {
+      return neo3_getAddressFromSriptHash(hash)
     }
     return ''
   }
@@ -84,10 +82,10 @@ const Contract: React.FC<Props> = (props: Props) => {
                     contract?.manifest.name) ||
                   'N/A'}
             </div>
-            <div id="contract-hash-box">
-              <span id="contract-hash-label">CONTRACT:</span>
+            <div className="contract-hash-box">
+              <span className="contract-hash-label">CONTRACT:</span>
               <Link
-                id="contract-hash"
+                className="contract-hash"
                 to={`${
                   ROUTES.WALLET.url
                 }/${chain}/${network}/${getAddressLink()}`}
