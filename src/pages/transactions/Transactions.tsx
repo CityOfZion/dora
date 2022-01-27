@@ -78,9 +78,8 @@ const Transactions: React.FC<{}> = () => {
     dispatch(fetchTransactions(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
-  )
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
 
   const selectedData = (): Array<Transaction> => {
     if (protocol === 'all' && network === 'all') {

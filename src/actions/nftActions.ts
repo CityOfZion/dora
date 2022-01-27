@@ -40,54 +40,54 @@ type GhostMarketAttributes =
 
 export const nftLimit = 6
 
-export const requestNFTS = (page: number) => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFTS,
-    page,
-  })
-}
+export const requestNFTS =
+  (page: number) =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFTS,
+      page,
+    })
+  }
 
-export const requestNFTSSuccess = (
-  data: NFT[],
-  page: number,
-  total: number,
-) => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFTS_SUCCESS,
-    all: data,
-    page,
-    total,
-  })
-}
+export const requestNFTSSuccess =
+  (data: NFT[], page: number, total: number) =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFTS_SUCCESS,
+      all: data,
+      page,
+      total,
+    })
+  }
 
-export const requestNFTSError = (error: Error, page: number) => (
-  dispatch: Dispatch,
-): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFTS_ERROR,
-    error,
-    page,
-  })
-}
+export const requestNFTSError =
+  (error: Error, page: number) =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFTS_ERROR,
+      error,
+      page,
+    })
+  }
 
-export const clearList = () => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.CLEAR_NFTS_LIST,
-  })
-}
+export const clearList =
+  () =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.CLEAR_NFTS_LIST,
+    })
+  }
 
 function mapAttributes(attributes: GhostMarketAttributes): NFTAttribute[] {
   if (!attributes) return []
 
   function map(items: FlatJSON[]): NFTAttribute[] {
-    return items.map(
-      ({ value, key }): NFTAttribute => {
-        return {
-          key,
-          value,
-        }
-      },
-    )
+    return items.map(({ value, key }): NFTAttribute => {
+      return {
+        key,
+        value,
+      }
+    })
   }
 
   function fixObject(object: Record<any, any>): Record<any, any> {
@@ -142,30 +142,26 @@ export function fetchNFTS(ownerId: string, page = 1) {
           },
         }),
       )
-      const {
-        assets,
-        total_results,
-      } = (await response.json()) as GhostMarketAssets
+      const { assets, total_results } =
+        (await response.json()) as GhostMarketAssets
 
-      const nfts = assets.map(
-        ({ nft }): NFT => {
-          const attributes = mapAttributes(
-            JSON.parse(nft.nft_extended).attributes,
-          )
+      const nfts = assets.map(({ nft }): NFT => {
+        const attributes = mapAttributes(
+          JSON.parse(nft.nft_extended).attributes,
+        )
 
-          return {
-            name: nft.nft_metadata.name || '',
-            chain: nft.chain || '',
-            image: nft.nft_metadata.image || '',
-            id: nft.token_id || '',
-            collection: {
-              image: nft.collection.featured_image || '',
-              name: nft.collection.name || '',
-            },
-            attributes,
-          }
-        },
-      )
+        return {
+          name: nft.nft_metadata.name || '',
+          chain: nft.chain || '',
+          image: nft.nft_metadata.image || '',
+          id: nft.token_id || '',
+          collection: {
+            image: nft.collection.featured_image || '',
+            name: nft.collection.name || '',
+          },
+          attributes,
+        }
+      })
 
       dispatch(requestNFTSSuccess(nfts, page, total_results))
     } catch (e) {

@@ -133,9 +133,8 @@ const Contracts: React.FC<{}> = () => {
     dispatch(fetchContracts(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
-  )
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
   const selectedData = (): Array<Contract> => {
     if (protocol === 'all' && network === 'all') {
       return contractsState.all as Contract[]

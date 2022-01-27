@@ -82,9 +82,8 @@ const Blocks: React.FC<{}> = () => {
     dispatch(fetchBlocks(nextPage))
   }
   const history = useHistory()
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
-  )
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
   const selectedData = (): Array<Block> => {
     if (protocol === 'all' && network === 'all') {
       return blockState.all
