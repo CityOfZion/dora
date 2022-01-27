@@ -36,11 +36,29 @@
   #contract-name {
     font-weight: 600;
     font-size: 22px;
-    color: #dd4bf1;
     letter-spacing: 0;
     display: flex;
     align-items: center;
   }
+}
+
+.contract-hash-box{
+  display: flex;
+  flex-direction: row;
+}
+
+.contract-hash-label{
+  margin-right: 5px;
+}
+
+.contract-hash {
+  font-weight: 600;
+  font-size: 16px;
+  margin-inside: 10px;
+  color: var(--pink);
+  letter-spacing: 0;
+  display: flex;
+  align-items: center;
 }
 
 .full-width-tile-row {
