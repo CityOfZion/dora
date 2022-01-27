@@ -5,88 +5,91 @@ import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
-export const requestAddress =
-  (requestedAddress: string) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS,
-      requestedAddress,
-    })
-  }
+export const requestAddress = (requestedAddress: string) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: REQUEST_ADDRESS,
+    requestedAddress,
+  })
+}
 
 export const REQUEST_ADDRESS_SUCCESS = 'REQUEST_ADDRESS_SUCCESS'
-export const requestAddressSuccess =
-  (requestedAddress: string, json: {}) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS_SUCCESS,
-      requestedAddress,
-      json,
-      receivedAt: Date.now(),
-    })
-  }
+export const requestAddressSuccess = (requestedAddress: string, json: {}) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: REQUEST_ADDRESS_SUCCESS,
+    requestedAddress,
+    json,
+    receivedAt: Date.now(),
+  })
+}
 
 export const REQUEST_ADDRESS_ERROR = 'REQUEST_ADDRESS_ERROR'
-export const requestAddressError =
-  (requestedAddress: string, error: Error) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS_ERROR,
-      requestedAddress,
-      error,
-      receivedAt: Date.now(),
-    })
-  }
+export const requestAddressError = (requestedAddress: string, error: Error) => (
+  dispatch: Dispatch,
+): void => {
+  dispatch({
+    type: REQUEST_ADDRESS_ERROR,
+    requestedAddress,
+    error,
+    receivedAt: Date.now(),
+  })
+}
 
 export const REQUEST_ADDRESS_TRANSFER_HISTORY =
   'REQUEST_ADDRESS_TRANSFER_HISTORY'
-export const requestAddressTransferHistory =
-  (requestedAddress: string, transferHistoryPage = 1) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS_TRANSFER_HISTORY,
-      requestedAddress,
-      transferHistoryPage,
-    })
-  }
+export const requestAddressTransferHistory = (
+  requestedAddress: string,
+  transferHistoryPage = 1,
+) => (dispatch: Dispatch): void => {
+  dispatch({
+    type: REQUEST_ADDRESS_TRANSFER_HISTORY,
+    requestedAddress,
+    transferHistoryPage,
+  })
+}
 
 export const REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS =
   'REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS'
-export const requestAddressTransferHistorySuccess =
-  (requestedAddress: string, transferHistoryPage = 1, json: {}) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS,
-      requestedAddress,
-      transferHistoryPage,
-      json,
-      receivedAt: Date.now(),
-    })
-  }
+export const requestAddressTransferHistorySuccess = (
+  requestedAddress: string,
+  transferHistoryPage = 1,
+  json: {},
+) => (dispatch: Dispatch): void => {
+  dispatch({
+    type: REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS,
+    requestedAddress,
+    transferHistoryPage,
+    json,
+    receivedAt: Date.now(),
+  })
+}
 
 export const REQUEST_ADDRESS_TRANSFER_HISTORY_ERROR =
   'REQUEST_ADDRESS_TRANSFER_HISTORY_ERROR'
-export const requestAddressTransferHistoryError =
-  (requestedAddress: string, transferHistoryPage = 1, error: Error) =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: REQUEST_ADDRESS_TRANSFER_HISTORY_ERROR,
-      requestedAddress,
-      transferHistoryPage,
-      error,
-      receivedAt: Date.now(),
-    })
-  }
+export const requestAddressTransferHistoryError = (
+  requestedAddress: string,
+  transferHistoryPage = 1,
+  error: Error,
+) => (dispatch: Dispatch): void => {
+  dispatch({
+    type: REQUEST_ADDRESS_TRANSFER_HISTORY_ERROR,
+    requestedAddress,
+    transferHistoryPage,
+    error,
+    receivedAt: Date.now(),
+  })
+}
 
 export const RESET = 'RESET'
-export const resetAddressState =
-  () =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: RESET,
-      receivedAt: Date.now(),
-    })
-  }
+export const resetAddressState = () => (dispatch: Dispatch): void => {
+  dispatch({
+    type: RESET,
+    receivedAt: Date.now(),
+  })
+}
 
 type ParsedBalanceData = {
   name: string
