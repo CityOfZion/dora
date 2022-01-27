@@ -1,4 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
+import { withRouter, useHistory } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -14,9 +15,9 @@ import {
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import useFilterState from '../../hooks/useFilterState'
 import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import TransactionTime from '../../components/transaction/TransactionTime'
 
 type ParsedTx = {
@@ -67,7 +68,7 @@ const returnTxListData = (
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
-
+  const history = useHistory()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -77,7 +78,8 @@ const Transactions: React.FC<{}> = () => {
     dispatch(fetchTransactions(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
 
   const selectedData = (): Array<Transaction> => {
     if (protocol === 'all' && network === 'all') {
@@ -138,6 +140,13 @@ const Transactions: React.FC<{}> = () => {
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,
@@ -189,4 +198,4 @@ const Transactions: React.FC<{}> = () => {
   )
 }
 
-export default Transactions
+export default withRouter(Transactions)
