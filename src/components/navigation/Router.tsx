@@ -26,6 +26,7 @@ import Monitor from '../../pages/monitor/Monitor'
 import { MonitorProvider } from '../../contexts/MonitorContext'
 import AddressNft from '../../pages/address/fragments/nfts/AddressNFTS'
 import AddressTransactions from '../../pages/address/fragments/transactions/AddressTransactions'
+import NftInformation from '../../pages/nft/NftInformation'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -64,6 +65,11 @@ const Router: React.FC = (): ReactElement => {
                 <Route
                   path={`${ROUTES.WALLET.url}/:chain/:network/:hash/transactions`}
                   component={(): ReactElement => <AddressTransactions />}
+                />
+
+                <Route
+                  path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
+                  component={(): ReactElement => <NftInformation />}
                 />
 
                 <Route

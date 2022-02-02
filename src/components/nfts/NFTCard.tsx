@@ -1,5 +1,6 @@
 import React from 'react'
 import { NFT } from '../../reducers/nftReducer'
+import { Link } from 'react-router-dom'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import NFTAttribute from './NFTAttibute'
 
@@ -7,12 +8,16 @@ import NoImageFound from '../../assets/no-image-found.png'
 
 import './NFTCard.scss'
 import TextBreakable from '../text-breakable/TextBreakable'
+import { ROUTES } from '../../constants'
 
 type Props = {
   data: NFT
+  chain: string
+  network: string
+  contractHash: string
 }
 
-const NFTCard: React.FC<Props> = ({ data }) => {
+const NFTCard: React.FC<Props> = ({ data, chain, network, contractHash }) => {
   function handleOnError({
     currentTarget,
   }: React.SyntheticEvent<HTMLImageElement, Event>) {
@@ -53,9 +58,13 @@ const NFTCard: React.FC<Props> = ({ data }) => {
             </div>
           </div>
         </div>
-        <button className="navigate-button">
-          <ArrowForward />
-        </button>
+        <Link
+          to={`${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${data.id}`}
+        >
+          <button className="navigate-button">
+            <ArrowForward />
+          </button>
+        </Link>
       </div>
       <div className="card-body">
         {data.attributes.length > 0 ? (

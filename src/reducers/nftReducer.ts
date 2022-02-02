@@ -2,8 +2,11 @@ import { AnyAction } from 'redux'
 
 export enum ActionType {
   REQUEST_NFTS = 'REQUEST_NFTS',
+  REQUEST_NFT = 'REQUEST_NFT',
   REQUEST_NFTS_SUCCESS = 'REQUEST_NFTS_SUCCESS',
+  REQUEST_NFT_SUCCESS = 'REQUEST_NFT_SUCCESS',
   REQUEST_NFTS_ERROR = 'REQUEST_NFTS_ERROR',
+  REQUEST_NFT_ERROR = 'REQUEST_NFT_ERROR',
   CLEAR_NFTS_LIST = 'CLEAR_NFTS_LIST',
 }
 
@@ -13,6 +16,7 @@ type Action = {
   error: Error
   page: number
   total: number
+  value: NFT
 }
 
 export type NFTAttribute = {
@@ -25,6 +29,25 @@ export type NFT = {
   chain: string
   name: string
   image: string
+  contract: string
+  collection: {
+    name: string
+    image: string
+  }
+  attributes: NFTAttribute[]
+}
+
+export type DETAILED_NFT = {
+  id: string
+  chain: string
+  symbol: string
+  contract: string
+  name: string
+  image: string
+  description: string
+  creatorAddress: string
+  creatorName: string
+  apiUrl: string
   collection: {
     name: string
     image: string
@@ -38,6 +61,7 @@ export type State = {
   error: Error | null
   page: number | null
   total: number | null
+  value: DETAILED_NFT | null
 }
 
 const INITIAL_STATE = {
@@ -46,6 +70,7 @@ const INITIAL_STATE = {
   error: null,
   page: null,
   total: null,
+  value: null,
 }
 
 export default (
@@ -59,6 +84,11 @@ export default (
         page: action.page,
       })
 
+    case ActionType.REQUEST_NFT:
+      return Object.assign({}, state, {
+        isLoading: true,
+      })
+
     case ActionType.REQUEST_NFTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
@@ -66,6 +96,19 @@ export default (
         page: action.page,
         total: action.total,
       })
+
+    case ActionType.REQUEST_NFT_SUCCESS:
+      return Object.assign({}, state, {
+        isLoading: false,
+        value: action.value,
+      })
+
+    case ActionType.REQUEST_NFT_ERROR:
+      return Object.assign({}, state, {
+        isLoading: false,
+        error: action.error,
+      })
+
     case ActionType.REQUEST_NFTS_ERROR:
       return Object.assign({}, state, {
         isLoading: false,
