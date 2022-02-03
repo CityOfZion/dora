@@ -1,7 +1,13 @@
 import { Action, Dispatch } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 import { BUILD_GHOST_MARKET_URL } from '../constants'
-import { ActionType, NFT, NFTAttribute, State } from '../reducers/nftReducer'
+import {
+  ActionType,
+  DETAILED_NFT,
+  NFT,
+  NFTAttribute,
+  State,
+} from '../reducers/nftReducer'
 import { FlatJSON, flatJSON } from '../utils/flatJSON'
 
 interface GhostMarketNFT {
@@ -54,25 +60,31 @@ export const requestNFTS =
     })
   }
 
-export const requestNFT = () => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFT,
-  })
-}
+export const requestNFT =
+  () =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFT,
+    })
+  }
 
-export const requestNFTSuccess = (data: NFT) => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFT_SUCCESS,
-    value: data,
-  })
-}
+export const requestNFTSuccess =
+  (data: DETAILED_NFT) =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFT_SUCCESS,
+      value: data,
+    })
+  }
 
-export const requestNFTError = (error: Error) => (dispatch: Dispatch): void => {
-  dispatch({
-    type: ActionType.REQUEST_NFT_SUCCESS,
-    error,
-  })
-}
+export const requestNFTError =
+  (error: Error) =>
+  (dispatch: Dispatch): void => {
+    dispatch({
+      type: ActionType.REQUEST_NFT_SUCCESS,
+      error,
+    })
+  }
 
 export const requestNFTSSuccess =
   (data: NFT[], page: number, total: number) =>
@@ -214,7 +226,7 @@ export function fetchNFT(tokenId: string, contractHash: string) {
       )
       const { assets } = (await response.json()) as GhostMarketAssets
 
-      const { nft } = assets[0]
+      const [{ nft }] = assets
 
       const attributes = mapAttributes(JSON.parse(nft.nft_extended).attributes)
 
@@ -238,7 +250,6 @@ export function fetchNFT(tokenId: string, contractHash: string) {
 
       dispatch(requestNFTSuccess(mappedNFT))
     } catch (e) {
-      console.log(e)
       dispatch(requestNFTError(e as Error))
     }
   }

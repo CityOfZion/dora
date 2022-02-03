@@ -26,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const NftInformation: React.FC<Props> = (props: Props) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const { contractHash, chain, network, id } = props.match.params
+  const { contractHash, id } = props.match.params
   const width = useWindowWidth()
   const dispatch = useDispatch()
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
@@ -37,7 +37,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
 
   const isMobileOrTablet = width <= 1200
 
-  const min_text_length = 25
+  const minTextLength = 25
 
   const handleCloseModal = () => {
     setIsOpenModal(false)
@@ -49,7 +49,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
 
   const truncateText = (isMobile: boolean, text?: string) => {
     if (text) {
-      if (isMobile && text.length > min_text_length) {
+      if (isMobile && text.length > minTextLength) {
         const separator = '...'
         const firstHalf = text.substring(0, Math.floor(text.length / 2))
         const lastDigits = text.substring(text.length - 4, text.length)
@@ -64,6 +64,14 @@ const NftInformation: React.FC<Props> = (props: Props) => {
 
   const buildGhostMarketUrl = () => {
     return `https://ghostmarket.io/asset/n3/${nftState.value?.contract}/${nftState.value?.id}`
+  }
+
+  const hasAttributes = () => {
+    return (
+      nftState.value &&
+      nftState.value.attributes &&
+      nftState.value.attributes.length > 0
+    )
   }
 
   function handleOnError({
@@ -100,16 +108,16 @@ const NftInformation: React.FC<Props> = (props: Props) => {
   return (
     <div id="Nft" className="page-container">
       {/*
-          BackButton won't work for now
+          TODO: BackButton won't work for now
       */}
       <BackButton url="" text="back to address information" />
       <div className="inner-page-container">
-        <div className="title-container">
+        <div className="title-container items-center">
           {ROUTES.NFT.renderIcon()}
           <h1>NFT Information</h1>
         </div>
 
-        <div className="nft-title">
+        <div className="nft-title justify-between">
           <span>{nftState.value?.name}</span>
           <span className="id">
             ID:
@@ -119,10 +127,20 @@ const NftInformation: React.FC<Props> = (props: Props) => {
           </span>
         </div>
 
-        {!nftState.isLoading && (
+        {nftState.isLoading ? (
+          <SkeletonTheme
+            color="#21383d"
+            highlightColor="rgb(125 159 177 / 25%)"
+          >
+            <Skeleton height={650} style={{ margin: '50px 0' }} />
+          </SkeletonTheme>
+        ) : (
           <div className="nft-information-container">
             <div className="info-grid">
-              <div className="image-container" onClick={handleOpenModal}>
+              <div
+                className="image-container items-center"
+                onClick={handleOpenModal}
+              >
                 <div className="image-content">
                   <img
                     src={nftState.value?.image}
@@ -137,7 +155,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
                   />
                 </div>
               </div>
-              <div className="details-container">
+              <div className="verti justify-between">
                 <div className="section-title">DETAILS</div>
                 <div className="description-block">
                   <span className="title">DESCRIPTION</span>
@@ -162,7 +180,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
                           alt="token-logo"
                         />
                       */}
-                      <span>{nftState.value?.collection.name}</span>
+                      <span>{nftState.value?.collection?.name}</span>
                     </div>
                   </div>
                 </div>
@@ -194,20 +212,11 @@ const NftInformation: React.FC<Props> = (props: Props) => {
             </div>
           </div>
         )}
-        {nftState.isLoading && (
-          <SkeletonTheme
-            color="#21383d"
-            highlightColor="rgb(125 159 177 / 25%)"
-          >
-            <Skeleton height={650} style={{ margin: '50px 0' }} />
-          </SkeletonTheme>
-        )}
-
         <div className="nft-attributes-container">
           <p className="section-title">ATTRIBUTES</p>
           {!nftState.isLoading && (
             <div className="attributes-grid">
-              {nftState.value && nftState.value?.attributes.length > 0
+              {hasAttributes()
                 ? nftState.value?.attributes.map(attr => (
                     <div className="attributes-block">
                       <span className="title">
@@ -234,9 +243,9 @@ const NftInformation: React.FC<Props> = (props: Props) => {
       <Modal
         open={isOpenModal}
         onClose={handleCloseModal}
-        className="modal-container"
+        className="modal-container items-center justify-center"
       >
-        <div id="modal-content">
+        <div className="verti justify-center items-center modal-content">
           <div className="content-position">
             <button type="button" onClick={handleCloseModal}>
               <CloseIcon />

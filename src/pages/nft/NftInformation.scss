@@ -1,19 +1,18 @@
 .nft-title {
-  background: #21383d;
+  background: var(--darkest-grey);
   border-radius: 2.4px;
   height: auto;
   padding: 12px;
   font-size: 18px;
   letter-spacing: 0;
-  border-left: 4px solid #eb4dff;
+  border-left: 4px solid var(--pink);
   display: flex;
-  justify-content: space-between;
   align-items: center;
 
   .id {
     font-size: 12px;
     font-weight: 300;
-    color: #7D9FB1;
+    color: var(--medium-grey);
 
     .number {
       color: var(--pink);
@@ -27,7 +26,6 @@
 
   .image-container {
     display: flex;
-    align-items: center;
     margin-right: 10px;
 
     .token-image {
@@ -52,12 +50,6 @@
     }
   }
 
-  .details-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
   .info-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -66,8 +58,7 @@
 }
 
 .description-block {
-  display: flex;
-  flex-direction: column;
+  @extend .verti;
   background-color: #21383D;
   margin: 5px 2px 0 2px;
   padding: 5px 10px 15px 5px;
@@ -75,7 +66,7 @@
   min-height: 140px;
 
   .title {
-    color: #7D9FB1;
+    color: var(--medium-grey);
     font-size: 12px;
     margin: 0 5px;
   }
@@ -148,7 +139,6 @@
 
 .title-container {
   display: flex;
-  align-items: center;
 
   h1 {
     letter-spacing: -1.27px;
@@ -161,16 +151,12 @@
     margin-right: 12px;
 
     g {
-      fill: #fff;
+      fill: var(--white);
     }
   }
 }
 
-#modal-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.modal-content {
   outline: none;
   width: max-content;
   font-weight: 300;
@@ -203,8 +189,11 @@
 
 .modal-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.verti {
+  display: flex;
+  flex-direction: column;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -307,7 +296,7 @@
     margin: 0;
   }
 
-  #modal-content {
+  .modal-content {
     margin: 0 15px;
 
     img {
@@ -315,4 +304,5 @@
     }
   }
 }
+
 
