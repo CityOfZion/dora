@@ -12,6 +12,7 @@ import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
 import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
+import { ReactComponent as Diamond } from './assets/icons/shape.svg'
 
 //eslint-disable-next-line
 const bs58check = require('bs58check')
@@ -217,6 +218,12 @@ export const ROUTES = {
     name: 'Monitor',
     renderIcon: (): React.ReactNode => <Monitor />,
     target: '_self',
+  },
+  NFT: {
+    url: '/nft',
+    name: 'NFT',
+    renderIcon: (): React.ReactNode => <Diamond />,
+    target: 'self',
   },
   NOT_FOUND: {
     url: '/not-found',

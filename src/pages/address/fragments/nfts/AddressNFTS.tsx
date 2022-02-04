@@ -19,7 +19,7 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const AddressNFTS: React.FC<Props> = props => {
-  const { hash } = props.match.params
+  const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const [page, setPage] = useState(1)
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
@@ -46,7 +46,13 @@ const AddressNFTS: React.FC<Props> = props => {
         (nftState.all.length > 0 ? (
           <div id="nft-cards-container">
             {nftState.all.map(nft => (
-              <NFTCard key={nft.id} data={nft} />
+              <NFTCard
+                key={nft.id}
+                data={nft}
+                chain={chain}
+                network={network}
+                contractHash={nft.contract}
+              />
             ))}
           </div>
         ) : (
