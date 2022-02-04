@@ -59,7 +59,7 @@
 
 .description-block {
   @extend .verti;
-  background-color: #21383D;
+  background-color: var(--darkest-grey);
   margin: 5px 2px 0 2px;
   padding: 5px 10px 15px 5px;
   border-radius: 5px;
