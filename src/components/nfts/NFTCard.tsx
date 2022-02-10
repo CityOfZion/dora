@@ -14,10 +14,17 @@ type Props = {
   data: NFT
   chain: string
   network: string
+  hash: string
   contractHash: string
 }
 
-const NFTCard: React.FC<Props> = ({ data, chain, network, contractHash }) => {
+const NFTCard: React.FC<Props> = ({
+  data,
+  chain,
+  network,
+  contractHash,
+  hash,
+}) => {
   function handleOnError({
     currentTarget,
   }: React.SyntheticEvent<HTMLImageElement, Event>) {
@@ -59,7 +66,10 @@ const NFTCard: React.FC<Props> = ({ data, chain, network, contractHash }) => {
           </div>
         </div>
         <Link
-          to={`${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${data.id}`}
+          to={{
+            pathname: `${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${data.id}`,
+            state: hash,
+          }}
         >
           <button className="navigate-button">
             <ArrowForward />
