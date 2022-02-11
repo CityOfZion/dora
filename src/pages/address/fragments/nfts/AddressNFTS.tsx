@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
 import { clearList, fetchNFTS, nftLimit } from '../../../../actions/nftActions'
-import NFTCard from '../../../../components/nfts/NFTCard'
+import NFTFilters, {
+  NFTFiltersToggleType,
+} from '../../../../components/nfts/NFTFilters'
 import Button from '../../../../components/button/Button'
 import { State } from '../../../../reducers/nftReducer'
 
 import './AddressNFTS.scss'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import AddressHeader from '../AddressHeader'
+import NFTList from '../../../../components/nfts/NFTList'
+import NFTGallery from '../../../../components/nfts/NFTGallery'
+import { ROUTES } from '../../../../constants'
+import useWindowWidth from '../../../../hooks/useWindowWidth'
 
 interface MatchParams {
   hash: string
@@ -21,14 +27,28 @@ type Props = RouteComponentProps<MatchParams>
 const AddressNFTS: React.FC<Props> = props => {
   const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
+  const history = useHistory()
   const [page, setPage] = useState(1)
+  const [toggleTypeSelected, setToggleTypeSelected] =
+    useState<NFTFiltersToggleType>('list')
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
+  const windowWidth = useWindowWidth()
 
   function loadMore(): void {
     const nextPage = page + 1
     dispatch(fetchNFTS(hash, nextPage))
     setPage(lastState => lastState + 1)
   }
+
+  function handleNavigate(id: string) {
+    history.push(`${ROUTES.NFT.url}/${chain}/${network}/${hash}/${id}`)
+  }
+
+  useEffect(() => {
+    if (windowWidth < 769) {
+      setToggleTypeSelected('list')
+    }
+  }, [windowWidth])
 
   useEffect(() => {
     dispatch(fetchNFTS(hash))
@@ -43,21 +63,24 @@ const AddressNFTS: React.FC<Props> = props => {
       <div className="inner-page-container">
         <AddressHeader {...props} />
 
+        <NFTFilters
+          toggleTypeSelected={toggleTypeSelected}
+          onSelected={type => setToggleTypeSelected(type)}
+        />
+
         {nftState.all.length > 0 ? (
-          <div id="nft-cards-container">
-            {nftState.all.map(nft => (
-              <NFTCard
-                key={nft.id}
-                data={nft}
-                chain={chain}
-                network={network}
-                contractHash={nft.contract}
-                hash={hash}
+          <>
+            {toggleTypeSelected === 'list' ? (
+              <NFTList data={nftState.all} onClickToNavigate={handleNavigate} />
+            ) : (
+              <NFTGallery
+                data={nftState.all}
+                onClickToNavigate={handleNavigate}
               />
-            ))}
-          </div>
+            )}
+          </>
         ) : (
-          <div id="no-nft">
+          <div id="no-nft" className="horiz justify-center">
             <p>No NFT to list</p>
           </div>
         )}
@@ -72,7 +95,7 @@ const AddressNFTS: React.FC<Props> = props => {
           </div>
         )}
 
-        <div id="button-container">
+        <div className="button-container horiz justify-center">
           {nftState.total !== 0 && (
             <Button
               disabled={
