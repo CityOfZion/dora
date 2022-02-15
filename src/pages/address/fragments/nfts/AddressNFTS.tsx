@@ -39,11 +39,11 @@ const AddressNFTS: React.FC<Props> = props => {
   }, [dispatch])
 
   return (
-    <div id="nft-container">
-      <AddressHeader {...props} />
+    <div id="nft-container" className="page-container">
+      <div className="inner-page-container">
+        <AddressHeader {...props} />
 
-      {!nftState.isLoading &&
-        (nftState.all.length > 0 ? (
+        {nftState.all.length > 0 ? (
           <div id="nft-cards-container">
             {nftState.all.map(nft => (
               <NFTCard
@@ -60,34 +60,35 @@ const AddressNFTS: React.FC<Props> = props => {
           <div id="no-nft">
             <p>No NFT to list</p>
           </div>
-        ))}
-      {nftState.isLoading && (
-        <div style={{ marginTop: nftState.all.length > 0 ? '16px' : '0px' }}>
-          <SkeletonTheme
-            color="#21383d"
-            highlightColor="rgb(125 159 177 / 25%)"
-          >
-            <Skeleton height={110} count={6} className="skeleton-row" />
-          </SkeletonTheme>
-        </div>
-      )}
-
-      <div id="button-container">
-        {nftState.total === 0 && (
-          <Button
-            disabled={
-              nftState.isLoading
-                ? true
-                : !!nftState.total
-                ? page * nftLimit >= nftState.total
-                : false
-            }
-            primary={false}
-            onClick={(): void => loadMore()}
-          >
-            load more
-          </Button>
         )}
+        {nftState.isLoading && (
+          <div style={{ marginTop: nftState.all.length > 0 ? '16px' : '0px' }}>
+            <SkeletonTheme
+              color="#21383d"
+              highlightColor="rgb(125 159 177 / 25%)"
+            >
+              <Skeleton height={110} count={6} className="skeleton-row" />
+            </SkeletonTheme>
+          </div>
+        )}
+
+        <div id="button-container">
+          {nftState.total !== 0 && (
+            <Button
+              disabled={
+                nftState.isLoading
+                  ? true
+                  : !!nftState.total
+                  ? page * nftLimit >= nftState.total
+                  : false
+              }
+              primary={false}
+              onClick={(): void => loadMore()}
+            >
+              load more
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )
