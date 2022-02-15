@@ -52,6 +52,7 @@ const AddressNFTS: React.FC<Props> = props => {
                 chain={chain}
                 network={network}
                 contractHash={nft.contract}
+                hash={hash}
               />
             ))}
           </div>
