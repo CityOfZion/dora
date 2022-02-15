@@ -128,6 +128,22 @@ const TransactionResult = (result: any): ReactElement => (
   </Link>
 )
 
+const ContractResult = (result: any): ReactElement => (
+  <Link
+    to={`${ROUTES.CONTRACT.url}/${result.protocol}/${result.network}/${result.hash}`}
+  >
+    <div className="search-result-container">
+      <PlatformElement protocol={result.protocol} network={result.network} />
+      <div className="search-results-details">
+        <div className="search-result-type">
+          {ROUTES.CONTRACTS.renderIcon()} Contract
+        </div>
+        <div className="search-result-info"></div>
+      </div>
+    </div>
+  </Link>
+)
+
 const SearchResult = ({ result }: { result: any }): ReactElement => {
   switch (result.type) {
     case 'block':
@@ -136,6 +152,8 @@ const SearchResult = ({ result }: { result: any }): ReactElement => {
       return AddressResult(result)
     case 'transaction':
       return TransactionResult(result)
+    case 'contract':
+      return ContractResult(result)
   }
   return <div />
 }
