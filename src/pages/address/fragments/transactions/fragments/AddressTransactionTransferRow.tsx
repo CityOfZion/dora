@@ -1,10 +1,8 @@
 import React from 'react'
-import Neo2 from '../../../../../assets/icons/neo2.svg'
-import Neo3 from '../../../../../assets/icons/neo3.svg'
-import { toBigNumber } from '../../../../../utils/formatter'
 import { Transfer } from '../AddressTransaction'
 import { ROUTES } from '../../../../../constants'
 import { Link } from 'react-router-dom'
+import tokens from '../../../../../assets/nep5/svg'
 
 type Props = {
   transfers: Transfer[]
@@ -40,14 +38,16 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
           >
             <span className="text-primary">{transfer.to}</span>
           </Link>
-          <span>
-            <img
-              width={15}
-              height={10}
-              src={chain === 'neo2' ? Neo2 : Neo3}
-              alt="token-logo"
-            />
-            {toBigNumber(transfer.amount || 0).toString()}
+          <span className="whitespace-no-wrap">
+            {tokens[transfer.icon ?? 'NEO'] && (
+              <img
+                width={15}
+                height={10}
+                src={tokens[transfer.icon ?? 'NEO']}
+                alt=""
+              />
+            )}
+            {transfer.amount}
           </span>
           <span>NEP-17 Transfer</span>
         </div>

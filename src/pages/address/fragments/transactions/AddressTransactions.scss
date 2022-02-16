@@ -5,6 +5,14 @@
     color: var(--pink);
   }
 
+  .whitespace-no-wrap {
+    white-space: nowrap;
+  }
+
+  img {
+    margin-right: 5px;
+  }
+
   * {
     text-decoration: none;
   }
@@ -145,7 +153,7 @@
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(auto-fill, 15px);
-        grid-gap: 50px;
+        grid-gap: 30px;
         flex: 1;
       }
 
