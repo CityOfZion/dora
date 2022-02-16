@@ -1,30 +1,19 @@
 import React from 'react'
 import { NFT } from '../../reducers/nftReducer'
-import { Link } from 'react-router-dom'
 import ArrowForward from '@material-ui/icons/ArrowForward'
 import NFTAttribute from './NFTAttibute'
 
 import NoImageFound from '../../assets/no-image-found.png'
 
-import './NFTCard.scss'
+import './NFTCardList.scss'
 import TextBreakable from '../text-breakable/TextBreakable'
-import { ROUTES } from '../../constants'
 
 type Props = {
   data: NFT
-  chain: string
-  network: string
-  hash: string
-  contractHash: string
+  onClickToNavigate(): void
 }
 
-const NFTCard: React.FC<Props> = ({
-  data,
-  chain,
-  network,
-  contractHash,
-  hash,
-}) => {
+const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
   function handleOnError({
     currentTarget,
   }: React.SyntheticEvent<HTMLImageElement, Event>) {
@@ -33,7 +22,7 @@ const NFTCard: React.FC<Props> = ({
   }
 
   return (
-    <div className="card-container">
+    <div className="card-list-container">
       <div className="card-image-container">
         <div className="token-image">
           <img src={data.image} alt={data.name} onError={handleOnError} />
@@ -65,16 +54,9 @@ const NFTCard: React.FC<Props> = ({
             </div>
           </div>
         </div>
-        <Link
-          to={{
-            pathname: `${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${data.id}`,
-            state: hash,
-          }}
-        >
-          <button className="navigate-button">
-            <ArrowForward />
-          </button>
-        </Link>
+        <button className="navigate-button" onClick={onClickToNavigate}>
+          <ArrowForward />
+        </button>
       </div>
       <div className="card-body">
         {data.attributes.length > 0 ? (
@@ -87,4 +69,4 @@ const NFTCard: React.FC<Props> = ({
   )
 }
 
-export default NFTCard
+export default NFTCardList

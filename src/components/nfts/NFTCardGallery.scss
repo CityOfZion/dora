@@ -1,0 +1,86 @@
+.card-gallery-container {
+  width: 280px;
+  padding: 15px 15px 24px;
+  background-color: var(--darkest-grey);
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  p {
+    margin: 0;
+  }
+
+  header {
+    display: flex;
+    margin-bottom: 15px;
+    column-gap: 8px;
+    justify-content: center;
+
+    p {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--medium-grey);
+    }
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  .token-name {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 15px;
+    color: var(--white);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .nft-id-container {
+    min-width: 0;
+    margin-top: 15px;
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--medium-grey);
+    }
+
+    .token-id {
+      margin-left: 4px;
+
+      > span {
+        color: var(--pink);
+      }
+    }
+  }
+
+  .card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #ffffff;
+
+    > img {
+      height: 102%;
+      width: 102%;
+      object-fit: cover;
+    }
+  }
+
+  .token-image-container {
+    width: 250px;
+    height: 250px;
+    border-radius: 8px;
+  }
+
+  .collection-image-container {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+  }
+}
