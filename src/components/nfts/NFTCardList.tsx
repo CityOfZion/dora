@@ -60,7 +60,12 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
       </div>
       <div className="card-body">
         {data.attributes.length > 0 ? (
-          data.attributes.map(attribute => <NFTAttribute data={attribute} />)
+          data.attributes.map(attribute => (
+            <NFTAttribute
+              key={attribute.key || attribute.value}
+              data={attribute}
+            />
+          ))
         ) : (
           <p className="no-attributes">No attributes</p>
         )}

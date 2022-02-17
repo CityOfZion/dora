@@ -10,7 +10,6 @@ import { State } from '../../../../reducers/nftReducer'
 
 import './AddressNFTS.scss'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import AddressHeader from '../AddressHeader'
 import NFTList from '../../../../components/nfts/NFTList'
 import NFTGallery from '../../../../components/nfts/NFTGallery'
 import { ROUTES } from '../../../../constants'
@@ -60,58 +59,50 @@ const AddressNFTS: React.FC<Props> = props => {
 
   return (
     <div id="nft-container" className="page-container">
-      <div className="inner-page-container">
-        <AddressHeader {...props} />
+      <NFTFilters
+        toggleTypeSelected={toggleTypeSelected}
+        onSelected={type => setToggleTypeSelected(type)}
+      />
 
-        <NFTFilters
-          toggleTypeSelected={toggleTypeSelected}
-          onSelected={type => setToggleTypeSelected(type)}
-        />
-
-        {nftState.all.length > 0 ? (
-          <>
-            {toggleTypeSelected === 'list' ? (
-              <NFTList data={nftState.all} onClickToNavigate={handleNavigate} />
-            ) : (
-              <NFTGallery
-                data={nftState.all}
-                onClickToNavigate={handleNavigate}
-              />
-            )}
-          </>
-        ) : (
+      {nftState.all.length > 0 ? (
+        <>
+          {toggleTypeSelected === 'list' ? (
+            <NFTList data={nftState.all} onClickToNavigate={handleNavigate} />
+          ) : (
+            <NFTGallery
+              data={nftState.all}
+              onClickToNavigate={handleNavigate}
+            />
+          )}
+        </>
+      ) : (
+        !nftState.isLoading && (
           <div id="no-nft" className="horiz justify-center">
             <p>No NFT to list</p>
           </div>
-        )}
-        {nftState.isLoading && (
-          <div style={{ marginTop: nftState.all.length > 0 ? '16px' : '0px' }}>
-            <SkeletonTheme
-              color="#21383d"
-              highlightColor="rgb(125 159 177 / 25%)"
-            >
-              <Skeleton height={110} count={6} className="skeleton-row" />
-            </SkeletonTheme>
-          </div>
-        )}
-
-        <div className="button-container horiz justify-center">
-          {nftState.total !== 0 && (
-            <Button
-              disabled={
-                nftState.isLoading
-                  ? true
-                  : !!nftState.total
-                  ? page * nftLimit >= nftState.total
-                  : false
-              }
-              primary={false}
-              onClick={(): void => loadMore()}
-            >
-              load more
-            </Button>
-          )}
+        )
+      )}
+      {nftState.isLoading && (
+        <div style={{ marginTop: nftState.all.length > 0 ? '16px' : '0px' }}>
+          <SkeletonTheme
+            color="#21383d"
+            highlightColor="rgb(125 159 177 / 25%)"
+          >
+            <Skeleton height={110} count={6} className="skeleton-row" />
+          </SkeletonTheme>
         </div>
+      )}
+
+      <div className="button-container horiz justify-center">
+        {!!nftState.total && page * nftLimit < nftState.total && (
+          <Button
+            disabled={nftState.isLoading}
+            primary={false}
+            onClick={(): void => loadMore()}
+          >
+            load more
+          </Button>
+        )}
       </div>
     </div>
   )

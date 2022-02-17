@@ -1,11 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  useLocation,
-  // Redirect,
-} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -24,8 +18,6 @@ import SearchResults from '../../pages/search-results/SearchResults'
 import Monitor from '../../pages/monitor/Monitor'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
-import AddressNft from '../../pages/address/fragments/nfts/AddressNFTS'
-import AddressTransactions from '../../pages/address/fragments/transactions/AddressTransactions'
 import NftInformation from '../../pages/nft/NftInformation'
 
 const ScrollToTop = (): null => {
@@ -56,15 +48,6 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.HOME.url}
                   component={(): ReactElement => <Home />}
                   exact
-                />
-                <Route
-                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash/nfts`}
-                  component={(): ReactElement => <AddressNft />}
-                />
-
-                <Route
-                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash/transactions`}
-                  component={(): ReactElement => <AddressTransactions />}
                 />
 
                 <Route
