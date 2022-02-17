@@ -99,7 +99,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
     } else {
       return (
         <>
-          <span>NEO LEGACY</span>
+          <span>{nftState.value?.chain}</span>
         </>
       )
     }
@@ -112,7 +112,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
       */}
       <BackButton url="" text="back to address information" />
       <div className="inner-page-container">
-        <div className="title-container items-center">
+        <div className="page-title-container items-center">
           {ROUTES.NFT.renderIcon()}
           <h1>NFT Information</h1>
         </div>
