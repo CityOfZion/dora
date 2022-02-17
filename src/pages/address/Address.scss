@@ -75,8 +75,9 @@
   justify-content: center;
   align-items: center;
 
-  a {
+  .option {
     color: var(--white);
+    cursor: pointer;
     text-decoration: none;
     font-weight: 300;
     font-size: 18px;
@@ -84,6 +85,7 @@
     padding: 8px 5px;
     margin: 1px;
     flex: 1;
+    max-width: 170px;
     text-align: center;
     font-style: normal;
 

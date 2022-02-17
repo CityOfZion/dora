@@ -11,6 +11,6 @@ export const fetchTransaction = async (hash: string, page = 1) => {
     }
   } catch (error) {
     console.error(error)
-    return []
+    return { items: [], totalCount: 0 }
   }
 }
