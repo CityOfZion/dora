@@ -85,7 +85,8 @@
     "ci-lint": "eslint -c .eslintrc --max-warnings=0 ./src --ext .ts,.tsx",
     "format": "prettier --write ./src",
     "deploy": "aws s3 sync ./build s3://neoscan/prod --acl public-read",
-    "deploy:develop": "aws s3 sync ./build s3://neoscan/dev --acl public-read"
+    "deploy:develop": "aws s3 sync ./build s3://neoscan/dev --acl public-read",
+    "deploy:stage": "aws s3 sync ./build s3://neoscan/stage --acl public-read"
   },
   "browserslist": {
     "production": [
