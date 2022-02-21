@@ -1,4 +1,4 @@
-.card-container {
+.card-list-container {
   p {
     margin: 0;
     padding: 0;
@@ -14,7 +14,7 @@
   overflow: hidden;
 
   .card-image-container {
-    background-color: #27454c;
+    background-color: var(--dark-grey);
     padding: 20px 12px;
     grid-area: image;
   }
@@ -27,7 +27,7 @@
     justify-content: center;
     border-radius: 50%;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: var(--white);
 
     > img {
       height: 102%;
@@ -39,7 +39,7 @@
   .card-header {
     display: flex;
     min-width: 0;
-    background-color: #0d282e;
+    background-color: var(--medium-grey-blue);
     padding: 6px 24px;
 
     .card-header-content {
@@ -55,7 +55,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #d355e7;
+      color: var(--pink);
       align-self: center;
       background-color: transparent;
       border: none;
@@ -88,7 +88,7 @@
       }
       .collection-name-mobile {
         display: none;
-        color: #88a2b3;
+        color: var(--medium-grey);
         font-size: 14px;
         font-weight: 700;
         text-overflow: ellipsis;
@@ -99,7 +99,7 @@
 
     .token-name {
       font-size: 18px;
-      color: #ffffff;
+      color: var(--white);
       font-weight: 700;
       margin-bottom: 6px;
       text-overflow: ellipsis;
@@ -117,7 +117,7 @@
       span {
         font-size: 14px;
         font-weight: 500;
-        color: #88a2b3;
+        color: var(--medium-grey);
       }
 
       > div {
@@ -128,7 +128,7 @@
           margin-left: 4px;
 
           > span {
-            color: #c95bf0;
+            color: var(--pink);
           }
         }
       }
@@ -138,14 +138,14 @@
   .card-body {
     grid-area: body;
     display: flex;
-    background-color: #21383d;
+    background-color: var(--darkest-grey);
     padding: 12px 24px;
     flex-wrap: wrap;
     column-gap: 12px;
     row-gap: 8px;
 
     .no-attributes {
-      color: #88a2b3;
+      color: var(--medium-grey);
     }
   }
 
@@ -156,11 +156,11 @@
       width: 90px;
       height: 90px;
       border-radius: 4px;
-      background-color: #ffffff;
+      background-color: var(--white);
     }
 
     .card-image-container {
-      background-color: #21383d;
+      background-color: var(--darkest-grey);
       padding: 8px;
     }
 
@@ -170,7 +170,7 @@
 
     .card-header {
       align-items: center;
-      background-color: #21383d;
+      background-color: var(--darkest-grey);
 
       .card-header-content {
         display: block;

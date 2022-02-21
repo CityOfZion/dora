@@ -61,6 +61,10 @@
   align-items: center;
 }
 
+.hidden {
+  display: none;
+}
+
 $sizes: 1, 2, 3, 4, 5;
 
 @each $size in $sizes {
