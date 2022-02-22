@@ -1,4 +1,6 @@
 import React from 'react'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { nftLimit } from '../../actions/nftActions'
 import { NFT } from '../../reducers/nftReducer'
 import NFTCard from './NFTCardList'
 
@@ -6,10 +8,11 @@ import './NFTList.scss'
 
 interface Props {
   data: NFT[]
+  isLoading: boolean
   onClickToNavigate(id: string): void
 }
 
-const NFTList: React.FC<Props> = ({ data, onClickToNavigate }) => {
+const NFTList: React.FC<Props> = ({ data, isLoading, onClickToNavigate }) => {
   return (
     <div id="nft-cards-list-container" className="verti">
       {data.map(item => (
@@ -19,6 +22,12 @@ const NFTList: React.FC<Props> = ({ data, onClickToNavigate }) => {
           onClickToNavigate={() => onClickToNavigate(item.id)}
         />
       ))}
+
+      {isLoading && (
+        <SkeletonTheme color="#21383d" highlightColor="rgb(125 159 177 / 25%)">
+          <Skeleton height={110} count={nftLimit} className="skeleton-row" />
+        </SkeletonTheme>
+      )}
     </div>
   )
 }

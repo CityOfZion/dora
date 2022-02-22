@@ -9,7 +9,7 @@ import Button from '../../../../components/button/Button'
 import { State } from '../../../../reducers/nftReducer'
 
 import './AddressNFTS.scss'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+
 import NFTList from '../../../../components/nfts/NFTList'
 import NFTGallery from '../../../../components/nfts/NFTGallery'
 import { ROUTES } from '../../../../constants'
@@ -67,9 +67,14 @@ const AddressNFTS: React.FC<Props> = props => {
       {nftState.all.length > 0 ? (
         <>
           {toggleTypeSelected === 'list' ? (
-            <NFTList data={nftState.all} onClickToNavigate={handleNavigate} />
+            <NFTList
+              isLoading={nftState.isLoading}
+              data={nftState.all}
+              onClickToNavigate={handleNavigate}
+            />
           ) : (
             <NFTGallery
+              isLoading={nftState.isLoading}
               data={nftState.all}
               onClickToNavigate={handleNavigate}
             />
@@ -81,16 +86,6 @@ const AddressNFTS: React.FC<Props> = props => {
             <p>No NFT to list</p>
           </div>
         )
-      )}
-      {nftState.isLoading && (
-        <div style={{ marginTop: nftState.all.length > 0 ? '16px' : '0px' }}>
-          <SkeletonTheme
-            color="#21383d"
-            highlightColor="rgb(125 159 177 / 25%)"
-          >
-            <Skeleton height={110} count={6} className="skeleton-row" />
-          </SkeletonTheme>
-        </div>
       )}
 
       <div className="button-container horiz justify-center">
