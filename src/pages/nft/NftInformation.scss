@@ -10,12 +10,16 @@
   align-items: center;
 
   .id {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 300;
     color: var(--medium-grey);
 
     .number {
       color: var(--pink);
+
+      &:before {
+        content: " #";
+      }
     }
   }
 
@@ -213,22 +217,22 @@
   .description-block {
     height: auto;
     .title {
-      font-size: 25px;
+      font-size: 20px;
       padding-top: 5px;
     }
     .content {
-      font-size: 25px;
+      font-size: 20px;
       text-align: left;
       align-self: flex-start;
     }
     .inline-content {
-      font-size: 25px;
+      font-size: 20px;
       align-self: center;
       margin: 15px;
     }
     .grid-content {
-      font-size: 35px;
-      margin: 0 10px;
+      font-size: 20px;
+      margin: 5px 10px;
       text-align: right;
       align-items: center;
       align-self: flex-end;
@@ -250,6 +254,10 @@
 
   .content-block {
     height: auto;
+
+    .title {
+      padding-bottom: 10px;
+    }
   }
 
   .nft-information-container {
@@ -261,9 +269,14 @@
       justify-content: center;
       margin: 0 0 30px 0;
 
-      img {
-        width: 780px;
-        height: 780px;
+      .token-image {
+        max-width: 100%;
+        height: 380px;
+      }
+
+      .image-content {
+        width: 100%;
+        height: 380px;
       }
     }
   }
@@ -275,25 +288,15 @@
 
     .attributes-block {
       .title {
-        font-size: 25px;
+        font-size: 20px;
         margin: 5px;
       }
       .content {
-        font-size: 35px;
+        font-size: 20px;
         margin: 0 10px;
         align-self: end;
       }
     }
-  }
-
-  .title-container {
-    h1 {
-      font-size: 47px;
-    }
-    svg {
-      margin: 0 10px 0 0;
-    }
-    margin: 0;
   }
 
   .modal-content {

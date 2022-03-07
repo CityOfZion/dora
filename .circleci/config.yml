@@ -52,6 +52,33 @@ jobs:
             name: deploy
             command: npm run deploy:develop
 
+  deploy-stage:
+    docker:
+      - image: circleci/node:14.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install dependencies
+          command: npm install
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: build
+          command: npm run build
+      - run:
+          name: install aws cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: deploy
+          command: npm run deploy:stage
+
   deploy-production:
     docker:
       - image: circleci/node:14.16.0
@@ -96,6 +123,13 @@ workflows:
                 - dev
             branches:
               ignore: /.*/
+      - deploy-stage:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - develop
       - approve-release:
           type: approval
           requires:

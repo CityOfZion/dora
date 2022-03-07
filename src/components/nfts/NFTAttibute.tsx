@@ -9,7 +9,7 @@ type Props = {
 
 const NFTAttribute: React.FC<Props> = ({ data }) => {
   return (
-    <div className="nft-attribute">
+    <div className="nft-attribute horiz justify-center">
       {!!data.key ? (
         <span>{data.key}:</span>
       ) : (

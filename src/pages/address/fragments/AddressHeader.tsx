@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../constants'
 import Copy from '../../../components/copy/Copy'
 import GAS2 from '../../../assets/icons/GAS_2.svg'
@@ -39,19 +39,30 @@ interface MatchParams {
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
+type Props = RouteComponentProps<MatchParams> & {
+  onChange: Function
+}
 
 const AddressHeader: React.FC<Props> = (props: Props) => {
-  useUpdateNetworkState(props)
   const { hash, chain, network } = props.match.params
   const { pathname } = props.location
+  const history = useHistory()
+  useUpdateNetworkState(props)
 
   const [selectedOption, setSelectedOption] = useState('')
 
+  const changeRoute = (val: string) => {
+    setSelectedOption(val)
+    props.onChange(val)
+    const path = `${ROUTES.WALLET.url}/${chain}/${network}/${hash}/${val}`
+
+    history.push(path)
+  }
+
   useEffect(() => {
     const path = pathname.split('/')
-    setSelectedOption(path[5] || 'assets')
-  }, [pathname])
+    changeRoute(path[5] || 'assets')
+  }, [])
 
   return (
     <>
@@ -77,32 +88,35 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
       </div>
 
       <div id="address-menu">
-        <Link
-          to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}`}
+        <div
+          onClick={() => changeRoute('assets')}
           className={classNames({
+            option: true,
             active: selectedOption === 'assets',
           })}
         >
           Assets
-        </Link>
+        </div>
         {chain === 'neo3' && (
-          <Link
-            to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/nfts`}
+          <div
+            onClick={() => changeRoute('nfts')}
             className={classNames({
+              option: true,
               active: selectedOption === 'nfts',
             })}
           >
             NFTs
-          </Link>
+          </div>
         )}
-        <Link
-          to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/transactions`}
+        <div
+          onClick={() => changeRoute('transactions')}
           className={classNames({
+            option: true,
             active: selectedOption === 'transactions',
           })}
         >
           Transactions
-        </Link>
+        </div>
       </div>
     </>
   )
