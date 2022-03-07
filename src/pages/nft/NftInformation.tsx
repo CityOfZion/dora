@@ -32,7 +32,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
 
   useEffect(() => {
-    dispatch(fetchNFT(id, contractHash))
+    dispatch(fetchNFT(id, contractHash, network))
   }, [dispatch])
 
   const isMobileOrTablet = width <= 1200
@@ -63,7 +63,9 @@ const NftInformation: React.FC<Props> = (props: Props) => {
   }
 
   const buildGhostMarketUrl = () => {
-    return `https://ghostmarket.io/asset/n3/${nftState.value?.contract}/${nftState.value?.id}`
+    return network === 'mainnet'
+      ? `https://ghostmarket.io/asset/n3/${nftState.value?.contract}/${nftState.value?.id}`
+      : `https://testnet.ghostmarket.io/asset/n3t/${nftState.value?.contract}/${nftState.value?.id}`
   }
 
   const hasAttributes = () => {
@@ -109,7 +111,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
     <div id="Nft" className="page-container">
       {nftState.value && (
         <BackButton
-          url={`${ROUTES.WALLET.url}/${chain}/${network}/${nftState.value.creatorAddress}/nfts`}
+          url={`${ROUTES.WALLET.url}/${chain}/${network}/${nftState.value.ownerAddress}/nfts`}
           text="back to address information"
         />
       )}
