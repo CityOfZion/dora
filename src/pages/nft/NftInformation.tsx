@@ -27,7 +27,6 @@ type Props = RouteComponentProps<MatchParams>
 const NftInformation: React.FC<Props> = (props: Props) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
   const { contractHash, id, chain, network } = props.match.params
-  const { state: hash } = props.location
   const width = useWindowWidth()
   const dispatch = useDispatch()
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
@@ -108,9 +107,9 @@ const NftInformation: React.FC<Props> = (props: Props) => {
 
   return (
     <div id="Nft" className="page-container">
-      {hash && (
+      {nftState.value && (
         <BackButton
-          url={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/nfts`}
+          url={`${ROUTES.WALLET.url}/${chain}/${network}/${nftState.value.creatorAddress}/nfts`}
           text="back to address information"
         />
       )}

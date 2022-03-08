@@ -9,7 +9,7 @@ import './NFTList.scss'
 interface Props {
   data: NFT[]
   isLoading: boolean
-  onClickToNavigate(id: string): void
+  onClickToNavigate(id: string, contractHash: string): void
 }
 
 const NFTList: React.FC<Props> = ({ data, isLoading, onClickToNavigate }) => {
@@ -19,7 +19,7 @@ const NFTList: React.FC<Props> = ({ data, isLoading, onClickToNavigate }) => {
         <NFTCard
           key={item.id}
           data={item}
-          onClickToNavigate={() => onClickToNavigate(item.id)}
+          onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
         />
       ))}
 
