@@ -1,10 +1,9 @@
 import React from 'react'
-import Neo2 from '../../../../../assets/icons/neo2.svg'
-import Neo3 from '../../../../../assets/icons/neo3.svg'
-import { toBigNumber } from '../../../../../utils/formatter'
 import { Transfer } from '../AddressTransaction'
 import { ROUTES } from '../../../../../constants'
 import { Link } from 'react-router-dom'
+import tokens from '../../../../../assets/nep5/svg'
+import { truncateHash } from '../../../../../utils/formatter'
 
 type Props = {
   transfers: Transfer[]
@@ -20,6 +19,7 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
       <div className="address-transactions__table--transfers-labels">
         <label>From</label>
         <label>To</label>
+        <label>Symbol</label>
         <label>Amount</label>
         <label>Type</label>
       </div>
@@ -32,22 +32,31 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
           <Link
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.from}`}
           >
-            <span className="text-primary">{transfer.from}</span>
+            <span className="text-primary">
+              {truncateHash(transfer.from, true, 25, 7)}
+            </span>
           </Link>
           <Link
             className="hash"
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.to}`}
           >
-            <span className="text-primary">{transfer.to}</span>
+            <span className="text-primary">
+              {truncateHash(transfer.to, true, 25, 7)}
+            </span>
           </Link>
-          <span>
-            <img
-              width={15}
-              height={10}
-              src={chain === 'neo2' ? Neo2 : Neo3}
-              alt="token-logo"
-            />
-            {toBigNumber(transfer.amount || 0).toString()}
+          <span className="whitespace-no-wrap">
+            {truncateHash(transfer.name, true, 8)}
+          </span>
+          <span className="whitespace-no-wrap">
+            {tokens[transfer.icon ?? 'NEO'] && (
+              <img
+                width={15}
+                height={10}
+                src={tokens[transfer.icon ?? 'NEO']}
+                alt=""
+              />
+            )}
+            {transfer.amount}
           </span>
           <span>NEP-17 Transfer</span>
         </div>

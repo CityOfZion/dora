@@ -16,6 +16,8 @@ export interface Transfer {
   block: number
   txid: string
   transferindex: string
+  icon?: string
+  name?: string
 }
 export interface Notification {
   contract: string

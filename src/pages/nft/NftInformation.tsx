@@ -14,6 +14,7 @@ import { State } from '../../reducers/nftReducer'
 import { fetchNFT } from '../../actions/nftActions'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import NoImageFound from '../../assets/no-image-found.png'
+import { truncateHash } from '../../utils/formatter'
 
 interface MatchParams {
   contractHash: string
@@ -37,29 +38,12 @@ const NftInformation: React.FC<Props> = (props: Props) => {
 
   const isMobileOrTablet = width <= 1200
 
-  const minTextLength = 25
-
   const handleCloseModal = () => {
     setIsOpenModal(false)
   }
 
   const handleOpenModal = () => {
     setIsOpenModal(true)
-  }
-
-  const truncateText = (isMobile: boolean, text?: string) => {
-    if (text) {
-      if (isMobile && text.length > minTextLength) {
-        const separator = '...'
-        const firstHalf = text.substring(0, Math.floor(text.length / 2))
-        const lastDigits = text.substring(text.length - 4, text.length)
-        return firstHalf + separator + lastDigits
-      } else {
-        return text
-      }
-    } else {
-      return ''
-    }
   }
 
   const buildGhostMarketUrl = () => {
@@ -126,7 +110,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
           <span className="id">
             ID:
             <span className="number">
-              {truncateText(isMobileOrTablet, nftState.value?.id)}
+              {truncateHash(nftState.value?.id, isMobileOrTablet)}
             </span>
           </span>
         </div>
@@ -170,7 +154,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
                     <span className="title">CREATOR</span>
                     <span className="grid-content">
                       {nftState.value?.creatorName ||
-                        truncateText(true, nftState.value?.creatorAddress)}
+                        truncateHash(nftState.value?.creatorAddress, true)}
                     </span>
                   </div>
                   <div className="content-block">
