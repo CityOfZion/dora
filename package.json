@@ -19,7 +19,7 @@
     "material-ui": "^0.20.2",
     "moment": "^2.25.3",
     "neo-convertor": "0.0.2",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react": "^16.13.1",
     "react-burger-menu": "^2.6.17",
     "react-copy-to-clipboard": "^5.0.2",
