@@ -39,8 +39,8 @@ const AddressNFTS: React.FC<Props> = props => {
     setPage(lastState => lastState + 1)
   }
 
-  function handleNavigate(id: string) {
-    history.push(`${ROUTES.NFT.url}/${chain}/${network}/${hash}/${id}`)
+  function handleNavigate(id: string, contractHash: string) {
+    history.push(`${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${id}`)
   }
 
   useEffect(() => {

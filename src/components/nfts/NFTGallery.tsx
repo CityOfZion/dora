@@ -8,7 +8,7 @@ import './NFTGallery.scss'
 
 interface Props {
   data: NFT[]
-  onClickToNavigate(id: string): void
+  onClickToNavigate(id: string, contractHash: string): void
   isLoading: boolean
 }
 
@@ -27,7 +27,7 @@ const NFTGallery: React.FC<Props> = ({
         <NFTCardGallery
           key={item.id}
           data={item}
-          onClickToNavigate={() => onClickToNavigate(item.id)}
+          onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
         />
       ))}
 
