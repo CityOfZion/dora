@@ -49,7 +49,7 @@ type GhostMarketAttributes =
   | Record<string, any>
   | undefined
 
-export const nftLimit = 6
+export const nftLimit = 8
 
 export const requestNFTS =
   (page: number) =>
