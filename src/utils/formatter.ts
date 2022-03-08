@@ -13,3 +13,22 @@ BigNumber.config({ EXPONENTIAL_AT: 12 })
 // https://github.com/MikeMcl/bignumber.js/issues/11
 export const toBigNumber = (value: number | string) =>
   new BigNumber(String(value))
+
+export const truncateHash = (
+  text?: string,
+  isMobile = false,
+  minTextLength = 25,
+) => {
+  if (text) {
+    if (isMobile && text.length > minTextLength) {
+      const separator = '...'
+      const firstHalf = text.substring(0, Math.floor(text.length / 2))
+      const lastDigits = text.substring(text.length - 4, text.length)
+      return firstHalf + separator + lastDigits
+    } else {
+      return text
+    }
+  } else {
+    return ''
+  }
+}

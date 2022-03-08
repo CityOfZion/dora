@@ -33,18 +33,20 @@
 
       label {
         color: var(--medium-grey);
-        font-weight: 900;
+        font-weight: 600;
         letter-spacing: -0.56px;
         line-height: 13px;
         text-align: left;
-        text-transform: uppercase;
       }
 
       .hash {
         color: var(--pink);
-        overflow: hidden;
-        width: 150px;
-        text-overflow: ellipsis;
+      }
+
+      &-items {
+        background-color: var(--medium-grey-blue);
+        border-radius: 4px;
+        padding: 10px;
       }
     }
   }
@@ -150,7 +152,7 @@
       &-labels,
       &-values {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         grid-template-rows: repeat(auto-fill, 15px);
         grid-gap: 30px;
         flex: 1;
@@ -163,7 +165,7 @@
         font-style: normal;
         letter-spacing: normal;
         line-height: normal;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
       }
 
       &-values {
@@ -173,7 +175,7 @@
         font-style: normal;
         letter-spacing: 0.96px;
         line-height: normal;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         text-align: left;
 
         a {
@@ -186,13 +188,13 @@
     &--balloon {
       align-items: center;
       background-color: #00000059;
-      font-family: 'Sofia Pro - Mediumitalic';
+      font-family: "Sofia Pro - Mediumitalic";
       border-radius: 15px;
       color: var(--white);
       display: flex;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 500;
-      font-style: normal;
+      font-style: italic;
       flex: 1;
       letter-spacing: 0.82px;
       line-height: normal;
@@ -201,8 +203,11 @@
       padding: 8px 15px;
 
       & span {
-        color: var(--pink);
         margin: 2px 5px 0;
+        color: var(--pink);
+        font-style: normal;
+        letter-spacing: normal;
+        line-height: normal;
       }
     }
   }

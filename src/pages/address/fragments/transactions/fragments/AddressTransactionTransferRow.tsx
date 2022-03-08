@@ -3,6 +3,7 @@ import { Transfer } from '../AddressTransaction'
 import { ROUTES } from '../../../../../constants'
 import { Link } from 'react-router-dom'
 import tokens from '../../../../../assets/nep5/svg'
+import { truncateHash } from '../../../../../utils/formatter'
 
 type Props = {
   transfers: Transfer[]
@@ -18,6 +19,7 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
       <div className="address-transactions__table--transfers-labels">
         <label>From</label>
         <label>To</label>
+        <label>Symbol</label>
         <label>Amount</label>
         <label>Type</label>
       </div>
@@ -30,14 +32,15 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
           <Link
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.from}`}
           >
-            <span className="text-primary">{transfer.from}</span>
+            <span className="text-primary">{truncateHash(transfer.from)}</span>
           </Link>
           <Link
             className="hash"
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.to}`}
           >
-            <span className="text-primary">{transfer.to}</span>
+            <span className="text-primary">{truncateHash(transfer.to)}</span>
           </Link>
+          <span className="whitespace-no-wrap">{transfer.name}</span>
           <span className="whitespace-no-wrap">
             {tokens[transfer.icon ?? 'NEO'] && (
               <img

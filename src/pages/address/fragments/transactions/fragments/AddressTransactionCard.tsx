@@ -1,0 +1,111 @@
+import Neo2 from '../../../../../assets/icons/neo2.svg'
+import Neo3 from '../../../../../assets/icons/neo3.svg'
+import { ArrowForwardIos } from '@material-ui/icons'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '../../../../../constants'
+import TransactionTime from './TransactionTime'
+import AddressTransactionMobileRow from './AddressTransactionMobileRow'
+import AddressTransactionTransfer from './AddressTransactionTransferRow'
+import React, { useState } from 'react'
+import { AddressTransaction } from '../AddressTransaction'
+import useWindowWidth from '../../../../../hooks/useWindowWidth'
+
+interface Props {
+  transaction: AddressTransaction
+  chain: string
+  network: string
+}
+
+const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
+  const { transaction, chain, network } = props
+  const [showDetail, setShowDetail] = useState(true)
+  const width = useWindowWidth()
+
+  const isMobileOrTablet = width <= 1200
+
+  return (
+    <div className="address-transactions__table--row">
+      {!isMobileOrTablet && (
+        <div className="address-transactions__table--chain">
+          <div className="address-transactions__table--logo">
+            {chain === 'neo2' ? (
+              <img src={Neo2} alt="token-logo" />
+            ) : (
+              <img src={Neo3} alt="token-logo" />
+            )}
+          </div>
+          <div>{chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</div>
+        </div>
+      )}
+      <div className="address-transactions__table--content">
+        <div className="address-transactions__table--hash">
+          {isMobileOrTablet ? (
+            <div
+              className="horiz justify-between weight-1"
+              onClick={() => setShowDetail(!showDetail)}
+            >
+              <div className="horiz">
+                <div className="address-transactions__table--logo">
+                  {chain === 'neo2' ? (
+                    <img src={Neo2} alt="token-logo" />
+                  ) : (
+                    <img src={Neo3} alt="token-logo" />
+                  )}
+                </div>
+                <div>{chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</div>
+              </div>
+              <ArrowForwardIos style={{ color: '#d355e7' }} />
+            </div>
+          ) : (
+            <>
+              <div className="horiz">
+                <label>ID</label>{' '}
+                <Link
+                  className="hash"
+                  to={`${ROUTES.TRANSACTION.url}/${chain}/${network}/${transaction.hash}`}
+                >
+                  <span>{transaction.hash}</span>
+                </Link>
+              </div>
+              <TransactionTime time={transaction.time} />
+            </>
+          )}
+        </div>
+
+        {(showDetail || !isMobileOrTablet) && (
+          <div
+            className={
+              isMobileOrTablet
+                ? 'verti address-transactions__table--transfers'
+                : 'address-transactions__table--transfers'
+            }
+          >
+            {isMobileOrTablet ? (
+              <AddressTransactionMobileRow
+                transaction={transaction}
+                chain={chain}
+                network={network}
+              />
+            ) : (
+              <AddressTransactionTransfer
+                transfers={transaction.transfers}
+                chain={chain}
+                network={network}
+              />
+            )}
+            <div className="horiz weight-1">
+              <div className="address-transactions__table--balloon">
+                Notifications: <span>{transaction.notifications.length}</span>
+              </div>
+              <div className="address-transactions__table--balloon">
+                Invocations: <span>{transaction.invocations.length}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default AddressTransactionsCard
