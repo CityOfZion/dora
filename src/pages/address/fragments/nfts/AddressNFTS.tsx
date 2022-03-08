@@ -35,7 +35,7 @@ const AddressNFTS: React.FC<Props> = props => {
 
   function loadMore(): void {
     const nextPage = page + 1
-    dispatch(fetchNFTS(hash, nextPage))
+    dispatch(fetchNFTS(hash, network, nextPage))
     setPage(lastState => lastState + 1)
   }
 
@@ -50,7 +50,7 @@ const AddressNFTS: React.FC<Props> = props => {
   }, [windowWidth])
 
   useEffect(() => {
-    dispatch(fetchNFTS(hash))
+    dispatch(fetchNFTS(hash, network))
 
     return () => {
       dispatch(clearList())

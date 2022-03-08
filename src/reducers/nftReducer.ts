@@ -47,6 +47,7 @@ export type DETAILED_NFT = {
   description: string
   creatorAddress: string
   creatorName: string
+  ownerAddress: string
   apiUrl: string
   collection: {
     name: string

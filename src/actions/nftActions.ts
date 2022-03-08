@@ -19,6 +19,9 @@ interface GhostMarketNFT {
     creator_offchain_name?: string
     api_url?: string
     contract?: string
+    owners: {
+      address: string
+    }[]
     collection: {
       name?: string
       featured_image?: string
@@ -28,7 +31,7 @@ interface GhostMarketNFT {
       image?: string
       description?: string
     }
-    nft_extended: string
+    nft_extended?: string
   }
 }
 
@@ -50,6 +53,16 @@ type GhostMarketAttributes =
   | undefined
 
 export const nftLimit = 8
+
+export function treatNFTImage(srcImage: string) {
+  if (srcImage.startsWith('ipfs://')) {
+    const [, imageId] = srcImage.split('://')
+
+    return `https://ipfs.ghostmarket.io/ipfs/${imageId}`
+  }
+
+  return srcImage
+}
 
 export const requestNFTS =
   (page: number) =>
@@ -162,7 +175,7 @@ function mapAttributes(attributes: GhostMarketAttributes): NFTAttribute[] {
   return []
 }
 
-export function fetchNFTS(ownerId: string, page = 1) {
+export function fetchNFTS(ownerId: string, network: string, page = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
@@ -171,6 +184,7 @@ export function fetchNFTS(ownerId: string, page = 1) {
       const response = await fetch(
         BUILD_GHOST_MARKET_URL({
           path: 'assets',
+          network,
           params: {
             owner: ownerId,
             limit: nftLimit,
@@ -183,14 +197,14 @@ export function fetchNFTS(ownerId: string, page = 1) {
         (await response.json()) as GhostMarketAssets
 
       const nfts = assets.map(({ nft }): NFT => {
-        const attributes = mapAttributes(
-          JSON.parse(nft.nft_extended).attributes,
-        )
+        const attributes = nft.nft_extended
+          ? mapAttributes(JSON.parse(nft.nft_extended).attributes)
+          : []
 
         return {
           name: nft.nft_metadata.name || '',
           chain: nft.chain || '',
-          image: nft.nft_metadata.image || '',
+          image: treatNFTImage(nft.nft_metadata.image || ''),
           id: nft.token_id || '',
           contract: nft.contract || '',
           collection: {
@@ -209,7 +223,11 @@ export function fetchNFTS(ownerId: string, page = 1) {
   }
 }
 
-export function fetchNFT(tokenId: string, contractHash: string) {
+export function fetchNFT(
+  tokenId: string,
+  contractHash: string,
+  network: string,
+) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
@@ -218,6 +236,7 @@ export function fetchNFT(tokenId: string, contractHash: string) {
       const response = await fetch(
         BUILD_GHOST_MARKET_URL({
           path: 'assets',
+          network,
           params: {
             token_id: tokenId,
             contract: contractHash,
@@ -228,18 +247,21 @@ export function fetchNFT(tokenId: string, contractHash: string) {
 
       const [{ nft }] = assets
 
-      const attributes = mapAttributes(JSON.parse(nft.nft_extended).attributes)
+      const attributes = nft.nft_extended
+        ? mapAttributes(JSON.parse(nft.nft_extended).attributes)
+        : []
 
       const mappedNFT = {
         name: nft.nft_metadata.name || '',
         chain: nft.chain || '',
         symbol: nft.symbol || '',
         contract: nft.contract || '',
-        image: nft.nft_metadata.image || '',
+        image: treatNFTImage(nft.nft_metadata.image || ''),
         id: nft.token_id || '',
         description: nft.nft_metadata.description || '',
         creatorName: nft.creator_offchain_name || '',
         creatorAddress: nft.creator_address || '',
+        ownerAddress: nft.owners[0].address,
         apiUrl: nft.api_url || '',
         collection: {
           image: nft.collection.featured_image || '',

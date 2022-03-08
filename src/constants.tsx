@@ -77,16 +77,16 @@ export const GENERATE_BASE_URL = (
 }
 
 export const BUILD_GHOST_MARKET_URL = ({
-  chain = 'n3',
   network = 'mainnet',
   path,
   params,
 }: {
   path: string
-  chain?: string
   network?: string
   params?: Record<string, string | number>
 }): string => {
+  const chain = network === 'mainnet' ? 'n3' : 'n3t'
+
   const baseUrl =
     network === 'mainnet'
       ? 'https://api.ghostmarket.io/api/v1'
