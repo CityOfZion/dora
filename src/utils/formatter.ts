@@ -18,11 +18,15 @@ export const truncateHash = (
   text?: string,
   isMobile = false,
   minTextLength = 25,
+  firstChars?: number,
 ) => {
   if (text) {
     if (isMobile && text.length > minTextLength) {
       const separator = '...'
-      const firstHalf = text.substring(0, Math.floor(text.length / 2))
+      const firstHalf = text.substring(
+        0,
+        Math.floor(firstChars || text.length / 2),
+      )
       const lastDigits = text.substring(text.length - 4, text.length)
       return firstHalf + separator + lastDigits
     } else {

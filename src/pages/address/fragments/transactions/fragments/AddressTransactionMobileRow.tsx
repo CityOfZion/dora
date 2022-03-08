@@ -58,7 +58,7 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           </div>
           <div className="horiz">
             <label className="weight-1">Symbol</label>
-            <span>{it.name}</span>
+            <span>{truncateHash(it.name, true, 8)}</span>
           </div>
           <div className="horiz">
             <label className="weight-1">Amount</label>

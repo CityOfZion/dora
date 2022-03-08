@@ -17,6 +17,10 @@
     text-decoration: none;
   }
 
+  .title {
+    color: var(--medium-grey);
+  }
+
   &__card {
     &--mobile {
       font-size: 14px;
@@ -153,7 +157,7 @@
       &-values {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        grid-template-rows: repeat(auto-fill, 15px);
+        grid-template-rows: repeat(auto-fill, auto);
         grid-gap: 30px;
         flex: 1;
       }
@@ -177,11 +181,6 @@
         line-height: normal;
         margin-bottom: 10px;
         text-align: left;
-
-        a {
-          text-overflow: ellipsis;
-          overflow: hidden;
-        }
       }
     }
 
@@ -192,7 +191,7 @@
       border-radius: 15px;
       color: var(--white);
       display: flex;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500;
       font-style: italic;
       flex: 1;

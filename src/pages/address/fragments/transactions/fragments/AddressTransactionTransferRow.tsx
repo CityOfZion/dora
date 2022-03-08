@@ -32,15 +32,21 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
           <Link
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.from}`}
           >
-            <span className="text-primary">{truncateHash(transfer.from)}</span>
+            <span className="text-primary">
+              {truncateHash(transfer.from, true, 25, 7)}
+            </span>
           </Link>
           <Link
             className="hash"
             to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.to}`}
           >
-            <span className="text-primary">{truncateHash(transfer.to)}</span>
+            <span className="text-primary">
+              {truncateHash(transfer.to, true, 25, 7)}
+            </span>
           </Link>
-          <span className="whitespace-no-wrap">{transfer.name}</span>
+          <span className="whitespace-no-wrap">
+            {truncateHash(transfer.name, true, 8)}
+          </span>
           <span className="whitespace-no-wrap">
             {tokens[transfer.icon ?? 'NEO'] && (
               <img
