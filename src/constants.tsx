@@ -2,6 +2,7 @@ import React from 'react'
 import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
+import { wallet, u } from '@cityofzion/neon-js'
 
 import './components/navigation/Sidebar.scss'
 import { store } from './store'
@@ -292,6 +293,14 @@ export const neo3_asciiToByteArray = (str: string): string => {
     arr.push(utf8.charCodeAt(i))
   }
   return ''
+}
+
+export const byteStringToAddress = (byteString: string): string => {
+  const account = new wallet.Account(
+    u.reverseHex(u.HexString.fromBase64(byteString).toString()),
+  )
+
+  return account.address
 }
 
 export const HEX_STRING_OPTION = {
