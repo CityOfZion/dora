@@ -61,6 +61,12 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
           <span>NEP-17 Transfer</span>
         </div>
       ))}
+
+      {!transfers.length && (
+        <div className="horiz justify-center">
+          <p>not found transfers</p>
+        </div>
+      )}
     </div>
   )
 }
