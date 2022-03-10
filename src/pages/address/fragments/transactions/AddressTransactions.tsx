@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { fetchTransaction } from './AddressTransactionService'
 import './AddressTransactions.scss'
-import { AddressTransaction, Transfer } from './AddressTransaction'
+import {
+  AddressTransaction,
+  Notification,
+  Transfer,
+} from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { GENERATE_BASE_URL } from '../../../../constants'
+import { byteStringToAddress, GENERATE_BASE_URL } from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 
@@ -33,29 +37,39 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
     setCurrentPage(currentPage + 1)
   }
 
-  const getTransfers = (transfers: Transfer[]) =>
+  const getTransfers = (invocations: Notification[]) =>
     Promise.all(
-      transfers.map(async transfer => {
-        const { scripthash } = transfer
-        const response = await fetch(
-          `${GENERATE_BASE_URL()}/asset/${scripthash}`,
+      invocations
+        .filter(
+          ({ state, event_name }) =>
+            state.length === 3 && event_name === 'Transfer',
         )
+        .map(async ({ contract, state }): Promise<Transfer> => {
+          const [{ value: from }, { value: to }, { value: amount }] = state
 
-        const json = await response.json()
-        const { name, symbol, decimals } = json
+          const response = await fetch(
+            `${GENERATE_BASE_URL()}/asset/${contract}`,
+          )
 
-        const amount = convertToArbitraryDecimals(
-          Number(transfer.amount),
-          decimals,
-        )
+          const json = await response.json()
+          const { name, symbol, decimals } = json
 
-        return {
-          ...transfer,
-          amount,
-          name,
-          icon: symbol,
-        }
-      }),
+          const convertedAmount = convertToArbitraryDecimals(
+            Number(amount),
+            decimals,
+          )
+          const convertedFrom = byteStringToAddress(from)
+          const convertedTo = byteStringToAddress(to)
+
+          return {
+            scripthash: contract,
+            from: convertedFrom,
+            to: convertedTo,
+            amount: convertedAmount,
+            name,
+            icon: symbol,
+          }
+        }),
     )
 
   useEffect(() => {
@@ -67,7 +81,7 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
       )
 
       for (const item of items) {
-        item.transfers = await getTransfers(item.transfers)
+        item.transfers = await getTransfers(item.notifications)
       }
 
       populateRecords(items)

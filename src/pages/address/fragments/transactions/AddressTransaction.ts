@@ -10,24 +10,18 @@ export interface Incovation {
 export interface Transfer {
   from: string
   to: string
-  time: string
   scripthash: string
-  amount: string
-  block: number
-  txid: string
-  transferindex: string
+  amount: number
   icon?: string
   name?: string
 }
 export interface Notification {
   contract: string
   event_name: string
-  state: [
-    {
-      type: string
-      value: string
-    },
-  ]
+  state: {
+    type: string
+    value: string
+  }[]
 }
 
 export interface AddressTransaction {
