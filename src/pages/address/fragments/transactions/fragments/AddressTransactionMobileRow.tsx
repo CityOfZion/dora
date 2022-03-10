@@ -4,8 +4,7 @@ import { AddressTransaction } from '../AddressTransaction'
 import TransactionTime from './TransactionTime'
 import { ROUTES } from '../../../../../constants'
 import { truncateHash } from '../../../../../utils/formatter'
-import Neo2 from '../../../../../assets/icons/neo2.svg'
-import Neo3 from '../../../../../assets/icons/neo3.svg'
+import tokens from '../../../../../assets/nep5/svg'
 
 type Props = {
   transaction: AddressTransaction
@@ -62,12 +61,14 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           </div>
           <div className="horiz">
             <label className="weight-1">Amount</label>
-            <img
-              width={15}
-              height={10}
-              src={chain === 'neo2' ? Neo2 : Neo3}
-              alt="token-logo"
-            />
+            {tokens[it.icon ?? 'NEO'] && (
+              <img
+                width={15}
+                height={10}
+                src={tokens[it.icon ?? 'NEO']}
+                alt=""
+              />
+            )}
             <span>{it.amount}</span>
           </div>
           <div className="horiz">
@@ -76,6 +77,11 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           </div>
         </div>
       ))}
+      {!transaction.transfers.length && (
+        <div className="horiz justify-center">
+          <p>not found transfers</p>
+        </div>
+      )}
     </div>
   )
 }
