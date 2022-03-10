@@ -58,8 +58,9 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
             Number(amount),
             decimals,
           )
-          const convertedFrom = byteStringToAddress(from)
-          const convertedTo = byteStringToAddress(to)
+
+          const convertedFrom = from ? byteStringToAddress(from) : 'mint'
+          const convertedTo = to ? byteStringToAddress(to) : 'burn'
 
           return {
             scripthash: contract,
