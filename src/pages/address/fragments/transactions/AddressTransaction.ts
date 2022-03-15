@@ -12,8 +12,7 @@ export interface Transfer {
   to: string
   scripthash: string
   amount: number
-  icon?: string
-  name?: string
+  symbol?: string
 }
 export interface Notification {
   contract: string

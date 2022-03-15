@@ -57,15 +57,15 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           </div>
           <div className="horiz">
             <label className="weight-1">Symbol</label>
-            <span>{truncateHash(it.name, true, 8)}</span>
+            <span>{truncateHash(it.symbol, true, 10, 4)}</span>
           </div>
           <div className="horiz">
             <label className="weight-1">Amount</label>
-            {tokens[it.icon ?? 'NEO'] && (
+            {tokens[it.symbol ?? 'NEO'] && (
               <img
                 width={15}
                 height={10}
-                src={tokens[it.icon ?? 'NEO']}
+                src={tokens[it.symbol ?? 'NEO']}
                 alt=""
               />
             )}
