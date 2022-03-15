@@ -1,9 +1,8 @@
 import React from 'react'
 import { Transfer } from '../AddressTransaction'
-import { ROUTES } from '../../../../../constants'
-import { Link } from 'react-router-dom'
 import tokens from '../../../../../assets/nep5/svg'
 import { truncateHash } from '../../../../../utils/formatter'
+import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
 
 type Props = {
   transfers: Transfer[]
@@ -11,9 +10,10 @@ type Props = {
   network: string
 }
 
-const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
-  const { transfers, chain, network } = props
-
+const AddressTransactionTransfer: React.FC<Props> = ({
+  transfers,
+  ...props
+}: Props) => {
   return (
     <div className="address-transactions__table--transfers-items">
       {transfers.length > 0 && (
@@ -31,21 +31,9 @@ const AddressTransactionTransfer: React.FC<Props> = (props: Props) => {
               className="address-transactions__table--transfers-values"
               key={transfer.from + transfer.to + transfer.amount}
             >
-              <Link
-                to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.from}`}
-              >
-                <span className="text-primary">
-                  {truncateHash(transfer.from, true, 25, 7)}
-                </span>
-              </Link>
-              <Link
-                className="hash"
-                to={`${ROUTES.WALLET.url}/${chain}/${network}/${transfer.to}`}
-              >
-                <span className="text-primary">
-                  {truncateHash(transfer.to, true, 25, 7)}
-                </span>
-              </Link>
+              <TransactionAddressLink address={transfer.from} {...props} />
+              <TransactionAddressLink address={transfer.to} {...props} />
+
               <span className="whitespace-no-wrap">
                 {truncateHash(transfer.symbol, true, 10, 4)}
               </span>

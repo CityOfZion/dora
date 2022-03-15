@@ -5,6 +5,7 @@ import TransactionTime from './TransactionTime'
 import { ROUTES } from '../../../../../constants'
 import { truncateHash } from '../../../../../utils/formatter'
 import tokens from '../../../../../assets/nep5/svg'
+import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
 
 type Props = {
   transaction: AddressTransaction
@@ -37,23 +38,19 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
         >
           <div className="horiz">
             <label className="weight-1">From</label>
-            <Link
-              className="hash"
-              to={`${ROUTES.WALLET.url}/${chain}/${network}/${it.from}`}
-            >
-              <span className="text-primary">
-                {truncateHash(it.from, true)}
-              </span>
-            </Link>
+            <TransactionAddressLink
+              address={it.from}
+              linkClassName="hash"
+              {...props}
+            />
           </div>
           <div className="horiz">
             <label className="weight-1">To</label>
-            <Link
-              className="hash"
-              to={`${ROUTES.WALLET.url}/${chain}/${network}/${it.to}`}
-            >
-              <span className="text-primary">{truncateHash(it.to, true)}</span>
-            </Link>
+            <TransactionAddressLink
+              address={it.to}
+              linkClassName="hash"
+              {...props}
+            />
           </div>
           <div className="horiz">
             <label className="weight-1">Symbol</label>

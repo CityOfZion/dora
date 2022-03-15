@@ -15,13 +15,15 @@ interface Props {
 const NFTList: React.FC<Props> = ({ data, isLoading, onClickToNavigate }) => {
   return (
     <div id="nft-cards-list-container" className="verti">
-      {data.map(item => (
-        <NFTCard
-          key={item.id}
-          data={item}
-          onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
-        />
-      ))}
+      {!isLoading &&
+        data.length > 0 &&
+        data.map(item => (
+          <NFTCard
+            key={item.id}
+            data={item}
+            onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
+          />
+        ))}
 
       {isLoading && (
         <SkeletonTheme color="#21383d" highlightColor="rgb(125 159 177 / 25%)">

@@ -187,7 +187,7 @@
     &--balloon {
       align-items: center;
       background-color: #00000059;
-      font-family: "Sofia Pro - Mediumitalic";
+      font-family: 'Sofia Pro - Mediumitalic';
       border-radius: 15px;
       color: var(--white);
       display: flex;
@@ -209,5 +209,12 @@
         line-height: normal;
       }
     }
+  }
+}
+
+.no-transaction {
+  p {
+    font-size: 24px;
+    color: var(--medium-grey);
   }
 }

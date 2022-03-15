@@ -5,15 +5,15 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { toBigNumber } from '../../../../utils/formatter'
 import { State as AddressState } from '../../../../reducers/addressReducer'
-import tokens from '../../../../assets/nep5/svg'
-import { fetchAddress } from '../../../../actions/addressActions'
+import {
+  fetchAddress,
+  resetAddressState,
+} from '../../../../actions/addressActions'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
+import { getLogo } from '../../../../utils/getLogo'
 
 function getTransferLogo(symbol: string, chain: string): React.ReactNode {
-  const isNeo2 = ['NEO', 'GAS'].includes(symbol) && chain === 'neo2'
-  const tidySymbol = isNeo2 ? `symbol${2}` : symbol
-
-  const icon = tokens[tidySymbol]
+  const icon = getLogo(symbol, chain)
 
   return icon ? (
     <img src={icon} className="icon" alt="token-logo" />
@@ -41,6 +41,10 @@ const AddressAssets: React.FC<Props> = props => {
 
   useEffect(() => {
     dispatch(fetchAddress(hash, chain))
+
+    return () => {
+      dispatch(resetAddressState())
+    }
   }, [chain, dispatch, hash])
 
   return (

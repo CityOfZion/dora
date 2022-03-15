@@ -1,37 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
+import React from 'react'
+import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../constants'
 import Copy from '../../../components/copy/Copy'
-import GAS2 from '../../../assets/icons/GAS_2.svg'
-import GAS3 from '../../../assets/icons/GAS_3.svg'
-import Neo2 from '../../../assets/icons/neo2.svg'
-import Neo3 from '../../../assets/icons/neo3.svg'
-import tokens from '../../../assets/nep5/svg'
-import useUpdateNetworkState from '../../../hooks/useUpdateNetworkState'
 import classNames from 'classnames'
-
-function returnTransferLogo(
-  name: string,
-  chain: string,
-): React.ReactNode | string {
-  if (name === 'GAS') {
-    return chain === 'neo2' ? (
-      <img src={GAS2} alt="token-logo" />
-    ) : (
-      <img src={GAS3} alt="token-logo" />
-    )
-  }
-
-  if (name === 'NEO') {
-    return chain === 'neo2' ? (
-      <img src={Neo2} alt="token-logo" />
-    ) : (
-      <img src={Neo3} alt="token-logo" />
-    )
-  }
-
-  return tokens[name] && <img src={tokens[name]} alt="token-logo" />
-}
+import { getLogo } from '../../../utils/getLogo'
 
 interface MatchParams {
   hash: string
@@ -39,30 +11,10 @@ interface MatchParams {
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams> & {
-  onChange: Function
-}
+type Props = RouteComponentProps<MatchParams>
 
 const AddressHeader: React.FC<Props> = (props: Props) => {
   const { hash, chain, network } = props.match.params
-  const { pathname } = props.location
-  const history = useHistory()
-  useUpdateNetworkState(props)
-
-  const [selectedOption, setSelectedOption] = useState('')
-
-  const changeRoute = (val: string) => {
-    setSelectedOption(val)
-    props.onChange(val)
-    const path = `${ROUTES.WALLET.url}/${chain}/${network}/${hash}/${val}`
-
-    history.push(path)
-  }
-
-  useEffect(() => {
-    const path = pathname.split('/')
-    changeRoute(path[5] || 'assets')
-  }, [])
 
   return (
     <>
@@ -76,7 +28,7 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
         <div className="horiz weight-1">
           <div className="address-hash-info">
             <div className="address-hash-logo">
-              {returnTransferLogo('NEO', chain)}
+              <img src={getLogo('NEO', chain)} alt="token-logo" />
             </div>
             <div>
               <div>{chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</div>
@@ -88,35 +40,32 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
       </div>
 
       <div id="address-menu">
-        <div
-          onClick={() => changeRoute('assets')}
+        <NavLink
+          to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/assets`}
           className={classNames({
             option: true,
-            active: selectedOption === 'assets',
           })}
         >
           Assets
-        </div>
+        </NavLink>
         {chain === 'neo3' && (
-          <div
-            onClick={() => changeRoute('nfts')}
+          <NavLink
+            to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/nfts`}
             className={classNames({
               option: true,
-              active: selectedOption === 'nfts',
             })}
           >
             NFTs
-          </div>
+          </NavLink>
         )}
-        <div
-          onClick={() => changeRoute('transactions')}
+        <NavLink
+          to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/transactions`}
           className={classNames({
             option: true,
-            active: selectedOption === 'transactions',
           })}
         >
           Transactions
-        </div>
+        </NavLink>
       </div>
     </>
   )
