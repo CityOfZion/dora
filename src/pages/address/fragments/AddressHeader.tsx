@@ -39,7 +39,7 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
         </div>
       </div>
 
-      <div id="address-menu">
+      <div id="address-menu" className={chain}>
         <NavLink
           to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/assets`}
           className={classNames({
@@ -49,23 +49,26 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
           Assets
         </NavLink>
         {chain === 'neo3' && (
-          <NavLink
-            to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/nfts`}
-            className={classNames({
-              option: true,
-            })}
-          >
-            NFTs
-          </NavLink>
+          <>
+            <NavLink
+              to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/nfts`}
+              className={classNames({
+                option: true,
+              })}
+            >
+              NFTs
+            </NavLink>
+
+            <NavLink
+              to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/transactions`}
+              className={classNames({
+                option: true,
+              })}
+            >
+              Transactions
+            </NavLink>
+          </>
         )}
-        <NavLink
-          to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/transactions`}
-          className={classNames({
-            option: true,
-          })}
-        >
-          Transactions
-        </NavLink>
       </div>
     </>
   )

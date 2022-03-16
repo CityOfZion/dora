@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom'
 import { fetchTransaction } from './AddressTransactionService'
 import './AddressTransactions.scss'
 import {
@@ -9,7 +9,11 @@ import {
 } from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { byteStringToAddress, GENERATE_BASE_URL } from '../../../../constants'
+import {
+  byteStringToAddress,
+  GENERATE_BASE_URL,
+  ROUTES,
+} from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 
@@ -95,6 +99,14 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
       populate()
     }
   }, [chain, network, hash, currentPage])
+
+  if (chain === 'neo2') {
+    return (
+      <Redirect
+        to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/assets`}
+      />
+    )
+  }
 
   return (
     <div
