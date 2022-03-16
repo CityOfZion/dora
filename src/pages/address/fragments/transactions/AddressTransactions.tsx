@@ -52,7 +52,7 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
           )
 
           const json = await response.json()
-          const { name, symbol, decimals } = json
+          const { symbol, decimals } = json
 
           const convertedAmount = convertToArbitraryDecimals(
             Number(amount),
@@ -67,8 +67,7 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
             from: convertedFrom,
             to: convertedTo,
             amount: convertedAmount,
-            name,
-            icon: symbol,
+            symbol,
           }
         }),
     )
