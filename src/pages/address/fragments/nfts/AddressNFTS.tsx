@@ -59,33 +59,31 @@ const AddressNFTS: React.FC<Props> = props => {
 
   return (
     <div id="nft-container" className="page-container">
-      <NFTFilters
-        toggleTypeSelected={toggleTypeSelected}
-        onSelected={type => setToggleTypeSelected(type)}
-      />
+      {nftState.all.length > 0 && (
+        <NFTFilters
+          toggleTypeSelected={toggleTypeSelected}
+          onSelected={type => setToggleTypeSelected(type)}
+        />
+      )}
 
-      {nftState.all.length > 0 ? (
-        <>
-          {toggleTypeSelected === 'list' ? (
-            <NFTList
-              isLoading={nftState.isLoading}
-              data={nftState.all}
-              onClickToNavigate={handleNavigate}
-            />
-          ) : (
-            <NFTGallery
-              isLoading={nftState.isLoading}
-              data={nftState.all}
-              onClickToNavigate={handleNavigate}
-            />
-          )}
-        </>
+      {toggleTypeSelected === 'list' ? (
+        <NFTList
+          isLoading={nftState.isLoading}
+          data={nftState.all}
+          onClickToNavigate={handleNavigate}
+        />
       ) : (
-        !nftState.isLoading && (
-          <div id="no-nft" className="horiz justify-center">
-            <p>No NFT to list</p>
-          </div>
-        )
+        <NFTGallery
+          isLoading={nftState.isLoading}
+          data={nftState.all}
+          onClickToNavigate={handleNavigate}
+        />
+      )}
+
+      {!nftState.isLoading && nftState.all.length === 0 && (
+        <div className="horiz justify-center no-nft">
+          <p>No NFT to list</p>
+        </div>
       )}
 
       <div className="button-container horiz justify-center">

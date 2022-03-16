@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import React from 'react'
+import {
+  Route,
+  RouteComponentProps,
+  Switch,
+  withRouter,
+  useRouteMatch,
+  Redirect,
+} from 'react-router-dom'
 
 import './Address.scss'
 import AddressHeader from './fragments/AddressHeader'
 import AddressTransactions from './fragments/transactions/AddressTransactions'
 import AddressNFTS from './fragments/nfts/AddressNFTS'
-import classNames from 'classnames'
 import AddressAssets from './fragments/assets/AddressAssets'
 
 interface MatchParams {
@@ -17,59 +23,24 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const Address: React.FC<Props> = (props: Props) => {
-  const [selectedOption, setSelectedOption] = useState('')
-  const [rendered, setRendered] = useState({
-    assets: false,
-    transactions: false,
-    nfts: false,
-  })
-
-  const isAssets = selectedOption === 'assets'
-  const isTransactions = selectedOption === 'transactions'
-  const isNfts = selectedOption === 'nfts'
-
-  const onChange = (tabName: string) => {
-    setSelectedOption(tabName)
-    setRendered({
-      ...rendered,
-      [tabName]: true,
-    })
-  }
+  const { path, url } = useRouteMatch()
 
   return (
     <div id="Address" className="page-container">
       <div className="inner-page-container">
-        <AddressHeader {...props} onChange={onChange} />
+        <AddressHeader />
 
-        {rendered['assets'] && (
-          <div
-            className={classNames({
-              hidden: !isAssets,
-            })}
-          >
-            <AddressAssets {...props} />
-          </div>
-        )}
-
-        {rendered['nfts'] && (
-          <div
-            className={classNames({
-              hidden: !isNfts,
-            })}
-          >
-            <AddressNFTS {...props} />
-          </div>
-        )}
-
-        {rendered['transactions'] && (
-          <div
-            className={classNames({
-              hidden: !isTransactions,
-            })}
-          >
-            <AddressTransactions {...props} />
-          </div>
-        )}
+        <Switch>
+          <Route exact path={path}>
+            <Redirect to={`${url}/assets`} />
+          </Route>
+          <Route path={`${path}/assets`} component={AddressAssets} />
+          <Route path={`${path}/nfts`} component={AddressNFTS} />
+          <Route
+            path={`${path}/transactions`}
+            component={AddressTransactions}
+          />
+        </Switch>
       </div>
     </div>
   )

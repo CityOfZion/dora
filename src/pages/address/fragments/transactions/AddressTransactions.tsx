@@ -112,8 +112,8 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
               />
             ))
           : !isLoading && (
-              <div className="horiz justify-center">
-                <p>not found transactions</p>
+              <div className="horiz justify-center no-transaction">
+                <p>No transaction to list</p>
               </div>
             )}
 
