@@ -13,10 +13,10 @@
 }
 
 @font-face {
-    font-family: 'Sofia Pro - Mediumitalic';
-    src: url('./assets/fonts/SofiaPro-MediumItalic.woff') format('woff');
-    font-weight: 500;
-    font-style: italic;
+  font-family: 'Sofia Pro - Mediumitalic';
+  src: url('./assets/fonts/SofiaPro-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
 }
 
 @font-face {
