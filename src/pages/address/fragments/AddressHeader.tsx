@@ -4,6 +4,7 @@ import { ROUTES } from '../../../constants'
 import Copy from '../../../components/copy/Copy'
 import classNames from 'classnames'
 import { getLogo } from '../../../utils/getLogo'
+import { capitalizeWord } from '../../../utils/formatter'
 
 interface MatchParams {
   hash: string
@@ -31,7 +32,7 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
               <img src={getLogo('NEO', chain)} alt="token-logo" />
             </div>
             <div>
-              <div>{chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</div>
+              <div>{chain === 'neo2' ? `Neo Legacy(${capitalizeWord(network)})` : `Neo N3 (${capitalizeWord(network)})`}</div>
               <div className="hash-label">{hash}</div>
             </div>
           </div>
