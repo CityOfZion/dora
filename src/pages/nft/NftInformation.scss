@@ -18,11 +18,10 @@
       color: var(--pink);
 
       &:before {
-        content: " #";
+        content: ' #';
       }
     }
   }
-
 }
 
 .nft-information-container {
@@ -248,7 +247,7 @@
     font-size: 25px;
 
     &:after {
-      content: ""
+      content: '';
     }
   }
 
@@ -307,5 +306,3 @@
     }
   }
 }
-
-

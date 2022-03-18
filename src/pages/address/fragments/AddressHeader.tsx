@@ -32,7 +32,11 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
               <img src={getLogo('NEO', chain)} alt="token-logo" />
             </div>
             <div>
-              <div>{chain === 'neo2' ? `Neo Legacy(${capitalizeWord(network)})` : `Neo N3 (${capitalizeWord(network)})`}</div>
+              <div>
+                {chain === 'neo2'
+                  ? `Neo Legacy(${capitalizeWord(network)})`
+                  : `Neo N3 (${capitalizeWord(network)})`}
+              </div>
               <div className="hash-label">{hash}</div>
             </div>
           </div>
