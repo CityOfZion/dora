@@ -16,6 +16,7 @@ import Address from '../../pages/address/Address'
 import NotFound from '../../pages/not-found/NotFound'
 import SearchResults from '../../pages/search-results/SearchResults'
 import Monitor from '../../pages/monitor/Monitor'
+import Endpoint from '../../pages/endpoint/Endpoint'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
 import NftInformation from '../../pages/nft/NftInformation'
@@ -95,7 +96,6 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.BLOCKS.url}
                   component={(): ReactElement => <Blocks />}
                 />
-
                 <Route
                   path={ROUTES.MONITOR.url}
                   component={(): ReactElement => (
@@ -104,7 +104,11 @@ const Router: React.FC = (): ReactElement => {
                     </MonitorProvider>
                   )}
                 />
-
+                <Route
+                  exact
+                  path={`${ROUTES.ENDPOINT.url}/:endpoint`}
+                  component={(): ReactElement => <Endpoint />}
+                />
                 <Route
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
