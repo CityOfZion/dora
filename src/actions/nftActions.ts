@@ -8,7 +8,6 @@ import {
   NFTAttribute,
   State,
 } from '../reducers/nftReducer'
-import { FlatJSON, flatJSON } from '../utils/flatJSON'
 
 interface GhostMarketNFT {
   nft: {
@@ -30,8 +29,8 @@ interface GhostMarketNFT {
       name?: string
       image?: string
       description?: string
+      attributes: GhostMarketAttributes[]
     }
-    nft_extended?: string
   }
 }
 
@@ -40,17 +39,18 @@ interface GhostMarketAssets {
   total_results: number
 }
 
-type GhostMarketAttributes =
-  | Array<{
-      value: any
-      trait_type: any
-    }>
-  | Array<{
-      value: any
-      type: any
-    }>
-  | Record<string, any>
-  | undefined
+type GhostMarketAttributes = {
+  name_id: string
+  name: string
+  display_name: string
+  value_id: number
+  value: string
+  display_value: string
+  count: number
+  count_overall: number
+  count_on_sale: number
+  rarity: number
+}
 
 export const nftLimit = 8
 
@@ -128,51 +128,13 @@ export const clearList =
     })
   }
 
-function mapAttributes(attributes: GhostMarketAttributes): NFTAttribute[] {
-  if (!attributes) return []
-
-  function map(items: FlatJSON[]): NFTAttribute[] {
-    return items.map(({ value, key }): NFTAttribute => {
-      return {
-        key,
-        value,
-      }
-    })
-  }
-
-  function fixObject(object: Record<any, any>): Record<any, any> {
-    if ('value' in object) {
-      if ('trait_type' in object) {
-        return { [object.trait_type]: object.value }
-      }
-
-      if ('type' in object) {
-        return { [object.type]: object.value }
-      }
-
-      return { undefined: object.value }
+function mapAttributes(attributes: GhostMarketAttributes[]): NFTAttribute[] {
+  return attributes.map(({ value, name }): NFTAttribute => {
+    return {
+      key: name,
+      value,
     }
-
-    return { undefined: undefined }
-  }
-
-  if (Array.isArray(attributes)) {
-    return attributes.flatMap(attribute => {
-      const objectFixed = fixObject(attribute)
-
-      const flatted = flatJSON(objectFixed)
-
-      return map(flatted)
-    })
-  }
-
-  if (typeof attributes === 'object') {
-    const flatted = flatJSON(attributes)
-
-    return map(flatted)
-  }
-
-  return []
+  })
 }
 
 export function fetchNFTS(ownerId: string, network: string, page = 1) {
@@ -197,8 +159,8 @@ export function fetchNFTS(ownerId: string, network: string, page = 1) {
         (await response.json()) as GhostMarketAssets
 
       const nfts = assets.map(({ nft }): NFT => {
-        const attributes = nft.nft_extended
-          ? mapAttributes(JSON.parse(nft.nft_extended).attributes)
+        const attributes = nft.nft_metadata.attributes
+          ? mapAttributes(nft.nft_metadata.attributes)
           : []
 
         return {
@@ -247,8 +209,8 @@ export function fetchNFT(
 
       const [{ nft }] = assets
 
-      const attributes = nft.nft_extended
-        ? mapAttributes(JSON.parse(nft.nft_extended).attributes)
+      const attributes = nft.nft_metadata.attributes
+        ? mapAttributes(nft.nft_metadata.attributes)
         : []
 
       const mappedNFT = {
