@@ -39,7 +39,7 @@ jobs:
             key: dependency-cache-{{ checksum "package-lock.json" }}
             paths:
               - ./node_modules
-         - run:
+        - run:
             name: fetch git commit hash
             command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
         - run:
