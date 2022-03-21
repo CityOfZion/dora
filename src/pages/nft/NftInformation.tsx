@@ -231,15 +231,18 @@ const NftInformation: React.FC<Props> = (props: Props) => {
       <Modal
         open={isOpenModal}
         onClose={handleCloseModal}
-        className="modal-container items-center justify-center"
+        className="verti items-center justify-center modal-container"
       >
-        <div className="verti justify-center items-center modal-content">
+        <div className="verti justify-center modal-content">
           <div className="content-position">
             <button type="button" onClick={handleCloseModal}>
               <CloseIcon />
             </button>
           </div>
-          <img src={nftState.value?.image} alt="token-logo" />
+
+          <div className="content-image">
+            <img src={nftState.value?.image} alt="token-logo" />
+          </div>
           <div className="content-position">{nftState.value?.name}</div>
         </div>
       </Modal>
