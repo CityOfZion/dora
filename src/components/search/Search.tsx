@@ -10,7 +10,7 @@ import {
 import { State as SearchState } from '../../reducers/searchReducer'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { ROUTES } from '../../constants'
+import { ROUTES, SEARCH_TYPES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 
 const Search: React.FC<{}> = () => {
@@ -58,14 +58,15 @@ const Search: React.FC<{}> = () => {
             url = ROUTES.TRANSACTION.url
             return history.push(
               `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
-          )
+            )
 
-        case SEARCH_TYPES.ENDPOINT:
-          dispatch(clearSearchInputState())
-          return history.push(`${ROUTES.ENDPOINT.url}/${searchValue}`)
+          case SEARCH_TYPES.ENDPOINT:
+            dispatch(clearSearchInputState())
+            return history.push(`${ROUTES.ENDPOINT.url}/${searchValue}`)
 
-        default:
-          break}
+          default:
+            break
+        }
       }
     }
 

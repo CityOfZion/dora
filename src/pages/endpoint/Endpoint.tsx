@@ -4,10 +4,7 @@ import ReactCountryFlag from 'react-country-flag'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
-import {
-  State as NodeState,
-  SerializeState as SerializeNode,
-} from '../../reducers/nodeReducer'
+import { State as NodeState, OrderNodes } from '../../reducers/nodeReducer'
 import './Endpoint.scss'
 import { ROUTES } from '../../constants'
 
@@ -31,7 +28,8 @@ const Endpoint: React.FC<Props> = (props: Props) => {
     .replace(/_/g, '.')
     .replace(/-/g, ':')
 
-  const endpointSelected = SerializeNode(nodes).filter(nodes => {
+  const sortedNodes = OrderNodes('isItUp', nodes.nodesArray, false)
+  const endpointSelected = sortedNodes.filter(nodes => {
     return nodes.url === endpointUrl
   })[0]
 
