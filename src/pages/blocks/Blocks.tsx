@@ -16,10 +16,11 @@ import './Blocks.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import Filter from '../../components/filter/Filter'
+import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
+import { useHistory } from 'react-router-dom'
 
 type ParsedBlock = {
   time: string
@@ -33,10 +34,12 @@ type ParsedBlock = {
   chain: string
 }
 
-const mapBlockData = (block: Block, network?: string): ParsedBlock => {
+const mapBlockData = (block: Block): ParsedBlock => {
   return {
-    chain: block.chain || '',
-    platform: (): ReactElement => <PlatformCell chain={block.chain} />,
+    chain: block.protocol || '',
+    platform: (): ReactElement => (
+      <PlatformCell protocol={block.protocol} network={block.network} />
+    ),
     time: convertFromSecondsToLarger(
       getDiffInSecondsFromNow(moment.unix(block.time).format()),
     ),
@@ -53,7 +56,7 @@ const mapBlockData = (block: Block, network?: string): ParsedBlock => {
       </div>
     ),
 
-    href: `${ROUTES.BLOCK.url}/${block.chain}/${network}/${block.index}`,
+    href: `${ROUTES.BLOCK.url}/${block.protocol}/${block.network}/${block.index}`,
   }
 }
 
@@ -65,7 +68,7 @@ const returnBlockListData = (
   if (returnStub) {
     return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
   } else {
-    return data.map(block => mapBlockData(block, network))
+    return data.map(block => mapBlockData(block))
   }
 }
 
@@ -78,15 +81,20 @@ const Blocks: React.FC<{}> = () => {
     const nextPage = blockState.page + 1
     dispatch(fetchBlocks(nextPage))
   }
-  const { selectedChain, handleSetFilterData, network } = useFilterState()
+  const history = useHistory()
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
   const selectedData = (): Array<Block> => {
-    switch (selectedChain) {
-      case 'neo2':
-        return blockState.neo2List
-      case 'neo3':
-        return blockState.neo3List
-      default:
-        return blockState.all
+    if (protocol === 'all' && network === 'all') {
+      return blockState.all
+    } else if (protocol === 'all' && network !== 'all') {
+      return blockState.all.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return blockState.all.filter(d => d.protocol === protocol)
+    } else {
+      return blockState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
     }
   }
 
@@ -141,9 +149,17 @@ const Blocks: React.FC<{}> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              selectedChain: option.value,
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
             })
           }}
         />

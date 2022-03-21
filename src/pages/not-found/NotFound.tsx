@@ -61,7 +61,9 @@ const NotFound: React.FC<{}> = () => {
             If you think Deep thought is having a bad day please let us know.
           </span>
           <div className="load-more-button-container">
-            <Button primary={false}>contact us</Button>
+            <a href="mailto:contact@coz.io">
+              <Button primary={false}>contact us</Button>
+            </a>
           </div>
         </div>
       </div>

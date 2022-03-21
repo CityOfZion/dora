@@ -23,9 +23,7 @@ type Action = {
 export type State = {
   isLoading: boolean
   cached: { [key: string]: DetailedTransaction }
-  neo2List: []
-  neo3List: []
-  all: []
+  all: Transaction[]
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
   page: number
@@ -37,7 +35,8 @@ export type Transaction = {
   txid: string
   type: string
   hash?: string
-  chain?: string
+  protocol?: string
+  network?: string
 }
 
 export type Vin = {
@@ -75,6 +74,7 @@ export type TransactionNotification = {
   event_name: string
 }
 
+// TODO: create different types for the chains instead of this generic one
 export type DetailedTransaction = {
   type: string
   size: string
@@ -90,6 +90,8 @@ export type DetailedTransaction = {
   vout: Vout[]
   net_fee: string
   sys_fee: string
+  netfee: string
+  sysfee: string
   items: {
     tokens: TransactionTokenAbstract[]
     inputs: TransactionIOAbstract[]
@@ -102,21 +104,27 @@ export type DetailedTransaction = {
       verification: string
     },
   ]
+  signers?: Signer[]
   notifications?: TransactionNotification[]
+  exception?: string
+}
+
+export type Signer = {
+  account: string
+  scopes: string
 }
 
 export type BlockTransaction = {
   size: number
   time: number
   txid: string
-  type: string
+  type?: string
+  hash: string
 }
 
 export const INITIAL_STATE = {
   isLoading: false,
   cached: {},
-  neo2List: [],
-  neo3List: [],
   all: [],
   lastUpdated: null,
   transaction: null,
@@ -124,16 +132,7 @@ export const INITIAL_STATE = {
 }
 
 export default (
-  state: State = {
-    isLoading: false,
-    cached: {},
-    neo2List: [],
-    neo3List: [],
-    all: [],
-    lastUpdated: null,
-    transaction: null,
-    page: 1,
-  },
+  state: State = INITIAL_STATE,
   action: AnyAction | Action,
 ): State => {
   switch (action.type) {
@@ -159,9 +158,7 @@ export default (
     case REQUEST_TRANSACTIONS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        neo2List: [...state.neo2List, ...action.json.neo2.transactions],
-        neo3List: [...state.neo3List, ...action.json.neo3.transactions],
-        all: [...state.all, ...action.json.all.transactions],
+        all: [...state.all, ...action.json.all.items],
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
@@ -169,8 +166,6 @@ export default (
     case CLEAR_TRANSACTIONS_LIST:
       return Object.assign({}, state, {
         all: [],
-        neo2List: [],
-        neo3List: [],
         page: 0,
       })
     case 'RESET':

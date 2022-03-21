@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { Icon } from '@iconify/react'
 import DateRangeIcon from '@material-ui/icons/DateRange'
@@ -19,6 +19,7 @@ import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { formatDate, formatHours } from '../../utils/time'
+import N3BlockTransactionsList from '../../components/transaction/N3BlockTransactionList'
 
 interface MatchParams {
   hash: string
@@ -33,11 +34,20 @@ const Block: React.FC<Props> = (props: Props) => {
   const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const [blockTimeState, setBlockTimeState] = useState('')
   const { block, isLoading } = blockState
 
   useEffect(() => {
     dispatch(fetchBlock(hash))
   }, [dispatch, hash])
+
+  useEffect(() => {
+    const { block } = blockState
+    if (block?.blocktime && block?.blocktime > 0) {
+      const blockTimeInSeconds = (block.blocktime / 1000).toFixed(3)
+      setBlockTimeState(blockTimeInSeconds)
+    }
+  }, [blockState])
 
   return (
     <div id="Block" className="page-container">
@@ -121,7 +131,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className="detail-tile">
                   <label>BLOCK TIME</label>
-                  <span>{!isLoading && block && block.blocktime} seconds</span>
+                  <span>{!isLoading && block && blockTimeState} seconds</span>
                 </div>
               </div>
               <div
@@ -153,13 +163,27 @@ const Block: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {/* TODO: implement the tx list component for neo3 */}
           {block && !!block.tx.length && chain === 'neo2' && (
             <div className="block-transactions-section">
               <div className="details-section">
                 <div className="section-label">TRANSACTIONS</div>
 
                 <BlockTransactionsList
+                  loading={isLoading}
+                  list={block.tx}
+                  block={block}
+                  network={network}
+                  chain={chain}
+                />
+              </div>
+            </div>
+          )}
+          {block && !!block.tx.length && chain === 'neo3' && (
+            <div className="block-transactions-section">
+              <div className="details-section">
+                <div className="section-label">TRANSACTIONS</div>
+
+                <N3BlockTransactionsList
                   loading={isLoading}
                   list={block.tx}
                   block={block}

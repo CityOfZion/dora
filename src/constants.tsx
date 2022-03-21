@@ -2,6 +2,7 @@ import React from 'react'
 import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
+import { wallet, u } from '@cityofzion/neon-js'
 
 import './components/navigation/Sidebar.scss'
 import { store } from './store'
@@ -12,6 +13,7 @@ import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
 import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
 import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
+import { ReactComponent as Diamond } from './assets/icons/shape.svg'
 
 //eslint-disable-next-line
 const bs58check = require('bs58check')
@@ -63,22 +65,54 @@ export const ASSETS = [
 ]
 
 export const GENERATE_BASE_URL = (
-  chain = 'neo2',
-  useChainInState = true,
+  protocol = 'neo2',
+  network = 'mainnet',
+  useState = true,
 ): string => {
-  const net = store.getState().network.network
-  const chainInState = store.getState().network.chain
-
-  let useChain = chain
-
-  if (useChainInState) useChain = chainInState
-
-  if (useChain !== 'neo2') {
-    return `https://dora.coz.io/api/v1/${useChain}/testnet`
+  if (useState) {
+    network = store.getState().network.network
+    protocol = store.getState().network.chain
   }
 
-  return `https://dora.coz.io/api/v1/${useChain}/${net}`
+  return `https://dora.coz.io/api/v1/${protocol}/${network}`
 }
+
+export const BUILD_GHOST_MARKET_URL = ({
+  network = 'mainnet',
+  path,
+  params,
+}: {
+  path: string
+  network?: string
+  params?: Record<string, string | number>
+}): string => {
+  const chain = network === 'mainnet' ? 'n3' : 'n3t'
+
+  const baseUrl =
+    network === 'mainnet'
+      ? 'https://api.ghostmarket.io/api/v1'
+      : 'https://api3.ghostmarket.io:7061/api/v1'
+
+  const parameters =
+    params && Object.keys(params).length > 0
+      ? Object.keys(params).reduce(
+          (acc, item) => acc + `&${item}=${params[item]}`,
+          '',
+        )
+      : ''
+
+  const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
+
+  return url
+}
+
+export const SUPPORTED_PLATFORMS = [
+  { protocol: 'neo3', network: 'mainnet' },
+  { protocol: 'neo3', network: 'testnet' },
+  { protocol: 'neo3', network: 'testnet_rc4' },
+  { protocol: 'neo2', network: 'mainnet' },
+  { protocol: 'neo2', network: 'testnet' },
+]
 
 export const TRANSFER = '7472616e73666572'
 
@@ -192,6 +226,12 @@ export const ROUTES = {
     name: 'Endpoint',
     target: '_self',
   },
+  NFT: {
+    url: '/nft',
+    name: 'NFT',
+    renderIcon: (): React.ReactNode => <Diamond />,
+    target: 'self',
+  },
   NOT_FOUND: {
     url: '/not-found',
     name: 'No Results found',
@@ -243,8 +283,7 @@ export const neo3_hexToAscii = async (str1: string): Promise<string> => {
   if (size === 20) {
     return neo3_getAddressFromSriptHash(str1)
   } else {
-    const unencoded = atob(str1)
-    return unencoded
+    return atob(str1)
   }
 }
 
@@ -260,6 +299,14 @@ export const neo3_asciiToByteArray = (str: string): string => {
     arr.push(utf8.charCodeAt(i))
   }
   return ''
+}
+
+export const byteStringToAddress = (byteString: string): string => {
+  const account = new wallet.Account(
+    u.reverseHex(u.HexString.fromBase64(byteString).toString()),
+  )
+
+  return account.address
 }
 
 export const HEX_STRING_OPTION = {
@@ -280,9 +327,22 @@ export const STRING_OPTION = {
   },
 }
 
+export const BYTE_STRING_OPTION = {
+  value: 'ByteString',
+  label: 'ByteString',
+  convert: async (value: string, chain?: string): Promise<string> => {
+    return chain === 'neo3' ? neo3_hexToAscii(value) : hexToAscii(value)
+  },
+}
+
 export const INTEGER_OPTION = {
   value: 'Integer',
   label: 'Integer',
+}
+
+export const BUFFER_OPTION = {
+  value: 'Buffer',
+  label: 'Buffer',
 }
 
 export const ADDRESS_OPTION = {
@@ -342,9 +402,17 @@ export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
     color: '#67DD8B',
     options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
   },
+  ByteString: {
+    color: '#67DD8B',
+    options: [BYTE_STRING_OPTION, STRING_OPTION],
+  },
   Array: {
     color: '#F28F00',
     options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
+  },
+  Buffer: {
+    color: '#F28F00',
+    options: [BUFFER_OPTION],
   },
   InteropInterface: {
     color: '#A50000',

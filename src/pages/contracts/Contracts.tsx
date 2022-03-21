@@ -12,10 +12,11 @@ import { ROUTES } from '../../constants'
 import { fetchContracts, clearList } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
-import useFilterState from '../../hooks/useFilterState'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import Filter from '../../components/filter/Filter'
+import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
+import { useHistory } from 'react-router-dom'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 
 type Contract = {
   block: number
@@ -27,7 +28,8 @@ type Contract = {
   asset_name: string
   symbol: string
   type: string
-  chain?: string
+  protocol?: string
+  network?: string
   manifest?: {
     name: string
     extras: {
@@ -48,13 +50,12 @@ type ParsedContract = {
   platform: React.FC<{}>
 }
 
-const mapContractData = (
-  contract: Contract,
-  network?: string,
-): ParsedContract => {
+const mapContractData = (contract: Contract): ParsedContract => {
   return {
-    platform: (): ReactElement => <PlatformCell chain={contract.chain} />,
-    chain: contract.chain || '',
+    platform: (): ReactElement => (
+      <PlatformCell protocol={contract.protocol} network={contract.network} />
+    ),
+    chain: contract.protocol || '',
     hash: contract.hash,
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
@@ -89,19 +90,18 @@ const mapContractData = (
         {contract.block.toLocaleString()}{' '}
       </div>
     ),
-    href: `${ROUTES.CONTRACT.url}/${contract.chain}/${network}/${contract.hash}`,
+    href: `${ROUTES.CONTRACT.url}/${contract.protocol}/${contract.network}/${contract.hash}`,
   }
 }
 
 const returnContractListData = (
   data: Array<Contract>,
   returnStub: boolean,
-  network: string,
 ): Array<ParsedContract> => {
   if (returnStub) {
     return MOCK_CONTRACT_LIST_DATA.map(c => mapContractData(c))
   } else {
-    return data.map(c => mapContractData(c, network))
+    return data.map(c => mapContractData(c))
   }
 }
 
@@ -111,6 +111,7 @@ const Contracts: React.FC<{}> = () => {
     ({ contract }: { contract: ContractState }) => contract,
   )
   const width = useWindowWidth()
+  const history = useHistory()
 
   const columns =
     width > 768
@@ -132,16 +133,21 @@ const Contracts: React.FC<{}> = () => {
     dispatch(fetchContracts(nextPage))
   }
 
-  const { selectedChain, handleSetFilterData, network } = useFilterState()
-
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
   const selectedData = (): Array<Contract> => {
-    switch (selectedChain) {
-      case 'neo2':
-        return contractsState.neo2List
-      case 'neo3':
-        return contractsState.neo3List
-      default:
-        return contractsState.all
+    if (protocol === 'all' && network === 'all') {
+      return contractsState.all as Contract[]
+    } else if (protocol === 'all' && network !== 'all') {
+      return contractsState.all.filter(d => d.network === network) as Contract[]
+    } else if (protocol !== 'all' && network === 'all') {
+      return contractsState.all.filter(
+        d => d.protocol === protocol,
+      ) as Contract[]
+    } else {
+      return contractsState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      ) as Contract[]
     }
   }
 
@@ -173,18 +179,22 @@ const Contracts: React.FC<{}> = () => {
           <h1>{ROUTES.CONTRACTS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              selectedChain: option.value,
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
             })
           }}
         />
         <List
-          data={returnContractListData(
-            selectedData(),
-            !selectedData().length,
-            network,
-          )}
+          data={returnContractListData(selectedData(), !selectedData().length)}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={!contractsState.all.length}

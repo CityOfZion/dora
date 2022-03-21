@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { State as ContractState } from '../../reducers/contractReducer'
 import './Contract.scss'
-import { ROUTES } from '../../constants'
+import { neo3_getAddressFromSriptHash, ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
@@ -32,6 +32,13 @@ const Contract: React.FC<Props> = (props: Props) => {
     ({ contract }: { contract: ContractState }) => contract,
   )
   const { contract, isLoading } = contractsState
+
+  function getAddressLink(): string {
+    if (contract && chain === 'neo3') {
+      return neo3_getAddressFromSriptHash(hash)
+    }
+    return ''
+  }
 
   useEffect(() => {
     dispatch(fetchContract(hash))
@@ -75,11 +82,16 @@ const Contract: React.FC<Props> = (props: Props) => {
                     contract?.manifest.name) ||
                   'N/A'}
             </div>
-            <div>
-              <span>CONTRACT:</span>{' '}
-              <div id="contract-hash">
+            <div className="contract-hash-box">
+              <span className="contract-hash-label">CONTRACT:</span>
+              <Link
+                className="contract-hash"
+                to={`${
+                  ROUTES.WALLET.url
+                }/${chain}/${network}/${getAddressLink()}`}
+              >
                 {contract && !isLoading && contract.hash}
-              </div>
+              </Link>
             </div>
           </div>
 
@@ -93,7 +105,7 @@ const Contract: React.FC<Props> = (props: Props) => {
           )}
 
           <div className="details-section">
-            <div className="section-label">DETAILS</div>
+            <div className="section-label">CONTRACT INFORMATION</div>
             <div className="inner-details-container">
               <div className="detail-tile-row">
                 <div className="detail-tile">
@@ -109,11 +121,14 @@ const Contract: React.FC<Props> = (props: Props) => {
                   </span>
                 </div>
                 <div className="detail-tile">
-                  <label>TYPE</label>
+                  <label>
+                    {chain === 'neo2' ? 'TYPE' : 'SUPPORTED STANDARDS'}
+                  </label>
                   <span>
                     {chain === 'neo2'
                       ? 'NEP5'
-                      : contract?.manifest?.supportedstandards.join(', ')}
+                      : contract?.manifest?.supportedstandards.join(', ') ||
+                        'N/A'}
                   </span>
                 </div>
                 <div className="detail-tile">
@@ -169,10 +184,51 @@ const Contract: React.FC<Props> = (props: Props) => {
               </div>
             </div>
           </div>
+          {chain === 'neo3' && (
+            <div className="details-section">
+              <div className="section-label">DETAILS</div>
+              <div className="inner-details-container">
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>AUTHOR</label>
+                    <span>
+                      {contract?.manifest?.extra
+                        ? contract?.manifest?.extra['Author']
+                        : 'N/A'}
+                    </span>
+                  </div>
+                  <div className="detail-tile">
+                    <label>EMAIL</label>
+                    <span>
+                      {contract?.manifest?.extra
+                        ? contract?.manifest?.extra['Email']
+                        : 'N/A'}
+                    </span>
+                  </div>
+                </div>
+                <div className="detail-tile-row">
+                  <div className="detail-tile">
+                    <label>DESCRIPTION</label>
+                    <span>
+                      {contract?.manifest?.extra
+                        ? contract?.manifest?.extra['Description']
+                        : 'N/A'}
+                    </span>
+                  </div>
+                  <div className="detail-tile">
+                    <label>COMPILER</label>
+                    <span>{contract?.nef?.compiler || 'N/A'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="script-section">
             <div className="section-label">SCRIPT</div>
             <div id="contract-script">
-              {contract && !isLoading && contract.script}
+              {chain === 'neo2'
+                ? contract?.script || 'NA'
+                : contract?.nef.script || 'NA'}
             </div>
           </div>
 

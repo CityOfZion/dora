@@ -3,17 +3,13 @@ import Select, { ValueType } from 'react-select'
 
 import './Select.scss'
 import { customStyles } from './customStyles'
-
-type SelectOption = {
-  label: string
-  value: string
-}
+import { Option } from '../filter/Filter'
 
 type SelectProps = {
   computedDisplayValue?: string
-  options: SelectOption[]
-  handleChange?: (selected: ValueType<SelectOption, false>) => void
-  selectedOption: SelectOption
+  options: Option[]
+  handleChange?: (selected: ValueType<Option, false>) => void
+  selectedOption: Option
   disabled?: boolean
 }
 

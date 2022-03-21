@@ -37,3 +37,40 @@
   width: 100%;
   z-index: 0;
 }
+
+.horiz {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.verti {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+$sizes: 1, 2, 3, 4, 5;
+
+@each $size in $sizes {
+  .weight-#{$size} {
+    flex-grow: $size;
+    flex-shrink: unset;
+    flex-basis: 0;
+  }
+}

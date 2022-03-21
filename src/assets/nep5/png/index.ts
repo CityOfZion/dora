@@ -48,8 +48,12 @@ import XQTA from './XQTA.png'
 import ZPT from './ZPT.png'
 import NOS from './NOS.png'
 import FLM from './FLM.png'
+import GHOST from './GHOST.png'
+import GM from './GM.png'
 
-export const imageMap = {
+export type TokenMap = { [key: string]: string }
+
+const tokens: TokenMap = {
   NEO,
   GAS,
   FLM,
@@ -100,4 +104,8 @@ export const imageMap = {
   XQTA,
   ZPT,
   NOS,
+  GHOST,
+  GM,
 }
+
+export default tokens

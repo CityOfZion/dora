@@ -126,12 +126,12 @@ const parseNeo3TransactionData = async (
           const from_address = neo3_getAddressFromSriptHash(
             // eslint-disable-next-line
             // @ts-ignore
-            notification?.state?.value[1].value || '',
+            notification?.state?.value[0].value || '',
           )
           const to_address = neo3_getAddressFromSriptHash(
             // eslint-disable-next-line
             // @ts-ignore
-            notification?.state?.value[2].value || '',
+            notification?.state?.value[1].value || '',
           )
           transfers.push({
             name,
@@ -436,10 +436,24 @@ const Transaction: React.FC<Props> = (props: Props) => {
             chain={'neo3'}
             transfers={transfers}
             handleAddressClick={(address): void =>
-              history.push(`/address/${address}`)
+              history.push(`/address/${chain}/${network}/${address}`)
             }
-            networkFee={transaction ? transaction.net_fee : ''}
-            systemFee={transaction ? transaction.sys_fee : ''}
+            networkFee={
+              transaction
+                ? convertToArbitraryDecimals(
+                    Number(transaction.netfee),
+                    8,
+                  ).toString()
+                : ''
+            }
+            systemFee={
+              transaction
+                ? convertToArbitraryDecimals(
+                    Number(transaction.sysfee),
+                    8,
+                  ).toString()
+                : ''
+            }
             size={transaction ? transaction.size : ''}
           />
         )}
@@ -590,15 +604,53 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   </div>
                 )}
 
+              {transaction && transaction.signers && transaction.signers[0] && (
+                <ExpandingPanel title="SIGNERS" open={false}>
+                  {transaction.signers.map(signer => (
+                    <div key={signer.account} className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>ACCOUNT</label>
+                        <span>
+                          {!isLoading && transaction && signer.account}{' '}
+                        </span>
+                      </div>
+                      <div className="detail-tile script-tile">
+                        <label>SCOPES</label>
+                        <span>
+                          {!isLoading && transaction && signer.scopes}{' '}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </ExpandingPanel>
+              )}
+
+              {transaction && transaction.exception && (
+                <div style={{ margin: '24px 0' }}>
+                  <ExpandingPanel title="EXCEPTION" open={false}>
+                    <div className="script-tile-row">
+                      <div className="detail-tile script-tile">
+                        <label>EXCEPTION</label>
+                        <span>
+                          {!isLoading && transaction && transaction.exception}
+                        </span>
+                      </div>
+                    </div>
+                  </ExpandingPanel>
+                </div>
+              )}
+
               {transaction &&
                 transaction.notifications &&
                 transaction.notifications.map(notification => (
-                  <Notification
-                    chain={chain}
-                    network={network}
-                    key={uniqueId()}
-                    notification={notification}
-                  />
+                  <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
+                    <Notification
+                      chain={chain}
+                      network={network}
+                      key={uniqueId()}
+                      notification={notification}
+                    />
+                  </div>
                 ))}
             </div>
           </div>

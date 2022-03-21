@@ -1,11 +1,6 @@
 import React, { ReactElement, useEffect } from 'react'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
-import moment from 'moment'
+import { withRouter, useHistory } from 'react-router-dom'
 
-import {
-  getDiffInSecondsFromNow,
-  convertFromSecondsToLarger,
-} from '../../utils/time'
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,9 +15,10 @@ import {
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import useFilterState from '../../hooks/useFilterState'
-import Filter from '../../components/filter/Filter'
+import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
+import TransactionTime from '../../components/transaction/TransactionTime'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -36,17 +32,12 @@ type ParsedTx = {
   href: string
 }
 
-const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
+const mapTransactionData = (tx: Transaction): ParsedTx => {
   return {
-    platform: (): ReactElement => <PlatformCell chain={tx.chain} />,
-    time: (): ReactElement => (
-      <div className="contract-time-cell">
-        {convertFromSecondsToLarger(
-          getDiffInSecondsFromNow(moment.unix(tx.time).format()),
-        )}
-        <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
-      </div>
+    platform: (): ReactElement => (
+      <PlatformCell protocol={tx.protocol} network={tx.network} />
     ),
+    time: (): ReactElement => <TransactionTime block_time={tx.time} />,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
     ),
@@ -56,8 +47,8 @@ const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
     parsedType: (): ReactElement => (
       <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
     ),
-    chain: tx.chain || '',
-    href: `${ROUTES.TRANSACTION.url}/${tx.chain}/${network}/${
+    chain: tx.protocol || '',
+    href: `${ROUTES.TRANSACTION.url}/${tx.protocol}/${tx.network}/${
       tx.hash || tx.txid
     }`,
   }
@@ -66,19 +57,18 @@ const mapTransactionData = (tx: Transaction, network?: string): ParsedTx => {
 const returnTxListData = (
   data: Array<Transaction>,
   returnStub: boolean,
-  network: string,
 ): Array<ParsedTx> => {
   if (returnStub) {
     return MOCK_TX_LIST_DATA.map(tx => mapTransactionData(tx))
   } else {
-    return data.map(tx => mapTransactionData(tx, network))
+    return data.map(tx => mapTransactionData(tx))
   }
 }
 
 const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
-
+  const history = useHistory()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -88,16 +78,20 @@ const Transactions: React.FC<{}> = () => {
     dispatch(fetchTransactions(nextPage))
   }
 
-  const { selectedChain, handleSetFilterData, network } = useFilterState()
+  const { protocol, handleSetFilterData, network } =
+    useFilterStateWithHistory(history)
 
   const selectedData = (): Array<Transaction> => {
-    switch (selectedChain) {
-      case 'neo2':
-        return transactionState.neo2List
-      case 'neo3':
-        return transactionState.neo3List
-      default:
-        return transactionState.all
+    if (protocol === 'all' && network === 'all') {
+      return transactionState.all
+    } else if (protocol === 'all' && network !== 'all') {
+      return transactionState.all.filter(d => d.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return transactionState.all.filter(d => d.protocol === protocol)
+    } else {
+      return transactionState.all.filter(
+        d => d.protocol === protocol && d.network === network,
+      )
     }
   }
 
@@ -116,7 +110,7 @@ const Transactions: React.FC<{}> = () => {
           { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
-          { name: 'Time', accessor: 'time' },
+          { name: 'Completed on', accessor: 'time' },
         ]
       : [
           { name: 'Platform', accessor: 'platform' },
@@ -146,18 +140,22 @@ const Transactions: React.FC<{}> = () => {
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
         <Filter
+          selectedOption={{
+            label: '',
+            value: {
+              protocol,
+              network,
+            },
+          }}
           handleFilterUpdate={(option): void => {
             handleSetFilterData({
-              selectedChain: option.value,
+              protocol: (option.value as Platform).protocol,
+              network: (option.value as Platform).network,
             })
           }}
         />
         <List
-          data={returnTxListData(
-            selectedData(),
-            !selectedData().length,
-            network,
-          )}
+          data={returnTxListData(selectedData(), !selectedData().length)}
           rowId="hash"
           isLoading={!transactionState.all.length}
           columns={columns}
@@ -200,4 +198,4 @@ const Transactions: React.FC<{}> = () => {
   )
 }
 
-export default Transactions
+export default withRouter(Transactions)

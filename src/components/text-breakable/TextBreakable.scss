@@ -1,0 +1,15 @@
+.text-breakable-container {
+  display: flex;
+  min-width: 0;
+
+  span {
+    color: inherit;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .text-breakable {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}

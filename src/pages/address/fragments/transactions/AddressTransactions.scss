@@ -1,0 +1,220 @@
+.address-transactions {
+  max-width: 100vw;
+
+  .text-primary {
+    color: var(--pink);
+  }
+
+  .whitespace-no-wrap {
+    white-space: nowrap;
+  }
+
+  img {
+    margin-right: 5px;
+  }
+
+  * {
+    text-decoration: none;
+  }
+
+  .title {
+    color: var(--medium-grey);
+  }
+
+  &__card {
+    &--mobile {
+      font-size: 14px;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: 18px;
+      margin-bottom: 15px;
+      text-align: right;
+
+      * {
+        margin-bottom: 5px;
+      }
+
+      label {
+        color: var(--medium-grey);
+        font-weight: 600;
+        letter-spacing: -0.56px;
+        line-height: 13px;
+        text-align: left;
+      }
+
+      .hash {
+        color: var(--pink);
+      }
+
+      &-items {
+        background-color: var(--medium-grey-blue);
+        border-radius: 4px;
+        padding: 10px;
+      }
+    }
+  }
+
+  &__table {
+    display: flex;
+    flex-direction: column;
+
+    &--row {
+      display: flex;
+      margin-bottom: 15px;
+      flex: 1;
+    }
+
+    &--chain {
+      background-color: var(--dark-grey);
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      justify-items: center;
+      padding: 15px 15px 20px;
+    }
+
+    &--logo {
+      align-items: center;
+      background-color: var(--medium-grey-blue);
+      border-radius: 100%;
+      display: flex;
+      height: 49px;
+      justify-content: center;
+      margin-bottom: 10px;
+      width: 53px;
+
+      img {
+        height: 22px;
+        width: 22px;
+      }
+
+      @media screen and (max-width: 1200px) {
+        & {
+          height: 15px;
+          justify-content: flex-start;
+          margin-bottom: 0;
+          width: unset;
+
+          img {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
+    &--content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    &--hash {
+      align-items: center;
+      background-color: var(--medium-grey-blue);
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 30px;
+      color: var(--white);
+      font-size: 14px;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: normal;
+
+      label {
+        color: var(--medium-grey);
+        font-style: normal;
+        letter-spacing: normal;
+        line-height: normal;
+      }
+
+      span {
+        color: var(--pink);
+        font-size: 15px;
+        font-weight: 500;
+        font-style: normal;
+        letter-spacing: normal;
+        line-height: normal;
+        text-align: left;
+        margin: 0 10px;
+      }
+    }
+
+    &--transfers {
+      background-color: var(--darkest-grey);
+      display: flex;
+      flex: 1;
+      padding: 15px 30px;
+
+      &-items {
+        display: flex;
+        flex-direction: column;
+        flex: 4;
+      }
+
+      &-labels,
+      &-values {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(auto-fill, auto);
+        grid-gap: 30px;
+        flex: 1;
+      }
+
+      &-labels {
+        color: var(--medium-grey);
+        font-size: 12px;
+        font-weight: 600;
+        font-style: normal;
+        letter-spacing: normal;
+        line-height: normal;
+        margin-bottom: 10px;
+      }
+
+      &-values {
+        color: var(--white);
+        font-size: 14px;
+        font-weight: 500;
+        font-style: normal;
+        letter-spacing: 0.96px;
+        line-height: normal;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+    }
+
+    &--balloon {
+      align-items: center;
+      background-color: #00000059;
+      font-family: 'Sofia Pro - Mediumitalic';
+      border-radius: 15px;
+      color: var(--white);
+      display: flex;
+      font-size: 12px;
+      font-weight: 500;
+      font-style: italic;
+      flex: 1;
+      letter-spacing: 0.82px;
+      line-height: normal;
+      justify-content: center;
+      margin: 0 5px;
+      padding: 8px 15px;
+
+      & span {
+        margin: 2px 5px 0;
+        color: var(--pink);
+        font-style: normal;
+        letter-spacing: normal;
+        line-height: normal;
+      }
+    }
+  }
+}
+
+.no-transaction {
+  p {
+    font-size: 24px;
+    color: var(--medium-grey);
+  }
+}

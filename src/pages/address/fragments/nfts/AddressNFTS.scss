@@ -1,0 +1,17 @@
+#nft-container {
+  .no-nft {
+    p {
+      font-size: 24px;
+      color: var(--medium-grey);
+    }
+  }
+
+  .button-container {
+    margin-top: 55px;
+
+    > button {
+      width: max-content;
+      padding: 0 45px;
+    }
+  }
+}

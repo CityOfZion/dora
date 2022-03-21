@@ -87,6 +87,8 @@ export default (state: State = INITIAL_STATE, action: Action): State => {
     case 'RESET':
       return INITIAL_STATE
     default:
-      return state
+      return Object.assign({}, state, {
+        isLoading: false,
+      })
   }
 }

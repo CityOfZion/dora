@@ -1,0 +1,7 @@
+#nft-cards-list-container {
+  row-gap: 16px;
+
+  .skeleton-row:not(:last-child) {
+    margin-bottom: 16px;
+  }
+}

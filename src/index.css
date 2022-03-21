@@ -13,6 +13,13 @@
 }
 
 @font-face {
+  font-family: 'Sofia Pro - Mediumitalic';
+  src: url('./assets/fonts/SofiaPro-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
   font-family: 'SofiaPro';
   src: url('./assets/fonts/SofiaProSemiBold.woff') format('woff');
   font-weight: 500;
@@ -56,6 +63,7 @@ code {
   --gold: #fedd5b;
   --blue: #00cbff;
   --dark-grey: #2a3d42;
+  --darkest-grey: #21383d;
   --medium-grey: #7d9fb1;
   --medium-grey-blue: #0a282e;
   --grey: #bfcbd0;

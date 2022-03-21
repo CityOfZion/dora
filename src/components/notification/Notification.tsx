@@ -11,11 +11,13 @@ import {
   ADDRESS_OPTION,
   HEX_STRING_OPTION,
   STRING_OPTION,
+  BYTE_STRING_OPTION,
 } from '../../constants'
 import { TransactionNotification } from '../../reducers/transactionReducer'
+import { Platform } from '../filter/Filter'
 
 type Option = {
-  value: string
+  value: Platform | string
   label: string
   convert?:
     | ((value: string, chain?: string) => Promise<string> | string | undefined)
@@ -47,6 +49,12 @@ export const NotificationRow: React.FC<{
     }
     if (selectedOption) {
       convert()
+      if (
+        selectedOption.label === HEX_STRING_OPTION.label ||
+        selectedOption.label === STRING_OPTION.label
+      ) {
+        setConvertedvalue(value)
+      }
     }
   }, [selectedOption, options, value, chain])
 
@@ -63,12 +71,18 @@ export const NotificationRow: React.FC<{
     filteredOptions = [HEX_STRING_OPTION, STRING_OPTION]
   }
 
+  if (type === 'ByteString' && value.length !== 28) {
+    filteredOptions = [BYTE_STRING_OPTION]
+  }
+
   return (
     <Select
       selectedOption={(selectedOption.label && selectedOption) || options[0]}
       handleChange={handleChange}
-      options={filteredOptions || options}
-      computedDisplayValue={convertedValue || value}
+      options={(filteredOptions.length && filteredOptions) || options}
+      computedDisplayValue={
+        selectedOption.label === STRING_OPTION.label ? convertedValue : value
+      }
     />
   )
 }
@@ -119,6 +133,7 @@ const NotificationHeaderLink: React.FC<{
       {' '}
       {notification.contract}{' '}
     </Link>
+    {chain === 'neo3' && <code> ({notification.event_name}) </code>}
   </div>
 )
 

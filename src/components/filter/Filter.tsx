@@ -1,11 +1,16 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import Select from '../select/Select'
 import { ValueType } from 'react-select'
 
 import './Filter.scss'
 
-type Option = {
-  value: string
+export interface Platform {
+  protocol: string
+  network: string
+}
+
+export interface Option {
+  value: Platform | string
   label: string
 }
 
@@ -21,28 +26,68 @@ export const Filter: React.FC<Props> = ({
   const options: Option[] = [
     {
       label: 'All',
-      value: 'all',
+      value: {
+        protocol: 'all',
+        network: 'all',
+      },
     },
     {
-      label: 'Neo Legacy',
-      value: 'neo2',
+      label: 'Neo N3 (Mainnet)',
+      value: {
+        protocol: 'neo3',
+        network: 'mainnet',
+      },
     },
     {
-      label: 'Neo (Testnet)',
-      value: 'neo3',
+      label: 'Neo N3 (Testnet)',
+      value: {
+        protocol: 'neo3',
+        network: 'testnet_rc4',
+      },
+    },
+    {
+      label: 'Neo N3 (RC3 Testnet)',
+      value: {
+        protocol: 'neo3',
+        network: 'testnet',
+      },
+    },
+    {
+      label: 'Neo Legacy (Mainnet)',
+      value: {
+        protocol: 'neo2',
+        network: 'mainnet',
+      },
+    },
+    {
+      label: 'Neo Legacy (Testnet)',
+      value: {
+        protocol: 'neo2',
+        network: 'testnet',
+      },
     },
   ]
 
   // TODO: this should read redux state to set default
-  const [currentOption, setCurrentOption] = useState(
-    selectedOption || options[1],
-  )
+  const [currentOption, setCurrentOption] = useState(options[0])
 
   const setFilter = (option: ValueType<Option, false>): void => {
     const filterOption = option as Option
     handleFilterUpdate(filterOption)
     setCurrentOption(filterOption)
   }
+
+  useEffect(() => {
+    const { protocol, network } = (selectedOption?.value || {}) as Platform
+    const option = options.find(it => {
+      const selectedOptionPlataform = it?.value as Platform
+      return (
+        selectedOptionPlataform.protocol === protocol &&
+        selectedOptionPlataform.network === network
+      )
+    })
+    if (option) setCurrentOption(option)
+  }, [selectedOption])
 
   return (
     <div id="Filter">

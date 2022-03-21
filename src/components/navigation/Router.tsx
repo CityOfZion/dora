@@ -1,11 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  useLocation,
-  // Redirect,
-} from 'react-router-dom'
+import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -25,6 +19,7 @@ import Monitor from '../../pages/monitor/Monitor'
 import Endpoint from '../../pages/endpoint/Endpoint'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
+import NftInformation from '../../pages/nft/NftInformation'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -32,7 +27,10 @@ const ScrollToTop = (): null => {
   return null
 }
 
-const reload = (): void => window.location.reload()
+const reload = () => {
+  window.location.reload()
+  return <></>
+}
 
 const Router: React.FC = (): ReactElement => {
   return (
@@ -52,6 +50,12 @@ const Router: React.FC = (): ReactElement => {
                   component={(): ReactElement => <Home />}
                   exact
                 />
+
+                <Route
+                  path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
+                  component={(): ReactElement => <NftInformation />}
+                />
+
                 <Route
                   path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Address />}
@@ -76,7 +80,7 @@ const Router: React.FC = (): ReactElement => {
 
                 <Route
                   exact
-                  path={`${ROUTES.SEARCH.url}/:chain/:network/:hash`}
+                  path={`${ROUTES.SEARCH.url}/:protocol/:network/:search`}
                   component={(): ReactElement => <SearchResults />}
                 />
 
@@ -109,7 +113,7 @@ const Router: React.FC = (): ReactElement => {
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
                 />
-                <Route path={`${ROUTES.API.url}`} onEnter={reload} />
+                <Route path={`${ROUTES.API.url}`} render={reload} />
                 <Route component={(): ReactElement => <NotFound />} />
               </Switch>
             </div>
