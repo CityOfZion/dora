@@ -17,7 +17,7 @@ jobs:
             - ./node_modules
       - run:
           name: type check
-          command: npm run ts-buld
+          command: npm run ts-build
       - run:
           name: lint
           command: npm run ci-lint
