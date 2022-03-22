@@ -1,5 +1,10 @@
 import React, { useEffect, useState, ReactElement } from 'react'
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
+import {
+  RouteComponentProps,
+  withRouter,
+  useHistory,
+  Link,
+} from 'react-router-dom'
 import moment from 'moment'
 import { useDispatch, useSelector } from 'react-redux'
 import { Icon } from '@iconify/react'
@@ -257,22 +262,26 @@ const Transaction: React.FC<Props> = (props: Props) => {
                   </div>
 
                   <div className="detail-tile">
-                    <label>SIZE</label>
-                    <span>
-                      {renderSkeleton(
-                        transaction &&
-                          `${transaction.size.toLocaleString()} bytes`,
-                      )}
-                    </span>
+                    <label>INCLUDED IN BLOCK</label>
+                    <Link
+                      to={`${ROUTES.BLOCK.url}/${chain}/${network}/${transaction?.block}`}
+                    >
+                      <span>
+                        {renderSkeleton(
+                          transaction && transaction.block.toLocaleString(),
+                        )}
+                      </span>
+                    </Link>
                   </div>
                 </div>
 
                 <div className="detail-tile-row">
                   <div className="detail-tile">
-                    <label>INCLUDED IN BLOCK</label>
+                    <label>SIZE</label>
                     <span>
                       {renderSkeleton(
-                        transaction && transaction.block.toLocaleString(),
+                        transaction &&
+                          `${transaction.size.toLocaleString()} bytes`,
                       )}
                     </span>
                   </div>
@@ -464,7 +473,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>SENDER</label>
-                  <span className="small-pink-text">
+                  <span className="small-text">
                     {renderSkeleton(
                       transaction && transaction.sender
                         ? transaction.sender
@@ -474,22 +483,26 @@ const Transaction: React.FC<Props> = (props: Props) => {
                 </div>
 
                 <div className="detail-tile">
+                  <label>INCLUDED IN BLOCK</label>
+                  <Link
+                    to={`${ROUTES.BLOCK.url}/${chain}/${network}/${transaction?.block}`}
+                  >
+                    <span>
+                      {renderSkeleton(
+                        transaction && transaction.block.toLocaleString(),
+                      )}
+                    </span>
+                  </Link>
+                </div>
+              </div>
+
+              <div className="detail-tile-row">
+                <div className="detail-tile ">
                   <label>SIZE</label>
                   <span>
                     {renderSkeleton(
                       transaction &&
                         `${transaction.size.toLocaleString()} bytes`,
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              <div className="detail-tile-row">
-                <div className="detail-tile">
-                  <label>INCLUDED IN BLOCK</label>
-                  <span>
-                    {renderSkeleton(
-                      transaction && transaction.block.toLocaleString(),
                     )}
                   </span>
                 </div>
