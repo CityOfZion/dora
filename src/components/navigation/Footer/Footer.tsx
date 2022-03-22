@@ -66,19 +66,22 @@ const Footer: React.FC = (): ReactElement => {
           </div>
         </div>
         <div id="company-banner">
-          <img className="coz-logo" alt="coz-logo" src={cozLogo} />
-          <p className="copyright">
-            {new Date().getFullYear()} Copyright{' '}
-            <a
-              className="accent"
-              href="https://coz.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-test="test400"
-            >
-              COZ
-            </a>
-          </p>
+          <div id="company-banner">
+            <img className="coz-logo" alt="coz-logo" src={cozLogo} />
+            <p className="copyright">
+              {new Date().getFullYear()} Copyright{' '}
+              <a
+                className="accent"
+                href="https://coz.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-test="test400"
+              >
+                COZ
+              </a>
+            </p>
+          </div>
+          {process.env.REACT_APP_LAST_COMMIT ?? ''}
         </div>
       </div>
     </div>

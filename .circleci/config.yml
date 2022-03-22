@@ -16,8 +16,11 @@ jobs:
           paths:
             - ./node_modules
       - run:
+          name: fetch git commit hash
+          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+      - run:
           name: type check
-          command: npm run ts-buld
+          command: npm run ts-build
       - run:
           name: lint
           command: npm run ci-lint
@@ -39,6 +42,9 @@ jobs:
             key: dependency-cache-{{ checksum "package-lock.json" }}
             paths:
               - ./node_modules
+        - run:
+            name: fetch git commit hash
+            command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
         - run:
             name: build
             command: npm run build
@@ -67,6 +73,9 @@ jobs:
           paths:
             - ./node_modules
       - run:
+          name: fetch git commit hash
+          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+      - run:
           name: build
           command: npm run build
       - run:
@@ -93,6 +102,9 @@ jobs:
           key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
+      - run:
+          name: fetch git commit hash
+          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: build
           command: npm run build
