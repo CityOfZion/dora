@@ -1,14 +1,16 @@
 import React, { createContext, useState } from 'react'
 
-export type TFilterName = 'N3' | 'N2' | 'Default' | 'testnet' | 'mainnet'
-
 export type MonitorContent = {
   showMessage: boolean
   message: string
-  filterName: TFilterName
+  stopRender: boolean
+  protocol: string
+  network: string
   setShowMessage: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
-  setFilterName: React.Dispatch<React.SetStateAction<TFilterName>>
+  setStopRender: React.Dispatch<React.SetStateAction<boolean>>
+  setProtocol: React.Dispatch<React.SetStateAction<string>>
+  setNetwork: React.Dispatch<React.SetStateAction<string>>
 }
 
 export const MonitorContext = createContext({} as MonitorContent)
@@ -16,17 +18,23 @@ export const MonitorContext = createContext({} as MonitorContent)
 export const MonitorProvider: React.FC = ({ children }) => {
   const [showMessage, setShowMessage] = useState(false)
   const [message, setMessage] = useState('')
-  const [filterName, setFilterName] = useState<TFilterName>('N3')
+  const [stopRender, setStopRender] = useState<boolean>(false)
+  const [protocol, setProtocol] = useState<string>('all')
+  const [network, setNetwork] = useState<string>('all')
 
   return (
     <MonitorContext.Provider
       value={{
         message,
         showMessage,
-        filterName,
+        stopRender,
+        protocol,
+        network,
         setMessage,
         setShowMessage,
-        setFilterName,
+        setStopRender,
+        setProtocol,
+        setNetwork,
       }}
     >
       {children}

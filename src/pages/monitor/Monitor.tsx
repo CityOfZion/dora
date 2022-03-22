@@ -1,13 +1,22 @@
-import React, { ReactElement, useEffect, useState, useContext } from 'react'
+import React, {
+  ReactElement,
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+  ReactText,
+} from 'react'
 import { Link } from 'react-router-dom'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
-import Snackbar from '@material-ui/core/Snackbar'
+
+import { Snackbar, Theme, Tooltip, withStyles } from '@material-ui/core'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { Socket } from '../../config/Socket'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
 import { ReactComponent as Cube } from '../../assets/icons/cube.svg'
 import { ReactComponent as Graphic } from '../../assets/icons/graphic.svg'
 import { ReactComponent as Hourglass } from '../../assets/icons/hourglass.svg'
@@ -18,7 +27,7 @@ import {
   OrderNodes,
 } from '../../reducers/nodeReducer'
 import { setNode } from '../../actions/nodeActions'
-import List, { ColumnType } from '../../components/list/List'
+import { ColumnType } from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import InformationPanel from '../../components/panel/InformationPanel'
 import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
@@ -30,6 +39,9 @@ import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
 import { useHistory } from 'react-router-dom'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
+import classNames from 'classnames'
+import useFilterState from '../../hooks/useFilterState'
+import { uniqueId } from 'lodash'
 
 const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
 
@@ -98,6 +110,20 @@ export type IsItUp = {
   url?: string
 }
 
+const IsItUpTooltip = withStyles((theme: Theme) => ({
+  tooltip: {
+    border: '1px solid #4cffb3',
+    backgroundColor: 'rgba(14, 25, 27, 0.73)',
+    fontSize: '13px',
+  },
+  arrow: {
+    color: 'rgba(14, 25, 27, 1)',
+    '&::before': {
+      border: '1px solid #4cffb3',
+    },
+  },
+}))(Tooltip)
+
 export const IsItUp: React.FC<IsItUp> = ({
   statusIsItUp,
   fromMonitor,
@@ -105,6 +131,8 @@ export const IsItUp: React.FC<IsItUp> = ({
 }): JSX.Element => {
   const width = useWindowWidth()
   const canNavigate = width < 1200 && fromMonitor
+  const { setStopRender } = useContext(MonitorContext)
+  const [showToolTip, setShowToolTip] = useState<boolean>(false)
   const getIconByStatus = (): React.FunctionComponent<
     React.SVGProps<SVGSVGElement> & {
       title?: string | undefined
@@ -116,17 +144,39 @@ export const IsItUp: React.FC<IsItUp> = ({
     return Icon ?? DisapprovedSVG
   }
 
+  const handleMouseEvent = (showTooltip: boolean): void => {
+    setStopRender(showTooltip)
+    setShowToolTip(showTooltip)
+  }
+
   const Icon = getIconByStatus()
-  return canNavigate ? (
-    <Link
-      style={{ textDecoration: 'none' }}
-      to={`${ROUTES.ENDPOINT.url}/${url}`}
-      className={'link'}
+  return (
+    <div
+      onMouseEnter={(): void => handleMouseEvent(true)}
+      onMouseLeave={(): void => handleMouseEvent(false)}
     >
-      {<Icon />}
-    </Link>
-  ) : (
-    <div>{<Icon />}</div>
+      <IsItUpTooltip
+        open={showToolTip}
+        arrow={true}
+        title={`Status: ${statusIsItUp}`}
+        onClose={(): void => {
+          setStopRender(false)
+        }}
+        placement={'right'}
+      >
+        {canNavigate ? (
+          <Link
+            style={{ textDecoration: 'none' }}
+            to={`${ROUTES.ENDPOINT.url}/${url}`}
+            className={'link'}
+          >
+            {<Icon />}
+          </Link>
+        ) : (
+          <div>{<Icon />}</div>
+        )}
+      </IsItUpTooltip>
+    </div>
   )
 }
 
@@ -171,7 +221,7 @@ const NegativeComponent: React.FC<NegativeComponent> = ({
         style={{ textDecoration: 'none' }}
       >
         <div className={disable ? 'disable' : ''}>-</div>
-        <ArrowForwardIcon style={{ color: '#D355E7' }} />
+        <ArrowForwardIcon style={{ color: '#d355e7' }} />
       </Link>
     ) : (
       <Link
@@ -247,7 +297,7 @@ const Peers: React.FC<Peers> = ({ text, disable, url }) => {
       style={{ textDecoration: 'none' }}
     >
       <div className={disable ? 'disable' : ''}>{text}</div>
-      <ArrowForwardIcon style={{ color: '#D355E7' }} />
+      <ArrowForwardIcon style={{ color: '#d355e7' }} />
     </Link>
   ) : (
     <div className={disable ? 'disable' : ''}>{text}</div>
@@ -268,7 +318,7 @@ const Availability: React.FC<Availability> = ({ text, disable, url }) => {
       style={{ textDecoration: 'none' }}
     >
       <div className={disable ? 'disable' : ''}>{text}</div>
-      <ArrowForwardIcon style={{ color: '#D355E7' }} />
+      <ArrowForwardIcon style={{ color: '#d355e7' }} />
     </Link>
   ) : width < 1200 ? (
     <Link
@@ -303,6 +353,9 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
         key={data.url}
       />
     ),
+    type: (): ReactElement => (
+      <TypeNode textType={data.type} disable={!isPositive()} />
+    ),
     blockHeight: isPositive()
       ? (): ReactElement => (
           <NavigateColumn text={`#${data.height}`} url={url} />
@@ -319,9 +372,6 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
       : (): ReactElement => (
           <NegativeComponent disable={!isPositive()} url={url} />
         ),
-    type: (): ReactElement => (
-      <TypeNode textType={data.type} disable={!isPositive()} />
-    ),
     peers: isPositive()
       ? (): ReactElement => <Peers text={data.peers} url={url} />
       : (): ReactElement => (
@@ -354,7 +404,12 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
           />
         ),
     isItUp: (): ReactElement => (
-      <IsItUp statusIsItUp={data.status} fromMonitor={true} url={url} />
+      <IsItUp
+        statusIsItUp={data.status}
+        fromMonitor={true}
+        url={url}
+        key={`${data.url} isitup`}
+      />
     ),
     chain: data.status || '',
   }
@@ -415,6 +470,7 @@ const mobileColumns: ColumnType[] = [
 interface NetworkStatus {
   data: WSDoraData[]
 }
+
 const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   const BEST_BLOCK = 'Best Block'
   const LAST_BLOCK = 'Last Block'
@@ -458,7 +514,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   useEffect(() => {
     handleAvgBlockCounter()
     setLastBlockCounter(0) //eslint-disable-next-line
-  }, [bestBlock])
+  }, [bestBlock]);
 
   useEffect(() => {
     const sumBlockTime = listAvgBlockTime.reduce((avg, time) => {
@@ -478,7 +534,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
   useEffect(() => {
     setBestBlock(getBestBlock()) //eslint-disable-next-line
-  }, [data])
+  }, [data]);
 
   return (
     <div className="network-status-content">
@@ -501,17 +557,19 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   )
 }
 
-const Monitor: React.FC<{}> = () => {
+const ListMonitor: React.FC = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const history = useHistory()
-  const { protocol, handleSetFilterData, network } =
-    useFilterStateWithHistory(history)
+  const { protocol, network } = useFilterStateWithHistory(history)
+  const { stopRender } = useContext(MonitorContext)
+  const [data, setData] = useState<Array<ParsedNodes>>([])
+  const dispatch = useDispatch()
+
+  const isLoading = nodes.isLoading
   const [sortDataList, setSortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION
   }>({ desc: false, sort: 'isItUp' })
-
-  const { message, showMessage, setShowMessage } = useContext(MonitorContext)
 
   const selectedData = (): WSDoraData[] => {
     const sortedNodes = OrderNodes(
@@ -542,11 +600,19 @@ const Monitor: React.FC<{}> = () => {
     }
   }
 
+  const leftBorderColorOnRow = (
+    _: string | number | React.FC<{}> | undefined,
+    chain: string | number | React.FC<{}> | undefined,
+  ): string => {
+    const color = STATUS_ICONS.find(({ status }) => status === chain)?.color
+    return color ?? '#de4c85'
+  }
+
   const handleSortDataList = (option: SORT_OPTION): void => {
     setSortDataList({ sort: option, desc: !sortDataList.desc })
   }
 
-  const dispatch = useDispatch()
+  const width = useWindowWidth()
 
   /**
    * Configures and begins listening to the socket
@@ -555,18 +621,233 @@ const Monitor: React.FC<{}> = () => {
     socket.listening<WSDoraData>(data => {
       dispatch(setNode(data))
     })
-  }, [dispatch, sortDataList])
+  }, [dispatch, sortDataList, stopRender])
 
-  const width = useWindowWidth()
+  const headerRowClass = classNames({
+    'loading-table-row': isLoading,
+    'data-list-column': true,
+  })
 
-  const conditionalColumns =
-    width > 1000
-      ? width < 1200
-        ? tabletColumns
-        : columns
-      : width < 768
-      ? mobileColumns
-      : tabletColumns
+  useEffect(() => {
+    if (!stopRender) {
+      setData(returnNodesListData(selectedData(), !selectedData().length))
+    } //eslint-disable-next-line
+  }, [nodes, sortDataList]);
+
+  useEffect(() => {
+    setData(returnNodesListData(selectedData(), !selectedData().length)) //eslint-disable-next-line
+  }, [network, protocol]);
+
+  const rowClass = classNames({
+    'loading-table-row': isLoading,
+    'without-pointer-cursor': true,
+  })
+
+  const conditionalBorderRadius = (
+    index: number,
+    shouldReturnBorderLeftStyle?: boolean,
+    id?: string | number | React.FC<{}>,
+    chain?: string | number | React.FC<{}>,
+  ): { borderRadius: string } | undefined => {
+    if (!index) {
+      const border = {
+        borderRadius: '3px 0 0 3px',
+        borderLeft: '',
+      }
+      if (shouldReturnBorderLeftStyle && leftBorderColorOnRow) {
+        border.borderLeft = `solid 3px ${
+          typeof leftBorderColorOnRow === 'function'
+            ? leftBorderColorOnRow(id, chain)
+            : leftBorderColorOnRow
+        }`
+      }
+      return border
+    }
+    if (index === columns.length) {
+      const border = {
+        borderRadius: '0 3px 3px 0',
+      }
+      return border
+    }
+    return undefined
+  }
+
+  const CListMonitor = useMemo(() => {
+    const renderCellData = (
+      isLoading: boolean,
+      data: string | number | React.FC<{}>,
+    ): ReactText | React.ReactNode => {
+      const cellProps = {}
+      if (isLoading) return undefined
+      if (typeof data === 'function') return data(cellProps)
+      return data
+    }
+
+    const conditionalColumns =
+      width > 1000
+        ? width < 1200
+          ? tabletColumns
+          : columns
+        : width < 768
+        ? mobileColumns
+        : tabletColumns
+
+    const gridstyle = {
+      gridTemplateColumns: `repeat(${conditionalColumns.length}, auto)`,
+    }
+
+    const sortedByAccessor = data.map(
+      (
+        data: {
+          [key: string]: string | number | React.FC<{}>
+        },
+        index: number,
+      ) => {
+        interface Sorted {
+          id: string
+
+          [key: string]: string | number | React.FC<{}>
+        }
+
+        const sorted = {} as Sorted
+        conditionalColumns.forEach(column => {
+          sorted[column.accessor] = data[column.accessor]
+          sorted.id = String(data['endpoint'])
+          sorted.chain = data.chain
+        })
+        return sorted
+      },
+    )
+
+    interface HeaderCell {
+      styleHeader?: React.CSSProperties
+      classNameHeader?: string
+      nameColumn?: React.Key | null
+      isLoading?: boolean
+      orderData?: boolean
+      sortOpt?: SORT_OPTION
+      callbalOrderData?: (field: SORT_OPTION) => void
+    }
+
+    const HeaderCell: React.FC<HeaderCell> = ({
+      styleHeader,
+      classNameHeader,
+      nameColumn,
+      isLoading,
+      sortOpt,
+      callbalOrderData,
+    }) => {
+      return (
+        <div
+          style={styleHeader}
+          className={`${classNameHeader} header-cell-container`}
+          key={nameColumn}
+          onClick={(e): void => {
+            e.preventDefault()
+            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+          }}
+        >
+          {isLoading ? '' : nameColumn}
+          <div className="data-list-arrow-sort">
+            <ArrowSortSVG />
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="data-list" style={gridstyle}>
+        {conditionalColumns.map((column, i) => {
+          return (
+            <HeaderCell
+              classNameHeader={headerRowClass}
+              styleHeader={{
+                ...conditionalBorderRadius(i),
+                ...(column.style || {}),
+              }}
+              key={column.name}
+              isLoading={nodes.isLoading}
+              sortOpt={column.sortOpt}
+              callbalOrderData={handleSortDataList}
+              nameColumn={column.name}
+            />
+          )
+        })}
+        {sortedByAccessor.map(
+          (
+            data: {
+              [key: string]: string | number | React.FC<{}>
+            },
+            index: number,
+          ) =>
+            Object.keys(data).map((key, i) => {
+              return (
+                key !== 'id' &&
+                key !== 'href' &&
+                key !== 'chain' && (
+                  <div
+                    id="non-link-list-cell-container"
+                    style={conditionalBorderRadius(
+                      i,
+                      true,
+                      data.id,
+                      data.chain,
+                    )}
+                    key={uniqueId()}
+                    className={rowClass}
+                  >
+                    {renderCellData(isLoading, data[key])}
+                  </div>
+                )
+              )
+            }),
+        )}
+      </div>
+    ) //eslint-disable-next-line
+  }, [data, width]);
+
+  return CListMonitor
+}
+
+const Monitor: React.FC<{}> = () => {
+  const nodes = useSelector(({ node }: { node: NodeState }) => node)
+  const { protocol, handleSetFilterData, network } = useFilterState()
+  const [sortDataList] = useState<{
+    desc: boolean
+    sort: SORT_OPTION
+  }>({ desc: false, sort: 'isItUp' })
+
+  const { message, showMessage, setShowMessage, setNetwork, setProtocol } =
+    useContext(MonitorContext)
+
+  const selectedData = (): WSDoraData[] => {
+    const sortedNodes = OrderNodes(
+      sortDataList.sort,
+      nodes.nodesArray,
+      sortDataList.desc,
+    )
+
+    if (protocol === 'all' && network === 'all') {
+      return sortedNodes
+    } else if (protocol === 'all' && network !== 'all') {
+      return sortedNodes.filter(node => node.network === network)
+    } else if (protocol !== 'all' && network === 'all') {
+      return sortedNodes.filter(node => node.protocol === protocol)
+    } else {
+      //temporary state, remove when api cuts over
+      let mutableNetwork = network
+      if (protocol === 'neo3' && mutableNetwork === 'testnet') {
+        mutableNetwork = 'testnet_rc3'
+      }
+      if (mutableNetwork === 'testnet_rc4') {
+        mutableNetwork = 'testnet'
+      }
+
+      return sortedNodes.filter(
+        node => node.protocol === protocol && node.network === mutableNetwork,
+      )
+    }
+  }
 
   return (
     <div id="Monitor" className="page-container">
@@ -606,6 +887,8 @@ const Monitor: React.FC<{}> = () => {
                     protocol: (option.value as Platform).protocol,
                     network: (option.value as Platform).network,
                   })
+                  setNetwork((option.value as Platform).network)
+                  setProtocol((option.value as Platform).protocol)
                 }}
               />
             </div>
@@ -613,21 +896,7 @@ const Monitor: React.FC<{}> = () => {
           <NetworkStatus data={selectedData()} />
         </div>
         <div>
-          <List
-            data={returnNodesListData(selectedData(), !selectedData().length)}
-            columns={conditionalColumns}
-            isLoading={nodes.isLoading}
-            rowId="endpoint"
-            leftBorderColorOnRow={(_, chain): string => {
-              const color = STATUS_ICONS.find(
-                ({ status }) => status === chain,
-              )?.color
-              return color ?? '#de4c85'
-            }}
-            orderData={true}
-            callbalOrderData={handleSortDataList}
-            paddingCell={{ paddingValue: '0 0 0 21px', indexesColumns: [0] }}
-          />
+          <ListMonitor />
         </div>
         <Snackbar
           title={message}
