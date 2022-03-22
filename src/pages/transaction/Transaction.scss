@@ -1,16 +1,4 @@
 #Transaction {
-  a {
-    text-decoration: none;
-    display: flex;
-    letter-spacing: 0;
-    align-self: center;
-    margin: auto;
-
-    span {
-      color: #dd4bf1 !important;
-    }
-  }
-
   .details-section {
     margin-top: 0;
 
@@ -30,6 +18,7 @@
 
     span {
       font-size: 14px;
+      color: #d355e7;
       letter-spacing: 0;
       margin-left: 24px;
       word-break: break-all;
@@ -38,8 +27,9 @@
     }
   }
 
-  .small-text {
+  .small-pink-text {
     font-size: 16px;
+    color: #d355e7;
     letter-spacing: 0;
     margin-left: 24px;
     word-break: break-all;
