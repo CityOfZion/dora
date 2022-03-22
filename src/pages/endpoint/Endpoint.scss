@@ -1,17 +1,25 @@
-#Endpoint {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.endpoint {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+
+  .inner-page-container {
+    width: 100%;
+
+    & > div {
+      padding: 0 15px;
+    }
   }
 
-  .close-button {
+  &-close-button {
     position: absolute;
     right: 4px;
     top: 120px;
     cursor: pointer;
   }
 
-  .flag {
+  &-flag {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -25,13 +33,13 @@
     justify-content: center;
   }
 
-  .detail-tile {
+  &-detail-tile {
     height: 51px;
     display: flex;
     flex-direction: row;
 
     span {
-      margin-right: 0px;
+      margin-right: 0;
       font-size: 14px;
       font-weight: 400;
     }
@@ -46,15 +54,16 @@
     }
   }
 
-  .title-tile {
+  &-title-tile {
     display: flex;
     flex-direction: row;
-    
+
   }
 
-  .content-tile {
+  &-content-tile {
     display: flex;
     flex-direction: row;
     justify-self: flex-end;
-    right: 0px;
+    right: 0;
   }
+}
