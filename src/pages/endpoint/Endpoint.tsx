@@ -50,15 +50,15 @@ const Endpoint: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <div id="Endpoint" className="page-container">
+    <div id="endpoint" className="page-container endpoint">
       <div className="inner-page-container">
         <div id="block-details-container">
-          <div className="close-button" onClick={handleCloseButton}>
+          <div className="endpoint-close-button" onClick={handleCloseButton}>
             <CloseX />
           </div>
           <div className="details-section">
             <div className="inner-page-container">
-              <div className="flag">
+              <div className="endpoint-flag">
                 <ReactCountryFlag
                   style={{
                     fontSize: '3em',
@@ -72,52 +72,66 @@ const Endpoint: React.FC<Props> = (props: Props) => {
                 />
               </div>
               <div className="detail-tile-row">
-                <div className="detail-tile">
-                  <label className="title-tile">ENDPOINT</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    ENDPOINT
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     {endpointSelected && endpointSelected.url}
                   </span>
                   <Copy text={endpointSelected ? endpointSelected.url : ''} />
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">TYPE</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">TYPE</label>
+                  <span className="content-tile endpoint-content-tile">
                     {endpointSelected && endpointSelected.type}
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">IS IT UP?</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    IS IT UP?
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     <IsItUp statusIsItUp={endpointSelected?.status}></IsItUp>
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">AVAILABILITY</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    AVAILABILITY
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     {endpointSelected && endpointSelected.availability} %
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">STATE HEIGHT</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    STATE HEIGHT
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     #{endpointSelected && endpointSelected.stateheight}
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">BLOCK HEIGHT</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    BLOCK HEIGHT
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     #{endpointSelected && endpointSelected.height}
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">VERSION</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    VERSION
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     {endpointSelected && endpointSelected.version}
                   </span>
                 </div>
-                <div className="detail-tile">
-                  <label className="title-tile">PEERS</label>
-                  <span className="content-tile">
+                <div className="detail-tile endpoint-detail-tile">
+                  <label className="title-tile endpoint-title-tile">
+                    PEERS
+                  </label>
+                  <span className="content-tile endpoint-content-tile">
                     {endpointSelected && endpointSelected.peers}
                   </span>
                 </div>

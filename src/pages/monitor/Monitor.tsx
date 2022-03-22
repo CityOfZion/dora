@@ -104,7 +104,7 @@ const Endpoint: React.FC<Endpoint> = ({ url, locale, disable }) => {
   )
 }
 
-export type IsItUp = {
+type IsItUp = {
   statusIsItUp: string
   fromMonitor?: boolean
   url?: string
@@ -145,7 +145,9 @@ export const IsItUp: React.FC<IsItUp> = ({
   }
 
   const handleMouseEvent = (showTooltip: boolean): void => {
-    setStopRender(showTooltip)
+    if (setStopRender) {
+      setStopRender(showTooltip)
+    }
     setShowToolTip(showTooltip)
   }
 
@@ -160,7 +162,7 @@ export const IsItUp: React.FC<IsItUp> = ({
         arrow={true}
         title={`Status: ${statusIsItUp}`}
         onClose={(): void => {
-          setStopRender(false)
+          setStopRender && setStopRender(false)
         }}
         placement={'right'}
       >
