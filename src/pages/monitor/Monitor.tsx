@@ -37,8 +37,6 @@ import { MonitorContext } from '../../contexts/MonitorContext'
 import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
-import { useHistory } from 'react-router-dom'
-import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { uniqueId } from 'lodash'
@@ -516,7 +514,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   useEffect(() => {
     handleAvgBlockCounter()
     setLastBlockCounter(0) //eslint-disable-next-line
-  }, [bestBlock]);
+  }, [bestBlock])
 
   useEffect(() => {
     const sumBlockTime = listAvgBlockTime.reduce((avg, time) => {
@@ -536,7 +534,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
   useEffect(() => {
     setBestBlock(getBestBlock()) //eslint-disable-next-line
-  }, [data]);
+  }, [data])
 
   return (
     <div className="network-status-content">
@@ -559,10 +557,13 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   )
 }
 
-const ListMonitor: React.FC = () => {
+interface ListMonitor {
+  network: string
+  protocol: string
+}
+
+const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const history = useHistory()
-  const { protocol, network } = useFilterStateWithHistory(history)
   const { stopRender } = useContext(MonitorContext)
   const [data, setData] = useState<Array<ParsedNodes>>([])
   const dispatch = useDispatch()
@@ -623,6 +624,10 @@ const ListMonitor: React.FC = () => {
     socket.listening<WSDoraData>(data => {
       dispatch(setNode(data))
     })
+
+    return () => {
+      socket.close()
+    }
   }, [dispatch, sortDataList, stopRender])
 
   const headerRowClass = classNames({
@@ -634,11 +639,11 @@ const ListMonitor: React.FC = () => {
     if (!stopRender) {
       setData(returnNodesListData(selectedData(), !selectedData().length))
     } //eslint-disable-next-line
-  }, [nodes, sortDataList]);
+  }, [nodes, sortDataList])
 
   useEffect(() => {
     setData(returnNodesListData(selectedData(), !selectedData().length)) //eslint-disable-next-line
-  }, [network, protocol]);
+  }, [network, protocol])
 
   const rowClass = classNames({
     'loading-table-row': isLoading,
@@ -806,7 +811,7 @@ const ListMonitor: React.FC = () => {
         )}
       </div>
     ) //eslint-disable-next-line
-  }, [data, width]);
+  }, [data, width])
 
   return CListMonitor
 }
@@ -898,7 +903,7 @@ const Monitor: React.FC<{}> = () => {
           <NetworkStatus data={selectedData()} />
         </div>
         <div>
-          <ListMonitor />
+          <ListMonitor network={network} protocol={protocol} />
         </div>
         <Snackbar
           title={message}
