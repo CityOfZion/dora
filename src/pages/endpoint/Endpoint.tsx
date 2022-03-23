@@ -50,7 +50,7 @@ const Endpoint: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <div id="endpoint" className="page-container endpoint">
+    <div id="Endpoint" className="page-container endpoint">
       <div className="inner-page-container">
         <div id="block-details-container">
           <div className="endpoint-close-button" onClick={handleCloseButton}>
