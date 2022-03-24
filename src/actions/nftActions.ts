@@ -158,24 +158,26 @@ export function fetchNFTS(ownerId: string, network: string, page = 1) {
       const { assets, total_results } =
         (await response.json()) as GhostMarketAssets
 
-      const nfts = assets.map(({ nft }): NFT => {
-        const attributes = nft.nft_metadata.attributes
-          ? mapAttributes(nft.nft_metadata.attributes)
-          : []
+      const nfts = assets
+        ? assets.map(({ nft }): NFT => {
+            const attributes = nft.nft_metadata.attributes
+              ? mapAttributes(nft.nft_metadata.attributes)
+              : []
 
-        return {
-          name: nft.nft_metadata.name || '',
-          chain: nft.chain || '',
-          image: treatNFTImage(nft.nft_metadata.image || ''),
-          id: nft.token_id || '',
-          contract: nft.contract || '',
-          collection: {
-            image: nft.collection.featured_image || '',
-            name: nft.collection.name || '',
-          },
-          attributes,
-        }
-      })
+            return {
+              name: nft.nft_metadata.name || '',
+              chain: nft.chain || '',
+              image: treatNFTImage(nft.nft_metadata.image || ''),
+              id: nft.token_id || '',
+              contract: nft.contract || '',
+              collection: {
+                image: nft.collection.featured_image || '',
+                name: nft.collection.name || '',
+              },
+              attributes,
+            }
+          })
+        : []
 
       dispatch(requestNFTSSuccess(nfts, page, total_results))
     } catch (e) {
