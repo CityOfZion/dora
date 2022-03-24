@@ -39,9 +39,7 @@ const PlatformElement = ({
           } else if (protocol === 'neo2' && network === 'testnet') {
             return 'Testnet'
           } else if (protocol === 'neo3' && network === 'testnet') {
-            return 'RC3 Testnet'
-          } else if (protocol === 'neo3' && network === 'testnet_rc4') {
-            return 'RC4 Testnet'
+            return 'Testnet'
           } else if (protocol === 'neo3' && network === 'mainnet') {
             return 'Mainnet'
           }
