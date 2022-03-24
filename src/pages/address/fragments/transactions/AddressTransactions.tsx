@@ -16,6 +16,7 @@ import {
 } from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
+import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
 
 interface MatchParams {
   hash: string
@@ -27,6 +28,7 @@ type Props = RouteComponentProps<MatchParams>
 
 const AddressTransactions: React.FC<Props> = (props: Props) => {
   const { chain, network, hash } = props.match.params
+  useUpdateNetworkState(props)
   const [transactions, setTransactions] = useState([] as AddressTransaction[])
   const [currentPage, setCurrentPage] = useState(1)
   const [pages, setPages] = useState(0)
