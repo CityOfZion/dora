@@ -160,6 +160,20 @@ const Block: React.FC<Props> = (props: Props) => {
                   <Copy text={block ? block.nextconsensus : ''} />
                 </div>
               </div>
+
+              <div className="detail-tile-row full-width-tile-row">
+                <div className="detail-tile">
+                  <label>NETWORK</label>
+                  <span>{!isLoading && network} </span>
+                </div>
+              </div>
+
+              <div className="detail-tile-row full-width-tile-row">
+                <div className="detail-tile">
+                  <label>PROTOCOL</label>
+                  <span>{!isLoading && chain} </span>
+                </div>
+              </div>
             </div>
           </div>
 

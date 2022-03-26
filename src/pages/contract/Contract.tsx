@@ -221,6 +221,16 @@ const Contract: React.FC<Props> = (props: Props) => {
                   </div>
                 </div>
               </div>
+              <div className="detail-tile-row">
+                <div className="detail-tile">
+                  <label>NETWORK</label>
+                  <span>{!isLoading && network} </span>
+                </div>
+                <div className="detail-tile">
+                  <label>PROTOCOL</label>
+                  <span>{!isLoading && chain} </span>
+                </div>
+              </div>
             </div>
           )}
           <div className="script-section">
