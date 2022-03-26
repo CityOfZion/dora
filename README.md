@@ -29,4 +29,4 @@ You will also see any lint errors in the console.
 Static documentation automatically gets parsed and generated on the client side based on the contents of `/src/documentation/api.yaml` in the `develop` branch built on top of [swagger-ui-dist](https://www.npmjs.com/package/swagger-ui-dist)
 
 ## Deployment to Develop and Production Environments
-Merges made to the `develop` branch will automatically build and deploy to `https://dora-dev.coz.io/` while updates to `master` will deploy `https://dora.coz.io/`
+Merges made to the `develop` branch will automatically build and deploy to https://dora-dev.coz.io/ while updates to `master` will deploy https://dora.coz.io/
