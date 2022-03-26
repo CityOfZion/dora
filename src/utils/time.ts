@@ -67,6 +67,9 @@ export const formatDate = (time: string | number): string =>
 export const formatHours = (time: string | number): string =>
   moment.unix(Number(time)).format('hh:mm:ss')
 
+export const format24Hours = (time: string | number): string =>
+  moment.unix(Number(time)).format('HH:mm:ss')
+
 type ListUnionType = (Block | Transaction | Contract)[]
 
 export const sortedByDate = (
