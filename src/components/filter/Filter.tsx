@@ -42,6 +42,13 @@ export const Filter: React.FC<Props> = ({
       label: 'Neo N3 (Testnet)',
       value: {
         protocol: 'neo3',
+        network: 'testnet_rc4',
+      },
+    },
+    {
+      label: 'Neo N3 (RC3 Testnet)',
+      value: {
+        protocol: 'neo3',
         network: 'testnet',
       },
     },
