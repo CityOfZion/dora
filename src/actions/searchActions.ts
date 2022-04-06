@@ -158,6 +158,25 @@ export async function executeSearch(
       ctx: NeoRest,
       method: 'transaction',
     },
+    { protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'block' },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'balance',
+    },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'contract',
+    },
+    {
+      protocol: 'neo3',
+      network: 'testnet_rc4',
+      ctx: NeoRest,
+      method: 'transaction',
+    },
     { protocol: 'neo3', network: 'mainnet', ctx: NeoRest, method: 'block' },
     {
       protocol: 'neo3',
