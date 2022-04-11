@@ -70,7 +70,7 @@ export type TransactionIOAbstract = {
 
 export type TransactionNotification = {
   contract: string
-  state: { type: string; value: [{ type: string; value: string }] }
+  state: { type: string; value: { type: string; value: string }[] }
   event_name: string
 }
 

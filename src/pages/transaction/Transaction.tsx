@@ -1,37 +1,28 @@
-import React, { useEffect, useState, ReactElement } from 'react'
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
-import moment from 'moment'
+import React, { useEffect, useState, useCallback } from 'react'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
-import clockIcon from '@iconify/icons-simple-line-icons/clock'
-import { uniqueId } from 'lodash'
-
-import { formatDate, formatHours } from '../../utils/time'
 import {
   State as TransactionState,
   DetailedTransaction,
 } from '../../reducers/transactionReducer'
 import './Transaction.scss'
 import {
-  ROUTES,
   GENERATE_BASE_URL,
   NEO_HASHES,
   GAS_HASHES,
   neo3_getAddressFromSriptHash,
+  ROUTES,
 } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
-import ExpandingPanel from '../../components/panel/ExpandingPanel'
-import Transfer from '../../components/transfer/Transfer'
-import { disassemble } from '../../utils/disassemble'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
+import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
+import { TransactionN2 } from '../../components/transaction/TransactionN2'
+import { TransactionN3 } from '../../components/transaction/TransactionN3'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
-import Notification from '../../components/notification/Notification'
-import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import { neo3Disassemble } from '../../utils/neo3-disassemble'
 
-type ParsedTransfer = {
+export type ParsedTransfer = {
   name: string
   amount: string | number
   to: string
@@ -108,7 +99,7 @@ const parseNeo3TransactionData = async (
 ): Promise<ParsedTransfer[]> => {
   const transfers: ParsedTransfer[] = []
 
-  if (transaction && transaction.notifications) {
+  if (transaction.notifications) {
     for (const notification of transaction.notifications) {
       if (notification.state.type === 'Array') {
         const isTransfer = notification.event_name === 'Transfer'
@@ -124,14 +115,10 @@ const parseNeo3TransactionData = async (
           )
           const amount = integerNotfication ? integerNotfication.value : 0
           const from_address = neo3_getAddressFromSriptHash(
-            // eslint-disable-next-line
-            // @ts-ignore
-            notification?.state?.value[0].value || '',
+            notification?.state?.value[0]?.value || '',
           )
           const to_address = neo3_getAddressFromSriptHash(
-            // eslint-disable-next-line
-            // @ts-ignore
-            notification?.state?.value[1].value || '',
+            notification?.state?.value[1]?.value || '',
           )
           transfers.push({
             name,
@@ -158,7 +145,6 @@ type Props = RouteComponentProps<MatchParams>
 const Transaction: React.FC<Props> = (props: Props) => {
   const { hash, chain, network } = props.match.params
   const dispatch = useDispatch()
-  const history = useHistory()
   const transferArr: ParsedTransfer[] = []
   const [transfers, setTransfers] = useState(transferArr)
   const [localLoadComplete, setLocalLoadComplete] = useState(false)
@@ -166,243 +152,39 @@ const Transaction: React.FC<Props> = (props: Props) => {
   const transactionState = useSelector(
     ({ transaction }: { transaction: TransactionState }) => transaction,
   )
-  const { transaction, isLoading } = transactionState
+  const { transaction } = transactionState
 
-  const renderSkeleton = (
-    value: null | string | ReactElement,
-  ): null | string | ReactElement => {
-    if (!transaction || isLoading || !localLoadComplete || !value) {
-      return null
-    }
+  const parseTransfers = useCallback(
+    async (transaction: DetailedTransaction) => {
+      let parsedTransfers: ParsedTransfer[]
 
-    return value
-  }
+      if (chain === 'neo3') {
+        parsedTransfers = await parseNeo3TransactionData(transaction)
+      } else {
+        parsedTransfers = await parseAbstractData(transaction)
+      }
+
+      setTransfers(parsedTransfers)
+      setLocalLoadComplete(true)
+    },
+    [],
+  )
 
   useUpdateNetworkState(props)
 
   useEffect(() => {
-    async function computeTransfers(): Promise<void> {
-      if (transaction) {
-        setLocalLoadComplete(true)
-
-        const transfers =
-          chain === 'neo3'
-            ? await parseNeo3TransactionData(transaction)
-            : await parseAbstractData(transaction)
-
-        setTransfers(transfers)
-      }
-    }
     dispatch(fetchTransaction(hash, chain))
-    computeTransfers()
 
     return (): void => {
       setTransfers([])
     }
-  }, [chain, dispatch, hash, transaction])
+  }, [chain, dispatch, hash])
 
-  if (chain === 'neo2')
-    return (
-      <div id="Transaction" className="page-container">
-        <div className="inner-page-container">
-          <Breadcrumbs
-            crumbs={[
-              {
-                url: ROUTES.HOME.url,
-                label: 'Home',
-              },
-              {
-                url: ROUTES.TRANSACTIONS.url,
-                label: 'Transactions',
-              },
-              {
-                url: '#',
-                label: 'Transaction info',
-                active: true,
-              },
-            ]}
-          />
-
-          <BackButton
-            url={ROUTES.TRANSACTIONS.url}
-            text="back to transactions"
-          />
-          <div className="page-title-container">
-            {ROUTES.TRANSACTIONS.renderIcon()}
-            <h1>Transaction Information</h1>
-          </div>
-
-          {!!transfers.length && (
-            <Transfer
-              chain={'neo2'}
-              transfers={transfers}
-              handleAddressClick={(address): void =>
-                history.push(`/address/${chain}/${network}/${address}`)
-              }
-              networkFee={transaction ? transaction.net_fee : ''}
-              systemFee={transaction ? transaction.sys_fee : ''}
-              size={transaction ? transaction.size : ''}
-            />
-          )}
-          <div id="transaction-details-container">
-            <div className="details-section">
-              <div className="section-label">DETAILS</div>
-              <div className="inner-details-container">
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>TYPE</label>
-                    <span>
-                      {renderSkeleton(transaction && transaction.type)}
-                    </span>
-                  </div>
-
-                  <div className="detail-tile">
-                    <label>SIZE</label>
-                    <span>
-                      {renderSkeleton(
-                        transaction &&
-                          `${transaction.size.toLocaleString()} bytes`,
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="detail-tile-row">
-                  <div className="detail-tile">
-                    <label>INCLUDED IN BLOCK</label>
-                    <span>
-                      {renderSkeleton(
-                        transaction && transaction.block.toLocaleString(),
-                      )}
-                    </span>
-                  </div>
-
-                  <div className="detail-tile">
-                    <label>TIME</label>
-                    <span id="time-details-row">
-                      <div>
-                        {renderSkeleton(
-                          transaction && (
-                            <>
-                              <DateRangeIcon
-                                style={{ color: '#7698A9', fontSize: 20 }}
-                              />
-                              {moment
-                                .unix(transaction.time)
-                                .format('MM-DD-YYYY')}
-                            </>
-                          ),
-                        )}
-                      </div>
-                      <div>
-                        {renderSkeleton(
-                          transaction && (
-                            <>
-                              <Icon
-                                icon={clockIcon}
-                                style={{ color: '#7698A9', fontSize: 18 }}
-                              />
-                              {moment.unix(transaction.time).format('hh:mm:ss')}
-                            </>
-                          ),
-                        )}
-                      </div>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="transaction-hash-tile detail-tile">
-                  <label>HASH</label>
-                  <span>{renderSkeleton(transaction && transaction.txid)}</span>
-                </div>
-
-                {transaction && transaction.scripts && transaction.scripts[0] && (
-                  <ExpandingPanel title="RAW SCRIPT" open={false}>
-                    <div className="script-tile-row">
-                      <div className="detail-tile script-tile">
-                        <label>INVOCATION SCRIPT</label>
-                        <span>
-                          {!isLoading &&
-                            transaction &&
-                            transaction.scripts[0].invocation}{' '}
-                        </span>
-                      </div>
-                      <div className="detail-tile script-tile">
-                        <label>VERIFICATION SCRIPT</label>
-                        <span>
-                          {!isLoading &&
-                            transaction &&
-                            transaction.scripts[0].verification}{' '}
-                        </span>
-                      </div>
-                      <div className="detail-tile script-tile">
-                        <label> SCRIPT</label>
-                        <span>
-                          {!isLoading && transaction && transaction.script}
-                        </span>
-                      </div>
-                    </div>
-                  </ExpandingPanel>
-                )}
-
-                {transaction && transaction.scripts && transaction.scripts[0] && (
-                  <div style={{ margin: '24px 0' }}>
-                    <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
-                      <div className="script-tile-row">
-                        <div className="detail-tile script-tile">
-                          <label>INVOCATION SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              disassemble(
-                                transaction.scripts[0].invocation,
-                              )}{' '}
-                          </span>
-                        </div>
-                        <div className="detail-tile script-tile">
-                          <label>VERIFICATION SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              transaction.scripts &&
-                              transaction.scripts[0] &&
-                              disassemble(
-                                transaction.scripts[0].verification,
-                              )}{' '}
-                          </span>
-                        </div>
-                        <div className="detail-tile script-tile">
-                          <label> SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              transaction.script &&
-                              disassemble(transaction.script)}{' '}
-                          </span>
-                        </div>
-                      </div>
-                    </ExpandingPanel>
-                  </div>
-                )}
-
-                {transaction &&
-                  transaction.Item &&
-                  transaction.Item.notifications &&
-                  !!transaction.Item.notifications.length &&
-                  transaction.Item.notifications.map(notification => (
-                    <Notification
-                      chain={chain}
-                      network={network}
-                      key={uniqueId()}
-                      notification={notification}
-                    />
-                  ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  useEffect(() => {
+    if (transaction) {
+      parseTransfers(transaction)
+    }
+  }, [transaction])
 
   return (
     <div id="Transaction" className="page-container">
@@ -431,230 +213,62 @@ const Transaction: React.FC<Props> = (props: Props) => {
           <h1>Transaction Information</h1>
         </div>
 
-        {!!transfers.length && (
-          <Transfer
-            chain={'neo3'}
-            transfers={transfers}
-            handleAddressClick={(address): void =>
-              history.push(`/address/${chain}/${network}/${address}`)
-            }
-            networkFee={
-              transaction
-                ? convertToArbitraryDecimals(
-                    Number(transaction.netfee),
-                    8,
-                  ).toString()
-                : ''
-            }
-            systemFee={
-              transaction
-                ? convertToArbitraryDecimals(
-                    Number(transaction.sysfee),
-                    8,
-                  ).toString()
-                : ''
-            }
-            size={transaction ? transaction.size : ''}
-          />
-        )}
-        <div id="transaction-details-container">
-          <div className="details-section">
-            <div className="section-label">DETAILS</div>
-            <div className="inner-details-container">
-              <div className="detail-tile-row">
-                <div className="detail-tile">
-                  <label>SENDER</label>
-                  <span className="small-pink-text">
-                    {renderSkeleton(
-                      transaction && transaction.sender
-                        ? transaction.sender
-                        : '',
-                    )}
-                  </span>
-                </div>
-
-                <div className="detail-tile">
-                  <label>SIZE</label>
-                  <span>
-                    {renderSkeleton(
-                      transaction &&
-                        `${transaction.size.toLocaleString()} bytes`,
-                    )}
-                  </span>
-                </div>
-              </div>
-
-              <div className="detail-tile-row">
-                <div className="detail-tile">
-                  <label>INCLUDED IN BLOCK</label>
-                  <span>
-                    {renderSkeleton(
-                      transaction && transaction.block.toLocaleString(),
-                    )}
-                  </span>
-                </div>
-
-                <div className="detail-tile">
-                  <label>TIME</label>
-                  <span id="time-details-row">
-                    <div>
-                      {renderSkeleton(
-                        transaction && (
-                          <>
-                            <DateRangeIcon
-                              style={{ color: '#7698A9', fontSize: 20 }}
-                            />
-                            {formatDate(transaction.time)}
-                          </>
-                        ),
-                      )}
-                    </div>
-                    <div>
-                      {renderSkeleton(
-                        transaction && (
-                          <>
-                            <Icon
-                              icon={clockIcon}
-                              style={{ color: '#7698A9', fontSize: 18 }}
-                            />
-                            {formatHours(transaction.time)}
-                          </>
-                        ),
-                      )}
-                    </div>
-                  </span>
-                </div>
-              </div>
-
-              <div className="transaction-hash-tile detail-tile">
-                <label>HASH</label>
-                <span>{renderSkeleton(transaction && transaction.txid)}</span>
-              </div>
-
-              {transaction &&
-                transaction.witnesses &&
-                transaction.witnesses[0] && (
-                  <ExpandingPanel title="RAW SCRIPT" open={false}>
-                    <div className="script-tile-row">
-                      <div className="detail-tile script-tile">
-                        <label>INVOCATION SCRIPT</label>
-                        <span>
-                          {!isLoading &&
-                            transaction &&
-                            transaction.witnesses[0].invocation}{' '}
-                        </span>
-                      </div>
-                      <div className="detail-tile script-tile">
-                        <label>VERIFICATION SCRIPT</label>
-                        <span>
-                          {!isLoading &&
-                            transaction &&
-                            transaction.witnesses[0].verification}{' '}
-                        </span>
-                      </div>
-                      <div className="detail-tile script-tile">
-                        <label> SCRIPT</label>
-                        <span>
-                          {!isLoading && transaction && transaction.script}
-                        </span>
-                      </div>
-                    </div>
-                  </ExpandingPanel>
-                )}
-
-              {transaction &&
-                transaction.witnesses &&
-                transaction.witnesses[0] && (
-                  <div style={{ margin: '24px 0' }}>
-                    <ExpandingPanel title="DISASSEMBLED SCRIPT" open={false}>
-                      <div className="script-tile-row">
-                        <div className="detail-tile script-tile">
-                          <label>INVOCATION SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              neo3Disassemble(
-                                transaction.witnesses[0].invocation,
-                              )}{' '}
-                          </span>
-                        </div>
-                        <div className="detail-tile script-tile">
-                          <label>VERIFICATION SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              transaction.witnesses &&
-                              transaction.witnesses[0] &&
-                              neo3Disassemble(
-                                transaction.witnesses[0].verification,
-                              )}{' '}
-                          </span>
-                        </div>
-                        <div className="detail-tile script-tile">
-                          <label> SCRIPT</label>
-                          <span>
-                            {!isLoading &&
-                              transaction &&
-                              transaction.script &&
-                              neo3Disassemble(transaction.script)}{' '}
-                          </span>
-                        </div>
-                      </div>
-                    </ExpandingPanel>
-                  </div>
-                )}
-
-              {transaction && transaction.signers && transaction.signers[0] && (
-                <ExpandingPanel title="SIGNERS" open={false}>
-                  {transaction.signers.map(signer => (
-                    <div key={signer.account} className="script-tile-row">
-                      <div className="detail-tile script-tile">
-                        <label>ACCOUNT</label>
-                        <span>
-                          {!isLoading && transaction && signer.account}{' '}
-                        </span>
-                      </div>
-                      <div className="detail-tile script-tile">
-                        <label>SCOPES</label>
-                        <span>
-                          {!isLoading && transaction && signer.scopes}{' '}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </ExpandingPanel>
-              )}
-
-              {transaction && transaction.exception && (
-                <div style={{ margin: '24px 0' }}>
-                  <ExpandingPanel title="EXCEPTION" open={false}>
-                    <div className="script-tile-row">
-                      <div className="detail-tile script-tile">
-                        <label>EXCEPTION</label>
-                        <span>
-                          {!isLoading && transaction && transaction.exception}
-                        </span>
-                      </div>
-                    </div>
-                  </ExpandingPanel>
-                </div>
-              )}
-
-              {transaction &&
-                transaction.notifications &&
-                transaction.notifications.map(notification => (
-                  <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
-                    <Notification
-                      chain={chain}
-                      network={network}
-                      key={uniqueId()}
-                      notification={notification}
-                    />
-                  </div>
-                ))}
+        {transaction && localLoadComplete ? (
+          <>
+            {chain === 'neo2' ? (
+              <TransactionN2
+                chain={chain}
+                network={network}
+                transaction={transaction}
+                transfers={transfers}
+              />
+            ) : (
+              <TransactionN3
+                chain={chain}
+                network={network}
+                transaction={transaction}
+                transfers={transfers}
+              />
+            )}
+          </>
+        ) : (
+          <SkeletonTheme
+            color="#21383d"
+            highlightColor="rgb(125 159 177 / 25%)"
+          >
+            <div
+              style={{
+                height: '210px',
+                display: 'grid',
+                gridTemplateColumns: '1fr 240px 1fr',
+                columnGap: '24px',
+                gridTemplateRows: '1fr',
+              }}
+            >
+              <Skeleton height={'100%'} />
+              <Skeleton height={'100%'} />
+              <Skeleton height={'100%'} />
             </div>
-          </div>
-        </div>
+
+            <div className="section-label">DETAILS</div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                columnGap: '2px',
+                rowGap: '2px',
+                gridTemplateRows: 'repeat(2, 100px)',
+              }}
+            >
+              <Skeleton height={'100%'} />
+              <Skeleton height={'100%'} />
+              <Skeleton height={'100%'} />
+              <Skeleton height={'100%'} />
+            </div>
+            <Skeleton height={'50px'} style={{ margin: '5px 0' }} />
+          </SkeletonTheme>
+        )}
       </div>
     </div>
   )
