@@ -53,6 +53,7 @@ import FLM from './FLM.svg'
 import EPN from './EPN.svg'
 import EXT from './EXT.svg'
 import GHOST from './GHOST.svg'
+import GM from './GM.svg'
 
 export type TokenMap = { [key: string]: string }
 
