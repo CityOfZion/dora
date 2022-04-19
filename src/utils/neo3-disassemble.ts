@@ -222,6 +222,7 @@ const methodnames = [
   'System.Runtime.GetNotifications',
   'System.Runtime.GasLeft',
   'System.Runtime.BurnGas',
+  'System.Runtime.GetAddressVersion',
   'System.Storage.GetContext',
   'System.Storage.GetReadOnlyContext',
   'System.Storage.AsReadOnly',
