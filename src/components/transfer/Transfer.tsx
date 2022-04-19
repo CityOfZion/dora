@@ -69,6 +69,7 @@ const Transfer: React.FC<{
                 <div
                   className="link"
                   onClick={(): void => handleAddressClick(transfer.from)}
+                  style={{ color: '#d355e7' }}
                 >
                   {transfer.from}
                 </div>
@@ -112,6 +113,7 @@ const Transfer: React.FC<{
                 <div
                   className="link"
                   onClick={(): void => handleAddressClick(transfer.to)}
+                  style={{ color: '#d355e7' }}
                 >
                   {transfer.to}
                 </div>
