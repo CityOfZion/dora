@@ -113,6 +113,7 @@ const tokens: TokenMap = {
   EPN,
   EXT,
   GHOST,
+  GM,
 }
 
 export default tokens
