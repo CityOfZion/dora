@@ -67,7 +67,7 @@ const Transfer: React.FC<{
             transfer.from && (
               <div key={uniqueId()} className="asset-transfer-detail-container">
                 <div
-                  className="link"
+                  className="link-pink"
                   onClick={(): void => handleAddressClick(transfer.from)}
                   style={{ color: '#d355e7' }}
                 >
@@ -111,7 +111,7 @@ const Transfer: React.FC<{
             transfer.to && (
               <div key={uniqueId()} className="asset-transfer-detail-container">
                 <div
-                  className="link"
+                  className="link-pink"
                   onClick={(): void => handleAddressClick(transfer.to)}
                   style={{ color: '#d355e7' }}
                 >
