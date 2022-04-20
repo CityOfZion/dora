@@ -139,7 +139,7 @@ export function fetchBlocks(page = 1, chain?: string) {
     try {
       dispatch(requestBlocks(page))
 
-      const res = await Promise.all(
+      const res = await Promise.allSettled(
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
           let result: BlocksResponse | NLBlocksResponse | undefined = undefined
           if (protocol === 'neo2') {
@@ -164,8 +164,13 @@ export function fetchBlocks(page = 1, chain?: string) {
           }
         }),
       )
-
-      const cleanedBlocks = res.flat().filter(r => r !== undefined) as Block[]
+      let cleanedResults = res.filter(r => r['status'] === 'fulfilled')
+      // @ts-ignore
+      cleanedResults = cleanedResults.map(r => r['value'])
+      // @ts-ignore
+      const cleanedBlocks = cleanedResults
+        .flat()
+        .filter(r => r !== undefined) as Block[]
       const all = {
         items: sortSingleListByDate(cleanedBlocks) as Block[],
       }
