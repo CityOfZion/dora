@@ -108,7 +108,10 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
           <h4>Neo N3 (Mainnet)</h4>
           <div className="list-wrapper">
             <List
-              data={returnBlockListData(neo3List, blockState.isLoading || neo3List.length === 0)}
+              data={returnBlockListData(
+                neo3List,
+                blockState.isLoading || neo3List.length === 0,
+              )}
               rowId="height"
               generateHref={(data): string =>
                 `${ROUTES.BLOCK.url}/neo3/mainnet/${data.id}`
@@ -124,7 +127,10 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
         <h4>Neo Legacy (Mainnet)</h4>
         <div className="list-wrapper">
           <List
-            data={returnBlockListData(neo2List, blockState.isLoading || neo2List.length === 0)}
+            data={returnBlockListData(
+              neo2List,
+              blockState.isLoading || neo2List.length === 0,
+            )}
             rowId="height"
             generateHref={(data): string =>
               `${ROUTES.BLOCK.url}/neo2/${network}/${data.id}`
