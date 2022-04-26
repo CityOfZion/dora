@@ -108,12 +108,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
           <h4>Neo N3 (Mainnet)</h4>
           <div className="list-wrapper">
             <List
-              data={returnBlockListData(neo3List, blockState.isLoading)}
+              data={returnBlockListData(neo3List, blockState.isLoading || neo3List.length === 0)}
               rowId="height"
               generateHref={(data): string =>
                 `${ROUTES.BLOCK.url}/neo3/mainnet/${data.id}`
               }
-              isLoading={blockState.isLoading}
+              isLoading={blockState.isLoading || neo3List.length === 0}
               columns={columns}
               leftBorderColorOnRow="#D355E7"
             />
@@ -124,12 +124,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
         <h4>Neo Legacy (Mainnet)</h4>
         <div className="list-wrapper">
           <List
-            data={returnBlockListData(neo2List, blockState.isLoading)}
+            data={returnBlockListData(neo2List, blockState.isLoading || neo2List.length === 0)}
             rowId="height"
             generateHref={(data): string =>
               `${ROUTES.BLOCK.url}/neo2/${network}/${data.id}`
             }
-            isLoading={blockState.isLoading}
+            isLoading={blockState.isLoading || neo2List.length === 0}
             columns={columns}
             leftBorderColorOnRow="#D355E7"
           />
