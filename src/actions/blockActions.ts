@@ -164,15 +164,13 @@ export function fetchBlocks(page = 1, chain?: string) {
           }
         }),
       )
-      let cleanedResults = res.filter(r => r['status'] === 'fulfilled')
-      // @ts-ignore
-      cleanedResults = cleanedResults.map(r => r['value'])
-      // @ts-ignore
-      const cleanedBlocks = cleanedResults
-        .flat()
-        .filter(r => r !== undefined) as Block[]
+      const cleanedBlocks = res
+        .filter(it => it.status === 'fulfilled' && it.value)
+        .map(it => (it as PromiseFulfilledResult<Block[]>).value)
+        .flat() as Block[]
+
       const all = {
-        items: sortSingleListByDate(cleanedBlocks) as Block[],
+        items: sortSingleListByDate(cleanedBlocks),
       }
       dispatch(requestBlocksSuccess(page, { all }))
     } catch (e) {
