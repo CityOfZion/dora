@@ -104,14 +104,6 @@ export function shouldFetchTransaction(
 }
 
 export const RESET = 'RESET'
-export const resetTransactionState =
-  () =>
-  (dispatch: Dispatch): void => {
-    dispatch({
-      type: RESET,
-      receivedAt: Date.now(),
-    })
-  }
 
 export function fetchTransaction(hash: string, chain: string) {
   return async (
