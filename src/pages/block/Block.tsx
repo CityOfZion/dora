@@ -18,7 +18,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import { formatDate, formatHours } from '../../utils/time'
+import { format24Hours, formatDate } from '../../utils/time'
 import N3BlockTransactionsList from '../../components/transaction/N3BlockTransactionList'
 
 interface MatchParams {
@@ -119,7 +119,7 @@ const Block: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {formatHours(block.time)}
+                          {format24Hours(block.time)}
                         </>
                       )}
                     </div>

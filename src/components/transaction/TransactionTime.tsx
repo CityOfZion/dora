@@ -13,12 +13,12 @@ const TransactionTime: React.FC<TransactionTimeProps> = ({
 }: TransactionTimeProps) => (
   <span className="transaction-time-details-row">
     <div>
-      <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
-      <span>{moment.unix(block_time || 0).format('MM-DD-YYYY')}</span>
+      <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
+      <span>{moment.unix(block_time || 0).format('HH:mm:ss')}</span>
     </div>
     <div>
-      <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-      <span>{moment.unix(block_time || 0).format('hh:mm:ss')}</span>
+      <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
+      <span>{moment.unix(block_time || 0).format('MM-DD-YYYY')}</span>
     </div>
   </span>
 )
