@@ -1,0 +1,36 @@
+#transaction-block {
+  background: var(--darkest-grey);
+  border-radius: 2.4px;
+  flex: 1 1;
+  padding: 12px;
+  min-width: 310px;
+  white-space: pre-line;
+  max-height: none;
+  height: auto;
+  margin: 2px;
+
+  .label-container {
+    column-gap: 12px;
+
+    label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--medium-grey);
+      letter-spacing: -0.48px;
+    }
+  }
+
+  span {
+    font-family: 'Sofia Pro - Mediumitalic';
+    font-size: 14px;
+    margin-top: 24px;
+    color: var(--grey);
+    letter-spacing: 0;
+    line-height: 12.67px;
+    display: inline-block;
+    word-wrap: break-word;
+    word-break: break-all;
+    text-align: left;
+    padding-bottom: 24px;
+  }
+}
