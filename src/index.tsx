@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { ChakraProvider } from '@chakra-ui/react'
+
 import { Provider } from 'react-redux'
 import 'simple-line-icons/css/simple-line-icons.css'
 
@@ -8,12 +10,15 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { store } from './store'
+import { theme } from './ChakraTheme'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ChakraProvider theme={theme}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ChakraProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 )
