@@ -10,6 +10,7 @@ import Notification from '../notification/Notification'
 import { uniqueId } from 'lodash'
 import { TransactionBlock } from './TransactionBlock'
 import { neo3Disassemble } from '../../utils/neo3-disassemble'
+import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -78,11 +79,7 @@ export const TransactionN3: React.FC<Props> = ({
               </div>
             </div>
 
-            <div className="transaction-hash-tile detail-tile">
-              <label>HASH</label>
-
-              <span>{transaction.txid}</span>
-            </div>
+            <TransactionLogView transaction={transaction} mb={5} />
 
             {transaction.signers && transaction.signers[0] && (
               <ExpandingPanel title="SIGNERS" open={false}>
