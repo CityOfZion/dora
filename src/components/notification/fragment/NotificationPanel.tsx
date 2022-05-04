@@ -73,16 +73,18 @@ export const NotificationPanel: React.FC<{
               {parameters[index] && <Text mx={1}>{parameters[index]}</Text>}
             </Flex>
             <Flex alignItems={'center'}>
-              <Flex
-                py={1}
-                px={3}
-                mx={2}
-                fontSize={'xs'}
-                bg={TX_STATE_TYPE_MAPPINGS[state.type].color}
-                color={'medium-grey-blue'}
-              >
-                {state.type}
-              </Flex>
+              {TX_STATE_TYPE_MAPPINGS[state.type] && (
+                <Flex
+                  py={1}
+                  px={3}
+                  mx={6}
+                  fontSize={'xs'}
+                  bg={TX_STATE_TYPE_MAPPINGS[state.type]?.color}
+                  color={'medium-grey-blue'}
+                >
+                  {state.type}
+                </Flex>
+              )}
               {state.type !== 'Array' &&
                 state.value &&
                 TX_STATE_TYPE_MAPPINGS[state.type]?.options && (
@@ -108,11 +110,19 @@ export const NotificationPanel: React.FC<{
               />
             </Box>
           ) : (
-            <Flex px={7} py={2} bg={'white-100'} alignItems={'center'}>
+            <Flex
+              px={7}
+              py={2}
+              bg={'white-100'}
+              alignItems={'center'}
+              minHeight={5}
+            >
               <Text fontSize={'sm'} fontWeight={400} flex={1} color={'grey'}>
                 {stateValue[state.id]}
               </Text>
-              <Copy text={String(stateValue[state.id])} />
+              {stateValue[state.id] && (
+                <Copy text={String(stateValue[state.id])} />
+              )}
             </Flex>
           )}
         </Flex>
