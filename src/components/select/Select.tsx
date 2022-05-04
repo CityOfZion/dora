@@ -11,6 +11,7 @@ type SelectProps = {
   handleChange?: (selected: ValueType<Option, false>) => void
   selectedOption: Option
   disabled?: boolean
+  showSelected?: boolean
 }
 
 const CustomSelect: React.FC<SelectProps> = ({
@@ -19,6 +20,7 @@ const CustomSelect: React.FC<SelectProps> = ({
   options,
   computedDisplayValue,
   disabled,
+  showSelected = true,
 }): ReactElement => (
   <div className="select-container">
     <div className="inner-select-container">
@@ -35,7 +37,9 @@ const CustomSelect: React.FC<SelectProps> = ({
         isDisabled={!options.length || options.length === 1 || disabled}
       />
     </div>
-    <div className="select-computed-value">{computedDisplayValue}</div>
+    {showSelected && (
+      <div className="select-computed-value">{computedDisplayValue}</div>
+    )}
   </div>
 )
 

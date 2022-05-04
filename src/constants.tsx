@@ -407,7 +407,7 @@ export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
     options: [BYTE_STRING_OPTION, STRING_OPTION],
   },
   Array: {
-    color: '#F28F00',
+    color: '#0DCDFF',
     options: [HEX_STRING_OPTION, STRING_OPTION, ADDRESS_OPTION],
   },
   Buffer: {

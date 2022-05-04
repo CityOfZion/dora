@@ -1,169 +1,171 @@
-import React, { ReactElement } from 'react'
-import Select from '../select/Select'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ValueType } from 'react-select'
 
 import ExpandingPanel from '../panel/ExpandingPanel'
-import './Notification.scss'
-
-import {
-  TX_STATE_TYPE_MAPPINGS,
-  ADDRESS_OPTION,
-  HEX_STRING_OPTION,
-  STRING_OPTION,
-  BYTE_STRING_OPTION,
-} from '../../constants'
 import { TransactionNotification } from '../../reducers/transactionReducer'
-import { Platform } from '../filter/Filter'
-
-type Option = {
-  value: Platform | string
-  label: string
-  convert?:
-    | ((value: string, chain?: string) => Promise<string> | string | undefined)
-    | null
-}
-
-export const NotificationRow: React.FC<{
-  value: string
-  type: string
-  options: Option[]
-  chain?: string
-}> = ({ value, type, options = [], chain }): ReactElement => {
-  const selectOptionPlaceholder: ValueType<Option, false> = {
-    convert: null,
-    value: '',
-    label: '',
-  }
-  const [selectedOption, setSelectedOption] = React.useState(
-    selectOptionPlaceholder,
-  )
-  const [convertedValue, setConvertedvalue] = React.useState('')
-
-  React.useEffect(() => {
-    const convert = async (): Promise<string | void> => {
-      if (selectedOption && selectedOption.convert) {
-        const convertedValue = await selectedOption.convert(value, chain)
-        convertedValue && setConvertedvalue(convertedValue)
-      }
-    }
-    if (selectedOption) {
-      convert()
-      if (
-        selectedOption.label === HEX_STRING_OPTION.label ||
-        selectedOption.label === STRING_OPTION.label
-      ) {
-        setConvertedvalue(value)
-      }
-    }
-  }, [selectedOption, options, value, chain])
-
-  const handleChange = (selectedOption: ValueType<Option, false>): void => {
-    selectedOption && setSelectedOption(selectedOption as Option)
-  }
-
-  let filteredOptions: Option[] = []
-  // indicative of an address
-  if (type === 'ByteArray' && value.length === 40) {
-    filteredOptions = [ADDRESS_OPTION, HEX_STRING_OPTION]
-  }
-  if (type === 'ByteArray' && value.length !== 40) {
-    filteredOptions = [HEX_STRING_OPTION, STRING_OPTION]
-  }
-
-  if (type === 'ByteString' && value.length !== 28) {
-    filteredOptions = [BYTE_STRING_OPTION]
-  }
-
-  return (
-    <Select
-      selectedOption={(selectedOption.label && selectedOption) || options[0]}
-      handleChange={handleChange}
-      options={(filteredOptions.length && filteredOptions) || options}
-      computedDisplayValue={
-        selectedOption.label === STRING_OPTION.label ? convertedValue : value
-      }
-    />
-  )
-}
-
-export const NotificationPanel: React.FC<{
-  notification: TransactionNotification
-  chain?: string
-}> = ({ notification, chain }): ReactElement => {
-  return (
-    <div className="notification-panel">
-      <div className="notification-panel-header">STATE</div>
-      {notification.state.value.map((state, i) => (
-        <div className="notification-state-row-container" key={i}>
-          <span> [{i}] </span>
-          <p
-            style={{
-              background:
-                TX_STATE_TYPE_MAPPINGS[state.type] &&
-                TX_STATE_TYPE_MAPPINGS[state.type].color,
-            }}
-          >
-            {state.type}
-          </p>
-          {state.value &&
-            TX_STATE_TYPE_MAPPINGS[state.type] &&
-            TX_STATE_TYPE_MAPPINGS[state.type].options && (
-              <NotificationRow
-                value={state.value}
-                type={state.type}
-                options={TX_STATE_TYPE_MAPPINGS[state.type].options}
-                chain={chain}
-              />
-            )}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-const NotificationHeaderLink: React.FC<{
-  notification: TransactionNotification
-  chain: string
-  network: string
-}> = ({ notification, chain, network }): ReactElement => (
-  <div className="NotificationHeaderLink">
-    NOTIFICATIONS
-    <Link to={`/contract/${chain}/${network}/${notification.contract}`}>
-      {' '}
-      {notification.contract}{' '}
-    </Link>
-    {chain === 'neo3' && <code> ({notification.event_name}) </code>}
-  </div>
-)
+import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
+import Copy from '../copy/Copy'
+import { NotificationPanel } from './fragment/NotificationPanel'
+import { GENERATE_BASE_URL } from '../../constants'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { DetailedContract } from '../../reducers/contractReducer'
+import { uuid } from '../../utils/formatter'
 
 export const Notification: React.FC<{
-  notification: TransactionNotification
+  notifications: TransactionNotification[]
   chain: string
   network: string
-}> = ({ notification, chain, network }): ReactElement => {
-  return (
-    <div style={{ margin: '24px 0' }} className="Notification">
-      <ExpandingPanel
-        title={
-          <NotificationHeaderLink
-            chain={chain}
-            network={network}
-            notification={notification}
-          />
+}> = ({ notifications, chain, network }): ReactElement => {
+  const [isOpen, setOpen] = useState<Record<string, boolean>>({})
+  const [isLoading, setLoading] = useState<boolean>(false)
+  const [items, setItems] = useState<TransactionNotification[]>([])
+  const [contracts, setContracts] = useState<Record<string, DetailedContract>>(
+    {},
+  )
+
+  useEffect(() => {
+    const groupedItems = notifications.reduce((result, it) => {
+      const found = result.find(
+        item =>
+          item.contract === it.contract && item.event_name === it.event_name,
+      )
+      if (found) {
+        found.state.value.push(...it.state.value)
+        return result
+      }
+
+      result.push(it)
+      return result
+    }, [] as TransactionNotification[])
+
+    setItems(groupedItems)
+
+    return () => {
+      setItems([])
+      setContracts({})
+    }
+  }, [notifications])
+
+  const populateContract = async () => {
+    try {
+      setLoading(true)
+      for (const it of items) {
+        const id = uuid()
+        it.id = id
+        setOpen(val => ({ ...val, [id]: false }))
+
+        if (!!contracts[it.contract]) {
+          it.contractObj = contracts[it.contract]
+          continue
         }
+
+        const response = await fetch(
+          `${GENERATE_BASE_URL()}/contract/${it.contract}`,
+        )
+        it.contractObj = await response.json()
+
+        setContracts(current => ({
+          ...current,
+          [it.contract]: it.contractObj,
+        }))
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Box my={3}>
+      <ExpandingPanel
+        title={<Text>NOTIFICATIONS</Text>}
         open={false}
+        handleClick={(isOpen: boolean) => isOpen && populateContract()}
       >
-        <div
-          className="secondary-panels-row"
-          style={{
-            display: 'flex',
-          }}
-        >
-          <NotificationPanel chain={chain} notification={notification} />
-        </div>
+        {isLoading && (
+          <SkeletonTheme
+            color="#21383d"
+            highlightColor="rgb(125 159 177 / 25%)"
+          >
+            <Skeleton
+              count={items.length}
+              style={{ margin: '5px 0', height: '40px' }}
+            />
+          </SkeletonTheme>
+        )}
+        {!isLoading &&
+          items.map((notification, index) => (
+            <Box key={notification.id + index}>
+              <Box bg={'medium-grey-blue'} mt={3} px={3}>
+                <Flex
+                  justifyContent={'space-between'}
+                  py={2}
+                  borderBottom={'2px solid'}
+                  borderColor={'gray.600'}
+                  cursor={'pointer'}
+                  alignItems={'center'}
+                  onClick={() =>
+                    setOpen({
+                      ...isOpen,
+                      [notification.id]: !isOpen[notification.id],
+                    })
+                  }
+                >
+                  <Text>{notification.contractObj?.manifest?.name}</Text>
+                  <Flex alignItems={'center'}>
+                    <Text>{notification.event_name}</Text>
+                    {isOpen[notification.id] ? (
+                      <Text mx={2} color={'tertiary'} fontSize={'4xl'}>
+                        -
+                      </Text>
+                    ) : (
+                      <Text mx={2} color={'tertiary'} fontSize={'4xl'}>
+                        +
+                      </Text>
+                    )}
+                  </Flex>
+                </Flex>
+
+                <Flex justifyContent={'space-between'} py={2}>
+                  <Text color={'medium-grey'} fontSize={'xs'}>
+                    HASH
+                  </Text>
+
+                  <Flex alignItems={'center'}>
+                    <Link
+                      to={`/contract/${chain}/${network}/${notification.contract}`}
+                    >
+                      <Text
+                        fontSize={'sm'}
+                        isTruncated
+                        color={'tertiary'}
+                        mx={8}
+                        fontWeight={500}
+                      >
+                        {notification.contract}
+                      </Text>
+                    </Link>
+
+                    <Copy text={notification.contract} />
+                  </Flex>
+                </Flex>
+              </Box>
+
+              <Collapse in={isOpen[notification.id]}>
+                <NotificationPanel
+                  key={index}
+                  chain={chain}
+                  state={notification.state}
+                  parameters={
+                    notification.contractObj?.manifest?.abi?.events
+                      ?.find(it => it.name === notification.event_name)
+                      ?.parameters.map(it => it.name) || []
+                  }
+                />
+              </Collapse>
+            </Box>
+          ))}
       </ExpandingPanel>
-    </div>
+    </Box>
   )
 }
 

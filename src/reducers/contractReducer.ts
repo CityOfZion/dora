@@ -70,6 +70,28 @@ export type DetailedContract = {
   manifest?: {
     name: string
     supportedstandards: []
+    abi: {
+      methods: [
+        {
+          name: string
+          parameters: []
+          returntype: string
+          offset: number
+          safe: boolean
+        },
+      ]
+      events: [
+        {
+          name: string
+          parameters: [
+            {
+              name: string
+              type: string
+            },
+          ]
+        },
+      ]
+    }
     extra?: {
       [key: string]: string
     }
