@@ -1,12 +1,13 @@
 import { AnyAction } from 'redux'
 
 import {
+  CLEAR_TRANSACTIONS_LIST,
   REQUEST_TRANSACTION,
+  REQUEST_TRANSACTION_SUCCESS,
   REQUEST_TRANSACTIONS,
   REQUEST_TRANSACTIONS_SUCCESS,
-  REQUEST_TRANSACTION_SUCCESS,
-  CLEAR_TRANSACTIONS_LIST,
 } from '../actions/transactionActions'
+import { DetailedContract } from './contractReducer'
 
 type Action = {
   type: string
@@ -68,10 +69,23 @@ export type TransactionIOAbstract = {
   value: string
 }
 
+export type NotificationState = {
+  type: string
+  value: NotificationStateValue[]
+}
+
+export type NotificationStateValue = {
+  id: string
+  type: string
+  value: string
+}
+
 export type TransactionNotification = {
+  id: string
   contract: string
-  state: { type: string; value: { type: string; value: string }[] }
+  state: NotificationState
   event_name: string
+  contractObj: DetailedContract
 }
 
 // TODO: create different types for the chains instead of this generic one

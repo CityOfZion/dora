@@ -153,7 +153,7 @@ export const resetContractState =
     })
   }
 
-export function fetchContract(hash: string) {
+export function fetchContract(hash: string, populateStates = true) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { contract: State },
@@ -164,18 +164,23 @@ export function fetchContract(hash: string) {
       try {
         const response = await fetch(`${GENERATE_BASE_URL()}/contract/${hash}`)
 
-        const invocationStatsResponse = await fetch(
-          `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
-        )
-
-        const invocationStats = await invocationStatsResponse
-          .json()
-          .catch(e => {
-            console.error('An error occurred fetching invocation stats.', { e })
-          })
-
         const json = await response.json()
-        json.invocationStats = invocationStats || null
+
+        if (populateStates) {
+          const invocationStatsResponse = await fetch(
+            `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
+          )
+
+          const invocationStats = await invocationStatsResponse
+            .json()
+            .catch(error => {
+              console.error('An error occurred fetching invocation stats.', {
+                error,
+              })
+            })
+
+          json.invocationStats = invocationStats || null
+        }
 
         dispatch(requestContractSuccess(hash, json))
       } catch (e) {

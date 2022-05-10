@@ -7,10 +7,10 @@ import { DetailedTransaction } from '../../reducers/transactionReducer'
 import { formatDate, formatHours } from '../../utils/time'
 import ExpandingPanel from '../panel/ExpandingPanel'
 import Notification from '../notification/Notification'
-import { uniqueId } from 'lodash'
 import { TransactionBlock } from './TransactionBlock'
 import { neo3Disassemble } from '../../utils/neo3-disassemble'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
+import { uuid } from '../../utils/formatter'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -50,7 +50,7 @@ export const TransactionN3: React.FC<Props> = ({
               <div className="detail-tile">
                 <label>SIZE</label>
 
-                <span>{transaction.size.toLocaleString()} bytes</span>
+                <span>{transaction.size?.toLocaleString()} bytes</span>
               </div>
             </div>
 
@@ -58,7 +58,7 @@ export const TransactionN3: React.FC<Props> = ({
               <div className="detail-tile">
                 <label>INCLUDED IN BLOCK</label>
 
-                <span>{transaction.block.toLocaleString()}</span>
+                <span>{transaction.block?.toLocaleString()}</span>
               </div>
 
               <div className="detail-tile">
@@ -111,18 +111,16 @@ export const TransactionN3: React.FC<Props> = ({
               </div>
             )}
 
-            {transaction.notifications &&
-              !!transaction.notifications.length &&
-              transaction.notifications.map(notification => (
-                <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
-                  <Notification
-                    chain={chain}
-                    network={network}
-                    key={uniqueId()}
-                    notification={notification}
-                  />
-                </div>
-              ))}
+            {transaction.notifications && !!transaction.notifications.length && (
+              <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
+                <Notification
+                  chain={chain}
+                  network={network}
+                  key={uuid()}
+                  notifications={transaction.notifications}
+                />
+              </div>
+            )}
 
             {transaction.witnesses && transaction.witnesses[0] && (
               <>

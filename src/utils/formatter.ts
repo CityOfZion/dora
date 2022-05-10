@@ -41,3 +41,9 @@ export const capitalizeWord = (word: string) => {
   const firstLetter = word.charAt(0).toUpperCase()
   return firstLetter + word.slice(1)
 }
+
+export const uuid = () => {
+  const date = Date.now().toString(36)
+  const numbers = Math.random().toString(36)
+  return date + numbers
+}

@@ -9,8 +9,8 @@ import DateRangeIcon from '@material-ui/icons/DateRange'
 import { Icon } from '@iconify/react'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { formatDate, formatHours } from '../../utils/time'
-import { uniqueId } from 'lodash'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
+import { uuid } from '../../utils/formatter'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -81,16 +81,14 @@ export const TransactionN2: React.FC<Props> = ({
 
             <TransactionLogView transaction={transaction} mb={5} />
 
-            {transaction.Item &&
-              !!transaction.Item.notifications.length &&
-              transaction.Item.notifications.map(notification => (
-                <Notification
-                  chain={chain}
-                  network={network}
-                  key={uniqueId()}
-                  notification={notification}
-                />
-              ))}
+            {transaction.Item && !!transaction.Item.notifications.length && (
+              <Notification
+                chain={chain}
+                network={network}
+                key={uuid()}
+                notifications={transaction.Item.notifications}
+              />
+            )}
 
             {transaction.scripts && transaction.scripts[0] && (
               <>

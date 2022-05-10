@@ -24,7 +24,7 @@ export const customStyles = {
     ...provided,
     backgroundColor: '#2F454E',
     border: 'transparent',
-    borderRadius: '0 80px 80px 0',
+    borderRadius: '80px 80px',
     height: '30px',
     minHeight: '30px',
     paddingLeft: '12px',
