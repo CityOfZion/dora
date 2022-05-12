@@ -126,6 +126,7 @@ export type DetailedTransaction = {
 export type Signer = {
   account: string
   scopes: string
+  allowedcontracts: string[]
 }
 
 export type BlockTransaction = {

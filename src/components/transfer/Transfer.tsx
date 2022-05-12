@@ -10,6 +10,7 @@ import { getLogo } from '../../utils/getLogo'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
 import { useHistory } from 'react-router-dom'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
+import { Flex, SimpleGrid } from '@chakra-ui/react'
 
 type Transfer = {
   from: string
@@ -56,8 +57,8 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
   }
 
   return (
-    <div className="transfer-container">
-      <div className="transfer-column detail-tile">
+    <SimpleGrid columns={[1, 1, 1, 3]} gap={2} className="transfer-container">
+      <Flex className="transfer-column detail-tile">
         <label>SENT FROM</label>
         <div className="asset-transfer-details-container">
           {transfers.map(
@@ -83,8 +84,8 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           )}
         </div>
         <img className="tx-cube-image" src={txCube} alt="tx-background-cubes" />
-      </div>
-      <div id="transfer-arrow-container" className="transfer-column">
+      </Flex>
+      <Flex id="transfer-arrow-container" className="transfer-column" flex={1}>
         <img src={txBackgroundCubes} alt="tx-background-cubes" />
 
         <TransferArrow />
@@ -97,8 +98,8 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
         <div>
           <span>Data size:</span> <p>{getSize()} bytes</p>
         </div>
-      </div>
-      <div className="transfer-column detail-tile">
+      </Flex>
+      <Flex className="transfer-column detail-tile">
         <label>SENT TO</label>
         <img
           className="tx-cube-image sent-to-cube"
@@ -128,8 +129,8 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
               ),
           )}
         </div>
-      </div>
-    </div>
+      </Flex>
+    </SimpleGrid>
   )
 }
 

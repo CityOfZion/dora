@@ -6,7 +6,6 @@
 
   @media only screen and (max-width: 1030px) {
     flex-direction: column;
-    align-items: center;
 
     .detail-tile {
       width: 100%;
@@ -28,7 +27,7 @@
   .tx-cube-image {
     position: absolute;
 
-    left: 10;
+    left: 10px;
     margin-left: 370px;
     margin-top: 50px;
 
@@ -97,7 +96,6 @@
 
 #transfer-arrow-container {
   margin: 0 24px;
-  max-width: 179px;
   display: flex;
   justify-content: center;
   align-items: center;
