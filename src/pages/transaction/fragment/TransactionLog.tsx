@@ -37,8 +37,12 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
 
   return (
     <Box {...props} minH={'46px'}>
-      <Flex flexWrap={'wrap'}>
-        <Box className="detail-tile">
+      <Flex direction={['column', 'row']}>
+        <Box
+          className="detail-tile"
+          minH={['54px', '74px']}
+          overflow={'hidden'}
+        >
           <Text color={'medium-grey'} fontSize={'xs'}>
             HASH
           </Text>
@@ -51,7 +55,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
         </Box>
 
         {!!transactionLog.trigger && (
-          <Flex className="detail-tile">
+          <Flex className="detail-tile" minH={['54px', '74px']}>
             <Text color={'medium-grey'} fontSize={'xs'}>
               TRIGGER
             </Text>

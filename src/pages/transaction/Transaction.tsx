@@ -21,6 +21,7 @@ import { TransactionN3 } from '../../components/transaction/TransactionN3'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
+import { Box } from '@chakra-ui/react'
 
 export type ParsedTransfer = {
   name: string
@@ -187,7 +188,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
   }, [transaction])
 
   return (
-    <div id="Transaction" className="page-container">
+    <Box id="Transaction" className="page-container" maxW={'100vw'}>
       <div className="inner-page-container">
         <Breadcrumbs
           crumbs={[
@@ -270,7 +271,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
           </SkeletonTheme>
         )}
       </div>
-    </div>
+    </Box>
   )
 }
 

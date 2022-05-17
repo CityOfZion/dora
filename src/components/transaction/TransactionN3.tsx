@@ -6,11 +6,13 @@ import { ParsedTransfer } from '../../pages/transaction/Transaction'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
 import { formatDate, formatHours } from '../../utils/time'
 import ExpandingPanel from '../panel/ExpandingPanel'
-import Notification from '../notification/Notification'
+import Notification from './notification/Notification'
 import { TransactionBlock } from './TransactionBlock'
 import { neo3Disassemble } from '../../utils/neo3-disassemble'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
 import { uuid } from '../../utils/formatter'
+import Signature from './signatures/Signature'
+import { Flex } from '@chakra-ui/react'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -39,29 +41,29 @@ export const TransactionN3: React.FC<Props> = ({
       <div id="transaction-details-container">
         <div className="details-section">
           <div className="section-label">DETAILS</div>
-          <div className="inner-details-container">
-            <div className="detail-tile-row">
-              <div className="detail-tile">
+          <Flex direction={'column'} className="inner-details-container">
+            <Flex direction={['column', 'row']} className="detail-tile-row">
+              <Flex className="detail-tile" minH={['54px', '74px']}>
                 <label>SENDER</label>
 
                 <span className="small-pink-text">{transaction.sender}</span>
-              </div>
+              </Flex>
 
-              <div className="detail-tile">
+              <Flex className="detail-tile" minH={['54px', '74px']}>
                 <label>SIZE</label>
 
                 <span>{transaction.size?.toLocaleString()} bytes</span>
-              </div>
-            </div>
+              </Flex>
+            </Flex>
 
-            <div className="detail-tile-row">
-              <div className="detail-tile">
+            <Flex direction={['column', 'row']} className="detail-tile-row">
+              <Flex className="detail-tile" minH={['54px', '74px']}>
                 <label>INCLUDED IN BLOCK</label>
 
                 <span>{transaction.block?.toLocaleString()}</span>
-              </div>
+              </Flex>
 
-              <div className="detail-tile">
+              <Flex className="detail-tile" minH={['54px', '74px']}>
                 <label>TIME</label>
                 <span id="time-details-row">
                   <div>
@@ -76,26 +78,17 @@ export const TransactionN3: React.FC<Props> = ({
                     {formatHours(transaction.time)}
                   </div>
                 </span>
-              </div>
-            </div>
+              </Flex>
+            </Flex>
 
             <TransactionLogView transaction={transaction} mb={5} />
 
             {transaction.signers && transaction.signers[0] && (
-              <ExpandingPanel title="SIGNERS" open={false}>
-                {transaction.signers.map(signer => (
-                  <div key={signer.account} className="script-tile-row">
-                    <div className="detail-tile script-tile">
-                      <label>ACCOUNT</label>
-                      <span>{signer.account}</span>
-                    </div>
-                    <div className="detail-tile script-tile">
-                      <label>SCOPES</label>
-                      <span>{signer.scopes}</span>
-                    </div>
-                  </div>
-                ))}
-              </ExpandingPanel>
+              <Signature
+                chain={chain}
+                network={network}
+                signers={transaction.signers}
+              />
             )}
 
             {transaction.exception && (
@@ -111,16 +104,15 @@ export const TransactionN3: React.FC<Props> = ({
               </div>
             )}
 
-            {transaction.notifications && !!transaction.notifications.length && (
-              <div style={{ opacity: transaction.exception ? 0.6 : 1 }}>
+            {transaction.notifications &&
+              !!transaction.notifications.length && (
                 <Notification
                   chain={chain}
                   network={network}
                   key={uuid()}
                   notifications={transaction.notifications}
                 />
-              </div>
-            )}
+              )}
 
             {transaction.witnesses && transaction.witnesses[0] && (
               <>
@@ -176,7 +168,7 @@ export const TransactionN3: React.FC<Props> = ({
                 </div>
               </>
             )}
-          </div>
+          </Flex>
         </div>
       </div>
     </>

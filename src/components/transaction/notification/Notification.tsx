@@ -1,15 +1,15 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import ExpandingPanel from '../panel/ExpandingPanel'
-import { TransactionNotification } from '../../reducers/transactionReducer'
+import ExpandingPanel from '../../panel/ExpandingPanel'
+import { TransactionNotification } from '../../../reducers/transactionReducer'
 import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
-import Copy from '../copy/Copy'
+import Copy from '../../copy/Copy'
 import { NotificationPanel } from './fragment/NotificationPanel'
-import { GENERATE_BASE_URL } from '../../constants'
+import { GENERATE_BASE_URL, ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { DetailedContract } from '../../reducers/contractReducer'
-import { uuid } from '../../utils/formatter'
+import { DetailedContract } from '../../../reducers/contractReducer'
+import { uuid } from '../../../utils/formatter'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -130,20 +130,25 @@ export const Notification: React.FC<{
                     HASH
                   </Text>
 
-                  <Flex alignItems={'center'}>
-                    <Link
-                      to={`/contract/${chain}/${network}/${notification.contract}`}
+                  <Flex
+                    alignItems={'center'}
+                    overflow={'hidden'}
+                    flex={1}
+                    justifyContent={'end'}
+                  >
+                    <Text
+                      fontSize={'sm'}
+                      isTruncated
+                      color={'tertiary'}
+                      mx={2}
+                      fontWeight={500}
                     >
-                      <Text
-                        fontSize={'sm'}
-                        isTruncated
-                        color={'tertiary'}
-                        mx={8}
-                        fontWeight={500}
+                      <Link
+                        to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${notification.contract}`}
                       >
                         {notification.contract}
-                      </Text>
-                    </Link>
+                      </Link>
+                    </Text>
 
                     <Copy text={notification.contract} />
                   </Flex>
