@@ -1,24 +1,37 @@
 import React, { ReactElement } from 'react'
 import { useHistory } from 'react-router-dom'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import Button from '../button/Button'
+import { Box, BoxProps, Button, Flex, Text } from '@chakra-ui/react'
 
-import './BackButton.scss'
-
-type Props = {
+interface Props extends BoxProps {
   text: string
   url: string
 }
 
-const BackButton: React.FC<Props> = ({ text, url }): ReactElement => {
+const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
   const history = useHistory()
   return (
-    <div id="BackButton">
-      <Button onClick={(): void => history.push(url)}>
-        {' '}
-        <ChevronLeftIcon /> {text}
+    <Box {...props}>
+      <Button m={0} p={0} onClick={(): void => history.push(url)}>
+        <Flex
+          bg={'tertiary'}
+          borderRadius={16}
+          px={3}
+          py={1}
+          alignItems={`center`}
+        >
+          <ChevronLeftIcon />
+          <Text
+            fontWeight={600}
+            fontSize={16}
+            textTransform={'capitalize'}
+            mt={1}
+          >
+            {text}
+          </Text>
+        </Flex>
       </Button>
-    </div>
+    </Box>
   )
 }
 

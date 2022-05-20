@@ -110,9 +110,33 @@ export const Notification: React.FC<{
                     })
                   }
                 >
-                  <Text>{notification.contractObj?.manifest?.name}</Text>
+                  <Flex flexDir={'column'}>
+                    <Text
+                      fontWeight={500}
+                      color={'white'}
+                      fontSize={'md'}
+                      mb={1}
+                    >
+                      {notification.contractObj?.manifest?.name}
+                    </Text>
+                    <Text
+                      fontWeight={500}
+                      color={'white'}
+                      fontSize={'md'}
+                      display={['inline', 'none']}
+                    >
+                      {notification.event_name}
+                    </Text>
+                  </Flex>
                   <Flex alignItems={'center'}>
-                    <Text>{notification.event_name}</Text>
+                    <Text
+                      fontWeight={500}
+                      color={'white'}
+                      fontSize={'md'}
+                      display={['none', 'inline']}
+                    >
+                      {notification.event_name}
+                    </Text>
                     {isOpen[notification.id] ? (
                       <Text mx={2} color={'tertiary'} fontSize={'4xl'}>
                         -
@@ -125,10 +149,20 @@ export const Notification: React.FC<{
                   </Flex>
                 </Flex>
 
-                <Flex justifyContent={'space-between'} py={2}>
-                  <Text color={'medium-grey'} fontSize={'xs'}>
-                    HASH
-                  </Text>
+                <Flex
+                  justifyContent={'space-between'}
+                  py={2}
+                  flexDir={['column', 'row']}
+                >
+                  <Flex justifyContent={'space-between'}>
+                    <Text color={'medium-grey'} fontSize={'xs'}>
+                      HASH
+                    </Text>
+
+                    <Text display={['inline', 'none']}>
+                      <Copy text={notification.contract} />
+                    </Text>
+                  </Flex>
 
                   <Flex
                     alignItems={'center'}
@@ -139,8 +173,8 @@ export const Notification: React.FC<{
                     <Text
                       fontSize={'sm'}
                       isTruncated
+                      textOverflow={'clip'}
                       color={'tertiary'}
-                      mx={2}
                       fontWeight={500}
                     >
                       <Link
@@ -149,8 +183,9 @@ export const Notification: React.FC<{
                         {notification.contract}
                       </Link>
                     </Text>
-
-                    <Copy text={notification.contract} />
+                    <Text display={['none', 'inline']} mx={1}>
+                      <Copy text={notification.contract} />
+                    </Text>
                   </Flex>
                 </Flex>
               </Box>

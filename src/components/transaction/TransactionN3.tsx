@@ -12,7 +12,8 @@ import { neo3Disassemble } from '../../utils/neo3-disassemble'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
 import { uuid } from '../../utils/formatter'
 import Signature from './signatures/Signature'
-import { Flex } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -27,6 +28,10 @@ export const TransactionN3: React.FC<Props> = ({
   transaction,
   transfers,
 }) => {
+  const width = useWindowWidth()
+
+  const isMobileOrTablet = width <= 768
+
   return (
     <>
       {!!transfers.length && (
@@ -38,46 +43,117 @@ export const TransactionN3: React.FC<Props> = ({
         />
       )}
 
-      <div id="transaction-details-container">
-        <div className="details-section">
-          <div className="section-label">DETAILS</div>
-          <Flex direction={'column'} className="inner-details-container">
-            <Flex direction={['column', 'row']} className="detail-tile-row">
-              <Flex className="detail-tile" minH={['54px', '74px']}>
-                <label>SENDER</label>
+      <Box id="transaction-details-container">
+        <Box className="details-section">
+          <Text
+            lineHeight={'48px'}
+            fontSize={'sm'}
+            fontWeight={700}
+            letterSpacing={'-0.56px'}
+            mx={1}
+          >
+            DETAILS
+          </Text>
 
-                <span className="small-pink-text">{transaction.sender}</span>
+          <Flex
+            direction={'column'}
+            color={'medium-grey'}
+            fontWeight={700}
+            fontSize={'xs'}
+          >
+            <Flex
+              direction={['column', 'row']}
+              className="detail-tile-row"
+              flexWrap={'unset'}
+            >
+              <Flex
+                className="detail-tile"
+                minH={['54px', '74px']}
+                overflow={'hidden'}
+                maxW={'100%'}
+              >
+                <Text flex={1}>SENDER</Text>
+
+                <Text
+                  color={'tertiary'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.sender}
+                </Text>
               </Flex>
 
               <Flex className="detail-tile" minH={['54px', '74px']}>
-                <label>SIZE</label>
+                <Text flex={1}>SIZE</Text>
 
-                <span>{transaction.size?.toLocaleString()} bytes</span>
+                <Text
+                  color={'white'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.size?.toLocaleString()} bytes
+                </Text>
               </Flex>
             </Flex>
 
             <Flex direction={['column', 'row']} className="detail-tile-row">
               <Flex className="detail-tile" minH={['54px', '74px']}>
-                <label>INCLUDED IN BLOCK</label>
+                <Text flex={1}>INCLUDED IN BLOCK</Text>
 
-                <span>{transaction.block?.toLocaleString()}</span>
+                <Text
+                  color={'white'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.block?.toLocaleString()}
+                </Text>
               </Flex>
 
               <Flex className="detail-tile" minH={['54px', '74px']}>
-                <label>TIME</label>
-                <span id="time-details-row">
-                  <div>
-                    <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
+                <Text flex={1}>TIME</Text>
+
+                <Flex
+                  flexDir={['column', 'row']}
+                  color={'white'}
+                  isTruncated
+                  fontSize={['sm', 'sm', 'lg']}
+                  fontWeight={600}
+                  flex={1}
+                  justifyContent={['unset', 'center']}
+                >
+                  <Flex mb={1}>
+                    <Flex flex={1} justifyContent={'end'} mx={[2, 1]}>
+                      <DateRangeIcon
+                        style={{
+                          color: '#7698a9',
+                          fontSize: isMobileOrTablet ? 11 : 16,
+                        }}
+                      />
+                    </Flex>
                     {formatDate(transaction.time)}
-                  </div>
-                  <div>
-                    <Icon
-                      icon={clockIcon}
-                      style={{ color: '#7698A9', fontSize: 18 }}
-                    />
-                    {formatHours(transaction.time)}
-                  </div>
-                </span>
+                  </Flex>
+                  <Flex>
+                    <Flex flex={1} justifyContent={'end'} mx={[2, 1]}>
+                      <Icon
+                        icon={clockIcon}
+                        style={{
+                          color: '#7698a9',
+                          fontSize: isMobileOrTablet ? 11 : 16,
+                        }}
+                      />
+                    </Flex>
+                    <Text w={'75px'}>{formatHours(transaction.time)}</Text>
+                  </Flex>
+                </Flex>
               </Flex>
             </Flex>
 
@@ -169,8 +245,8 @@ export const TransactionN3: React.FC<Props> = ({
               </>
             )}
           </Flex>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </>
   )
 }
