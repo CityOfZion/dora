@@ -8,6 +8,7 @@ import './components/navigation/Sidebar.scss'
 import { store } from './store'
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
+import { ReactComponent as Transaction } from './assets/icons/invocation.svg'
 import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
 import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
 import { ReactComponent as Api } from './assets/icons/api.svg'
@@ -185,6 +186,7 @@ export const ROUTES = {
   TRANSACTION: {
     url: '/transaction',
     name: 'Transaction',
+    renderIcon: (): React.ReactNode => <Transaction />,
     target: '_self',
   },
   BLOCKS: {

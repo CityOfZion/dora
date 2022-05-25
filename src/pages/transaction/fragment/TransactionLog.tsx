@@ -43,23 +43,46 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
           minH={['54px', '74px']}
           overflow={'hidden'}
         >
-          <Text color={'medium-grey'} fontSize={'xs'}>
-            HASH
-          </Text>
+          <Flex justifyContent={'space-between'} alignItems={'center'}>
+            <Text color={'medium-grey'} fontSize={'xs'}>
+              HASH
+            </Text>
+            <Text display={['inline', 'none']}>
+              <Copy text={transaction?.txid ?? ''} />
+            </Text>
+          </Flex>
+
           <Flex alignItems={'center'} flex={1} justifyContent={'space-between'}>
-            <Text fontSize={'sm'} isTruncated color={'tertiary'} mx={8}>
+            <Text
+              fontSize={'sm'}
+              isTruncated
+              color={'tertiary'}
+              textOverflow={'clip'}
+              mx={[0, 2]}
+              flex={1}
+              textAlign={'center'}
+            >
               {transaction && transaction.txid}
             </Text>
-            <Copy text={transaction?.txid ?? ''} />
+            <Text display={['none', 'inline']}>
+              <Copy text={transaction?.txid ?? ''} />
+            </Text>
           </Flex>
         </Box>
 
         {!!transactionLog.trigger && (
           <Flex className="detail-tile" minH={['54px', '74px']}>
-            <Text color={'medium-grey'} fontSize={'xs'}>
+            <Text color={'medium-grey'} fontSize={'xs'} flex={1}>
               TRIGGER
             </Text>
-            <Text m={'auto'} align={'center'} fontSize={'2xl'}>
+            <Text
+              color={'white'}
+              isTruncated
+              fontSize={'lg'}
+              fontWeight={600}
+              textAlign={['right', 'center']}
+              flex={1}
+            >
               {transactionLog.trigger}
             </Text>
           </Flex>

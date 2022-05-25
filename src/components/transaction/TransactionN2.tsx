@@ -11,6 +11,8 @@ import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { formatDate, formatHours } from '../../utils/time'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
 import { uuid } from '../../utils/formatter'
+import { Box, Flex, Text } from '@chakra-ui/react'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -25,6 +27,10 @@ export const TransactionN2: React.FC<Props> = ({
   chain,
   network,
 }) => {
+  const width = useWindowWidth()
+
+  const isMobileOrTablet = width <= 768
+
   return (
     <>
       {!!transfers.length && (
@@ -35,49 +41,121 @@ export const TransactionN2: React.FC<Props> = ({
           transaction={transaction}
         />
       )}
-      <div id="transaction-details-container">
-        <div className="details-section">
-          <div className="section-label">DETAILS</div>
-          <div className="inner-details-container">
-            <div className="detail-tile-row">
-              <div className="detail-tile">
-                <label>TYPE</label>
+      <Box id="transaction-details-container">
+        <Box className="details-section">
+          <Text className="section-label">DETAILS</Text>
+          <Flex
+            className="inner-details-container"
+            flexDir={'column'}
+            color={'medium-grey'}
+            fontWeight={700}
+            fontSize={'xs'}
+          >
+            <Flex className="detail-tile-row" flexDir={['column', 'row']}>
+              <Flex
+                className="detail-tile"
+                minH={['54px', '74px']}
+                overflow={'hidden'}
+                maxW={'100%'}
+              >
+                <Text flex={1}>TYPE</Text>
 
-                <span>{transaction.type}</span>
-              </div>
+                <Text
+                  color={'white'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.type}
+                </Text>
+              </Flex>
 
-              <div className="detail-tile">
-                <label>SIZE</label>
+              <Flex
+                className="detail-tile"
+                minH={['54px', '74px']}
+                overflow={'hidden'}
+                maxW={'100%'}
+              >
+                <Text flex={1}>SIZE</Text>
 
-                <span>{transaction.size.toLocaleString()} bytes</span>
-              </div>
-            </div>
+                <Text
+                  color={'white'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.size.toLocaleString()} bytes
+                </Text>
+              </Flex>
+            </Flex>
 
-            <div className="detail-tile-row">
-              <div className="detail-tile">
-                <label>INCLUDED IN BLOCK</label>
+            <Flex className="detail-tile-row" flexDir={['column', 'row']}>
+              <Flex
+                className="detail-tile"
+                minH={['54px', '74px']}
+                overflow={'hidden'}
+                maxW={'100%'}
+              >
+                <Text flex={1}>INCLUDED IN BLOCK</Text>
 
-                <span>{transaction.block.toLocaleString()}</span>
-              </div>
+                <Text
+                  color={'white'}
+                  isTruncated
+                  fontSize={'lg'}
+                  fontWeight={600}
+                  textAlign={['right', 'center']}
+                  flex={1}
+                >
+                  {transaction.block.toLocaleString()}
+                </Text>
+              </Flex>
 
-              <div className="detail-tile">
-                <label>TIME</label>
-                <span id="time-details-row">
-                  <div>
-                    <DateRangeIcon style={{ color: '#7698A9', fontSize: 20 }} />
+              <Flex
+                className="detail-tile"
+                minH={['54px', '74px']}
+                overflow={'hidden'}
+                maxW={'100%'}
+              >
+                <Text flex={1}>TIME</Text>
+                <Flex
+                  flexDir={['column', 'row']}
+                  color={'white'}
+                  isTruncated
+                  fontSize={['sm', 'sm', 'lg']}
+                  fontWeight={600}
+                  flex={1}
+                  justifyContent={['unset', 'center']}
+                >
+                  <Flex mb={1}>
+                    <Flex flex={1} justifyContent={'end'} mx={[2, 1]}>
+                      <DateRangeIcon
+                        style={{
+                          color: '#7698a9',
+                          fontSize: isMobileOrTablet ? 11 : 16,
+                        }}
+                      />
+                    </Flex>
                     {formatDate(transaction.time)}
-                  </div>
-
-                  <div>
-                    <Icon
-                      icon={clockIcon}
-                      style={{ color: '#7698A9', fontSize: 18 }}
-                    />
-                    {formatHours(transaction.time)}
-                  </div>
-                </span>
-              </div>
-            </div>
+                  </Flex>
+                  <Flex>
+                    <Flex flex={1} justifyContent={'end'} mx={[2, 1]}>
+                      <Icon
+                        icon={clockIcon}
+                        style={{
+                          color: '#7698a9',
+                          fontSize: isMobileOrTablet ? 11 : 16,
+                        }}
+                      />
+                    </Flex>
+                    <Text w={'75px'}>{formatHours(transaction.time)}</Text>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Flex>
 
             <TransactionLogView transaction={transaction} mb={5} />
 
@@ -140,9 +218,9 @@ export const TransactionN2: React.FC<Props> = ({
                 </div>
               </>
             )}
-          </div>
-        </div>
-      </div>
+          </Flex>
+        </Box>
+      </Box>
     </>
   )
 }

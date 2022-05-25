@@ -6,13 +6,18 @@ import { Signer } from '../../../reducers/transactionReducer'
 import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
 import { ROUTES } from '../../../constants'
+import { truncateHash } from '../../../utils/formatter'
+import useWindowWidth from '../../../hooks/useWindowWidth'
 
 export const Signature: React.FC<{
   signers: Signer[]
   chain: string
   network: string
 }> = ({ signers, chain, network }): ReactElement => {
+  const width = useWindowWidth()
   const [isOpen, setOpen] = useState<Record<string, boolean>>({})
+
+  const isMobile = width <= 460
 
   return (
     <Box my={3}>
@@ -31,7 +36,9 @@ export const Signature: React.FC<{
                 overflow={'hidden'}
                 flex={1}
               >
-                <Text fontWeight={500}>Signer</Text>
+                <Text fontSize={'sm'} fontWeight={500} color={'white'}>
+                  Signer
+                </Text>
                 <Flex
                   alignItems={'center'}
                   overflow={'hidden'}
@@ -45,7 +52,7 @@ export const Signature: React.FC<{
                     mx={2}
                     fontWeight={500}
                   >
-                    {signature.account}
+                    {truncateHash(signature.account, isMobile, 15, 5)}
                   </Text>
 
                   <Copy text={signature.account} />
@@ -67,7 +74,9 @@ export const Signature: React.FC<{
                   })
                 }
               >
-                <Text my={1.5}>{signature.scopes}</Text>
+                <Text color={'white'} my={1.5} fontSize={'md'}>
+                  {signature.scopes}
+                </Text>
                 {signature.allowedcontracts && (
                   <Box>
                     {isOpen[signature.scopes] ? (
@@ -109,7 +118,7 @@ export const Signature: React.FC<{
                           <Link
                             to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${it}`}
                           >
-                            {it}
+                            {truncateHash(it, isMobile, 15, 5)}
                           </Link>
                         </Text>
                       </Flex>

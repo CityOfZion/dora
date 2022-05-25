@@ -74,7 +74,11 @@ export const NotificationPanel: React.FC<{
               <Text color={'white-500'} ml={2} mr={0.5}>
                 [{index}]
               </Text>
-              {parameters[index] && <Text>{parameters[index]}</Text>}
+              {parameters[index] && (
+                <Text color={'white'} fontSize={'md'}>
+                  {parameters[index]}
+                </Text>
+              )}
             </Flex>
             <Flex alignItems={'center'}>
               {TX_STATE_TYPE_MAPPINGS[state.type] && (

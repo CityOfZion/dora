@@ -21,7 +21,8 @@ import { TransactionN3 } from '../../components/transaction/TransactionN3'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
-import { Box } from '@chakra-ui/react'
+import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
+import { Box, Flex, Text } from '@chakra-ui/react'
 
 export type ParsedTransfer = {
   name: string
@@ -189,7 +190,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
   return (
     <Box id="Transaction" className="page-container" maxW={'100vw'}>
-      <div className="inner-page-container">
+      <Flex className="inner-page-container" flexDir={'column'} px={4}>
         <Breadcrumbs
           crumbs={[
             {
@@ -208,11 +209,18 @@ const Transaction: React.FC<Props> = (props: Props) => {
           ]}
         />
 
-        <BackButton url={ROUTES.TRANSACTIONS.url} text="back to transactions" />
-        <div className="page-title-container">
-          {ROUTES.TRANSACTIONS.renderIcon()}
-          <h1>Transaction Information</h1>
-        </div>
+        <BackButton
+          mb={6}
+          url={ROUTES.TRANSACTIONS.url}
+          text="back to transactions"
+        />
+
+        <Flex alignItems={'center'} mb={10}>
+          <TransactionIcon width={22} height={23} />
+          <Text ml={2} fontSize={26} fontWeight={700} lineHeight={10}>
+            Transaction Information
+          </Text>
+        </Flex>
 
         {transaction && localLoadComplete ? (
           <>
@@ -270,7 +278,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
             <Skeleton height={'50px'} style={{ margin: '5px 0' }} />
           </SkeletonTheme>
         )}
-      </div>
+      </Flex>
     </Box>
   )
 }

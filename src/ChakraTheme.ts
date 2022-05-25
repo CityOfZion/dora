@@ -20,6 +20,7 @@ const colors = {
   'light-grey': '#fbfbfb',
   black: '#000000',
   white: '#fff',
+  'white-50': 'rgba(255, 255, 255, 0.05)',
   'white-70': 'rgba(255, 255, 255, 0.07)',
   'white-100': 'rgba(255, 255, 255, 0.1)',
   'white-200': 'rgba(255, 255, 255, 0.2)',
