@@ -1,17 +1,16 @@
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { slide as Menu } from 'react-burger-menu'
-
-import './Navigation.scss'
-import { ReactComponent as ResourceLogo } from '../../assets/icons/coz-resource-logo.svg'
-import { ReactComponent as MobileLogo } from '../../assets/icons/mobile-logo.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { NavLink, useHistory } from 'react-router-dom'
+import { closeMenu, openMenu } from '../../actions/menuActions'
 import { ReactComponent as BurgerMenu } from '../../assets/icons/burger-menu.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import Search from '../search/Search'
-import { NavLink, useHistory } from 'react-router-dom'
+import { ReactComponent as ResourceLogo } from '../../assets/icons/coz-resource-logo.svg'
+import { ReactComponent as MobileLogo } from '../../assets/icons/mobile-logo.svg'
 import { ROUTES } from '../../constants'
-import { useSelector, useDispatch } from 'react-redux'
 import { State as MenuState } from '../../reducers/menuReducer'
-import { openMenu, closeMenu } from '../../actions/menuActions'
+import Search from '../search/Search'
+import './Navigation.scss'
 
 const Navigation: React.FC = (): ReactElement => {
   const history = useHistory()
@@ -40,7 +39,13 @@ const Navigation: React.FC = (): ReactElement => {
         <div id="desktop-navigation">
           <div id="inner-desktop-navigation-container">
             <div id="coz-blockchain-logo">
-              <ResourceLogo />
+              <a
+                href="https://coz.io"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <ResourceLogo />
+              </a>
             </div>
 
             <div className="navigation-search-container">
