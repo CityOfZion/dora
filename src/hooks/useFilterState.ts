@@ -11,10 +11,14 @@ export interface FilterState {
   network: string
 }
 
-const useFilterState = (filter?: Filter): FilterState => {
+const useFilterState = (
+  filter?: Filter,
+  defaultProtocol?: string,
+  defaultNetwork?: string,
+): FilterState => {
   const DEFAULT_FILTER: Filter = {
-    protocol: 'all',
-    network: 'all',
+    protocol: !defaultProtocol ? 'all' : defaultProtocol,
+    network: !defaultNetwork ? 'all' : defaultNetwork,
   }
 
   const [filterData, setFilterData] = useState(filter || DEFAULT_FILTER)
