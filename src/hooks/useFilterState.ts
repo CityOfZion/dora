@@ -17,8 +17,8 @@ const useFilterState = (
   defaultNetwork?: string,
 ): FilterState => {
   const DEFAULT_FILTER: Filter = {
-    protocol: !defaultProtocol ? 'all' : defaultProtocol,
-    network: !defaultNetwork ? 'all' : defaultNetwork,
+    protocol: defaultProtocol ?? 'all',
+    network: defaultNetwork ?? 'all',
   }
 
   const [filterData, setFilterData] = useState(filter || DEFAULT_FILTER)
