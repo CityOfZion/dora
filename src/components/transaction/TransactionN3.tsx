@@ -10,7 +10,6 @@ import Notification from './notification/Notification'
 import { TransactionBlock } from './TransactionBlock'
 import { neo3Disassemble } from '../../utils/neo3-disassemble'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
-import { uuid } from '../../utils/formatter'
 import Signature from './signatures/Signature'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -185,7 +184,6 @@ export const TransactionN3: React.FC<Props> = ({
                 <Notification
                   chain={chain}
                   network={network}
-                  key={uuid()}
                   notifications={transaction.notifications}
                 />
               )}

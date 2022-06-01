@@ -24,21 +24,7 @@ export const Notification: React.FC<{
   )
 
   useEffect(() => {
-    const groupedItems = notifications.reduce((result, it) => {
-      const found = result.find(
-        item =>
-          item.contract === it.contract && item.event_name === it.event_name,
-      )
-      if (found) {
-        found.state.value.push(...it.state.value)
-        return result
-      }
-
-      result.push(it)
-      return result
-    }, [] as TransactionNotification[])
-
-    setItems(groupedItems)
+    setItems(notifications)
 
     return () => {
       setItems([])
@@ -192,7 +178,6 @@ export const Notification: React.FC<{
 
               <Collapse in={isOpen[notification.id]}>
                 <NotificationPanel
-                  key={index}
                   chain={chain}
                   state={notification.state}
                   parameters={
