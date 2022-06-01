@@ -99,6 +99,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     color={'tertiary'}
                     mb={4}
                     onClick={() => handleAddressClick(transfer.from)}
+                    className="link-style"
                   >
                     {transfer.from}
                   </Text>
@@ -264,6 +265,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     textAlign={'center'}
                     color={'tertiary'}
                     mb={4}
+                    className="link-style"
                   >
                     {transfer.to}
                   </Text>
