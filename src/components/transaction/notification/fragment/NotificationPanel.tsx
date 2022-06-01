@@ -7,7 +7,6 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { TX_STATE_TYPE_MAPPINGS } from '../../../../constants'
 import Copy from '../../../copy/Copy'
 import { NotificationRow } from './NotificationRow'
-import { uuid } from '../../../../utils/formatter'
 
 export const NotificationPanel: React.FC<{
   state: NotificationState
@@ -22,46 +21,42 @@ export const NotificationPanel: React.FC<{
     values: NotificationStateValue[],
   ): NotificationStateValue[] => {
     return values.flatMap<NotificationStateValue>(it => {
-      const id = uuid()
       const { type, value } = it
 
       if (type === 'Array' && typeof value === 'object') {
         return destructState(value as NotificationStateValue[])
       }
 
-      return {
-        ...it,
-        id,
-      }
+      return it
     })
   }
 
   useEffect(() => {
-    const items = destruct ? destructState(state.value) : state.value
+    const items = destruct ? destructState([...state.value]) : [...state.value]
 
     setValues(
       items.map(it => {
-        const id = uuid()
-
         setStateValue(currentVal => ({
           ...currentVal,
-          [id]: it.value,
+          [it.value]: it.value,
         }))
 
-        return {
-          ...it,
-          id,
-        }
+        return it
       }),
     )
-  }, [state.value])
+
+    return () => {
+      setValues([])
+      setStateValue({})
+    }
+  }, [state.value, destruct])
 
   return (
     <Flex direction={'column'} bg={'gray'} fontWeight={500} mb={4}>
       {values.map((state, index) => (
         <Flex
           direction={'column'}
-          key={state.id}
+          key={state.value + index}
           mb={index !== values.length - 1 ? 2 : 0}
         >
           <Flex
@@ -102,7 +97,7 @@ export const NotificationPanel: React.FC<{
                     options={TX_STATE_TYPE_MAPPINGS[state.type].options}
                     chain={chain}
                     handleValue={(event: string) =>
-                      setStateValue({ ...stateValue, [state.id]: event })
+                      setStateValue({ ...stateValue, [state.value]: event })
                     }
                   />
                 )}
@@ -126,10 +121,10 @@ export const NotificationPanel: React.FC<{
               minHeight={5}
             >
               <Text fontSize={'sm'} fontWeight={400} flex={1} color={'grey'}>
-                {stateValue[state.id]}
+                {stateValue[state.value]}
               </Text>
-              {stateValue[state.id] && (
-                <Copy text={String(stateValue[state.id])} />
+              {stateValue[state.value] && (
+                <Copy text={String(stateValue[state.value])} />
               )}
             </Flex>
           )}
