@@ -3,7 +3,11 @@ import { Platform } from '../components/filter/Filter'
 import { History } from 'history'
 import useFilterState, { FilterState } from './useFilterState'
 
-const useFilterStateWithFilter = (history: History): FilterState => {
+const useFilterStateWithFilter = (
+  history: History,
+  defaultProtocol?: string,
+  defaultNetwork?: string,
+): FilterState => {
   const { protocol, network } = (history.location.state || {}) as Platform
   const verify = () => {
     if (protocol && network) {
@@ -13,7 +17,7 @@ const useFilterStateWithFilter = (history: History): FilterState => {
       }
     }
   }
-  const filter = useFilterState(verify())
+  const filter = useFilterState(verify(), defaultProtocol, defaultNetwork)
 
   useEffect(() => {
     if (filter.protocol && filter.network) {
