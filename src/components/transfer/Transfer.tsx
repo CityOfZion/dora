@@ -100,6 +100,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     mb={4}
                     onClick={() => handleAddressClick(transfer.from)}
                     cursor={'pointer'}
+                    zIndex={2}
                   >
                     {transfer.from}
                   </Text>
@@ -266,6 +267,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     color={'tertiary'}
                     mb={4}
                     cursor={'pointer'}
+                    zIndex={2}
                   >
                     {transfer.to}
                   </Text>
