@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import InvocationGraph from '../../components/data-visualization/InvocationGraph'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import { formatDate, formatHours } from '../../utils/time'
+import { format24Hours, formatDate } from '../../utils/time'
 import Manifest from '../../components/manifest/Manifest'
 
 interface MatchParams {
@@ -175,7 +175,7 @@ const Contract: React.FC<Props> = (props: Props) => {
                             icon={clockIcon}
                             style={{ color: '#7698A9', fontSize: 18 }}
                           />
-                          {formatHours(contract.time)}
+                          {format24Hours(contract.time)}
                         </>
                       )}
                     </div>
