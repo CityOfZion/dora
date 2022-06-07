@@ -65,7 +65,7 @@ const mapTransactionData = (tx: Transaction): ParsedTransaction => {
         </div>
         <div>
           <Icon icon={clockIcon} style={{ color: '#7698A9', fontSize: 18 }} />
-          <span>{moment.unix(Number(tx.time)).format('hh:mm:ss')}</span>
+          <span>{moment.unix(Number(tx.time)).format('HH:mm:ss')}</span>
         </div>
       </span>
     ),

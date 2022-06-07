@@ -32,7 +32,7 @@ const TransactionTime: React.FC<Props> = (props: Props) => {
           marginLeft: 10,
         }}
       />
-      {moment.unix(time).format('hh:mm:ss')}
+      {moment.unix(time).format('HH:mm:ss')}
     </div>
   )
 }

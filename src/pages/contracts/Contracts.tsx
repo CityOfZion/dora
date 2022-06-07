@@ -81,7 +81,7 @@ const mapContractData = (contract: Contract): ParsedContract => {
         {' '}
         {moment
           .unix(Number(contract.time))
-          .format('MM-DD-YYYY | hh:mm:ss')}{' '}
+          .format('MM-DD-YYYY | HH:mm:ss')}{' '}
         <ArrowForwardIcon style={{ color: '#D355E7' }} />{' '}
       </div>
     ),
