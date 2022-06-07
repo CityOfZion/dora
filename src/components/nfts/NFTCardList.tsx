@@ -22,16 +22,17 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
   }
 
   return (
-    <div className="card-list-container">
-      <div className="card-image-container">
-        <div className="token-image">
-          <img src={data.image} alt={data.name} onError={handleOnError} />
+    <button onClick={onClickToNavigate}>
+      <div className="card-list-container">
+        <div className="card-image-container">
+          <div className="token-image">
+            <img src={data.image} alt={data.name} onError={handleOnError} />
+          </div>
         </div>
-      </div>
-      <div className="card-header">
-        <div className="card-header-content">
-          <div className="collection-image-container">
-            {/* 
+        <div className="card-header">
+          <div className="card-header-content">
+            <div className="collection-image-container">
+              {/* 
             
            TODO: uncomment the code below when Ghostmarket fix their API, currently is not returning an image for the collection
             
@@ -39,38 +40,39 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
               <img alt={data.collection.name} src={data.collection.image} />
             </div> */}
 
-            <span className="collection-name-mobile">
-              {data.collection.name}
-            </span>
-          </div>
-          <div className="infos-container">
-            <p className="token-name">{data.name}</p>
-            <div className="secondary-infos">
-              <p className="collection-name">{data.collection.name}</p>
-              <div>
-                <span>ID</span>
-                <TextBreakable text={`#${data.id}`} className="token-id" />
+              <span className="collection-name-mobile">
+                {data.collection.name}
+              </span>
+            </div>
+            <div className="infos-container">
+              <p className="token-name">{data.name}</p>
+              <div className="secondary-infos">
+                <p className="collection-name">{data.collection.name}</p>
+                <div>
+                  <span>ID</span>
+                  <TextBreakable text={`#${data.id}`} className="token-id" />
+                </div>
               </div>
             </div>
           </div>
+          <div className="navigate-button">
+            <ArrowForward />
+          </div>
         </div>
-        <button className="navigate-button" onClick={onClickToNavigate}>
-          <ArrowForward />
-        </button>
+        <div className="card-body">
+          {data.attributes.length > 0 ? (
+            data.attributes.map(attribute => (
+              <NFTAttribute
+                key={attribute.key || attribute.value}
+                data={attribute}
+              />
+            ))
+          ) : (
+            <p className="no-attributes">No attributes</p>
+          )}
+        </div>
       </div>
-      <div className="card-body">
-        {data.attributes.length > 0 ? (
-          data.attributes.map(attribute => (
-            <NFTAttribute
-              key={attribute.key || attribute.value}
-              data={attribute}
-            />
-          ))
-        ) : (
-          <p className="no-attributes">No attributes</p>
-        )}
-      </div>
-    </div>
+    </button>
   )
 }
 
