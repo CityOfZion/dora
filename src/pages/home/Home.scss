@@ -31,12 +31,12 @@
 
   .list-column-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
   }
   .list-row-container {
     display: flex;
-    // flex-wrap: wrap;
+    flex-wrap: wrap;
     justify-content: space-around;
   }
   .list-wrapper {

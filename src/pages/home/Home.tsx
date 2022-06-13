@@ -28,15 +28,15 @@ const Home: React.FC<{}> = () => {
               <span>Your home for all Neo related blockchain information</span>
             </div>
 
-            <div className="list-column-container">
+            <div className="list-row-container">
               <div>
                 <div className="label-wrapper"></div>
-                <DashboardBlockList network={network} />
+                <DashboardTransactionsList network={network} />
               </div>
 
               <div>
                 <div className="label-wrapper"></div>
-                <DashboardTransactionsList network={network} />
+                <DashboardBlockList network={network} />
               </div>
             </div>
           </div>
