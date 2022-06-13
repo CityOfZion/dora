@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import { withRouter, useHistory } from 'react-router-dom'
+import { withRouter, useHistory, useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -30,6 +30,11 @@ type ParsedTx = {
   platform: React.FC<{}>
   chain: string
   href: string
+}
+
+interface MatchParams {
+  chain?: string
+  network?: string
 }
 
 const mapTransactionData = (tx: Transaction): ParsedTx => {
@@ -69,6 +74,7 @@ const Transactions: React.FC<{}> = () => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
   const history = useHistory()
+  const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -78,8 +84,11 @@ const Transactions: React.FC<{}> = () => {
     dispatch(fetchTransactions(nextPage))
   }
 
-  const { protocol, handleSetFilterData, network } =
-    useFilterStateWithHistory(history)
+  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
+    history,
+    chain,
+    networkParam,
+  )
 
   const selectedData = (): Array<Transaction> => {
     if (protocol === 'all' && network === 'all') {

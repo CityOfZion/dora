@@ -89,11 +89,11 @@ const Router: React.FC = (): ReactElement => {
                   component={(): ReactElement => <Contracts />}
                 />
                 <Route
-                  path={ROUTES.TRANSACTIONS.url}
+                  path={`${ROUTES.TRANSACTIONS.url}/:chain?/:network?`}
                   component={(): ReactElement => <Transactions />}
                 />
                 <Route
-                  path={ROUTES.BLOCKS.url}
+                  path={`${ROUTES.BLOCKS.url}/:chain?/:network?`}
                   component={(): ReactElement => <Blocks />}
                 />
                 <Route

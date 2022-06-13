@@ -2,17 +2,14 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import { State as NetworkState } from '../../reducers/networkReducer'
-import Button from '../../components/button/Button'
 import logo from '../../assets/icons/logo.png'
 import './Home.scss'
-import { useHistory } from 'react-router-dom'
-import { ROUTES } from '../../constants'
+import '../../constants'
 import ContractsInvocations from '../../components/contract-invocation/ContractsInvocations'
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
 
 const Home: React.FC<{}> = () => {
-  const history = useHistory()
   const { network } = useSelector(
     ({ network }: { network: NetworkState }) => network,
   )
@@ -33,28 +30,12 @@ const Home: React.FC<{}> = () => {
 
             <div className="list-column-container">
               <div>
-                <div className="label-wrapper">
-                  <label>explore blocks</label>
-                  <Button
-                    primary
-                    onClick={(): void => history.push(ROUTES.BLOCKS.url)}
-                  >
-                    view all
-                  </Button>
-                </div>
+                <div className="label-wrapper"></div>
                 <DashboardBlockList network={network} />
               </div>
 
               <div>
-                <div className="label-wrapper">
-                  <label>explore transactions</label>
-                  <Button
-                    primary
-                    onClick={(): void => history.push(ROUTES.TRANSACTIONS.url)}
-                  >
-                    view all
-                  </Button>
-                </div>
+                <div className="label-wrapper"></div>
                 <DashboardTransactionsList network={network} />
               </div>
             </div>

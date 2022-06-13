@@ -20,7 +20,7 @@ import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 type ParsedBlock = {
   time: string
@@ -32,6 +32,11 @@ type ParsedBlock = {
   height: number
   href: string
   chain: string
+}
+
+interface MatchParams {
+  chain?: string
+  network?: string
 }
 
 const mapBlockData = (block: Block): ParsedBlock => {
@@ -72,7 +77,7 @@ const returnBlockListData = (
   }
 }
 
-const Blocks: React.FC<{}> = () => {
+const Blocks: React.FC<MatchParams> = props => {
   const dispatch = useDispatch()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const width = useWindowWidth()
@@ -82,8 +87,12 @@ const Blocks: React.FC<{}> = () => {
     dispatch(fetchBlocks(nextPage))
   }
   const history = useHistory()
-  const { protocol, handleSetFilterData, network } =
-    useFilterStateWithHistory(history)
+  const { chain, network: networkParam } = useParams<MatchParams>()
+  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
+    history,
+    chain,
+    networkParam,
+  )
   const selectedData = (): Array<Block> => {
     if (protocol === 'all' && network === 'all') {
       return blockState.all

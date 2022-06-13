@@ -14,6 +14,8 @@ import { Block, State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import './DashboardBlockList.scss'
+import Button from '../button/Button'
+import { useHistory } from 'react-router-dom'
 
 /*
 type Block = {
@@ -66,7 +68,7 @@ const returnBlockListData = (
 const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
-
+  const history = useHistory()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const neo2List = blockState.all.filter(
     d => d.protocol === 'neo2' && d.network === 'mainnet',
@@ -102,10 +104,20 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
         ]
 
   return (
-    <div className="multi-chain-dashboard-list list-row-container">
+    <div className="multi-chain-dashboard-list">
       <div className="block-list-chain-container">
         <div>
           <h4>Neo N3 (Mainnet)</h4>
+          <div className="label-wrapper-2">
+            <Button
+              primary
+              onClick={(): void =>
+                history.push(`${ROUTES.BLOCKS.url}/neo3/${network}`)
+              }
+            >
+              view blocks
+            </Button>
+          </div>
           <div className="list-wrapper">
             <List
               data={returnBlockListData(
@@ -125,6 +137,16 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
       </div>
       <div className="block-list-chain-container">
         <h4>Neo Legacy (Mainnet)</h4>
+        <div className="label-wrapper-2">
+          <Button
+            primary
+            onClick={(): void =>
+              history.push(`${ROUTES.BLOCKS.url}/neo2/${network}`)
+            }
+          >
+            view blocks
+          </Button>
+        </div>
         <div className="list-wrapper">
           <List
             data={returnBlockListData(
