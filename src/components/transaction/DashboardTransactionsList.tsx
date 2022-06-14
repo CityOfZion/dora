@@ -15,6 +15,8 @@ import {
 } from '../../reducers/transactionReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import Button from '../button/Button'
+import { useHistory } from 'react-router-dom'
 
 type ParsedTx = {
   time: string
@@ -54,7 +56,7 @@ const returnTxListData = (
 const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   const dispatch = useDispatch()
   const width = useWindowWidth()
-
+  const history = useHistory()
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -83,10 +85,20 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
         ]
 
   return (
-    <div className="multi-chain-dashboard-list list-row-container">
+    <div className="multi-chain-dashboard-list">
       <div className="block-list-chain-container">
         <div>
           <h4>Neo N3 (Mainnet) </h4>
+          <div className="label-wrapper-2">
+            <Button
+              primary
+              onClick={(): void =>
+                history.push(`${ROUTES.TRANSACTIONS.url}/neo3/${network}`)
+              }
+            >
+              view transactions
+            </Button>
+          </div>
           <div className="list-wrapper">
             <List
               data={returnTxListData(neo3List, txState.isLoading)}
@@ -103,6 +115,16 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
       </div>
       <div className="block-list-chain-container">
         <h4>Neo Legacy (Mainnet)</h4>
+        <div className="label-wrapper-2">
+          <Button
+            primary
+            onClick={(): void =>
+              history.push(`${ROUTES.TRANSACTIONS.url}/neo2/${network}`)
+            }
+          >
+            view transactions
+          </Button>
+        </div>
         <div className="list-wrapper">
           <List
             data={returnTxListData(neo2List, txState.isLoading)}
