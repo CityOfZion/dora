@@ -154,6 +154,8 @@ const opcodetable = {
   0xa2: { name: 'MOD', size: 0 },
   0xa3: { name: 'POW', size: 0 },
   0xa4: { name: 'SQRT', size: 0 },
+  0xa5: { name: 'MODMUL', size: 0},
+  0xa6: { name: 'MODPOW', size: 0},
   0xa8: { name: 'SHL', size: 0 },
   0xa9: { name: 'SHR', size: 0 },
   0xaa: { name: 'NOT', size: 0 },
