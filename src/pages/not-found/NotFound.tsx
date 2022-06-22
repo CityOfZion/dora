@@ -58,7 +58,7 @@ const NotFound: React.FC<{}> = () => {
           </h3>
 
           <span>
-            If you think Deep thought is having a bad day please let us know.
+            If you think Dora is having a bad day please let us know.
           </span>
           <div className="load-more-button-container">
             <a href="mailto:contact@coz.io">
