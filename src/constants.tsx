@@ -236,7 +236,7 @@ export const ROUTES = {
   },
   NOT_FOUND: {
     url: '/not-found',
-    name: 'No Results found',
+    name: 'No results found',
     renderIcon: (): React.ReactNode => <Magnify />,
     target: '_self',
   },
