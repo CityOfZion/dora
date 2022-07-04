@@ -92,7 +92,7 @@ export const BUILD_GHOST_MARKET_URL = ({
   const baseUrl =
     network === 'mainnet'
       ? 'https://api.ghostmarket.io/api/v1'
-      : 'https://api3.ghostmarket.io:7061/api/v1'
+      : 'https://api-testnet.ghostmarket.io/api/v1'
 
   const parameters =
     params && Object.keys(params).length > 0
