@@ -81,7 +81,7 @@ export function handleSearchInput(rawSearch: string) {
         return dispatch(clearSearchInputState())
       }
       return dispatch(searchInputEnteredError('No results found.'))
-    } catch (e) {
+    } catch (e: any) {
       dispatch(searchInputEnteredError(e.message))
     }
   }
@@ -155,25 +155,6 @@ export async function executeSearch(
     {
       protocol: 'neo3',
       network: 'testnet',
-      ctx: NeoRest,
-      method: 'transaction',
-    },
-    { protocol: 'neo3', network: 'testnet_rc4', ctx: NeoRest, method: 'block' },
-    {
-      protocol: 'neo3',
-      network: 'testnet_rc4',
-      ctx: NeoRest,
-      method: 'balance',
-    },
-    {
-      protocol: 'neo3',
-      network: 'testnet_rc4',
-      ctx: NeoRest,
-      method: 'contract',
-    },
-    {
-      protocol: 'neo3',
-      network: 'testnet_rc4',
       ctx: NeoRest,
       method: 'transaction',
     },

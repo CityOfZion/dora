@@ -51,6 +51,13 @@ export type Contract = {
   type: string
   protocol?: string
   network?: string
+  manifest?: {
+    name: string
+    extras: {
+      name: string
+      symbol: string
+    }
+  }
 }
 
 export type InvocationStat = {

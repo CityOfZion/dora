@@ -39,8 +39,6 @@ const PlatformElement = ({
           } else if (protocol === 'neo2' && network === 'testnet') {
             return 'Testnet'
           } else if (protocol === 'neo3' && network === 'testnet') {
-            return 'RC3 Testnet'
-          } else if (protocol === 'neo3' && network === 'testnet_rc4') {
             return 'Testnet'
           } else if (protocol === 'neo3' && network === 'mainnet') {
             return 'Mainnet'
@@ -162,15 +160,13 @@ const SearchResults: React.FC<Props> = (props: Props) => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { search, network } = props.match.params
+  const { search } = props.match.params
   const { results } = searchState
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!results) {
-      dispatch(handleSearchInput(search))
-    }
-  }, [dispatch, search, network, results])
+    dispatch(handleSearchInput(search))
+  }, [dispatch, search])
 
   return (
     <div id="SearchResults" className="page-container">
