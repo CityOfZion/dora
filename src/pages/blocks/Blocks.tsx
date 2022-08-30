@@ -93,18 +93,19 @@ const Blocks: React.FC<MatchParams> = props => {
     chain,
     networkParam,
   )
+
   const selectedData = (): Array<Block> => {
-    if (protocol === 'all' && network === 'all') {
-      return blockState.all
-    } else if (protocol === 'all' && network !== 'all') {
-      return blockState.all.filter(d => d.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return blockState.all.filter(d => d.protocol === protocol)
-    } else {
-      return blockState.all.filter(
-        d => d.protocol === protocol && d.network === network,
-      )
+    let sorted = blockState.all
+
+    if (protocol !== 'all') {
+      sorted = sorted.filter(block => block.protocol === protocol)
     }
+
+    if (network !== 'all') {
+      sorted = sorted.filter(block => block.network === network)
+    }
+
+    return sorted
   }
 
   useEffect(() => {

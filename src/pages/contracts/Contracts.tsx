@@ -5,7 +5,10 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { State as ContractState } from '../../reducers/contractReducer'
+import {
+  Contract,
+  State as ContractState,
+} from '../../reducers/contractReducer'
 import './Contracts.scss'
 import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
@@ -17,27 +20,6 @@ import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import { useHistory } from 'react-router-dom'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
-
-type Contract = {
-  block: number
-  time: number
-  name?: string
-  hash: string
-  idx: number
-  author?: string
-  asset_name: string
-  symbol: string
-  type: string
-  protocol?: string
-  network?: string
-  manifest?: {
-    name: string
-    extras: {
-      name: string
-      symbol: string
-    }
-  }
-}
 
 type ParsedContract = {
   time: React.FC<{}>
@@ -138,20 +120,18 @@ const Contracts: React.FC<{}> = () => {
     'neo3',
     'mainnet',
   )
-  const selectedData = (): Array<Contract> => {
-    if (protocol === 'all' && network === 'all') {
-      return contractsState.all as Contract[]
-    } else if (protocol === 'all' && network !== 'all') {
-      return contractsState.all.filter(d => d.network === network) as Contract[]
-    } else if (protocol !== 'all' && network === 'all') {
-      return contractsState.all.filter(
-        d => d.protocol === protocol,
-      ) as Contract[]
-    } else {
-      return contractsState.all.filter(
-        d => d.protocol === protocol && d.network === network,
-      ) as Contract[]
+  const selectedData = () => {
+    let sorted = contractsState.all
+
+    if (protocol !== 'all') {
+      sorted = sorted.filter(contract => contract.protocol === protocol)
     }
+
+    if (network !== 'all') {
+      sorted = sorted.filter(contract => contract.network === network)
+    }
+
+    return sorted
   }
 
   useEffect(() => {

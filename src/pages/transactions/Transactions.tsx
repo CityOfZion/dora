@@ -91,17 +91,17 @@ const Transactions: React.FC<{}> = () => {
   )
 
   const selectedData = (): Array<Transaction> => {
-    if (protocol === 'all' && network === 'all') {
-      return transactionState.all
-    } else if (protocol === 'all' && network !== 'all') {
-      return transactionState.all.filter(d => d.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return transactionState.all.filter(d => d.protocol === protocol)
-    } else {
-      return transactionState.all.filter(
-        d => d.protocol === protocol && d.network === network,
-      )
+    let sorted = transactionState.all
+
+    if (protocol !== 'all') {
+      sorted = sorted.filter(transaction => transaction.protocol === protocol)
     }
+
+    if (network !== 'all') {
+      sorted = sorted.filter(transaction => transaction.network === network)
+    }
+
+    return sorted
   }
 
   useEffect(() => {

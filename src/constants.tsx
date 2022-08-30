@@ -65,13 +65,28 @@ export const ASSETS = [
   },
 ]
 
+export const SUPPORTED_PLATFORMS = [
+  { protocol: 'neo3', network: 'mainnet' },
+  { protocol: 'neo3', network: 'testnet' },
+  { protocol: 'neo2', network: 'mainnet' },
+  { protocol: 'neo2', network: 'testnet' },
+]
+
+export const treatNetwork = (network: string) => {
+  const platform = SUPPORTED_PLATFORMS.find(platform =>
+    network.startsWith(platform.network),
+  )
+
+  return platform?.network ?? network
+}
+
 export const GENERATE_BASE_URL = (
   protocol = 'neo2',
   network = 'mainnet',
   useState = true,
 ): string => {
   if (useState) {
-    network = store.getState().network.network
+    network = treatNetwork(store.getState().network.network)
     protocol = store.getState().network.chain
   }
 
@@ -106,14 +121,6 @@ export const BUILD_GHOST_MARKET_URL = ({
 
   return url
 }
-
-export const SUPPORTED_PLATFORMS = [
-  { protocol: 'neo3', network: 'mainnet' },
-  { protocol: 'neo3', network: 'testnet' },
-  { protocol: 'neo3', network: 'testnet_rc4' },
-  { protocol: 'neo2', network: 'mainnet' },
-  { protocol: 'neo2', network: 'testnet' },
-]
 
 export const TRANSFER = '7472616e73666572'
 

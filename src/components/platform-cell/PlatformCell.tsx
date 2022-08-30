@@ -36,15 +36,6 @@ const PlatformCell = ({
           <div className="neo3-platform-cell">
             <img src={Neo3} alt="NEO 3" />
             <span>
-              Neo <small>(RC3 Testnet) </small>
-            </span>
-          </div>
-        )
-      } else if (protocol === 'neo3' && network === 'testnet_rc4') {
-        return (
-          <div className="neo3-platform-cell">
-            <img src={Neo3} alt="NEO 3" />
-            <span>
               Neo <small>(Testnet) </small>
             </span>
           </div>

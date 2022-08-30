@@ -828,32 +828,21 @@ const Monitor: React.FC<{}> = () => {
     useContext(MonitorContext)
 
   const selectedData = (): WSDoraData[] => {
-    const sortedNodes = OrderNodes(
+    let sortedNodes = OrderNodes(
       sortDataList.sort,
       nodes.nodesArray,
       sortDataList.desc,
     )
 
-    if (protocol === 'all' && network === 'all') {
-      return sortedNodes
-    } else if (protocol === 'all' && network !== 'all') {
-      return sortedNodes.filter(node => node.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return sortedNodes.filter(node => node.protocol === protocol)
-    } else {
-      //temporary state, remove when api cuts over
-      let mutableNetwork = network
-      if (protocol === 'neo3' && mutableNetwork === 'testnet') {
-        mutableNetwork = 'testnet_rc3'
-      }
-      if (mutableNetwork === 'testnet_rc4') {
-        mutableNetwork = 'testnet'
-      }
-
-      return sortedNodes.filter(
-        node => node.protocol === protocol && node.network === mutableNetwork,
-      )
+    if (protocol !== 'all') {
+      sortedNodes = sortedNodes.filter(node => node.protocol === protocol)
     }
+
+    if (network !== 'all') {
+      sortedNodes = sortedNodes.filter(node => node.network === network)
+    }
+
+    return sortedNodes
   }
 
   return (
