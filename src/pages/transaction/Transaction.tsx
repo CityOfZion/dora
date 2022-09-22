@@ -209,11 +209,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
           ]}
         />
 
-        <BackButton
-          mb={6}
-          url={ROUTES.TRANSACTIONS.url}
-          text="back to transactions"
-        />
+        <BackButton mb={6} text="back to transactions" />
 
         <Flex alignItems={'center'} mb={10}>
           <TransactionIcon width={22} height={23} />

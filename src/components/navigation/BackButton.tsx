@@ -5,14 +5,24 @@ import { Box, BoxProps, Button, Flex, Text } from '@chakra-ui/react'
 
 interface Props extends BoxProps {
   text: string
-  url: string
+  url?: string
 }
 
 const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
   const history = useHistory()
+
+  const handleClick = () => {
+    if (url) {
+      history.push(url)
+      return
+    }
+
+    history.goBack()
+  }
+
   return (
     <Box {...props}>
-      <Button m={0} p={0} onClick={(): void => history.push(url)}>
+      <Button m={0} p={0} onClick={handleClick}>
         <Flex
           bg={'tertiary'}
           borderRadius={16}
