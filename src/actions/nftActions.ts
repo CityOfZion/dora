@@ -58,7 +58,7 @@ export function treatNFTImage(srcImage: string) {
   if (srcImage.startsWith('ipfs://')) {
     const [, imageId] = srcImage.split('://')
 
-    return `https://ipfs.ghostmarket.io/ipfs/${imageId}`
+    return `https://ghostmarket.mypinata.cloud/ipfs/${imageId}`
   }
 
   return srcImage
