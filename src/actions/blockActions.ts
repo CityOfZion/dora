@@ -4,7 +4,6 @@ import { ThunkDispatch } from 'redux-thunk'
 import {
   GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
-  Platform,
   SUPPORTED_PLATFORMS,
 } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
@@ -139,7 +138,7 @@ export function fetchBlock(indexOrHash: string | number = 1) {
 export function fetchBlocks(
   page = 1,
   chain?: string,
-  supportedPlatforms?: Platform[],
+  supportedPlatforms = SUPPORTED_PLATFORMS,
 ) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
@@ -148,13 +147,8 @@ export function fetchBlocks(
     try {
       dispatch(requestBlocks(page))
 
-      const platforms =
-        supportedPlatforms === undefined
-          ? SUPPORTED_PLATFORMS
-          : supportedPlatforms
-
       const res = await Promise.allSettled(
-        platforms.map(async ({ network, protocol }) => {
+        supportedPlatforms.map(async ({ network, protocol }) => {
           let result: BlocksResponse | NLBlocksResponse | undefined = undefined
           if (protocol === 'neo2') {
             result = await NeoLegacyREST.blocks(page, network)
