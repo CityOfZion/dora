@@ -65,11 +65,24 @@ export const ASSETS = [
   },
 ]
 
-export const SUPPORTED_PLATFORMS = [
+export type Platform = {
+  protocol: string
+  network: string
+}
+
+export const NEO_MAINNET_PLATFORMS = [
   { protocol: 'neo3', network: 'mainnet' },
-  { protocol: 'neo3', network: 'testnet' },
   { protocol: 'neo2', network: 'mainnet' },
+]
+
+export const NEO_TESTNET_PLATFORMS = [
+  { protocol: 'neo3', network: 'testnet' },
   { protocol: 'neo2', network: 'testnet' },
+]
+
+export const SUPPORTED_PLATFORMS = [
+  ...NEO_MAINNET_PLATFORMS,
+  ...NEO_TESTNET_PLATFORMS,
 ]
 
 export const treatNetwork = (network: string) => {
