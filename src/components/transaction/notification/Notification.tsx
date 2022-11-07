@@ -30,15 +30,14 @@ export const Notification: React.FC<{
       const isTransfer = notification.event_name === 'Transfer'
 
       if (isTransfer) {
-        const bytestringNotification = notification.state.value[2]
-        if (bytestringNotification.type === 'ByteString') {
-          const hexstr = Buffer.from(
-            bytestringNotification.value,
-            'base64',
-          ).toString('hex')
+        const amountStackItem = notification.state.value[2]
+        if (amountStackItem.type === 'ByteString') {
+          const hexstr = Buffer.from(amountStackItem.value, 'hex').toString(
+            'hex',
+          )
           const value = u.BigInteger.fromHex(hexstr, true)
-          bytestringNotification.type = 'Integer'
-          bytestringNotification.value = value.toString()
+          amountStackItem.type = 'Integer'
+          amountStackItem.value = value.toString()
         }
       }
     }

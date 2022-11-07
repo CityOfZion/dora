@@ -122,16 +122,16 @@ const parseNeo3TransactionData = async (
           } else {
             // fix for contracts that don't adhere to NEP-17 standard
             // and emit ByteString instead of Integer
-            const bytestringNotification = notification.state.value[2]
-            if (bytestringNotification.type === 'ByteString') {
+            const amountStackItem = notification.state.value[2]
+            if (amountStackItem.type === 'ByteString') {
               const hexstr = Buffer.from(
-                bytestringNotification.value,
+                amountStackItem.value,
                 'base64',
               ).toString('hex')
               const value = u.BigInteger.fromHex(hexstr, true)
               // not taking decimals into account as it is also not done
               // when the notification is of type Integer
-              amount = parseFloat(value.toDecimal(0))
+              amount = parseInt(value.toDecimal(0))
             }
           }
 
