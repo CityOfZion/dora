@@ -4,6 +4,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import {
   GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
+  Platform,
   SUPPORTED_PLATFORMS,
 } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
@@ -138,7 +139,7 @@ export function fetchBlock(indexOrHash: string | number = 1) {
 export function fetchBlocks(
   page = 1,
   chain?: string,
-  supportedPlatforms = SUPPORTED_PLATFORMS,
+  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
 ) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,

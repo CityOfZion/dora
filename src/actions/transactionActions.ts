@@ -4,6 +4,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import {
   GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
+  Platform,
   SUPPORTED_PLATFORMS,
 } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
@@ -151,7 +152,7 @@ export function fetchTransaction(hash: string, chain: string) {
 
 export function fetchTransactions(
   page = 1,
-  supportedPlatforms = SUPPORTED_PLATFORMS,
+  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
 ) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
