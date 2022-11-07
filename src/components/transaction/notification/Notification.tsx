@@ -10,6 +10,7 @@ import { GENERATE_BASE_URL, ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { DetailedContract } from '../../../reducers/contractReducer'
 import { uuid } from '../../../utils/formatter'
+import { u } from '@cityofzion/neon-js'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -22,6 +23,26 @@ export const Notification: React.FC<{
   const [contracts, setContracts] = useState<Record<string, DetailedContract>>(
     {},
   )
+
+  //fix for NEP-17 contract that emit transfer events with ByteString as amount
+  for (const notification of notifications) {
+    if (notification.state.type === 'Array') {
+      const isTransfer = notification.event_name === 'Transfer'
+
+      if (isTransfer) {
+        const bytestringNotification = notification.state.value[2]
+        if (bytestringNotification.type === 'ByteString') {
+          const hexstr = Buffer.from(
+            bytestringNotification.value,
+            'base64',
+          ).toString('hex')
+          const value = u.BigInteger.fromHex(hexstr, true)
+          bytestringNotification.type = 'Integer'
+          bytestringNotification.value = value.toString()
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     setItems(notifications)
