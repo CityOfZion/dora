@@ -1,7 +1,12 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
+import {
+  GENERATE_BASE_URL,
+  NEO_MAINNET_PLATFORMS,
+  Platform,
+  SUPPORTED_PLATFORMS,
+} from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
@@ -145,7 +150,10 @@ export function fetchTransaction(hash: string, chain: string) {
   }
 }
 
-export function fetchTransactions(page = 1) {
+export function fetchTransactions(
+  page = 1,
+  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
+) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { transaction: State },
@@ -156,8 +164,9 @@ export function fetchTransactions(page = 1) {
       interface TransactionsResponseShunt extends NLTransactionsResponse {
         items: any[]
       }
+
       let res = await Promise.all(
-        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
+        supportedPlatforms.map(async ({ network, protocol }) => {
           let result:
             | TransactionsResponseShunt
             | TransactionsResponse
@@ -196,4 +205,8 @@ export function fetchTransactions(page = 1) {
       dispatch(requestTransactionsError(page, e))
     }
   }
+}
+
+export function fetchMainNetTransactions(page = 1) {
+  return fetchTransactions(page, NEO_MAINNET_PLATFORMS)
 }

@@ -1,7 +1,12 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
+import {
+  GENERATE_BASE_URL,
+  NEO_MAINNET_PLATFORMS,
+  Platform,
+  SUPPORTED_PLATFORMS,
+} from '../constants'
 import { Block, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
@@ -131,7 +136,11 @@ export function fetchBlock(indexOrHash: string | number = 1) {
   }
 }
 
-export function fetchBlocks(page = 1, chain?: string) {
+export function fetchBlocks(
+  page = 1,
+  chain?: string,
+  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
+) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { block: State },
@@ -140,7 +149,7 @@ export function fetchBlocks(page = 1, chain?: string) {
       dispatch(requestBlocks(page))
 
       const res = await Promise.allSettled(
-        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
+        supportedPlatforms.map(async ({ network, protocol }) => {
           let result: BlocksResponse | NLBlocksResponse | undefined = undefined
           if (protocol === 'neo2') {
             result = await NeoLegacyREST.blocks(page, network)
@@ -177,4 +186,8 @@ export function fetchBlocks(page = 1, chain?: string) {
       dispatch(requestBlockError(page, e))
     }
   }
+}
+
+export function fetchMainNetBlocks(page = 1, chain?: string) {
+  return fetchBlocks(page, chain, NEO_MAINNET_PLATFORMS)
 }
