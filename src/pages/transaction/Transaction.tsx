@@ -23,6 +23,7 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
 import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
 import { Box, Flex, Text } from '@chakra-ui/react'
+import { u } from '@cityofzion/neon-js'
 
 export type ParsedTransfer = {
   name: string
@@ -112,10 +113,28 @@ const parseNeo3TransactionData = async (
           )
           const assetJson = await assetResponse.json()
           const { symbol, decimals, name } = assetJson
-          const integerNotfication = notification.state.value.find(
+          let amount = 0
+          const integerNotification = notification.state.value.find(
             value => value.type === 'Integer',
           )
-          const amount = integerNotfication ? integerNotfication.value : 0
+          if (integerNotification) {
+            amount = integerNotification.value as unknown as number
+          } else {
+            // fix for contracts that don't adhere to NEP-17 standard
+            // and emit ByteString instead of Integer
+            const amountStackItem = notification.state.value[2]
+            if (amountStackItem.type === 'ByteString') {
+              const hexstr = Buffer.from(
+                amountStackItem.value,
+                'base64',
+              ).toString('hex')
+              const value = u.BigInteger.fromHex(hexstr, true)
+              // not taking decimals into account as it is also not done
+              // when the notification is of type Integer
+              amount = parseInt(value.toDecimal(0))
+            }
+          }
+
           const from_address = neo3_getAddressFromSriptHash(
             notification?.state?.value[0]?.value || '',
           )
