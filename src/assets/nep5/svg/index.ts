@@ -54,6 +54,7 @@ import EPN from './EPN.svg'
 import EXT from './EXT.svg'
 import GHOST from './GHOST.svg'
 import GM from './GM.svg'
+import GFUND from './GFUND.svg'
 
 export type TokenMap = { [key: string]: string }
 
@@ -114,6 +115,7 @@ const tokens: TokenMap = {
   EXT,
   GHOST,
   GM,
+  GFUND,
 }
 
 export default tokens
