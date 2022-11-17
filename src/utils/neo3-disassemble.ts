@@ -9,6 +9,8 @@ const opcodetable = {
   0x03: { name: 'PUSHINT64', size: 8 },
   0x04: { name: 'PUSHINT128', size: 16 },
   0x05: { name: 'PUSHINT256', size: 32 },
+  0x08: { name: 'PUSHT', size: 0 },
+  0x09: { name: 'PUSHF', size: 0 },
   0x0a: { name: 'PUSHA', size: 4 },
   0x0b: { name: 'PUSHNULL', size: 0 },
   0x0c: { name: 'PUSHDATA1', size: 1 },
