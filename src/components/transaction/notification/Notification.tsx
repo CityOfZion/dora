@@ -5,12 +5,12 @@ import ExpandingPanel from '../../panel/ExpandingPanel'
 import { TransactionNotification } from '../../../reducers/transactionReducer'
 import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
-import { NotificationPanel } from './fragment/NotificationPanel'
 import { GENERATE_BASE_URL, ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { DetailedContract } from '../../../reducers/contractReducer'
 import { uuid } from '../../../utils/formatter'
 import { u } from '@cityofzion/neon-js'
+import { StackPanel } from '../StackPanel'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -27,14 +27,18 @@ export const Notification: React.FC<{
   //fix for NEP-17 contract that emit transfer events with ByteString as amount
   for (const notification of notifications) {
     if (notification.state.type === 'Array') {
+      if (!notification.state.value || !Array.isArray(notification.state.value))
+        continue
+
       const isTransfer = notification.event_name === 'Transfer'
 
       if (isTransfer) {
         const amountStackItem = notification.state.value[2]
         if (amountStackItem.type === 'ByteString') {
-          const hexstr = Buffer.from(amountStackItem.value, 'hex').toString(
+          const hexstr = Buffer.from(
+            String(amountStackItem.value),
             'hex',
-          )
+          ).toString('hex')
           const value = u.BigInteger.fromHex(hexstr, true)
           amountStackItem.type = 'Integer'
           amountStackItem.value = value.toString()
@@ -197,15 +201,18 @@ export const Notification: React.FC<{
               </Box>
 
               <Collapse in={isOpen[notification.id]}>
-                <NotificationPanel
-                  chain={chain}
-                  state={notification.state}
-                  parameters={
-                    notification.contractObj?.manifest?.abi?.events
-                      ?.find(it => it.name === notification.event_name)
-                      ?.parameters.map(it => it.name) || []
-                  }
-                />
+                {Array.isArray(notification.state.value) && (
+                  <StackPanel
+                    chain={chain}
+                    keyName={'notification-stack'}
+                    stack={notification.state.value}
+                    names={
+                      notification.contractObj?.manifest?.abi?.events
+                        ?.find(it => it.name === notification.event_name)
+                        ?.parameters.map(it => it.name) || []
+                    }
+                  />
+                )}
               </Collapse>
             </Box>
           ))}

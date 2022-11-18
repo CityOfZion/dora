@@ -13,6 +13,7 @@ import { TransactionLogView } from '../../pages/transaction/fragment/Transaction
 import Signature from './signatures/Signature'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { StackResult } from './StackResult'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -157,6 +158,10 @@ export const TransactionN3: React.FC<Props> = ({
             </Flex>
 
             <TransactionLogView transaction={transaction} mb={5} />
+
+            {transaction.stack && transaction.stack.length > 0 && (
+              <StackResult chain={chain} stack={transaction.stack} />
+            )}
 
             {transaction.signers && transaction.signers[0] && (
               <Signature

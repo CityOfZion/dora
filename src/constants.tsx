@@ -374,7 +374,7 @@ export const ADDRESS_OPTION = {
     NeoConvertor.Address.scriptHashToAddress(value, true),
 }
 
-type TxStateType = {
+export type TxStateType = {
   value: string
   label: string
   convert?: (val: string) => string | Promise<string>
