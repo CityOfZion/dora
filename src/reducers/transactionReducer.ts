@@ -69,21 +69,15 @@ export type TransactionIOAbstract = {
   value: string
 }
 
-export type NotificationState = {
+export type StackState = {
   type: string
-  value: NotificationStateValue[]
-}
-
-export type NotificationStateValue = {
-  id: string
-  type: string
-  value: string
+  value?: string | boolean | number | StackState[]
 }
 
 export type TransactionNotification = {
   id: string
   contract: string
-  state: NotificationState
+  state: StackState
   event_name: string
   contractObj: DetailedContract
 }
@@ -118,6 +112,7 @@ export type DetailedTransaction = {
       verification: string
     },
   ]
+  stack: StackState[]
   signers?: Signer[]
   notifications?: TransactionNotification[]
   exception?: string

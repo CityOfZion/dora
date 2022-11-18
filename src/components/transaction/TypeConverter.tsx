@@ -1,4 +1,4 @@
-import { Platform } from '../../../filter/Filter'
+import { Platform } from '../filter/Filter'
 import React, { ReactElement } from 'react'
 import { ValueType } from 'react-select'
 import {
@@ -6,8 +6,8 @@ import {
   BYTE_STRING_OPTION,
   HEX_STRING_OPTION,
   STRING_OPTION,
-} from '../../../../constants'
-import Select from '../../../select/Select'
+} from '../../constants'
+import Select from '../select/Select'
 
 type Option = {
   value: Platform | string
@@ -17,7 +17,7 @@ type Option = {
     | null
 }
 
-export const NotificationRow: React.FC<{
+export const TypeConverter: React.FC<{
   value: string
   type: string
   options: Option[]

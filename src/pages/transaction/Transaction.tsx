@@ -107,6 +107,12 @@ const parseNeo3TransactionData = async (
       if (notification.state.type === 'Array') {
         const isTransfer = notification.event_name === 'Transfer'
 
+        if (
+          !notification.state.value ||
+          !Array.isArray(notification.state.value)
+        )
+          continue
+
         if (isTransfer) {
           const assetResponse = await fetch(
             `${GENERATE_BASE_URL('neo3')}/asset/${notification.contract}`,
@@ -114,18 +120,21 @@ const parseNeo3TransactionData = async (
           const assetJson = await assetResponse.json()
           const { symbol, decimals, name } = assetJson
           let amount = 0
+
           const integerNotification = notification.state.value.find(
             value => value.type === 'Integer',
           )
+
           if (integerNotification) {
             amount = integerNotification.value as unknown as number
           } else {
             // fix for contracts that don't adhere to NEP-17 standard
             // and emit ByteString instead of Integer
             const amountStackItem = notification.state.value[2]
+
             if (amountStackItem.type === 'ByteString') {
               const hexstr = Buffer.from(
-                amountStackItem.value,
+                String(amountStackItem.value),
                 'base64',
               ).toString('hex')
               const value = u.BigInteger.fromHex(hexstr, true)
@@ -136,10 +145,10 @@ const parseNeo3TransactionData = async (
           }
 
           const from_address = neo3_getAddressFromSriptHash(
-            notification?.state?.value[0]?.value || '',
+            String(notification.state.value[0].value),
           )
           const to_address = neo3_getAddressFromSriptHash(
-            notification?.state?.value[1]?.value || '',
+            String(notification.state.value[1].value),
           )
           transfers.push({
             name,
