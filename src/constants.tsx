@@ -3,6 +3,7 @@ import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
 import NeoConvertor from 'neo-convertor'
 import { wallet, u } from '@cityofzion/neon-js'
+import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
 import { store } from './store'
@@ -113,29 +114,27 @@ export const BUILD_GHOST_MARKET_URL = ({
 }: {
   path: string
   network?: string
-  params?: Record<string, string | number>
+  params?: Record<string, any | any[]>
 }): string => {
   const chain = network === 'mainnet' ? 'n3' : 'n3t'
 
   const baseUrl =
     network === 'mainnet'
-      ? 'https://api.ghostmarket.io/api/v1'
-      : 'https://api-testnet.ghostmarket.io/api/v1'
+      ? 'https://api.ghostmarket.io/api/v2'
+      : 'https://api-testnet.ghostmarket.io/api/v2'
 
-  const parameters =
-    params && Object.keys(params).length > 0
-      ? Object.keys(params).reduce(
-          (acc, item) => acc + `&${item}=${params[item]}`,
-          '',
-        )
-      : ''
+  const parameters = queryString.stringify(
+    {
+      chain,
+      ...params,
+    },
+    { arrayFormat: 'bracket' },
+  )
 
-  const url = `${baseUrl}/${path}?chain=${chain}${parameters}`
+  const url = `${baseUrl}/${path}?${parameters}`
 
   return url
 }
-
-export const TRANSFER = '7472616e73666572'
 
 export const TRANSACTION_TYPES: {
   [key: string]: { id: string; label: string }

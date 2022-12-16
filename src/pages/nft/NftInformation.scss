@@ -133,6 +133,10 @@
   .attributes-block {
     @extend .description-block;
     min-height: auto;
+
+    .content {
+      word-break: break-all;
+    }
   }
 }
 
