@@ -10,46 +10,43 @@ import {
 } from '../reducers/nftReducer'
 
 interface GhostMarketNFT {
-  nft: {
-    token_id?: string
+  tokenId?: string
+  contract: {
     chain?: string
+    hash?: string
     symbol?: string
-    creator_address?: string
-    creator_offchain_name?: string
-    api_url?: string
-    contract?: string
-    owners: {
-      address: string
-    }[]
-    collection: {
-      name?: string
-      featured_image?: string
+  }
+  creator: {
+    address?: string
+    offchainName?: string
+  }
+  apiUrl?: string
+  ownerships: {
+    owner: {
+      address?: string
     }
-    nft_metadata: {
-      name?: string
-      image?: string
-      description?: string
-      attributes: GhostMarketAttributes[]
-    }
+  }[]
+  collection: {
+    name?: string
+    logoUrl?: string
   }
 }
 
 interface GhostMarketAssets {
   assets: GhostMarketNFT[]
-  total_results: number
+  total: number
 }
 
-type GhostMarketAttributes = {
-  name_id: string
-  name: string
-  display_name: string
-  value_id: number
+type GhostMarketAttribute = {
+  trait_type: string
   value: string
-  display_value: string
-  count: number
-  count_overall: number
-  count_on_sale: number
-  rarity: number
+}
+
+type GhostMarketMetadata = {
+  name?: string
+  description?: string
+  image?: string
+  attributes?: GhostMarketAttribute[]
 }
 
 export const nftLimit = 8
@@ -62,6 +59,88 @@ export function treatNFTImage(srcImage: string) {
   }
 
   return srcImage
+}
+
+function mapAttributes(attributes: GhostMarketAttribute[]): NFTAttribute[] {
+  return attributes.map(({ value, trait_type }): NFTAttribute => {
+    return {
+      key: trait_type,
+      value,
+    }
+  })
+}
+
+async function getGhostMarketNFT(
+  network: string,
+  params: Record<string, any | any[]>,
+) {
+  const response = await fetch(
+    BUILD_GHOST_MARKET_URL({
+      path: 'assets',
+      network,
+      params,
+    }),
+  )
+
+  const data = await response.json()
+
+  const { assets, total } = data as GhostMarketAssets
+
+  const nfts = assets.map(
+    (
+      nft,
+    ): Omit<DETAILED_NFT, 'attributes' | 'image' | 'description' | 'name'> => {
+      return {
+        chain: nft.contract.chain || '',
+        symbol: nft.contract.symbol || '',
+        contract: nft.contract.hash || '',
+        id: nft.tokenId || '',
+        creatorName: nft.creator.offchainName || '',
+        creatorAddress: nft.creator.address || '',
+        ownerAddress: nft.ownerships[0].owner.address || '',
+        apiUrl: nft.apiUrl || '',
+        collection: {
+          image: nft.collection.logoUrl || '',
+          name: nft.collection.name || '',
+        },
+      }
+    },
+  )
+
+  const nftsWithMetadataPromises = nfts.map(
+    async (nft): Promise<DETAILED_NFT> => {
+      const response = await fetch(
+        BUILD_GHOST_MARKET_URL({
+          path: 'metadata',
+          network,
+          params: {
+            contract: nft.contract,
+            tokenId: nft.id,
+          },
+        }),
+      )
+
+      const metadata = (await response.json()) as GhostMarketMetadata
+      const attributes = metadata.attributes
+        ? mapAttributes(metadata.attributes)
+        : []
+
+      return {
+        ...nft,
+        name: metadata.name || '',
+        description: metadata.description || '',
+        image: treatNFTImage(metadata.image || ''),
+        attributes,
+      }
+    },
+  )
+
+  const nftsWithMetadata = await Promise.all(nftsWithMetadataPromises)
+
+  return {
+    nfts: nftsWithMetadata,
+    total,
+  }
 }
 
 export const requestNFTS =
@@ -128,58 +207,20 @@ export const clearList =
     })
   }
 
-function mapAttributes(attributes: GhostMarketAttributes[]): NFTAttribute[] {
-  return attributes.map(({ value, name }): NFTAttribute => {
-    return {
-      key: name,
-      value,
-    }
-  })
-}
-
 export function fetchNFTS(ownerId: string, network: string, page = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
     dispatch(requestNFTS(page))
     try {
-      const response = await fetch(
-        BUILD_GHOST_MARKET_URL({
-          path: 'assets',
-          network,
-          params: {
-            owner: ownerId,
-            limit: nftLimit,
-            offset: nftLimit * (page - 1),
-            with_total: 1,
-          },
-        }),
-      )
-      const { assets, total_results } =
-        (await response.json()) as GhostMarketAssets
+      const { nfts, total } = await getGhostMarketNFT(network, {
+        owners: [ownerId],
+        size: nftLimit,
+        page,
+        getTotal: true,
+      })
 
-      const nfts = assets
-        ? assets.map(({ nft }): NFT => {
-            const attributes = nft.nft_metadata.attributes
-              ? mapAttributes(nft.nft_metadata.attributes)
-              : []
-
-            return {
-              name: nft.nft_metadata.name || '',
-              chain: nft.chain || '',
-              image: treatNFTImage(nft.nft_metadata.image || ''),
-              id: nft.token_id || '',
-              contract: nft.contract || '',
-              collection: {
-                image: nft.collection.featured_image || '',
-                name: nft.collection.name || '',
-              },
-              attributes,
-            }
-          })
-        : []
-
-      dispatch(requestNFTSSuccess(nfts, page, total_results))
+      dispatch(requestNFTSSuccess(nfts, page, total))
     } catch (e) {
       console.log(e)
       dispatch(requestNFTSError(e as Error, page))
@@ -197,44 +238,14 @@ export function fetchNFT(
   ): Promise<void> => {
     dispatch(requestNFT())
     try {
-      const response = await fetch(
-        BUILD_GHOST_MARKET_URL({
-          path: 'assets',
-          network,
-          params: {
-            token_id: tokenId,
-            contract: contractHash,
-          },
-        }),
-      )
-      const { assets } = (await response.json()) as GhostMarketAssets
+      const {
+        nfts: [nft],
+      } = await getGhostMarketNFT(network, {
+        tokenIds: [tokenId],
+        contract: contractHash,
+      })
 
-      const [{ nft }] = assets
-
-      const attributes = nft.nft_metadata.attributes
-        ? mapAttributes(nft.nft_metadata.attributes)
-        : []
-
-      const mappedNFT = {
-        name: nft.nft_metadata.name || '',
-        chain: nft.chain || '',
-        symbol: nft.symbol || '',
-        contract: nft.contract || '',
-        image: treatNFTImage(nft.nft_metadata.image || ''),
-        id: nft.token_id || '',
-        description: nft.nft_metadata.description || '',
-        creatorName: nft.creator_offchain_name || '',
-        creatorAddress: nft.creator_address || '',
-        ownerAddress: nft.owners[0].address,
-        apiUrl: nft.api_url || '',
-        collection: {
-          image: nft.collection.featured_image || '',
-          name: nft.collection.name || '',
-        },
-        attributes,
-      }
-
-      dispatch(requestNFTSuccess(mappedNFT))
+      dispatch(requestNFTSuccess(nft))
     } catch (e) {
       dispatch(requestNFTError(e as Error))
     }

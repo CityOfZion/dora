@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   Redirect,
@@ -30,18 +30,25 @@ type Props = RouteComponentProps<MatchParams>
 
 const AddressNFTS: React.FC<Props> = props => {
   const { hash, chain, network } = props.match.params
+
   const dispatch = useDispatch()
   const history = useHistory()
-  const [page, setPage] = useState(1)
-  const [toggleTypeSelected, setToggleTypeSelected] =
-    useState<NFTFiltersToggleType>('list')
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
   const windowWidth = useWindowWidth()
 
-  function loadMore(): void {
-    const nextPage = page + 1
-    dispatch(fetchNFTS(hash, network, nextPage))
-    setPage(lastState => lastState + 1)
+  const page = useRef(0)
+
+  const [toggleTypeSelected, setToggleTypeSelected] =
+    useState<NFTFiltersToggleType>('list')
+
+  const hasMore = useMemo(
+    () => nftState.total && page.current * nftLimit < nftState.total,
+    [nftState],
+  )
+
+  function getNFTS() {
+    page.current += 1
+    dispatch(fetchNFTS(hash, network, page.current))
   }
 
   function handleNavigate(id: string, contractHash: string) {
@@ -55,7 +62,7 @@ const AddressNFTS: React.FC<Props> = props => {
   }, [windowWidth])
 
   useEffect(() => {
-    dispatch(fetchNFTS(hash, network))
+    getNFTS()
 
     return () => {
       dispatch(clearList())
@@ -100,11 +107,11 @@ const AddressNFTS: React.FC<Props> = props => {
       )}
 
       <div className="button-container horiz justify-center">
-        {!!nftState.total && page * nftLimit < nftState.total && (
+        {hasMore && (
           <Button
             disabled={nftState.isLoading}
             primary={false}
-            onClick={(): void => loadMore()}
+            onClick={() => getNFTS()}
           >
             load more
           </Button>

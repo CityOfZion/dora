@@ -23,15 +23,13 @@ const NFTGallery: React.FC<Props> = ({
 
   return (
     <div id="nft-list-container">
-      {!isLoading &&
-        data.length > 0 &&
-        data.map(item => (
-          <NFTCardGallery
-            key={item.id}
-            data={item}
-            onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
-          />
-        ))}
+      {data.map(item => (
+        <NFTCardGallery
+          key={item.id}
+          data={item}
+          onClickToNavigate={() => onClickToNavigate(item.id, item.contract)}
+        />
+      ))}
 
       {isLoading &&
         skeletonRows.map(item => (

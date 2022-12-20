@@ -26,19 +26,24 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
       <div className="card-list-container">
         <div className="card-image-container">
           <div className="token-image">
-            <img src={data.image} alt={data.name} onError={handleOnError} />
+            <img
+              src={data.image}
+              alt={data.name}
+              onError={handleOnError}
+              loading="lazy"
+            />
           </div>
         </div>
         <div className="card-header">
           <div className="card-header-content">
             <div className="collection-image-container">
-              {/* 
-            
-           TODO: uncomment the code below when Ghostmarket fix their API, currently is not returning an image for the collection
-            
-            <div className="collection-image">
-              <img alt={data.collection.name} src={data.collection.image} />
-            </div> */}
+              <div className="collection-image">
+                <img
+                  alt={data.collection.name}
+                  src={data.collection.image}
+                  loading="lazy"
+                />
+              </div>
 
               <span className="collection-name-mobile">
                 {data.collection.name}
