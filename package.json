@@ -22,7 +22,7 @@
     "lodash": "^4.17.20",
     "material-design-icons": "^3.0.1",
     "material-ui": "^0.20.2",
-    "moment": "^2.25.3",
+    "moment": "^2.29.4",
     "neo-convertor": "0.0.2",
     "node-sass": "^4.14.1",
     "query-string": "7.0.0",
