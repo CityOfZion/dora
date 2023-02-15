@@ -4,12 +4,17 @@ import { ThunkDispatch } from 'redux-thunk'
 import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoLegacyREST, NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { ContractsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import {
   ContractsResponse as NLContractsResponse,
   InvocationStatsResponse,
 } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =

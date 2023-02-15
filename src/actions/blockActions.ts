@@ -9,9 +9,14 @@ import {
 } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoLegacyREST, NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { BlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { BlocksResponse as NLBlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting

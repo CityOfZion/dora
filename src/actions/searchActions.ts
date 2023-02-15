@@ -1,7 +1,12 @@
 import { ThunkDispatch } from 'redux-thunk'
 import { Dispatch, Action } from 'redux'
 import { State } from '../reducers/searchReducer'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoLegacyREST, NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered =
