@@ -119,22 +119,16 @@ export function fetchTransaction(hash: string, chain: string) {
       dispatch(requestTransaction(hash))
 
       const [network] = getNetworkAndProtocol()
-      const transactionRequestPromises: Promise<any>[] = []
-      if (chain === 'neo3') {
-        transactionRequestPromises.push(NeoRest.transaction(hash, network))
-        transactionRequestPromises.push(NeoRest.log(hash, network))
-      } else {
-        transactionRequestPromises.push(
-          NeoLegacyREST.transaction(hash, network),
-        )
-        transactionRequestPromises.push(NeoLegacyREST.log(hash, network))
-        transactionRequestPromises.push(
-          NeoLegacyREST.transactionAbstracts(hash, network),
-        )
-      }
-
+      const requests: Promise<any>[] =
+        chain === 'neo3'
+          ? [NeoRest.transaction(hash, network), NeoRest.log(hash, network)]
+          : [
+              NeoLegacyREST.transaction(hash, network),
+              NeoLegacyREST.log(hash, network),
+              NeoLegacyREST.transactionAbstracts(hash, network),
+            ]
       try {
-        const responses = await Promise.all(transactionRequestPromises)
+        const responses = await Promise.all(requests)
         const mergedResponse = {}
         for (const response of responses) {
           Object.assign(mergedResponse, response)
