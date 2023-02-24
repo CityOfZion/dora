@@ -2,7 +2,6 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import {
-  GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
   Platform,
   SUPPORTED_PLATFORMS,
@@ -13,6 +12,7 @@ import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
 import { TransactionsResponse as NLTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 import { TransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { getNetworkAndProtocol } from '../utils/chain'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =
@@ -118,25 +118,26 @@ export function fetchTransaction(hash: string, chain: string) {
     if (shouldFetchTransaction(getState(), hash)) {
       dispatch(requestTransaction(hash))
 
-      const transactionRequestPromises = [
-        fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
-        fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
-      ]
-
-      chain === 'neo2' &&
+      const [network] = getNetworkAndProtocol()
+      const transactionRequestPromises: Promise<any>[] = []
+      if (chain === 'neo3') {
+        transactionRequestPromises.push(NeoRest.transaction(hash, network))
+        transactionRequestPromises.push(NeoRest.log(hash, network))
+      } else {
         transactionRequestPromises.push(
-          fetch(`${GENERATE_BASE_URL()}/transaction_abstracts/${hash}`),
+          NeoLegacyREST.transaction(hash, network),
         )
+        transactionRequestPromises.push(NeoLegacyREST.log(hash, network))
+        transactionRequestPromises.push(
+          NeoLegacyREST.transactionAbstracts(hash, network),
+        )
+      }
 
       try {
         const responses = await Promise.all(transactionRequestPromises)
         const mergedResponse = {}
         for (const response of responses) {
-          const json =
-            (await response.json().catch(e => {
-              console.error({ e })
-            })) || {}
-          Object.assign(mergedResponse, json)
+          Object.assign(mergedResponse, response)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
       } catch (e) {

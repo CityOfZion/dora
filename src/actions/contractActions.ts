@@ -1,7 +1,7 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
+import { SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
@@ -10,6 +10,7 @@ import {
   ContractsResponse as NLContractsResponse,
   InvocationStatsResponse,
 } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { getNetworkAndProtocol } from '../utils/chain'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -160,19 +161,14 @@ export function fetchContract(hash: string, populateStates = true) {
   ): Promise<void> => {
     if (shouldFetchContract(getState(), hash)) {
       dispatch(requestContract(hash))
-
+      const [network, protocol] = getNetworkAndProtocol()
       try {
-        const response = await fetch(`${GENERATE_BASE_URL()}/contract/${hash}`)
-
-        const json = await response.json()
+        const restAPI = protocol === 'neo3' ? NeoRest : NeoLegacyREST
+        const json: any = await restAPI.contract(hash, network)
 
         if (populateStates) {
-          const invocationStatsResponse = await fetch(
-            `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
-          )
-
-          const invocationStats = await invocationStatsResponse
-            .json()
+          const invocationStats = await restAPI
+            .contractStats(hash, network)
             .catch(error => {
               console.error('An error occurred fetching invocation stats.', {
                 error,

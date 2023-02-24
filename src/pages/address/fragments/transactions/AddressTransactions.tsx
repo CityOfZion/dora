@@ -9,14 +9,12 @@ import {
 } from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import {
-  byteStringToAddress,
-  GENERATE_BASE_URL,
-  ROUTES,
-} from '../../../../constants'
+import { byteStringToAddress, ROUTES } from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
+import { getNetworkAndProtocol } from '../../../../utils/chain'
+import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 interface MatchParams {
   hash: string
@@ -53,13 +51,11 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
         .map(async ({ contract, state }): Promise<Transfer> => {
           const [{ value: from }, { value: to }, { value: amount }] = state
 
-          const response = await fetch(
-            `${GENERATE_BASE_URL()}/asset/${contract}`,
-          )
+          const [network, protocol] = getNetworkAndProtocol()
+          const restAPI = protocol === 'neo3' ? NeoRest : NeoLegacyREST
+          const json: any = await restAPI.asset(contract, network)
 
-          const json = await response.json()
           const { symbol, decimals } = json
-
           const convertedAmount = convertToArbitraryDecimals(
             Number(amount),
             decimals,
