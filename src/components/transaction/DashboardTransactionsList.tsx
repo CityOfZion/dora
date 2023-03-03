@@ -85,7 +85,6 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
     <div className="multi-chain-dashboard-list">
       <div className="block-list-chain-container">
         <div>
-          <h4>Neo N3 (Mainnet) </h4>
           <div className="label-wrapper-2">
             <Button
               primary

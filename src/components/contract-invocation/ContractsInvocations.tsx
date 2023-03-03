@@ -11,8 +11,6 @@ import { fetchContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
-import Filter, { Platform } from '../filter/Filter'
-import useFilterState from '../../hooks/useFilterState'
 
 type Invocation = {
   name: string
@@ -96,20 +94,10 @@ const ContractsInvocations: React.FC<{}> = () => {
   )
   const { contractsInvocations, isLoading } = contractState
   const width = useWindowWidth()
-
-  const { protocol, handleSetFilterData, network } = useFilterState()
   const selectedData = (): Array<any> => {
-    if (protocol === 'all' && network === 'all') {
-      return contractsInvocations
-    } else if (protocol === 'all' && network !== 'all') {
-      return contractsInvocations.filter(d => d.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return contractsInvocations.filter(d => d.protocol === protocol)
-    } else {
-      return contractsInvocations.filter(
-        d => d.protocol === protocol && d.network === network,
-      )
-    }
+    return contractsInvocations.filter(
+      d => d.network === 'mainnet' && d.protocol === 'neo3',
+    )
   }
 
   useEffect(() => {
@@ -138,14 +126,6 @@ const ContractsInvocations: React.FC<{}> = () => {
     <div>
       <div className="label-wrapper">
         <label>Contract Invocations in the last 24 hours</label>
-        <Filter
-          handleFilterUpdate={(option): void => {
-            handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
-            })
-          }}
-        />
       </div>
       <div
         id="ContractInvocations"
