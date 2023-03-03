@@ -32,30 +32,16 @@ export const Filter: React.FC<Props> = ({
       },
     },
     {
-      label: 'Neo N3 (Mainnet)',
+      label: 'Mainnet',
       value: {
         protocol: 'neo3',
         network: 'mainnet',
       },
     },
     {
-      label: 'Neo N3 (Testnet)',
+      label: 'Testnet',
       value: {
         protocol: 'neo3',
-        network: 'testnet',
-      },
-    },
-    {
-      label: 'Neo Legacy (Mainnet)',
-      value: {
-        protocol: 'neo2',
-        network: 'mainnet',
-      },
-    },
-    {
-      label: 'Neo Legacy (Testnet)',
-      value: {
-        protocol: 'neo2',
         network: 'testnet',
       },
     },

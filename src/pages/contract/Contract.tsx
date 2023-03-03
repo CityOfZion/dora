@@ -74,13 +74,11 @@ const Contract: React.FC<Props> = (props: Props) => {
         <div id="contract-details-container">
           <div id="contract-name-info">
             <div id="contract-name">
-              {chain === 'neo2'
-                ? (contract && !isLoading && contract.name) || 'N/A'
-                : (contract &&
-                    !isLoading &&
-                    contract.manifest &&
-                    contract?.manifest.name) ||
-                  'N/A'}
+              {(contract &&
+                !isLoading &&
+                contract.manifest &&
+                contract?.manifest.name) ||
+                'N/A'}
             </div>
             <div className="contract-hash-box">
               <span className="contract-hash-label">CONTRACT:</span>
@@ -111,24 +109,17 @@ const Contract: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile">
                   <label>NAME</label>
                   <span>
-                    {chain === 'neo2'
-                      ? (contract && !isLoading && contract.name) || 'N/A'
-                      : (contract &&
-                          !isLoading &&
-                          contract.manifest &&
-                          contract?.manifest.name) ||
-                        'N/A'}
+                    {(contract &&
+                      !isLoading &&
+                      contract.manifest &&
+                      contract?.manifest.name) ||
+                      'N/A'}
                   </span>
                 </div>
                 <div className="detail-tile">
-                  <label>
-                    {chain === 'neo2' ? 'TYPE' : 'SUPPORTED STANDARDS'}
-                  </label>
+                  <label>SUPPORTED STANDARDS</label>
                   <span>
-                    {chain === 'neo2'
-                      ? 'NEP5'
-                      : contract?.manifest?.supportedstandards.join(', ') ||
-                        'N/A'}
+                    {contract?.manifest?.supportedstandards.join(', ') || 'N/A'}
                   </span>
                 </div>
                 <div className="detail-tile">
@@ -225,11 +216,7 @@ const Contract: React.FC<Props> = (props: Props) => {
           )}
           <div className="script-section">
             <div className="section-label">SCRIPT</div>
-            <div id="contract-script">
-              {chain === 'neo2'
-                ? contract?.script || 'NA'
-                : contract?.nef.script || 'NA'}
-            </div>
+            <div id="contract-script">{contract?.nef.script || 'NA'}</div>
           </div>
 
           {contract && contract.manifest && (

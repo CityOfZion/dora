@@ -61,16 +61,13 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
     ({ transaction }: { transaction: TxState }) => transaction,
   )
   const { all } = txState
-  const neo2List = all.filter(
-    d => d.protocol === 'neo2' && d.network === 'mainnet',
-  )
   const neo3List = all.filter(
     d => d.protocol === 'neo3' && d.network === 'mainnet',
   )
 
   useEffect(() => {
-    if (!neo2List.length) dispatch(fetchMainNetTransactions())
-  }, [dispatch, neo2List.length])
+    if (!neo3List.length) dispatch(fetchMainNetTransactions())
+  }, [dispatch, neo3List.length])
 
   const columns =
     width > 768
@@ -111,31 +108,6 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
               leftBorderColorOnRow="#D355E7"
             />
           </div>
-        </div>
-      </div>
-      <div className="block-list-chain-container">
-        <h4>Neo Legacy (Mainnet)</h4>
-        <div className="label-wrapper-2">
-          <Button
-            primary
-            onClick={(): void =>
-              history.push(`${ROUTES.TRANSACTIONS.url}/neo2/${network}`)
-            }
-          >
-            view transactions
-          </Button>
-        </div>
-        <div className="list-wrapper">
-          <List
-            data={returnTxListData(neo2List, txState.isLoading)}
-            rowId="hash"
-            generateHref={(data): string =>
-              `${ROUTES.TRANSACTION.url}/neo2/${network}/${data.id}`
-            }
-            isLoading={txState.isLoading}
-            columns={columns}
-            leftBorderColorOnRow="#D355E7"
-          />
         </div>
       </div>
     </div>

@@ -71,15 +71,9 @@ export type Platform = {
   network: string
 }
 
-export const NEO_MAINNET_PLATFORMS = [
-  { protocol: 'neo3', network: 'mainnet' },
-  { protocol: 'neo2', network: 'mainnet' },
-]
+export const NEO_MAINNET_PLATFORMS = [{ protocol: 'neo3', network: 'mainnet' }]
 
-export const NEO_TESTNET_PLATFORMS = [
-  { protocol: 'neo3', network: 'testnet' },
-  { protocol: 'neo2', network: 'testnet' },
-]
+export const NEO_TESTNET_PLATFORMS = [{ protocol: 'neo3', network: 'testnet' }]
 
 export const SUPPORTED_PLATFORMS = [
   ...NEO_MAINNET_PLATFORMS,

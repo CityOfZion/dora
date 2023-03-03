@@ -1,4 +1,3 @@
-import Neo2 from '../../../../../assets/icons/neo2.svg'
 import Neo3 from '../../../../../assets/icons/neo3.svg'
 import { ArrowForwardIos } from '@material-ui/icons'
 import { Link } from 'react-router-dom'
@@ -27,13 +26,9 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
       {!isMobileOrTablet && (
         <div className="address-transactions__table--chain">
           <div className="address-transactions__table--logo">
-            {chain === 'neo2' ? (
-              <img src={Neo2} alt="token-logo" />
-            ) : (
-              <img src={Neo3} alt="token-logo" />
-            )}
+            <img src={Neo3} alt="token-logo" />
           </div>
-          <div>{chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</div>
+          <div>Neo N3</div>
         </div>
       )}
       <div className="address-transactions__table--content">
@@ -45,15 +40,9 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
             >
               <div className="horiz">
                 <div className="address-transactions__table--logo">
-                  {chain === 'neo2' ? (
-                    <img src={Neo2} alt="token-logo" />
-                  ) : (
-                    <img src={Neo3} alt="token-logo" />
-                  )}
+                  <img src={Neo3} alt="token-logo" />
                 </div>
-                <div className="title">
-                  {chain === 'neo2' ? 'Neo Legacy' : 'Neo N3'}
-                </div>
+                <div className="title">Neo N3</div>
               </div>
               <ArrowForwardIos style={{ color: '#d355e7' }} />
             </Link>
