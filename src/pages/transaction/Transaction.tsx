@@ -8,15 +8,12 @@ import {
 import './Transaction.scss'
 import {
   GENERATE_BASE_URL,
-  NEO_HASHES,
-  GAS_HASHES,
   neo3_getAddressFromSriptHash,
   ROUTES,
 } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
-import { TransactionN2 } from '../../components/transaction/TransactionN2'
 import { TransactionN3 } from '../../components/transaction/TransactionN3'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
@@ -32,71 +29,6 @@ export type ParsedTransfer = {
   from: string
   symbol: string
 }
-
-const parseAbstractData = async (
-  transaction: DetailedTransaction,
-): Promise<ParsedTransfer[]> => {
-  const transfers: ParsedTransfer[] = []
-
-  if (transaction.items) {
-    transaction.items.inputs.forEach(({ address, value, asset }) => {
-      let name = ''
-      if (NEO_HASHES.includes(asset)) {
-        name = 'NEO'
-      } else if (GAS_HASHES.includes(asset)) {
-        name = 'GAS'
-      }
-
-      transfers.push({
-        name,
-        amount: value,
-        to: '',
-        from: address,
-        symbol: name,
-      })
-    })
-
-    transaction.items.outputs.forEach(({ address, value, asset }) => {
-      let name = ''
-      if (NEO_HASHES.includes(asset)) {
-        name = 'NEO'
-      } else if (GAS_HASHES.includes(asset)) {
-        name = 'GAS'
-      }
-
-      transfers.push({
-        name,
-        amount: value,
-        to: address,
-        from: '',
-        symbol: name,
-      })
-    })
-
-    for (const token of transaction.items.tokens) {
-      const { scripthash, amount, to, from } = token
-      const response = await fetch(`${GENERATE_BASE_URL()}/asset/${scripthash}`)
-      const json = await response.json()
-      const { name, symbol } = json
-
-      const amountWithDecimals = convertToArbitraryDecimals(
-        Number(amount),
-        json.decimals,
-      )
-
-      transfers.push({
-        name,
-        amount: amountWithDecimals,
-        to,
-        from,
-        symbol,
-      })
-    }
-  }
-
-  return transfers
-}
-
 const parseNeo3TransactionData = async (
   transaction: DetailedTransaction,
 ): Promise<ParsedTransfer[]> => {
@@ -186,13 +118,9 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
   const parseTransfers = useCallback(
     async (transaction: DetailedTransaction) => {
-      let parsedTransfers: ParsedTransfer[]
-
-      if (chain === 'neo3') {
-        parsedTransfers = await parseNeo3TransactionData(transaction)
-      } else {
-        parsedTransfers = await parseAbstractData(transaction)
-      }
+      const parsedTransfers: ParsedTransfer[] = await parseNeo3TransactionData(
+        transaction,
+      )
 
       setTransfers(parsedTransfers)
       setLocalLoadComplete(true)
@@ -248,21 +176,12 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
         {transaction && localLoadComplete ? (
           <>
-            {chain === 'neo2' ? (
-              <TransactionN2
-                chain={chain}
-                network={network}
-                transaction={transaction}
-                transfers={transfers}
-              />
-            ) : (
-              <TransactionN3
-                chain={chain}
-                network={network}
-                transaction={transaction}
-                transfers={transfers}
-              />
-            )}
+            <TransactionN3
+              chain={chain}
+              network={network}
+              transaction={transaction}
+              transfers={transfers}
+            />
           </>
         ) : (
           <SkeletonTheme

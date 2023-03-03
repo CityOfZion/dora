@@ -3,7 +3,6 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import './NftInformation.scss'
 import Neo3 from '../../assets/icons/neo3.svg'
-import Neo2 from '../../assets/icons/neo2.svg'
 import ZoomIcon from '../../assets/icons/zoom-icon.svg'
 import BackButton from '../../components/navigation/BackButton'
 import Modal from '@material-ui/core/Modal'
@@ -73,13 +72,6 @@ const NftInformation: React.FC<Props> = (props: Props) => {
         <>
           <img className="token-logo" src={Neo3} alt="token-logo" />
           <span>NEO N3</span>
-        </>
-      )
-    } else if (nftState.value?.chain === 'n2') {
-      return (
-        <>
-          <img className="token-logo" src={Neo2} alt="token-logo" />
-          <span>NEO LEGACY</span>
         </>
       )
     } else {

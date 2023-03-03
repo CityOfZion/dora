@@ -1,11 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  Redirect,
-  RouteComponentProps,
-  useHistory,
-  withRouter,
-} from 'react-router-dom'
+import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
 import { clearList, fetchNFTS, nftLimit } from '../../../../actions/nftActions'
 import NFTFilters, {
   NFTFiltersToggleType,
@@ -68,14 +63,6 @@ const AddressNFTS: React.FC<Props> = props => {
       dispatch(clearList())
     }
   }, [dispatch])
-
-  if (chain === 'neo2') {
-    return (
-      <Redirect
-        to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/assets`}
-      />
-    )
-  }
 
   return (
     <div id="nft-container" className="page-container">

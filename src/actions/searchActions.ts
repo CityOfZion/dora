@@ -1,7 +1,7 @@
 import { ThunkDispatch } from 'redux-thunk'
 import { Dispatch, Action } from 'redux'
 import { State } from '../reducers/searchReducer'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered =
@@ -101,54 +101,6 @@ export async function executeSearch(
   }
 
   const options: SearchOptions[] = [
-    {
-      protocol: 'neo2',
-      network: 'mainnet',
-      ctx: NeoLegacyREST,
-      method: 'block',
-    },
-    {
-      protocol: 'neo2',
-      network: 'mainnet',
-      ctx: NeoLegacyREST,
-      method: 'balance',
-    },
-    {
-      protocol: 'neo2',
-      network: 'mainnet',
-      ctx: NeoLegacyREST,
-      method: 'contract',
-    },
-    {
-      protocol: 'neo2',
-      network: 'mainnet',
-      ctx: NeoLegacyREST,
-      method: 'transaction',
-    },
-    {
-      protocol: 'neo2',
-      network: 'testnet',
-      ctx: NeoLegacyREST,
-      method: 'block',
-    },
-    {
-      protocol: 'neo2',
-      network: 'testnet',
-      ctx: NeoLegacyREST,
-      method: 'balance',
-    },
-    {
-      protocol: 'neo2',
-      network: 'testnet',
-      ctx: NeoLegacyREST,
-      method: 'contract',
-    },
-    {
-      protocol: 'neo2',
-      network: 'testnet',
-      ctx: NeoLegacyREST,
-      method: 'transaction',
-    },
     { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'block' },
     { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'balance' },
     { protocol: 'neo3', network: 'testnet', ctx: NeoRest, method: 'contract' },

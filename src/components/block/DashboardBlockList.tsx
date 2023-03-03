@@ -27,7 +27,6 @@ type Block = {
   hash: string
   txCount: number
 }
-
  */
 
 type ParsedBlock = {
@@ -70,16 +69,13 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const width = useWindowWidth()
   const history = useHistory()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
-  const neo2List = blockState.all.filter(
-    d => d.protocol === 'neo2' && d.network === 'mainnet',
-  )
   const neo3List = blockState.all.filter(
     d => d.protocol === 'neo3' && d.network === 'mainnet',
   )
 
   useEffect(() => {
-    if (!neo2List.length) dispatch(fetchMainNetBlocks())
-  }, [dispatch, neo2List.length])
+    if (!neo3List.length) dispatch(fetchMainNetBlocks())
+  }, [dispatch, neo3List.length])
 
   const columns =
     width > 768
@@ -133,34 +129,6 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
               leftBorderColorOnRow="#D355E7"
             />
           </div>
-        </div>
-      </div>
-      <div className="block-list-chain-container">
-        <h4>Neo Legacy (Mainnet)</h4>
-        <div className="label-wrapper-2">
-          <Button
-            primary
-            onClick={(): void =>
-              history.push(`${ROUTES.BLOCKS.url}/neo2/${network}`)
-            }
-          >
-            view blocks
-          </Button>
-        </div>
-        <div className="list-wrapper">
-          <List
-            data={returnBlockListData(
-              neo2List,
-              blockState.isLoading || neo2List.length === 0,
-            )}
-            rowId="height"
-            generateHref={(data): string =>
-              `${ROUTES.BLOCK.url}/neo2/${network}/${data.id}`
-            }
-            isLoading={blockState.isLoading || neo2List.length === 0}
-            columns={columns}
-            leftBorderColorOnRow="#D355E7"
-          />
         </div>
       </div>
     </div>

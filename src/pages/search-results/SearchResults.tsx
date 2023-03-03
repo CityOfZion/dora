@@ -9,7 +9,6 @@ import './SearchResults.scss'
 
 import { State as SearchState } from '../../reducers/searchReducer'
 import { handleSearchInput } from '../../actions/searchActions'
-import { ReactComponent as Neo2 } from '../../assets/icons/neo2.svg'
 import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
 import { formatDate } from '../../utils/time'
 
@@ -29,22 +28,16 @@ const PlatformElement = ({
   network: string | void
 }): ReactElement => (
   <div className="search-result-chain-info">
-    <div id="chain-icon">{protocol === 'neo2' ? <Neo2 /> : <Neo3 />}</div>
-    <p>{protocol === 'neo2' ? 'Neo Legacy' : 'Neo N3'}</p>
+    <div id="chain-icon"><Neo3 /></div>
+    <p>Neo N3</p>
     <p>
       <small>
         {((): string => {
-          if (protocol === 'neo2' && network === 'mainnet') {
+          if (network === 'mainnet') {
             return 'Mainnet'
-          } else if (protocol === 'neo2' && network === 'testnet') {
+          } else {
             return 'Testnet'
-          } else if (protocol === 'neo3' && network === 'testnet') {
-            return 'Testnet'
-          } else if (protocol === 'neo3' && network === 'mainnet') {
-            return 'Mainnet'
           }
-
-          return ''
         })()}
       </small>
     </p>
