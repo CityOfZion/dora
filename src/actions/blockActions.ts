@@ -6,10 +6,11 @@ import {
   Platform,
   SUPPORTED_PLATFORMS,
 } from '../constants'
-import { Block, State } from '../reducers/blockReducer'
+import { Block, DetailedBlock, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 import { store } from '../store'
+import { BlockTransaction } from '../reducers/transactionReducer'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -35,7 +36,7 @@ export const requestBlocks =
 
 export const REQUEST_BLOCK_SUCCESS = 'REQUEST_BLOCK_SUCCESS'
 export const requestBlockSuccess =
-  (json: Block) =>
+  (json: DetailedBlock) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_BLOCK_SUCCESS,
@@ -125,7 +126,30 @@ export function fetchBlock(index = 1) {
         const network = store.getState().network.network
         const response = await NeoRest.block(index, network)
 
-        dispatch(requestBlockSuccess(response as unknown as Block))
+        const block = {
+          nextconsensus: response.nextconsensus,
+          oversize: 0,
+          previousblockhash: response.previousBlockHash,
+          index: response.index,
+          version: response.version,
+          nonce: response.nonce,
+          size: response.size,
+          blocktime: response.blocktime,
+          merkleroot: response.merkleroot,
+          time: Number(response.time),
+          hash: response.hash,
+          jsonsize: response.jsonsize,
+          tx: response.tx.map(
+            t =>
+              ({
+                size: t.size,
+                time: Number(t.time),
+                txid: t.hash,
+                hash: t.hash,
+              } as BlockTransaction),
+          ),
+        } as DetailedBlock
+        dispatch(requestBlockSuccess(block))
       } catch (e) {
         dispatch(requestBlockError(index, e))
       }

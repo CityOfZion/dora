@@ -128,7 +128,6 @@ export type BlockTransaction = {
   size: number
   time: number
   txid: string
-  type?: string
   hash: string
 }
 

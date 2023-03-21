@@ -169,7 +169,6 @@ const Block: React.FC<Props> = (props: Props) => {
 
                 <N3BlockTransactionsList
                   loading={isLoading}
-                  list={block.tx}
                   block={block}
                   network={network}
                   chain={chain}

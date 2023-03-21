@@ -7,6 +7,7 @@ import {
   REQUEST_BLOCKS_SUCCESS,
   CLEAR_BLOCKS_LIST,
 } from '../actions/blockActions'
+import { BlockTransaction } from './transactionReducer'
 
 type Action = {
   type: string
@@ -43,15 +44,11 @@ export type Block = {
 export type DetailedBlock = {
   nextconsensus: string
   oversize: number
-  tx: []
+  tx: BlockTransaction[]
   previousblockhash: string
   index: number
   version: number
   nonce: string
-  script: {
-    invocation: string
-    verification: string
-  }
   size: number
   blocktime: number
   merkleroot: string
