@@ -11,7 +11,7 @@ import {
 type Action = {
   type: string
   receivedAt: Date
-  indexOrHash: string
+  index: number
   blockHeight: string
   json: {
     hash: string

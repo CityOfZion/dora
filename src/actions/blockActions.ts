@@ -2,26 +2,24 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import {
-  GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
   Platform,
   SUPPORTED_PLATFORMS,
 } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { BlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import { BlocksResponse as NLBlocksResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { store } from '../store'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
-// block by height (index) or by its hash
+// block by height (index)
 export const requestBlock =
-  (indexOrHash: string | number) =>
+  (index: number) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_BLOCK,
-      indexOrHash,
+      index: index,
     })
   }
 
@@ -60,11 +58,11 @@ export const requestBlocksSuccess =
 
 export const REQUEST_BLOCK_ERROR = 'REQUEST_BLOCK_ERROR'
 export const requestBlockError =
-  (indexOrHash: string | number, error: Error) =>
+  (index: number, error: Error) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_BLOCK_ERROR,
-      indexOrHash,
+      index,
       error,
       receivedAt: Date.now(),
     })
@@ -94,7 +92,7 @@ export const clearList =
 
 export function shouldFetchBlock(
   state: { block: State },
-  indexOrHash: string | number,
+  index: number,
 ): boolean {
   return true
 
@@ -116,21 +114,20 @@ export const resetBlockState =
     })
   }
 
-export function fetchBlock(indexOrHash: string | number = 1) {
+export function fetchBlock(index = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { block: State },
   ): Promise<void> => {
-    if (shouldFetchBlock(getState(), indexOrHash)) {
-      dispatch(requestBlock(indexOrHash))
+    if (shouldFetchBlock(getState(), index)) {
+      dispatch(requestBlock(index))
       try {
-        const response = await fetch(
-          `${GENERATE_BASE_URL()}/block/${indexOrHash}`,
-        )
-        const json = await response.json()
-        dispatch(requestBlockSuccess(json))
+        const network = store.getState().network.network
+        const response = await NeoRest.block(index, network)
+
+        dispatch(requestBlockSuccess(response as unknown as Block))
       } catch (e) {
-        dispatch(requestBlockError(indexOrHash, e))
+        dispatch(requestBlockError(index, e))
       }
     }
   }
@@ -150,12 +147,7 @@ export function fetchBlocks(
 
       const res = await Promise.allSettled(
         supportedPlatforms.map(async ({ network, protocol }) => {
-          let result: BlocksResponse | NLBlocksResponse | undefined = undefined
-          if (protocol === 'neo2') {
-            result = await NeoLegacyREST.blocks(page, network)
-          } else if (protocol === 'neo3') {
-            result = await NeoRest.blocks(page, network)
-          }
+          const result = await NeoRest.blocks(page, network)
           if (result) {
             return result.items.map(d => {
               const parsed: Block = {

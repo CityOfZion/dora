@@ -35,9 +35,11 @@ const Block: React.FC<Props> = (props: Props) => {
   const [blockTimeState, setBlockTimeState] = useState('')
   const { block, isLoading } = blockState
 
+  const index = Number(hash ?? 1)
+
   useEffect(() => {
-    dispatch(fetchBlock(hash))
-  }, [dispatch, hash])
+    dispatch(fetchBlock(index))
+  }, [dispatch, index])
 
   useEffect(() => {
     const { block } = blockState
