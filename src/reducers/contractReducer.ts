@@ -44,7 +44,6 @@ export type State = {
   totalCount: number
 }
 
-// used in fetchContracts (plural) and Contracts list
 export type Contract = {
   block: number
   time: number
