@@ -154,11 +154,11 @@ export function fetchTransactions(
         supportedPlatforms.map(async ({ network, protocol }) => {
           const result = await NeoRest.transactions(page, network)
           return result.items.map(
-            tx =>
+            ({ time, hash, size }) =>
               ({
-                size: tx.size,
-                time: Number(tx.time),
-                txid: tx.hash,
+                size,
+                time: Number(time),
+                txid: hash,
                 protocol: protocol,
                 network: network,
               } as Transaction),
