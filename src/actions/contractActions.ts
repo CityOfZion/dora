@@ -1,15 +1,19 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
-import { Contract, State } from '../reducers/contractReducer'
+import { SUPPORTED_PLATFORMS } from '../constants'
+import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { ContractsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import {
+  ContractResponse,
+  ContractsResponse,
+} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import {
   ContractsResponse as NLContractsResponse,
   InvocationStatsResponse,
 } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { store } from '../store'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -33,7 +37,7 @@ export const requestContracts =
 
 export const REQUEST_CONTRACT_SUCCESS = 'REQUEST_CONTRACT_SUCCESS'
 export const requestContractSuccess =
-  (hash: string, json: Contract) =>
+  (hash: string, json: { contract: ContractResponse; stats: InvocationStat }) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACT_SUCCESS,
@@ -153,7 +157,7 @@ export const resetContractState =
     })
   }
 
-export function fetchContract(hash: string, populateStates = true) {
+export function fetchContract(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { contract: State },
@@ -162,27 +166,16 @@ export function fetchContract(hash: string, populateStates = true) {
       dispatch(requestContract(hash))
 
       try {
-        const response = await fetch(`${GENERATE_BASE_URL()}/contract/${hash}`)
+        const { network } = store.getState().network
+        const contract = await NeoRest.contract(hash, network)
+        const stats = await NeoRest.contractStats(hash, network)
 
-        const json = await response.json()
-
-        if (populateStates) {
-          const invocationStatsResponse = await fetch(
-            `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
-          )
-
-          const invocationStats = await invocationStatsResponse
-            .json()
-            .catch(error => {
-              console.error('An error occurred fetching invocation stats.', {
-                error,
-              })
-            })
-
-          json.invocationStats = invocationStats || null
-        }
-
-        dispatch(requestContractSuccess(hash, json))
+        dispatch(
+          requestContractSuccess(hash, {
+            contract,
+            stats: stats as InvocationStat,
+          }),
+        )
       } catch (e) {
         dispatch(requestContractError(hash, e))
       }

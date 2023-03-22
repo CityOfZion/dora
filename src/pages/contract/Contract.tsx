@@ -31,7 +31,7 @@ const Contract: React.FC<Props> = (props: Props) => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
-  const { contract, isLoading } = contractsState
+  const { contract, isLoading, contractStats } = contractsState
 
   function getAddressLink(): string {
     if (contract && chain === 'neo3') {
@@ -93,12 +93,12 @@ const Contract: React.FC<Props> = (props: Props) => {
             </div>
           </div>
 
-          {contract && contract.invocationStats && (
+          {contract && contractStats && (
             <div id="contract-invocations-graph-container">
               <div className="section-label" style={{ marginBottom: -20 }}>
                 LAST 30 DAYS INVOCATIONS
               </div>
-              <InvocationGraph data={contract.invocationStats} />
+              <InvocationGraph data={contractStats} />
             </div>
           )}
 
