@@ -2,7 +2,6 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import {
-  GENERATE_BASE_URL,
   NEO_MAINNET_PLATFORMS,
   Platform,
   SUPPORTED_PLATFORMS,
@@ -10,9 +9,7 @@ import {
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { TransactionsResponse as NLTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
-import { TransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =
@@ -117,26 +114,18 @@ export function fetchTransaction(hash: string, chain: string) {
   ): Promise<void> => {
     if (shouldFetchTransaction(getState(), hash)) {
       dispatch(requestTransaction(hash))
-
-      const transactionRequestPromises = [
-        fetch(`${GENERATE_BASE_URL()}/transaction/${hash}`),
-        fetch(`${GENERATE_BASE_URL()}/log/${hash}`),
-      ]
-
-      chain === 'neo2' &&
-        transactionRequestPromises.push(
-          fetch(`${GENERATE_BASE_URL()}/transaction_abstracts/${hash}`),
-        )
+      const network = getState().network.network
 
       try {
-        const responses = await Promise.all(transactionRequestPromises)
+        const requests: Promise<any>[] = [
+          NeoRest.transaction(hash, network),
+          NeoRest.log(hash, network),
+        ]
+
+        const responses = await Promise.all(requests)
         const mergedResponse = {}
         for (const response of responses) {
-          const json =
-            (await response.json().catch(e => {
-              console.error({ e })
-            })) || {}
-          Object.assign(mergedResponse, json)
+          Object.assign(mergedResponse, response)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
       } catch (e) {
@@ -161,44 +150,24 @@ export function fetchTransactions(
     try {
       dispatch(requestTransactions(page))
 
-      interface TransactionsResponseShunt extends NLTransactionsResponse {
-        items: any[]
-      }
-
-      let res = await Promise.all(
+      const res = await Promise.all(
         supportedPlatforms.map(async ({ network, protocol }) => {
-          let result:
-            | TransactionsResponseShunt
-            | TransactionsResponse
-            | undefined = undefined
-          if (protocol === 'neo3') {
-            result = await NeoRest.transactions(page, network)
-          } else if (protocol === 'neo2') {
-            const oldResult = await NeoLegacyREST.transactions(page, network)
-            result = oldResult as TransactionsResponseShunt
-            result.items = oldResult.transactions
-          }
-
-          if (result) {
-            result.items = result.items.map(d => ({
-              ...d,
-              network: network,
-              protocol: protocol,
-            }))
-          }
-          return result
+          const result = await NeoRest.transactions(page, network)
+          return result.items.map(
+            tx =>
+              ({
+                size: tx.size,
+                time: Number(tx.time),
+                txid: tx.hash,
+                protocol: protocol,
+                network: network,
+              } as Transaction),
+          )
         }),
       )
-
-      res = res.flat().filter(r => r !== undefined)
+      const flatRes = res.flat()
       const all = {
-        items: sortSingleListByDate(
-          res
-            .map(r => {
-              return r!.items
-            })
-            .flat(),
-        ) as Transaction[],
+        items: sortSingleListByDate(flatRes) as Transaction[],
       }
       dispatch(requestTransactionsSuccess(page, { all }))
     } catch (e) {

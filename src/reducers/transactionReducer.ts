@@ -34,7 +34,6 @@ export type Transaction = {
   size: number
   time: number
   txid: string
-  type: string
   hash?: string
   protocol?: string
   network?: string

@@ -9,10 +9,11 @@ import {
 } from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { byteStringToAddress, GENERATE_BASE_URL } from '../../../../constants'
+import { byteStringToAddress } from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 interface MatchParams {
   hash: string
@@ -49,16 +50,12 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
         .map(async ({ contract, state }): Promise<Transfer> => {
           const [{ value: from }, { value: to }, { value: amount }] = state
 
-          const response = await fetch(
-            `${GENERATE_BASE_URL()}/asset/${contract}`,
-          )
-
-          const json = await response.json()
+          const json = await NeoRest.asset(contract, network)
           const { symbol, decimals } = json
 
           const convertedAmount = convertToArbitraryDecimals(
             Number(amount),
-            decimals,
+            Number(decimals),
           )
 
           const convertedFrom = from ? byteStringToAddress(from) : 'mint'
