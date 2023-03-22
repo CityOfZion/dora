@@ -4,7 +4,7 @@ import uniqueId from 'lodash/uniqueId'
 import { ReactComponent as TransferArrow } from '../../assets/icons/transfer-arrow.svg'
 import txBackgroundCubes from '../../assets/tx_mask.svg'
 import txBackgroundCubesMobile from '../../assets/cubes.png'
-import txRightCube from '../../assets/right-cubes.png'
+import txRightCube from '../../assets/tx_right_cubes.svg'
 import txCube from '../../assets/tx_cube.svg'
 
 import './Transfer.scss'
