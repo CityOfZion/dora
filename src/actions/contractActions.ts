@@ -166,7 +166,7 @@ export function fetchContract(hash: string) {
       dispatch(requestContract(hash))
 
       try {
-        const network = store.getState().network.network
+        const { network } = store.getState().network
         const contract = await NeoRest.contract(hash, network)
         const stats = await NeoRest.contractStats(hash, network)
 
