@@ -6,11 +6,7 @@ import {
   DetailedTransaction,
 } from '../../reducers/transactionReducer'
 import './Transaction.scss'
-import {
-  GENERATE_BASE_URL,
-  neo3_getAddressFromSriptHash,
-  ROUTES,
-} from '../../constants'
+import { neo3_getAddressFromSriptHash, ROUTES } from '../../constants'
 import { fetchTransaction } from '../../actions/transactionActions'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
@@ -21,6 +17,8 @@ import BackButton from '../../components/navigation/BackButton'
 import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { store } from '../../store'
 
 export type ParsedTransfer = {
   name: string
@@ -46,11 +44,9 @@ const parseNeo3TransactionData = async (
           continue
 
         if (isTransfer) {
-          const assetResponse = await fetch(
-            `${GENERATE_BASE_URL('neo3')}/asset/${notification.contract}`,
-          )
-          const assetJson = await assetResponse.json()
-          const { symbol, decimals, name } = assetJson
+          const { network } = store.getState().network
+          const asset = await NeoRest.asset(notification.contract, network)
+          const { symbol, decimals, name } = asset
           let amount = 0
 
           const integerNotification = notification.state.value.find(
@@ -85,7 +81,10 @@ const parseNeo3TransactionData = async (
           transfers.push({
             name,
             symbol,
-            amount: convertToArbitraryDecimals(Number(amount), decimals),
+            amount: convertToArbitraryDecimals(
+              Number(amount),
+              Number(decimals),
+            ),
             to: to_address,
             from: from_address,
           })

@@ -7,7 +7,7 @@ import {
   REQUEST_TRANSACTIONS,
   REQUEST_TRANSACTIONS_SUCCESS,
 } from '../actions/transactionActions'
-import { DetailedContract } from './contractReducer'
+import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 type Action = {
   type: string
@@ -78,7 +78,7 @@ export type TransactionNotification = {
   contract: string
   state: StackState
   event_name: string
-  contractObj: DetailedContract
+  contractObj: ContractResponse
 }
 
 // TODO: create different types for the chains instead of this generic one
