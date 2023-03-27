@@ -4,15 +4,8 @@ import { ThunkDispatch } from 'redux-thunk'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import {
-  ContractResponse,
-  ContractsResponse,
-} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import {
-  ContractsResponse as NLContractsResponse,
-  InvocationStatsResponse,
-} from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { store } from '../store'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
@@ -192,19 +185,11 @@ export function fetchContracts(page = 1) {
 
       const res = await Promise.all(
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-          let result: ContractsResponse | NLContractsResponse | undefined =
-            undefined //TODO: Fix the typing
-          if (protocol === 'neo2') {
-            result = await NeoLegacyREST.contracts(page, network)
-          } else if (protocol === 'neo3') {
-            result = await NeoRest.contracts(page, network)
-          }
+          const result = await NeoRest.contracts(page, network)
           if (result) {
             return result.items.map(d => {
               if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
                 d.asset_name = d.manifest.name
-              } else if (d.asset_name === '' && 'name' in d) {
-                d.asset_name = d.name
               }
 
               const parsed: Contract = {
@@ -248,12 +233,7 @@ export function fetchContractsInvocations() {
       try {
         const res = await Promise.all(
           SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-            let result: InvocationStatsResponse | undefined = undefined
-            if (protocol === 'neo2') {
-              result = await NeoLegacyREST.invocationStats(network)
-            } else if (protocol === 'neo3') {
-              result = await NeoRest.invocationStats(network)
-            }
+            const result = await NeoRest.invocationStats(network)
             if (result) {
               return result.map(d => ({
                 ...d,
