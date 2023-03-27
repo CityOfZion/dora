@@ -187,7 +187,17 @@ export function fetchContracts(page = 1) {
         SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
           const result = await NeoRest.contracts(page, network)
           if (result) {
-            return result.items.map(d => {
+             return result.items.map(d => ({
+                  block: d.block,
+                  time: parseInt(d.time),
+                  asset_name: d.asset_name === '' && d.manifest?.name ? d.manifest.name : d.asset_name,
+                  hash: d.hash,
+                  type: d.type,
+                  symbol: d.symbol,
+                  network,
+                  protocol,
+              })
+          })
               if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
                 d.asset_name = d.manifest.name
               }
