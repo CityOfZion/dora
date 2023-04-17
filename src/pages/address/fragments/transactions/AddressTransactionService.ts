@@ -1,16 +1,13 @@
-import { GENERATE_BASE_URL } from '../../../../constants'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { store } from '../../../../store'
+import { AddressTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 export const fetchTransaction = async (hash: string, page = 1) => {
   try {
-    const response = await fetch(
-      `${GENERATE_BASE_URL()}/address_txfull/${hash}/${page}`,
-    )
-
-    if (response.ok) {
-      return await response.json()
-    }
+    const network = store.getState().network.network
+    return await NeoRest.addressTXFull(hash, page, network)
   } catch (error) {
     console.error(error)
-    return { items: [], totalCount: 0 }
+    return { items: [], totalCount: 0 } as AddressTransactionsResponse
   }
 }

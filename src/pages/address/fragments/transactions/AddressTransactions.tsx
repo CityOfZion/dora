@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { fetchTransaction } from './AddressTransactionService'
 import './AddressTransactions.scss'
-import {
-  AddressTransaction,
-  Notification,
-  Transfer,
-} from './AddressTransaction'
+import { AddressTransaction, Incovation, Transfer } from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { byteStringToAddress } from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
 import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import {
+  Notification,
+  TransactionEnhanced,
+  Transfer as TransferDoraTS,
+} from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
 
 interface MatchParams {
   hash: string
@@ -40,36 +40,45 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
     setCurrentPage(currentPage + 1)
   }
 
-  const getTransfers = (invocations: Notification[]) =>
-    Promise.all(
-      invocations
-        .filter(
-          ({ state, event_name }) =>
-            state.length === 3 && event_name === 'Transfer',
+  function fixTransfers(tfxs: TransferDoraTS[]) {
+    return Promise.all(
+      tfxs.map(async tx => {
+        const json = await NeoRest.asset(tx.scripthash, network)
+        const { symbol, decimals } = json
+
+        const convertedAmount = convertToArbitraryDecimals(
+          Number(tx.amount),
+          Number(decimals),
         )
-        .map(async ({ contract, state }): Promise<Transfer> => {
-          const [{ value: from }, { value: to }, { value: amount }] = state
 
-          const json = await NeoRest.asset(contract, network)
-          const { symbol, decimals } = json
-
-          const convertedAmount = convertToArbitraryDecimals(
-            Number(amount),
-            Number(decimals),
-          )
-
-          const convertedFrom = from ? byteStringToAddress(from) : 'mint'
-          const convertedTo = to ? byteStringToAddress(to) : 'burn'
-
-          return {
-            scripthash: contract,
-            from: convertedFrom,
-            to: convertedTo,
-            amount: convertedAmount,
-            symbol,
-          }
-        }),
+        return {
+          from: tx.from,
+          to: tx.to,
+          scripthash: tx.scripthash,
+          amount: convertedAmount,
+          symbol: symbol,
+        } as Transfer
+      }),
     )
+  }
+
+  async function convertToAddressTransactions(
+    items: TransactionEnhanced[],
+  ): Promise<AddressTransaction[]> {
+    const addrs = []
+    for (const item of items) {
+      const tfxs = await fixTransfers(item.transfers)
+
+      addrs.push({
+        ...item,
+        invocations: item.invocations as Incovation[],
+        notifications: item.notifications as Notification[],
+        time: Number(item.time),
+        transfers: tfxs,
+      } as AddressTransaction)
+    }
+    return addrs
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -79,11 +88,9 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
         currentPage,
       )
 
-      for (const item of items) {
-        item.transfers = await getTransfers(item.notifications)
-      }
+      const newItems = await convertToAddressTransactions(items)
 
-      populateRecords(items)
+      populateRecords(newItems)
 
       if (pages === 0 && items.length > 0) {
         setPages(Math.ceil(totalCount / items.length))
