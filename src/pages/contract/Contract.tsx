@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { State as ContractState } from '../../reducers/contractReducer'
 import './Contract.scss'
-import { neo3_getAddressFromSriptHash, ROUTES } from '../../constants'
+import { ROUTES } from '../../constants'
 import { fetchContract } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
@@ -15,6 +15,7 @@ import InvocationGraph from '../../components/data-visualization/InvocationGraph
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { format24Hours, formatDate } from '../../utils/time'
 import Manifest from '../../components/manifest/Manifest'
+import bs58check from 'bs58check'
 
 interface MatchParams {
   hash: string
@@ -35,7 +36,12 @@ const Contract: React.FC<Props> = (props: Props) => {
 
   function getAddressLink(): string {
     if (contract && chain === 'neo3') {
-      return neo3_getAddressFromSriptHash(hash)
+      const d = Buffer.from(hash.slice(2), 'hex')
+      d.reverse()
+      const inputData = Buffer.alloc(21)
+      inputData.writeInt8(0x35, 0)
+      inputData.fill(d, 1)
+      return bs58check.encode(inputData)
     }
     return ''
   }
