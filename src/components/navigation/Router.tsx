@@ -19,7 +19,8 @@ import Monitor from '../../pages/monitor/Monitor'
 import Endpoint from '../../pages/endpoint/Endpoint'
 
 import { MonitorProvider } from '../../contexts/MonitorContext'
-import NftInformation from '../../pages/nft/NftInformation'
+import NftInformationPage from '../../pages/nft/NftInformationPage'
+import Lookup from '../../pages/lookup/Lookup'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -52,8 +53,13 @@ const Router: React.FC = (): ReactElement => {
                 />
 
                 <Route
+                  path={ROUTES.LOOKUP.url}
+                  component={(): ReactElement => <Lookup />}
+                />
+
+                <Route
                   path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
-                  component={(): ReactElement => <NftInformation />}
+                  component={(): ReactElement => <NftInformationPage />}
                 />
 
                 <Route
