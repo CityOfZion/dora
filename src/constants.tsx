@@ -253,6 +253,11 @@ export const ROUTES = {
     renderIcon: (): React.ReactNode => <Diamond />,
     target: 'self',
   },
+  LOOKUP: {
+    url: '/lookup',
+    name: 'Lookup',
+    target: '_self',
+  },
   NOT_FOUND: {
     url: '/not-found',
     name: 'No results found',
