@@ -9,8 +9,8 @@ import {
 import { Block, DetailedBlock, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { store } from '../store'
 import { BlockTransaction } from '../reducers/transactionReducer'
+import { State as NetworkState } from '../reducers/networkReducer'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -118,12 +118,12 @@ export const resetBlockState =
 export function fetchBlock(index = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { block: State },
+    getState: () => { block: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchBlock(getState(), index)) {
       dispatch(requestBlock(index))
       try {
-        const network = store.getState().network.network
+        const network = getState().network.network
         const response = await NeoRest.block(index, network)
 
         const block = {

@@ -2,8 +2,8 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { State } from '../reducers/addressReducer'
+import { State as NetworkState } from '../reducers/networkReducer'
 import { NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { store } from '../store'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress =
@@ -96,10 +96,13 @@ type ParsedBalanceData = {
 }
 
 export function fetchAddress(address: string, chain: string) {
-  return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
+  return async (
+    dispatch: ThunkDispatch<{}, void, Action>,
+    getState: () => { network: NetworkState },
+  ): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const network = store.getState().network.network
+      const network = getState().network.network
       const response = await NeoRest.balance(address, network)
 
       // TODO: see if its possible for this data to be added
@@ -141,7 +144,7 @@ export function fetchAddressTransferHistory(address: string, page = 1) {
   ): Promise<void> => {
     dispatch(requestAddressTransferHistory(address, page))
     try {
-      const network = store.getState().network.network
+      const network = 'neo2'
       const response = await NeoRest.transferHistory(address, page, network)
       dispatch(requestAddressTransferHistorySuccess(address, page, response))
     } catch (e) {

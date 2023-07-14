@@ -6,7 +6,7 @@ import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import { store } from '../store'
+import { State as NetworkState } from '../reducers/networkReducer'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -153,13 +153,13 @@ export const resetContractState =
 export function fetchContract(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { contract: State },
+    getState: () => { contract: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchContract(getState(), hash)) {
       dispatch(requestContract(hash))
 
       try {
-        const { network } = store.getState().network
+        const { network } = getState().network
         const contract = await NeoRest.contract(hash, network)
         const stats = await NeoRest.contractStats(hash, network)
 
