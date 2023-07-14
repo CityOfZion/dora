@@ -8,7 +8,7 @@ import { DetailedTransaction } from '../../reducers/transactionReducer'
 import DateRangeIcon from '@material-ui/icons/DateRange'
 import { Icon } from '@iconify/react'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
-import { formatDate, formatHours } from '../../utils/time'
+import { formatDate, format24Hours } from '../../utils/time'
 import { TransactionLogView } from '../../pages/transaction/fragment/TransactionLog'
 import { uuid } from '../../utils/formatter'
 import { Box, Flex, Text } from '@chakra-ui/react'
@@ -151,7 +151,7 @@ export const TransactionN2: React.FC<Props> = ({
                         }}
                       />
                     </Flex>
-                    <Text w={'75px'}>{formatHours(transaction.time)}</Text>
+                    <Text w={'75px'}>{format24Hours(transaction.time)}</Text>
                   </Flex>
                 </Flex>
               </Flex>
