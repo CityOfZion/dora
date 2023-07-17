@@ -108,14 +108,14 @@ const Transactions: React.FC<{}> = () => {
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
           { name: 'Completed on', accessor: 'time' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
         ]

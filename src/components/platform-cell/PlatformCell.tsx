@@ -17,7 +17,7 @@ const PlatformCell = ({
           <div className="neo3-platform-cell">
             <img src={Neo3} alt="NEO 3" />
             <span>
-              Neo <small>(Testnet) </small>
+              <small>Testnet</small>
             </span>
           </div>
         )
@@ -26,7 +26,7 @@ const PlatformCell = ({
           <div className="neo3-platform-cell">
             <img src={Neo3} alt="NEO 3" />
             <span>
-              Neo <small>(Mainnet) </small>
+              <small>Mainnet</small>
             </span>
           </div>
         )
