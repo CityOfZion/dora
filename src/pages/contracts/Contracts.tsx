@@ -98,7 +98,7 @@ const Contracts: React.FC<{}> = () => {
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Name', accessor: 'name' },
           { name: 'Symbol', accessor: 'symbol' },
 
@@ -106,7 +106,7 @@ const Contracts: React.FC<{}> = () => {
           { name: 'Created on', accessor: 'time' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Name', accessor: 'name' },
         ]
 
