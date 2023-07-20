@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { ParsedTransfer } from '../../pages/transaction/Transaction'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
-import { formatDate, formatHours } from '../../utils/time'
+import { formatDate, format24Hours } from '../../utils/time'
 import ExpandingPanel from '../panel/ExpandingPanel'
 import Notification from './notification/Notification'
 import { TransactionBlock } from './TransactionBlock'
@@ -151,7 +151,7 @@ export const TransactionN3: React.FC<Props> = ({
                         }}
                       />
                     </Flex>
-                    <Text w={'75px'}>{formatHours(transaction.time)}</Text>
+                    <Text w={'75px'}>{format24Hours(transaction.time)}</Text>
                   </Flex>
                 </Flex>
               </Flex>
