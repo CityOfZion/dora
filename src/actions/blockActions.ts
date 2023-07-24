@@ -1,12 +1,7 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import {
-  GENERATE_BASE_URL,
-  NEO_MAINNET_PLATFORMS,
-  Platform,
-  SUPPORTED_PLATFORMS,
-} from '../constants'
+import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { Block, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
@@ -129,7 +124,7 @@ export function fetchBlock(indexOrHash: string | number = 1) {
         )
         const json = await response.json()
         dispatch(requestBlockSuccess(json))
-      } catch (e) {
+      } catch (e: any) {
         dispatch(requestBlockError(indexOrHash, e))
       }
     }
@@ -137,9 +132,10 @@ export function fetchBlock(indexOrHash: string | number = 1) {
 }
 
 export function fetchBlocks(
+  network?: string,
+  protocol?: string,
   page = 1,
   chain?: string,
-  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
 ) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
@@ -147,9 +143,19 @@ export function fetchBlocks(
   ): Promise<void> => {
     try {
       dispatch(requestBlocks(page))
+      let totalCount = 0
+      const filterSupportedPlatform =
+        network === 'all'
+          ? SUPPORTED_PLATFORMS
+          : SUPPORTED_PLATFORMS.filter(item => {
+              return (
+                (!protocol || item.protocol === protocol) &&
+                (!network || item.network === network)
+              )
+            })
 
       const res = await Promise.allSettled(
-        supportedPlatforms.map(async ({ network, protocol }) => {
+        filterSupportedPlatform.map(async ({ network, protocol }) => {
           let result: BlocksResponse | NLBlocksResponse | undefined = undefined
           if (protocol === 'neo2') {
             result = await NeoLegacyREST.blocks(page, network)
@@ -157,6 +163,7 @@ export function fetchBlocks(
             result = await NeoRest.blocks(page, network)
           }
           if (result) {
+            totalCount += result.totalCount
             return result.items.map(d => {
               const parsed: Block = {
                 blocktime: d.blocktime,
@@ -181,13 +188,9 @@ export function fetchBlocks(
       const all = {
         items: sortSingleListByDate(cleanedBlocks),
       }
-      dispatch(requestBlocksSuccess(page, { all }))
-    } catch (e) {
+      dispatch(requestBlocksSuccess(page, { all, totalCount }))
+    } catch (e: any) {
       dispatch(requestBlockError(page, e))
     }
   }
-}
-
-export function fetchMainNetBlocks(page = 1, chain?: string) {
-  return fetchBlocks(page, chain, NEO_MAINNET_PLATFORMS)
 }

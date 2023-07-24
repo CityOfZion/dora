@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import moment from 'moment'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
@@ -10,9 +10,8 @@ import {
   State as ContractState,
 } from '../../reducers/contractReducer'
 import './Contracts.scss'
-import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
-import { fetchContracts, clearList } from '../../actions/contractActions'
+import { fetchContracts } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -20,6 +19,8 @@ import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import { useHistory } from 'react-router-dom'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
+import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
+import ListPagination from '../../components/pagination/ListPagination'
 
 type ParsedContract = {
   time: React.FC<{}>
@@ -94,6 +95,11 @@ const Contracts: React.FC<{}> = () => {
   )
   const width = useWindowWidth()
   const history = useHistory()
+  const [perPage, setPerPage] = useState<number>(0)
+  const model = usePaginationModel({
+    lastPage: getLastPage(perPage, contractsState.totalCount),
+    onPageChange: pageNumber => loadPage(pageNumber),
+  })
 
   const columns =
     width > 768
@@ -110,9 +116,8 @@ const Contracts: React.FC<{}> = () => {
           { name: 'Name', accessor: 'name' },
         ]
 
-  function loadMore(): void {
-    const nextPage = contractsState.page + 1
-    dispatch(fetchContracts(nextPage))
+  function loadPage(page: number): void {
+    dispatch(fetchContracts(network, protocol, page))
   }
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
@@ -120,26 +125,19 @@ const Contracts: React.FC<{}> = () => {
     'neo3',
     'mainnet',
   )
-  const selectedData = () => {
-    let sorted = contractsState.all
-
-    if (protocol !== 'all') {
-      sorted = sorted.filter(contract => contract.protocol === protocol)
-    }
-
-    if (network !== 'all') {
-      sorted = sorted.filter(contract => contract.network === network)
-    }
-
-    return sorted
-  }
 
   useEffect(() => {
-    dispatch(fetchContracts())
-    return (): void => {
-      dispatch(clearList())
+    if (network !== 'all') {
+      setPerPage(15)
+      return
     }
-  }, [dispatch])
+
+    setPerPage(60)
+  }, [network])
+
+  useEffect(() => {
+    dispatch(fetchContracts(network, protocol))
+  }, [protocol, network])
 
   return (
     <div id="Contracts" className="page-container">
@@ -170,17 +168,22 @@ const Contracts: React.FC<{}> = () => {
             },
           }}
           handleFilterUpdate={(option): void => {
+            model.events.goTo(1)
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,
               network: (option.value as Platform).network,
             })
           }}
         />
+
         <List
-          data={returnContractListData(selectedData(), !selectedData().length)}
+          data={returnContractListData(
+            contractsState.all,
+            !contractsState.all.length,
+          )}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
-          isLoading={!contractsState.all.length}
+          isLoading={contractsState.isLoading}
           columns={columns}
           leftBorderColorOnRow={(
             id: string | number | void | React.FC<{}>,
@@ -207,16 +210,12 @@ const Contracts: React.FC<{}> = () => {
             label: 'Contracts',
           }}
         />
-        <div className="load-more-button-container">
-          <Button
-            disabled={
-              contractsState.isLoading || selectedData().length % 15 !== 0
-            }
-            primary={false}
-            onClick={(): void => loadMore()}
-          >
-            load more
-          </Button>
+        <div className="contract-list-pagination">
+          <ListPagination
+            perPage={perPage}
+            totalCount={contractsState.totalCount}
+            model={model}
+          />
         </div>
       </div>
     </div>

@@ -183,22 +183,27 @@ export function fetchContract(hash: string, populateStates = true) {
         }
 
         dispatch(requestContractSuccess(hash, json))
-      } catch (e) {
+      } catch (e: any) {
         dispatch(requestContractError(hash, e))
       }
     }
   }
 }
 
-export function fetchContracts(page = 1) {
+export function fetchContracts(network: string, protocol: string, page = 1) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
     try {
       dispatch(requestContracts(page))
-
+      let totalCount = 0
+      const filterSupportedPlatform = SUPPORTED_PLATFORMS.filter(
+        item =>
+          network === 'all' ||
+          (item.network === network && item.protocol === protocol),
+      )
       const res = await Promise.all(
-        SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
+        filterSupportedPlatform.map(async ({ network, protocol }) => {
           let result: ContractsResponse | NLContractsResponse | undefined =
             undefined //TODO: Fix the typing
           if (protocol === 'neo2') {
@@ -207,6 +212,7 @@ export function fetchContracts(page = 1) {
             result = await NeoRest.contracts(page, network)
           }
           if (result) {
+            totalCount += result.totalCount
             return result.items.map(d => {
               if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
                 d.asset_name = d.manifest.name
@@ -238,8 +244,8 @@ export function fetchContracts(page = 1) {
         items: sortSingleListByDate(cleanedContracts) as Contract[],
       }
 
-      dispatch(requestContractsSuccess(page, { all }))
-    } catch (e) {
+      dispatch(requestContractsSuccess(page, { all, totalCount }))
+    } catch (e: any) {
       dispatch(requestContractsError(page, e))
     }
   }
@@ -275,7 +281,7 @@ export function fetchContractsInvocations() {
           .flat()
           .sort((a, b) => (a!.count < b!.count ? 1 : -1))
         dispatch(requestContractsInvocationsSuccess(sortedContract))
-      } catch (e) {
+      } catch (e: any) {
         dispatch(requestContractsInvocationsError(e))
       }
     } else {
