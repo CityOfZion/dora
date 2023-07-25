@@ -590,9 +590,6 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
     } else {
       //temporary state, remove when api cuts over
       let mutableNetwork = network
-      if (protocol === 'neo3' && mutableNetwork === 'testnet') {
-        mutableNetwork = 'testnet_rc3'
-      }
       if (mutableNetwork === 'testnet_rc4') {
         mutableNetwork = 'testnet'
       }
