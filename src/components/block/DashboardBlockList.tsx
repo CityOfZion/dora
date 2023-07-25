@@ -9,7 +9,7 @@ import {
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchMainNetBlocks } from '../../actions/blockActions'
+import { fetchBlocks } from '../../actions/blockActions'
 import { Block, State as BlockState } from '../../reducers/blockReducer'
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -78,7 +78,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   )
 
   useEffect(() => {
-    if (!neo2List.length) dispatch(fetchMainNetBlocks())
+    if (!neo2List.length) dispatch(fetchBlocks('mainnet'))
   }, [dispatch, neo2List.length])
 
   const columns =

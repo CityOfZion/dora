@@ -1,12 +1,7 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import {
-  GENERATE_BASE_URL,
-  NEO_MAINNET_PLATFORMS,
-  Platform,
-  SUPPORTED_PLATFORMS,
-} from '../constants'
+import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
@@ -52,6 +47,7 @@ export const requestTransactionsSuccess =
     page: number,
     json: {
       all: { items: Array<Transaction> }
+      totalCount: number
     },
   ) =>
   (dispatch: Dispatch): void => {
@@ -139,7 +135,7 @@ export function fetchTransaction(hash: string, chain: string) {
           Object.assign(mergedResponse, json)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
-      } catch (e) {
+      } catch (e: any) {
         dispatch(requestTransactionError(hash, e))
       }
     } else {
@@ -151,8 +147,9 @@ export function fetchTransaction(hash: string, chain: string) {
 }
 
 export function fetchTransactions(
+  network?: string,
+  protocol?: string,
   page = 1,
-  supportedPlatforms: Platform[] = SUPPORTED_PLATFORMS,
 ) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
@@ -160,13 +157,23 @@ export function fetchTransactions(
   ): Promise<void> => {
     try {
       dispatch(requestTransactions(page))
+      let totalCount = 0
+      const filterSupportedPlatform =
+        network === 'all'
+          ? SUPPORTED_PLATFORMS
+          : SUPPORTED_PLATFORMS.filter(item => {
+              return (
+                (!protocol || item.protocol === protocol) &&
+                (!network || item.network === network)
+              )
+            })
 
       interface TransactionsResponseShunt extends NLTransactionsResponse {
         items: any[]
       }
 
       let res = await Promise.all(
-        supportedPlatforms.map(async ({ network, protocol }) => {
+        filterSupportedPlatform.map(async ({ network, protocol }) => {
           let result:
             | TransactionsResponseShunt
             | TransactionsResponse
@@ -180,6 +187,7 @@ export function fetchTransactions(
           }
 
           if (result) {
+            totalCount += result.totalCount
             result.items = result.items.map(d => ({
               ...d,
               network: network,
@@ -200,13 +208,9 @@ export function fetchTransactions(
             .flat(),
         ) as Transaction[],
       }
-      dispatch(requestTransactionsSuccess(page, { all }))
-    } catch (e) {
+      dispatch(requestTransactionsSuccess(page, { all, totalCount }))
+    } catch (e: any) {
       dispatch(requestTransactionsError(page, e))
     }
   }
-}
-
-export function fetchMainNetTransactions(page = 1) {
-  return fetchTransactions(page, NEO_MAINNET_PLATFORMS)
 }

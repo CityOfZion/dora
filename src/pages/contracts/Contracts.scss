@@ -16,6 +16,13 @@
       }
     }
   }
+
+  .contract-list-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+  }
 }
 
 .contract-time-cell {
