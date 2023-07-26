@@ -28,6 +28,7 @@ export type State = {
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
   page: number
+  totalCount: number
 }
 
 export type Transaction = {
@@ -137,6 +138,7 @@ export const INITIAL_STATE = {
   lastUpdated: null,
   transaction: null,
   page: 1,
+  totalCount: 0,
 }
 
 export default (
@@ -166,7 +168,7 @@ export default (
     case REQUEST_TRANSACTIONS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        all: [...state.all, ...action.json.all.items],
+        all: action.json.all.items,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,

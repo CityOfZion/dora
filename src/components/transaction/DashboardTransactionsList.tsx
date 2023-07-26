@@ -8,7 +8,7 @@ import {
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchMainNetTransactions } from '../../actions/transactionActions'
+import { fetchTransactions } from '../../actions/transactionActions'
 import {
   Transaction,
   State as TxState,
@@ -66,7 +66,7 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   )
 
   useEffect(() => {
-    if (!neo3List.length) dispatch(fetchMainNetTransactions())
+    if (!neo3List.length) dispatch(fetchTransactions('mainnet'))
   }, [dispatch, neo3List.length])
 
   const columns =

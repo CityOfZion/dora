@@ -28,4 +28,11 @@
       max-width: 29px;
     }
   }
+
+  .transaction-list-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: center;
+  }
 }

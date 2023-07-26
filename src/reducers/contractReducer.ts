@@ -162,7 +162,7 @@ export default (
     case REQUEST_CONTRACTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        all: [...state.all, ...action.json.all.items],
+        all: action.json.all.items,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,
