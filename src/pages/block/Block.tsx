@@ -192,8 +192,7 @@ const Block: React.FC<Props> = (props: Props) => {
                 </div>
                 <span>
                   {!isLoading &&
-                    block &&
-                    block.witnesses &&
+                    block?.witnesses &&
                     block.witnesses[0].invocation}
                 </span>
               </div>

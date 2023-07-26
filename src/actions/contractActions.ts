@@ -193,19 +193,21 @@ export function fetchContracts(network: string, protocol: string, page = 1) {
           const result = await NeoRest.contracts(page, network)
           if (result) {
             totalCount += result.totalCount
-            return result.items.map(d => ({
-              block: d.block,
-              time: parseInt(d.time),
-              asset_name:
-                d.asset_name === '' && d.manifest?.name
-                  ? d.manifest.name
-                  : d.asset_name,
-              hash: d.hash,
-              type: d.type,
-              symbol: d.symbol,
-              network,
-              protocol,
-            }))
+            return result.items.map(
+              ({ asset_name, block, hash, time, type, symbol, manifest }) => ({
+                block,
+                time: parseInt(time),
+                asset_name:
+                  asset_name === '' && manifest?.name
+                    ? manifest.name
+                    : asset_name,
+                hash: hash,
+                type: type,
+                symbol: symbol,
+                network,
+                protocol,
+              }),
+            )
           }
         }),
       )

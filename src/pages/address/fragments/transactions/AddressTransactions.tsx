@@ -40,21 +40,19 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
     setCurrentPage(currentPage + 1)
   }
 
-  function fixTransfers(tfxs: TransferDoraTS[]) {
+  function convertTransferAmounts(tfxs: TransferDoraTS[]) {
     return Promise.all(
-      tfxs.map(async tx => {
-        const json = await NeoRest.asset(tx.scripthash, network)
-        const { symbol, decimals } = json
-
+      tfxs.map(async ({ scripthash, amount, from, to }) => {
+        const { symbol, decimals } = await NeoRest.asset(scripthash, network)
         const convertedAmount = convertToArbitraryDecimals(
-          Number(tx.amount),
+          Number(amount),
           Number(decimals),
         )
 
         return {
-          from: tx.from,
-          to: tx.to,
-          scripthash: tx.scripthash,
+          from,
+          to,
+          scripthash,
           amount: convertedAmount,
           symbol: symbol,
         } as Transfer
@@ -65,19 +63,18 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
   async function convertToAddressTransactions(
     items: TransactionEnhanced[],
   ): Promise<AddressTransaction[]> {
-    const addrs = []
-    for (const item of items) {
-      const tfxs = await fixTransfers(item.transfers)
-
-      addrs.push({
-        ...item,
-        invocations: item.invocations as Incovation[],
-        notifications: item.notifications as Notification[],
-        time: Number(item.time),
-        transfers: tfxs,
-      } as AddressTransaction)
-    }
-    return addrs
+    return Promise.all(
+      items.map(async item => {
+        const transfers = await convertTransferAmounts(item.transfers)
+        return {
+          ...item,
+          invocations: item.invocations as Incovation[],
+          notifications: item.notifications as Notification[],
+          time: Number(item.time),
+          transfers,
+        } as AddressTransaction
+      }),
+    )
   }
 
   useEffect(() => {

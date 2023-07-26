@@ -119,23 +119,36 @@ export function fetchBlock(index = 1) {
     if (shouldFetchBlock(getState(), index)) {
       dispatch(requestBlock(index))
       try {
-        const network = getState().network.network
-        const response = await NeoRest.block(index, network)
+        const { network } = getState().network
+        const {
+          nextconsensus,
+          previousBlockHash,
+          index: index2,
+          version,
+          nonce,
+          size,
+          blocktime,
+          merkleroot,
+          time,
+          hash,
+          jsonsize,
+          tx,
+        } = await NeoRest.block(index, network)
 
         const block = {
-          nextconsensus: response.nextconsensus,
+          nextconsensus,
           oversize: 0,
-          previousblockhash: response.previousBlockHash,
-          index: response.index,
-          version: response.version,
-          nonce: response.nonce,
-          size: response.size,
-          blocktime: response.blocktime,
-          merkleroot: response.merkleroot,
-          time: Number(response.time),
-          hash: response.hash,
-          jsonsize: response.jsonsize,
-          tx: response.tx.map(
+          previousblockhash: previousBlockHash,
+          index: index2,
+          version,
+          nonce,
+          size,
+          blocktime,
+          merkleroot,
+          time: Number(time),
+          hash,
+          jsonsize,
+          tx: tx.map(
             t =>
               ({
                 size: t.size,
