@@ -19,10 +19,10 @@ type ParsedTx = {
 
 const mapTransactionData = (
   tx: BlockTransaction,
-  block: DetailedBlock,
+  block_time: number,
 ): ParsedTx => {
   return {
-    time: (): ReactElement => <TransactionTime block_time={block.time} />,
+    time: (): ReactElement => <TransactionTime block_time={block_time} />,
     txid: (): ReactElement => (
       <div className="txid-index-cell"> {tx.hash} </div>
     ),
@@ -32,20 +32,16 @@ const mapTransactionData = (
   }
 }
 
-const returnTxListData = (
-  data: Array<BlockTransaction>,
-  block: DetailedBlock,
-): Array<ParsedTx> => {
-  return data.map(tx => mapTransactionData(tx, block))
+const returnTxListData = (block: DetailedBlock): Array<ParsedTx> => {
+  return block.tx.map(tx => mapTransactionData(tx, block.blocktime))
 }
 
 const N3BlockTransactionsList: React.FC<{
-  list: Array<BlockTransaction>
   block: DetailedBlock
   loading: boolean
   network: string
   chain: string
-}> = ({ list, block, loading, network, chain }) => {
+}> = ({ block, loading, network, chain }) => {
   const width = useWindowWidth()
 
   const columns =
@@ -69,7 +65,7 @@ const N3BlockTransactionsList: React.FC<{
   return (
     <div id="BlockTransactionsList">
       <List
-        data={returnTxListData(list, block)}
+        data={returnTxListData(block)}
         rowId="hash"
         generateHref={(data): string =>
           `${ROUTES.TRANSACTION.url}/${chain}/${network}/${data.id}`

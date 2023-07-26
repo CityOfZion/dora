@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { ROUTES } from '../../constants'
 import './NftInformation.scss'
 import Neo3 from '../../assets/icons/neo3.svg'
-import Neo2 from '../../assets/icons/neo2.svg'
 import ZoomIcon from '../../assets/icons/zoom-icon.svg'
 import BackButton from '../../components/navigation/BackButton'
 import Modal from '@material-ui/core/Modal'
@@ -161,19 +160,16 @@ const NftInformation: React.FC<Props> = ({
                   <div className="content-block">
                     <span className="title">BLOCKCHAIN</span>
                     <div className="grid-content">
-                      {(nftState.value?.chain === 'n2' ||
-                        nftState.value?.chain === 'n3') && (
+                      {nftState.value?.chain === 'n3' && (
                         <img
                           className="token-logo"
-                          src={nftState.value?.chain === 'n3' ? Neo3 : Neo2}
+                          src={Neo3}
                           alt="token-logo"
                         />
                       )}
                       <span>
                         {nftState.value?.chain === 'n3'
                           ? 'NEO N3'
-                          : nftState.value?.chain === 'n2'
-                          ? 'NEO LEGACY'
                           : nftState.value?.chain}
                       </span>
                     </div>

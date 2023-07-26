@@ -6,7 +6,6 @@ import { wallet, u } from '@cityofzion/neon-js'
 import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
-import { store } from './store'
 import { ReactComponent as Home } from './assets/icons/home.svg'
 import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
 import { ReactComponent as Transaction } from './assets/icons/invocation.svg'
@@ -71,15 +70,9 @@ export type Platform = {
   network: string
 }
 
-export const NEO_MAINNET_PLATFORMS = [
-  { protocol: 'neo3', network: 'mainnet' },
-  { protocol: 'neo2', network: 'mainnet' },
-]
+export const NEO_MAINNET_PLATFORMS = [{ protocol: 'neo3', network: 'mainnet' }]
 
-export const NEO_TESTNET_PLATFORMS = [
-  { protocol: 'neo3', network: 'testnet' },
-  { protocol: 'neo2', network: 'testnet' },
-]
+export const NEO_TESTNET_PLATFORMS = [{ protocol: 'neo3', network: 'testnet' }]
 
 export const SUPPORTED_PLATFORMS = [
   ...NEO_MAINNET_PLATFORMS,
@@ -92,19 +85,6 @@ export const treatNetwork = (network: string) => {
   )
 
   return platform?.network ?? network
-}
-
-export const GENERATE_BASE_URL = (
-  protocol = 'neo2',
-  network = 'mainnet',
-  useState = true,
-): string => {
-  if (useState) {
-    network = treatNetwork(store.getState().network.network)
-    protocol = store.getState().network.chain
-  }
-
-  return `https://dora.coz.io/api/v1/${protocol}/${network}`
 }
 
 export const BUILD_GHOST_MARKET_URL = ({

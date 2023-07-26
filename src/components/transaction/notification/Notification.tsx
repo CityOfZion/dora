@@ -5,12 +5,13 @@ import ExpandingPanel from '../../panel/ExpandingPanel'
 import { TransactionNotification } from '../../../reducers/transactionReducer'
 import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
-import { GENERATE_BASE_URL, ROUTES } from '../../../constants'
+import { ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { DetailedContract } from '../../../reducers/contractReducer'
 import { uuid } from '../../../utils/formatter'
 import { u } from '@cityofzion/neon-js'
 import { StackPanel } from '../StackPanel'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -20,7 +21,7 @@ export const Notification: React.FC<{
   const [isOpen, setOpen] = useState<Record<string, boolean>>({})
   const [isLoading, setLoading] = useState<boolean>(false)
   const [items, setItems] = useState<TransactionNotification[]>([])
-  const [contracts, setContracts] = useState<Record<string, DetailedContract>>(
+  const [contracts, setContracts] = useState<Record<string, ContractResponse>>(
     {},
   )
 
@@ -69,14 +70,12 @@ export const Notification: React.FC<{
           continue
         }
 
-        const response = await fetch(
-          `${GENERATE_BASE_URL()}/contract/${it.contract}`,
-        )
-        it.contractObj = await response.json()
+        const c = await NeoRest.contract(it.contract, network)
+        it.contractObj = c
 
         setContracts(current => ({
           ...current,
-          [it.contract]: it.contractObj,
+          [it.contract]: c,
         }))
       }
     } finally {

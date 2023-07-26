@@ -117,7 +117,7 @@ const Blocks: React.FC<MatchParams> = props => {
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           {
             name: 'Height',
             accessor: 'index',
@@ -127,7 +127,7 @@ const Blocks: React.FC<MatchParams> = props => {
           { name: 'Size', accessor: 'size' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           {
             name: 'Height',
             accessor: 'index',

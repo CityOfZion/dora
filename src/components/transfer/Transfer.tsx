@@ -47,15 +47,11 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
   }
 
   function getNetworkFee() {
-    return chain === 'neo2'
-      ? transaction.net_fee
-      : String(convertToArbitraryDecimals(Number(transaction.netfee), 8))
+    return String(convertToArbitraryDecimals(Number(transaction.netfee), 8))
   }
 
   function getSystemfee() {
-    return chain === 'neo2'
-      ? transaction.sys_fee
-      : String(convertToArbitraryDecimals(Number(transaction.sysfee), 8))
+    return String(convertToArbitraryDecimals(Number(transaction.sysfee), 8))
   }
 
   function getSize() {

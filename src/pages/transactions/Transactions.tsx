@@ -12,7 +12,6 @@ import {
   State as TxState,
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
@@ -26,8 +25,6 @@ type ParsedTx = {
   txid: React.FC<{}>
   size: string
   hash: string
-  type: string
-  parsedType: React.FC<{}>
   platform: React.FC<{}>
   chain: string
   href: string
@@ -49,10 +46,6 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     hash: tx.hash || tx.txid,
-    type: tx.type,
-    parsedType: (): ReactElement => (
-      <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
-    ),
     chain: tx.protocol || '',
     href: `${ROUTES.TRANSACTION.url}/${tx.protocol}/${tx.network}/${
       tx.hash || tx.txid
@@ -112,14 +105,14 @@ const Transactions: React.FC<{}> = () => {
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
           { name: 'Completed on', accessor: 'time' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
         ]

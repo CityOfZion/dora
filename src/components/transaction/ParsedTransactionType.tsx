@@ -3,7 +3,6 @@ import React, { ReactElement } from 'react'
 import Invocation from '../../assets/icons/colored-invocation.svg'
 import Contract from '../../assets/icons/colored-contract-transaction.svg'
 import Claim from '../../assets/icons/colored-gas-claim-transaction.svg'
-import Miner from '../../assets/icons/miner-transaction.svg'
 import './ParsedTransactionType.scss'
 
 const parseTypeToDiplayValue = (type?: string): string => {
@@ -23,8 +22,6 @@ const parseTypeToDiplayValue = (type?: string): string => {
 
 const parseTypeToIcon = (type?: string): ReactElement => {
   switch (type) {
-    case 'MinerTransaction':
-      return <img src={Miner} alt="miner-icon" />
     case 'InvocationTransaction':
       return <img src={Invocation} alt="invocation-icon" />
     case 'ClaimTransaction':

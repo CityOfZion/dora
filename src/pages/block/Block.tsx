@@ -9,9 +9,7 @@ import { State as BlockState } from '../../reducers/blockReducer'
 import './Block.scss'
 import { ROUTES } from '../../constants'
 import { fetchBlock } from '../../actions/blockActions'
-import BlockTransactionsList from '../../components/transaction/BlockTransactionsList'
 import ExpandingPanel from '../../components/panel/ExpandingPanel'
-import { disassemble } from '../../utils/disassemble'
 import { neo3Disassemble } from '../../utils/neo3-disassemble'
 
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
@@ -37,9 +35,11 @@ const Block: React.FC<Props> = (props: Props) => {
   const [blockTimeState, setBlockTimeState] = useState('')
   const { block, isLoading } = blockState
 
+  const index = Number(hash ?? 1)
+
   useEffect(() => {
-    dispatch(fetchBlock(hash))
-  }, [dispatch, hash])
+    dispatch(fetchBlock(index))
+  }, [dispatch, index])
 
   useEffect(() => {
     const { block } = blockState
@@ -162,22 +162,6 @@ const Block: React.FC<Props> = (props: Props) => {
               </div>
             </div>
           </div>
-
-          {block && !!block.tx.length && chain === 'neo2' && (
-            <div className="block-transactions-section">
-              <div className="details-section">
-                <div className="section-label">TRANSACTIONS</div>
-
-                <BlockTransactionsList
-                  loading={isLoading}
-                  list={block.tx}
-                  block={block}
-                  network={network}
-                  chain={chain}
-                />
-              </div>
-            </div>
-          )}
           {block && !!block.tx.length && chain === 'neo3' && (
             <div className="block-transactions-section">
               <div className="details-section">
@@ -185,7 +169,6 @@ const Block: React.FC<Props> = (props: Props) => {
 
                 <N3BlockTransactionsList
                   loading={isLoading}
-                  list={block.tx}
                   block={block}
                   network={network}
                   chain={chain}
@@ -199,50 +182,36 @@ const Block: React.FC<Props> = (props: Props) => {
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>INVOCATION SCRIPT</label>{' '}
-                  {chain === 'neo2' ? (
-                    <Copy text={block ? block.script?.invocation : ''} />
-                  ) : (
-                    <Copy
-                      text={
-                        block && block.witnesses
-                          ? block.witnesses[0].invocation
-                          : ''
-                      }
-                    />
-                  )}
+                  <Copy
+                    text={
+                      block && block.witnesses
+                        ? block.witnesses[0].invocation
+                        : ''
+                    }
+                  />
                 </div>
                 <span>
-                  {chain === 'neo2'
-                    ? !isLoading && block && block.script?.invocation
-                    : !isLoading &&
-                      block &&
-                      block.witnesses &&
-                      block.witnesses[0].invocation}
+                  {!isLoading &&
+                    block?.witnesses &&
+                    block.witnesses[0].invocation}
                 </span>
               </div>
               <div className="detail-tile script-tile">
                 <div className="script-label-and-copy-row">
                   <label>VERIFICATION SCRIPT</label>
-
-                  {chain === 'neo2' ? (
-                    <Copy text={block ? block.script?.verification : ''} />
-                  ) : (
-                    <Copy
-                      text={
-                        block && block.witnesses
-                          ? block.witnesses[0].verification
-                          : ''
-                      }
-                    />
-                  )}
+                  <Copy
+                    text={
+                      block && block.witnesses
+                        ? block.witnesses[0].verification
+                        : ''
+                    }
+                  />
                 </div>
                 <span>
-                  {chain === 'neo2'
-                    ? !isLoading && block && block.script?.verification
-                    : !isLoading &&
-                      block &&
-                      block.witnesses &&
-                      block.witnesses[0].verification}
+                  {!isLoading &&
+                    block &&
+                    block.witnesses &&
+                    block.witnesses[0].verification}
                 </span>
               </div>
             </div>
@@ -254,19 +223,19 @@ const Block: React.FC<Props> = (props: Props) => {
                 <div className="detail-tile script-tile">
                   <label>INVOCATION SCRIPT</label>
                   <span>
-                    {!isLoading && block && chain === 'neo2'
-                      ? disassemble(block.script?.invocation) || ''
-                      : block?.witnesses &&
-                        neo3Disassemble(block?.witnesses[0].invocation)}
+                    {!isLoading &&
+                      block &&
+                      block?.witnesses &&
+                      neo3Disassemble(block?.witnesses[0].invocation)}
                   </span>
                 </div>
                 <div className="detail-tile script-tile">
                   <label>VERIFICATION SCRIPT</label>
                   <span>
-                    {!isLoading && block && chain === 'neo2'
-                      ? disassemble(block.script?.verification) || ''
-                      : block?.witnesses &&
-                        neo3Disassemble(block?.witnesses[0].verification)}
+                    {!isLoading &&
+                      block &&
+                      block?.witnesses &&
+                      neo3Disassemble(block?.witnesses[0].verification)}
                   </span>
                 </div>
               </div>

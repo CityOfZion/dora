@@ -1,15 +1,12 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, SUPPORTED_PLATFORMS } from '../constants'
-import { Contract, State } from '../reducers/contractReducer'
+import { SUPPORTED_PLATFORMS } from '../constants'
+import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoLegacyREST, NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { ContractsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
-import {
-  ContractsResponse as NLContractsResponse,
-  InvocationStatsResponse,
-} from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+import { State as NetworkState } from '../reducers/networkReducer'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -33,7 +30,7 @@ export const requestContracts =
 
 export const REQUEST_CONTRACT_SUCCESS = 'REQUEST_CONTRACT_SUCCESS'
 export const requestContractSuccess =
-  (hash: string, json: Contract) =>
+  (hash: string, json: { contract: ContractResponse; stats: InvocationStat }) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACT_SUCCESS,
@@ -153,37 +150,26 @@ export const resetContractState =
     })
   }
 
-export function fetchContract(hash: string, populateStates = true) {
+export function fetchContract(hash: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { contract: State },
+    getState: () => { contract: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchContract(getState(), hash)) {
       dispatch(requestContract(hash))
 
       try {
-        const response = await fetch(`${GENERATE_BASE_URL()}/contract/${hash}`)
+        const { network } = getState().network
+        const contract = await NeoRest.contract(hash, network)
+        const stats = await NeoRest.contractStats(hash, network)
 
-        const json = await response.json()
-
-        if (populateStates) {
-          const invocationStatsResponse = await fetch(
-            `${GENERATE_BASE_URL()}/contract_stats/${hash}`,
-          )
-
-          const invocationStats = await invocationStatsResponse
-            .json()
-            .catch(error => {
-              console.error('An error occurred fetching invocation stats.', {
-                error,
-              })
-            })
-
-          json.invocationStats = invocationStats || null
-        }
-
-        dispatch(requestContractSuccess(hash, json))
-      } catch (e: any) {
+        dispatch(
+          requestContractSuccess(hash, {
+            contract,
+            stats: stats as InvocationStat,
+          }),
+        )
+      } catch (e) {
         dispatch(requestContractError(hash, e))
       }
     }
@@ -204,34 +190,24 @@ export function fetchContracts(network: string, protocol: string, page = 1) {
       )
       const res = await Promise.all(
         filterSupportedPlatform.map(async ({ network, protocol }) => {
-          let result: ContractsResponse | NLContractsResponse | undefined =
-            undefined //TODO: Fix the typing
-          if (protocol === 'neo2') {
-            result = await NeoLegacyREST.contracts(page, network)
-          } else if (protocol === 'neo3') {
-            result = await NeoRest.contracts(page, network)
-          }
+          const result = await NeoRest.contracts(page, network)
           if (result) {
             totalCount += result.totalCount
-            return result.items.map(d => {
-              if (d.asset_name === '' && 'manifest' in d && d.manifest.name) {
-                d.asset_name = d.manifest.name
-              } else if (d.asset_name === '' && 'name' in d) {
-                d.asset_name = d.name
-              }
-
-              const parsed: Contract = {
-                block: d.block,
-                time: parseInt(d.time),
-                asset_name: d.asset_name,
-                hash: d.hash,
-                type: d.type,
-                symbol: d.symbol,
+            return result.items.map(
+              ({ asset_name, block, hash, time, type, symbol, manifest }) => ({
+                block,
+                time: parseInt(time),
+                asset_name:
+                  asset_name === '' && manifest?.name
+                    ? manifest.name
+                    : asset_name,
+                hash: hash,
+                type: type,
+                symbol: symbol,
                 network,
                 protocol,
-              }
-              return parsed
-            })
+              }),
+            )
           }
         }),
       )
@@ -261,12 +237,7 @@ export function fetchContractsInvocations() {
       try {
         const res = await Promise.all(
           SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-            let result: InvocationStatsResponse | undefined = undefined
-            if (protocol === 'neo2') {
-              result = await NeoLegacyREST.invocationStats(network)
-            } else if (protocol === 'neo3') {
-              result = await NeoRest.invocationStats(network)
-            }
+            const result = await NeoRest.invocationStats(network)
             if (result) {
               return result.map(d => ({
                 ...d,
