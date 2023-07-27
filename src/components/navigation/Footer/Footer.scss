@@ -41,6 +41,13 @@
     .first-section,
     .second-section {
       padding-right: 16px;
+      padding-top: 5px;
+    }
+
+    @media only screen and (max-width: 1300px) {
+      .first-section {
+        padding-top: 24px;
+      }
     }
 
     .footer-sections {
@@ -133,6 +140,8 @@
 
       img {
         padding-right: 6px;
+        align-self: center;
+        padding-bottom: 1px;
       }
     }
     .news-stream {
@@ -173,9 +182,11 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-top: 65px;
 
     @media screen and (max-width: 768px) {
       padding: 12px;
+      margin-top: 3px;
     }
     .coz-logo {
       margin-right: 16px;
@@ -184,6 +195,11 @@
       align-self: flex-end;
       display: inline-block;
       margin-bottom: 4px;
+    }
+    .last-commit {
+      @media screen and (max-width: 768px) {
+        padding: 0 12px 16px;
+      }
     }
   }
 }
