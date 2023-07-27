@@ -28,7 +28,9 @@ const PlatformElement = ({
   network: string | void
 }): ReactElement => (
   <div className="search-result-chain-info">
-    <div id="chain-icon"><Neo3 /></div>
+    <div id="chain-icon">
+      <Neo3 />
+    </div>
     <p>Neo N3</p>
     <p>
       <small>
