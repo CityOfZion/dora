@@ -49,12 +49,11 @@ const mapContractData = (contract: Contract): ParsedContract => {
         ) : (
           <div className="contract-icon-stub"></div>
         )}
-        <div>
-          {' '}
+        <div className="contract-name-label">
           {contract.name ||
             contract.asset_name ||
             contract.manifest?.name ||
-            contract.hash}{' '}
+            contract.hash}
         </div>
       </div>
     ),
