@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import moment from 'moment'
@@ -10,10 +10,9 @@ import {
 } from '../../utils/time'
 import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
-import { fetchBlocks, clearList } from '../../actions/blockActions'
+import { fetchBlocks } from '../../actions/blockActions'
 import { State as BlockState, Block } from '../../reducers/blockReducer'
 import './Blocks.scss'
-import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import Filter, { Platform } from '../../components/filter/Filter'
@@ -21,6 +20,8 @@ import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import { useHistory, useParams } from 'react-router-dom'
+import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
+import ListPagination from '../../components/pagination/ListPagination'
 
 type ParsedBlock = {
   time: string
@@ -82,10 +83,6 @@ const Blocks: React.FC<MatchParams> = props => {
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const width = useWindowWidth()
 
-  function loadMore(): void {
-    const nextPage = blockState.page + 1
-    dispatch(fetchBlocks(nextPage))
-  }
   const history = useHistory()
   const { chain, network: networkParam } = useParams<MatchParams>()
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
@@ -93,32 +90,34 @@ const Blocks: React.FC<MatchParams> = props => {
     chain,
     networkParam,
   )
+  const [perPage, setPerPage] = useState<number>(0)
 
-  const selectedData = (): Array<Block> => {
-    let sorted = blockState.all
+  const model = usePaginationModel({
+    lastPage: getLastPage(perPage, blockState.totalCount),
+    onPageChange: pageNumber => loadPage(pageNumber),
+  })
 
-    if (protocol !== 'all') {
-      sorted = sorted.filter(block => block.protocol === protocol)
-    }
-
-    if (network !== 'all') {
-      sorted = sorted.filter(block => block.network === network)
-    }
-
-    return sorted
+  function loadPage(page: number): void {
+    dispatch(fetchBlocks(network, protocol, page))
   }
 
   useEffect(() => {
-    dispatch(fetchBlocks())
-    return (): void => {
-      dispatch(clearList())
+    if (network !== 'all') {
+      setPerPage(15)
+      return
     }
-  }, [dispatch])
+
+    setPerPage(60)
+  }, [network])
+
+  useEffect(() => {
+    dispatch(fetchBlocks(network, protocol))
+  }, [protocol, network])
 
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           {
             name: 'Height',
             accessor: 'index',
@@ -128,7 +127,7 @@ const Blocks: React.FC<MatchParams> = props => {
           { name: 'Size', accessor: 'size' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           {
             name: 'Height',
             accessor: 'index',
@@ -167,6 +166,7 @@ const Blocks: React.FC<MatchParams> = props => {
             },
           }}
           handleFilterUpdate={(option): void => {
+            model.events.goTo(1)
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,
               network: (option.value as Platform).network,
@@ -175,12 +175,12 @@ const Blocks: React.FC<MatchParams> = props => {
         />
         <List
           data={returnBlockListData(
-            selectedData(),
-            !selectedData().length,
+            blockState.all,
+            !blockState.all.length,
             network,
           )}
           rowId="height"
-          isLoading={!blockState.all.length}
+          isLoading={blockState.isLoading}
           columns={columns}
           countConfig={{
             label: 'Blocks',
@@ -207,14 +207,12 @@ const Blocks: React.FC<MatchParams> = props => {
             return ''
           }}
         />
-        <div className="load-more-button-container">
-          <Button
-            disabled={blockState.isLoading}
-            primary={false}
-            onClick={(): void => loadMore()}
-          >
-            load more
-          </Button>
+        <div className="block-list-pagination">
+          <ListPagination
+            perPage={perPage}
+            totalCount={blockState.totalCount}
+            model={model}
+          />
         </div>
       </div>
     </div>

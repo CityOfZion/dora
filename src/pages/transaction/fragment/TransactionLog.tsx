@@ -2,27 +2,26 @@ import React, { useEffect, useState } from 'react'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../../components/copy/Copy'
 import { DetailedTransaction } from '../../../reducers/transactionReducer'
-import { GENERATE_BASE_URL } from '../../../constants'
-import { TransactionLog } from '../../../model/TransactionLog'
+
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { store } from '../../../store'
+import { LogResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 interface Props extends BoxProps {
   transaction: DetailedTransaction | null
 }
 
 export const TransactionLogView = ({ transaction, ...props }: Props) => {
-  const [transactionLog, setTransactionLog] = useState({} as TransactionLog)
+  const [transactionLog, setTransactionLog] = useState({} as LogResponse)
 
   useEffect(() => {
     const getTransactionLog = async () => {
       if (!transaction) return
 
+      const { network } = store.getState().network
       try {
-        const response = await fetch(
-          `${GENERATE_BASE_URL('neo3')}/log/${transaction.txid}`,
-        )
-        const json = await response.json()
-
-        setTransactionLog(json.Item ? json.Item : json)
+        const txLog = await NeoRest.log(transaction.txid, network)
+        setTransactionLog(txLog)
       } catch (error) {
         console.error(error)
       }
@@ -31,7 +30,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
     getTransactionLog()
 
     return (): void => {
-      setTransactionLog({} as TransactionLog)
+      setTransactionLog({} as LogResponse)
     }
   }, [transaction])
 

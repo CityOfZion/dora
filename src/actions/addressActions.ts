@@ -1,8 +1,9 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
-import { GENERATE_BASE_URL, NEO_HASHES, GAS_HASHES } from '../constants'
 import { State } from '../reducers/addressReducer'
+import { State as NetworkState } from '../reducers/networkReducer'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress =
@@ -95,56 +96,21 @@ type ParsedBalanceData = {
 }
 
 export function fetchAddress(address: string, chain: string) {
-  return async (dispatch: ThunkDispatch<{}, void, Action>): Promise<void> => {
+  return async (
+    dispatch: ThunkDispatch<{}, void, Action>,
+    getState: () => { network: NetworkState },
+  ): Promise<void> => {
     dispatch(requestAddress(address))
     try {
-      const response = await fetch(
-        `${GENERATE_BASE_URL(chain)}/balance/${address}`,
-      )
-      const json = await response.json()
-
-      // TODO: see if its possible for this data to be added
-      // so that these requests are not necessary
-      const fetchAssetData = async (): Promise<ParsedBalanceData[]> => {
-        const balances: ParsedBalanceData[] = []
-
-        for (const balanceData of json) {
-          let symbol
-          let name
-          const balance = String(balanceData.balance).replace(
-            /(,)(?=(\d{3})+$)/g,
-            '$1.',
-          )
-
-          if (NEO_HASHES.includes(balanceData.asset)) {
-            symbol = 'NEO'
-          } else if (GAS_HASHES.includes(balanceData.asset)) {
-            symbol = 'GAS'
-          } else {
-            const response = await fetch(
-              `${GENERATE_BASE_URL(chain)}/asset/${balanceData.asset}`,
-            )
-            const json = await response.json()
-            symbol = json.symbol
-            name = json.name
-          }
-
-          balances.push({
-            name,
-            symbol,
-            balance,
-          })
-        }
-
-        return balances
-      }
+      const network = getState().network.network
+      const response = await NeoRest.balance(address, network)
 
       // TODO: see if its possible for this data to be added
       // so that these requests are not necessary
       const fetchNeo3AssetData = async (): Promise<ParsedBalanceData[]> => {
         const balances: ParsedBalanceData[] = []
 
-        for (const balanceData of json) {
+        for (const balanceData of response) {
           const symbol = balanceData.symbol
           const name = balanceData.asset_name
           const balance = String(balanceData.balance).replace(
@@ -162,8 +128,7 @@ export function fetchAddress(address: string, chain: string) {
         return balances
       }
 
-      const balances =
-        chain === 'neo2' ? await fetchAssetData() : await fetchNeo3AssetData()
+      const balances = await fetchNeo3AssetData()
 
       dispatch(requestAddressSuccess(address, balances))
     } catch (e) {
@@ -179,11 +144,9 @@ export function fetchAddressTransferHistory(address: string, page = 1) {
   ): Promise<void> => {
     dispatch(requestAddressTransferHistory(address, page))
     try {
-      const response = await fetch(
-        `${GENERATE_BASE_URL()}/transfer_history/${address}/${page}`,
-      )
-      const json = await response.json()
-      dispatch(requestAddressTransferHistorySuccess(address, page, json))
+      const network = 'neo2'
+      const response = await NeoRest.transferHistory(address, page, network)
+      dispatch(requestAddressTransferHistorySuccess(address, page, response))
     } catch (e) {
       dispatch(requestAddressTransferHistoryError(address, page, e))
     }

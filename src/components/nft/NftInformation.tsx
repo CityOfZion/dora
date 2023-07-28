@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import './NftInformation.scss'
 import Neo3 from '../../assets/icons/neo3.svg'
-import Neo2 from '../../assets/icons/neo2.svg'
 import ZoomIcon from '../../assets/icons/zoom-icon.svg'
 import BackButton from '../../components/navigation/BackButton'
 import Modal from '@material-ui/core/Modal'
@@ -16,25 +14,31 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import NoImageFound from '../../assets/no-image-found.png'
 import { truncateHash } from '../../utils/formatter'
 
-interface MatchParams {
-  contractHash: string
-  chain: string
-  network: string
-  id: string
+interface Props {
+  contractHash?: string
+  chain?: string
+  network?: string
+  id?: string
+  isLoading?: boolean
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const NftInformation: React.FC<Props> = (props: Props) => {
+const NftInformation: React.FC<Props> = ({
+  chain,
+  contractHash,
+  id,
+  network,
+  isLoading,
+}: Props) => {
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const { contractHash, id, chain, network } = props.match.params
+
   const width = useWindowWidth()
   const dispatch = useDispatch()
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
 
   useEffect(() => {
+    if (!id || !contractHash || !network) return
     dispatch(fetchNFT(id, contractHash, network))
-  }, [dispatch])
+  }, [dispatch, id, contractHash, network])
 
   const isMobileOrTablet = width <= 1200
 
@@ -67,30 +71,6 @@ const NftInformation: React.FC<Props> = (props: Props) => {
     currentTarget.src = NoImageFound
   }
 
-  function returnChainNameAndLogo() {
-    if (nftState.value?.chain === 'n3') {
-      return (
-        <>
-          <img className="token-logo" src={Neo3} alt="token-logo" />
-          <span>NEO N3</span>
-        </>
-      )
-    } else if (nftState.value?.chain === 'n2') {
-      return (
-        <>
-          <img className="token-logo" src={Neo2} alt="token-logo" />
-          <span>NEO LEGACY</span>
-        </>
-      )
-    } else {
-      return (
-        <>
-          <span>{nftState.value?.chain}</span>
-        </>
-      )
-    }
-  }
-
   return (
     <div id="Nft" className="page-container">
       {nftState.value && (
@@ -115,7 +95,7 @@ const NftInformation: React.FC<Props> = (props: Props) => {
           </span>
         </div>
 
-        {nftState.isLoading ? (
+        {isLoading || nftState.isLoading ? (
           <SkeletonTheme
             color="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
@@ -180,7 +160,18 @@ const NftInformation: React.FC<Props> = (props: Props) => {
                   <div className="content-block">
                     <span className="title">BLOCKCHAIN</span>
                     <div className="grid-content">
-                      {returnChainNameAndLogo()}
+                      {nftState.value?.chain === 'n3' && (
+                        <img
+                          className="token-logo"
+                          src={Neo3}
+                          alt="token-logo"
+                        />
+                      )}
+                      <span>
+                        {nftState.value?.chain === 'n3'
+                          ? 'NEO N3'
+                          : nftState.value?.chain}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -250,4 +241,4 @@ const NftInformation: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(NftInformation)
+export default NftInformation

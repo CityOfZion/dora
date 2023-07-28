@@ -54,6 +54,13 @@
   max-width: 1200px;
 }
 
+.block-list-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+}
+
 .load-more-button-container {
   width: 100%;
   display: flex;

@@ -9,15 +9,19 @@ import {
   REQUEST_CONTRACTS_INVOCATIONS,
   REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
 } from '../actions/contractActions'
-import { InvocationStatsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo_legacy'
 import { NEF } from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
+import {
+  ContractResponse,
+  InvocationStatsResponse,
+} from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 type Action = {
   type: string
   receivedAt: Date
   hash: string
   json: {
-    hash: string
+    contract: ContractResponse
+    stats: InvocationStat
   }
   page: number
 }
@@ -33,6 +37,7 @@ export type State = {
   all: Contract[]
   lastUpdated: Date | null
   contract: DetailedContract | null
+  contractStats: InvocationStat
   contractsInvocations: InvocationStats[]
   page: number
   hasFetchedContractsInvocations: boolean
@@ -127,6 +132,7 @@ export default (
     hasFetchedContractsInvocations: false,
     lastUpdated: null,
     contract: null,
+    contractStats: {},
     page: 1,
     totalCount: 0,
   },
@@ -146,7 +152,8 @@ export default (
     case REQUEST_CONTRACT_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        contract: action.json,
+        contract: action.json.contract,
+        contractStats: action.json.stats,
         lastUpdated: action.receivedAt,
         cached: {
           [action.json.hash]: action.json,
@@ -155,7 +162,7 @@ export default (
     case REQUEST_CONTRACTS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        all: [...state.all, ...action.json.all.items],
+        all: action.json.all.items,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,

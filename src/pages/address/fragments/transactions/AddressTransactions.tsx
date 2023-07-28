@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { fetchTransaction } from './AddressTransactionService'
 import './AddressTransactions.scss'
-import {
-  AddressTransaction,
-  Notification,
-  Transfer,
-} from './AddressTransaction'
+import { AddressTransaction, Incovation, Transfer } from './AddressTransaction'
 import Button from '../../../../components/button/Button'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import {
-  byteStringToAddress,
-  GENERATE_BASE_URL,
-  ROUTES,
-} from '../../../../constants'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
+import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import {
+  Notification,
+  TransactionEnhanced,
+  Transfer as TransferDoraTS,
+} from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
 
 interface MatchParams {
   hash: string
@@ -43,40 +40,42 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
     setCurrentPage(currentPage + 1)
   }
 
-  const getTransfers = (invocations: Notification[]) =>
-    Promise.all(
-      invocations
-        .filter(
-          ({ state, event_name }) =>
-            state.length === 3 && event_name === 'Transfer',
+  function convertTransferAmounts(tfxs: TransferDoraTS[]) {
+    return Promise.all(
+      tfxs.map(async ({ scripthash, amount, from, to }) => {
+        const { symbol, decimals } = await NeoRest.asset(scripthash, network)
+        const convertedAmount = convertToArbitraryDecimals(
+          Number(amount),
+          Number(decimals),
         )
-        .map(async ({ contract, state }): Promise<Transfer> => {
-          const [{ value: from }, { value: to }, { value: amount }] = state
 
-          const response = await fetch(
-            `${GENERATE_BASE_URL()}/asset/${contract}`,
-          )
-
-          const json = await response.json()
-          const { symbol, decimals } = json
-
-          const convertedAmount = convertToArbitraryDecimals(
-            Number(amount),
-            decimals,
-          )
-
-          const convertedFrom = from ? byteStringToAddress(from) : 'mint'
-          const convertedTo = to ? byteStringToAddress(to) : 'burn'
-
-          return {
-            scripthash: contract,
-            from: convertedFrom,
-            to: convertedTo,
-            amount: convertedAmount,
-            symbol,
-          }
-        }),
+        return {
+          from,
+          to,
+          scripthash,
+          amount: convertedAmount,
+          symbol: symbol,
+        } as Transfer
+      }),
     )
+  }
+
+  async function convertToAddressTransactions(
+    items: TransactionEnhanced[],
+  ): Promise<AddressTransaction[]> {
+    return Promise.all(
+      items.map(async item => {
+        const transfers = await convertTransferAmounts(item.transfers)
+        return {
+          ...item,
+          invocations: item.invocations as Incovation[],
+          notifications: item.notifications as Notification[],
+          time: Number(item.time),
+          transfers,
+        } as AddressTransaction
+      }),
+    )
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -86,11 +85,9 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
         currentPage,
       )
 
-      for (const item of items) {
-        item.transfers = await getTransfers(item.notifications)
-      }
+      const newItems = await convertToAddressTransactions(items)
 
-      populateRecords(items)
+      populateRecords(newItems)
 
       if (pages === 0 && items.length > 0) {
         setPages(Math.ceil(totalCount / items.length))
@@ -101,14 +98,6 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
       populate()
     }
   }, [chain, network, hash, currentPage])
-
-  if (chain === 'neo2') {
-    return (
-      <Redirect
-        to={`${ROUTES.WALLET.url}/${chain}/${network}/${hash}/assets`}
-      />
-    )
-  }
 
   return (
     <div

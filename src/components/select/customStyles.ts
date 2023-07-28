@@ -19,6 +19,10 @@ export const customStyles = {
   }),
   valueContainer: (): CSSProperties => ({
     backgroundColor: '#2F454E',
+    display: 'flex',
+    alignItems: 'center',
+    overflow: 'hidden',
+    paddingRight: '6px',
   }),
   control: (provided: CSSProperties, state: SelectState): CSSProperties => ({
     ...provided,
@@ -30,6 +34,7 @@ export const customStyles = {
     paddingLeft: '12px',
     boxShadow: state.isFocused ? '0' : '0',
     zIndex: 100,
+    flexWrap: 'nowrap',
     // eslint-disable-next-line
     // @ts-ignore
     '&:hover': {
@@ -52,12 +57,14 @@ export const customStyles = {
     boxShadow: '0',
   }),
   singleValue: (
-    provided: CSSProperties,
+    _provided: CSSProperties,
     state: SelectState,
   ): CSSProperties => ({
-    ...provided,
     color: '#cae0eb',
     opacity: state.isDisabled ? 0.3 : 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   }),
   option: (provided: CSSProperties, state: SelectState): CSSProperties => ({
     ...provided,

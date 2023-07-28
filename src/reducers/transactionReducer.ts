@@ -7,7 +7,7 @@ import {
   REQUEST_TRANSACTIONS,
   REQUEST_TRANSACTIONS_SUCCESS,
 } from '../actions/transactionActions'
-import { DetailedContract } from './contractReducer'
+import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 type Action = {
   type: string
@@ -28,13 +28,13 @@ export type State = {
   lastUpdated: Date | null
   transaction: DetailedTransaction | null
   page: number
+  totalCount: number
 }
 
 export type Transaction = {
   size: number
   time: number
   txid: string
-  type: string
   hash?: string
   protocol?: string
   network?: string
@@ -79,7 +79,7 @@ export type TransactionNotification = {
   contract: string
   state: StackState
   event_name: string
-  contractObj: DetailedContract
+  contractObj: ContractResponse
 }
 
 // TODO: create different types for the chains instead of this generic one
@@ -128,7 +128,6 @@ export type BlockTransaction = {
   size: number
   time: number
   txid: string
-  type?: string
   hash: string
 }
 
@@ -139,6 +138,7 @@ export const INITIAL_STATE = {
   lastUpdated: null,
   transaction: null,
   page: 1,
+  totalCount: 0,
 }
 
 export default (
@@ -168,7 +168,7 @@ export default (
     case REQUEST_TRANSACTIONS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        all: [...state.all, ...action.json.all.items],
+        all: action.json.all.items,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,

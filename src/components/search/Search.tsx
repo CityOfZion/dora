@@ -24,7 +24,7 @@ const Search: React.FC<{}> = () => {
 
   const { error, searchValue, searchType, results } = searchState
   const network = 'mainnet'
-  const chain = 'neo2'
+  const chain = 'neo3'
   const placeholder =
     width > 900
       ? 'Search for block height, hash, address, or transaction ID'

@@ -1,32 +1,30 @@
-import React, { ReactElement, useEffect } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import { withRouter, useHistory, useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchTransactions, clearList } from '../../actions/transactionActions'
+import { fetchTransactions } from '../../actions/transactionActions'
 import './Transactions.scss'
-import Button from '../../components/button/Button'
 import { ROUTES } from '../../constants'
 import {
   Transaction,
   State as TxState,
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import ParsedTransactionType from '../../components/transaction/ParsedTransactionType'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import TransactionTime from '../../components/transaction/TransactionTime'
+import { usePaginationModel, getLastPage } from '@workday/canvas-kit-react'
+import ListPagination from '../../components/pagination/ListPagination'
 
 type ParsedTx = {
   time: React.FC<{}>
   txid: React.FC<{}>
   size: string
   hash: string
-  type: string
-  parsedType: React.FC<{}>
   platform: React.FC<{}>
   chain: string
   href: string
@@ -48,10 +46,6 @@ const mapTransactionData = (tx: Transaction): ParsedTx => {
     ),
     size: `${tx.size.toLocaleString()} Bytes`,
     hash: tx.hash || tx.txid,
-    type: tx.type,
-    parsedType: (): ReactElement => (
-      <ParsedTransactionType type={tx.type || 'ContractTransaction'} />
-    ),
     chain: tx.protocol || '',
     href: `${ROUTES.TRANSACTION.url}/${tx.protocol}/${tx.network}/${
       tx.hash || tx.txid
@@ -78,10 +72,15 @@ const Transactions: React.FC<{}> = () => {
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
+  const [perPage, setPerPage] = useState<number>(0)
 
-  function loadMore(): void {
-    const nextPage = transactionState.page + 1
-    dispatch(fetchTransactions(nextPage))
+  const model = usePaginationModel({
+    lastPage: getLastPage(perPage, transactionState.totalCount),
+    onPageChange: pageNumber => loadPage(pageNumber),
+  })
+
+  function loadPage(page: number): void {
+    dispatch(fetchTransactions(network, protocol, page))
   }
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
@@ -90,39 +89,30 @@ const Transactions: React.FC<{}> = () => {
     networkParam,
   )
 
-  const selectedData = (): Array<Transaction> => {
-    let sorted = transactionState.all
-
-    if (protocol !== 'all') {
-      sorted = sorted.filter(transaction => transaction.protocol === protocol)
-    }
-
+  useEffect(() => {
     if (network !== 'all') {
-      sorted = sorted.filter(transaction => transaction.network === network)
+      setPerPage(15)
+      return
     }
 
-    return sorted
-  }
+    setPerPage(60)
+  }, [network])
 
   useEffect(() => {
-    dispatch(fetchTransactions())
-
-    return (): void => {
-      dispatch(clearList())
-    }
-  }, [dispatch])
+    dispatch(fetchTransactions(network, protocol))
+  }, [protocol, network])
 
   const columns =
     width > 768
       ? [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
           { name: 'Completed on', accessor: 'time' },
         ]
       : [
-          { name: 'Platform', accessor: 'platform' },
+          { name: 'Network', accessor: 'platform' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
         ]
@@ -157,6 +147,10 @@ const Transactions: React.FC<{}> = () => {
             },
           }}
           handleFilterUpdate={(option): void => {
+            model.events.goTo(1)
+            if ((option.value as Platform).network !== 'all') {
+              setPerPage(15)
+            }
             handleSetFilterData({
               protocol: (option.value as Platform).protocol,
               network: (option.value as Platform).network,
@@ -164,9 +158,12 @@ const Transactions: React.FC<{}> = () => {
           }}
         />
         <List
-          data={returnTxListData(selectedData(), !selectedData().length)}
+          data={returnTxListData(
+            transactionState.all,
+            !transactionState.all.length,
+          )}
           rowId="hash"
-          isLoading={!transactionState.all.length}
+          isLoading={transactionState.isLoading}
           columns={columns}
           countConfig={{
             label: 'Transactions',
@@ -193,14 +190,12 @@ const Transactions: React.FC<{}> = () => {
             return ''
           }}
         />
-        <div className="load-more-button-container">
-          <Button
-            disabled={transactionState.isLoading}
-            primary={false}
-            onClick={(): void => loadMore()}
-          >
-            load more
-          </Button>
+        <div className="transaction-list-pagination">
+          <ListPagination
+            perPage={perPage}
+            totalCount={transactionState.totalCount}
+            model={model}
+          />
         </div>
       </div>
     </div>

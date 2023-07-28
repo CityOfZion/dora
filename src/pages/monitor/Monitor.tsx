@@ -575,11 +575,13 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }>({ desc: false, sort: 'isItUp' })
 
   const selectedData = (): WSDoraData[] => {
-    const sortedNodes = OrderNodes(
+    let sortedNodes = OrderNodes(
       sortDataList.sort,
       nodes.nodesArray,
       sortDataList.desc,
     )
+
+    sortedNodes = sortedNodes.filter(node => node.protocol !== 'neo2')
 
     if (protocol === 'all' && network === 'all') {
       return sortedNodes
@@ -590,9 +592,6 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
     } else {
       //temporary state, remove when api cuts over
       let mutableNetwork = network
-      if (protocol === 'neo3' && mutableNetwork === 'testnet') {
-        mutableNetwork = 'testnet_rc3'
-      }
       if (mutableNetwork === 'testnet_rc4') {
         mutableNetwork = 'testnet'
       }

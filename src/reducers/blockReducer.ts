@@ -7,11 +7,12 @@ import {
   REQUEST_BLOCKS_SUCCESS,
   CLEAR_BLOCKS_LIST,
 } from '../actions/blockActions'
+import { BlockTransaction } from './transactionReducer'
 
 type Action = {
   type: string
   receivedAt: Date
-  indexOrHash: string
+  index: number
   blockHeight: string
   json: {
     hash: string
@@ -26,6 +27,7 @@ export type State = {
   lastUpdated: Date | null
   block: DetailedBlock | null
   page: number
+  totalCount: number
 }
 
 export type Block = {
@@ -43,15 +45,11 @@ export type Block = {
 export type DetailedBlock = {
   nextconsensus: string
   oversize: number
-  tx: []
+  tx: BlockTransaction[]
   previousblockhash: string
   index: number
   version: number
   nonce: string
-  script: {
-    invocation: string
-    verification: string
-  }
   size: number
   blocktime: number
   merkleroot: string
@@ -74,6 +72,7 @@ export const INITIAL_STATE = {
   lastUpdated: null,
   block: null,
   page: 1,
+  totalCount: 0,
 }
 
 export default (
@@ -105,7 +104,7 @@ export default (
     case REQUEST_BLOCKS_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
-        all: [...state.all, ...action.json.all.items],
+        all: action.json.all.items,
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         page: action.page,

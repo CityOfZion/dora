@@ -1,3 +1,5 @@
+import { Transaction } from '../reducers/transactionReducer'
+
 export const MOCK_BLOCK_LIST_DATA = [
   {
     index: 786786,
@@ -145,99 +147,15 @@ export const MOCK_BLOCK_LIST_DATA = [
   },
 ]
 
-export const MOCK_TX_LIST_DATA = [
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-  {
-    time: 666,
-    size: 666,
-    txid: '',
-    type: '',
-  },
-]
-
+export const MOCK_TX_LIST_DATA = Array.from(
+  { length: 15 },
+  (_, i) =>
+    ({
+      time: 666,
+      size: 666,
+      hash: '',
+    } as Transaction),
+)
 export const MOCK_CONTRACT_LIST_DATA = [
   {
     block: 5785119,
