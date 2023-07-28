@@ -16,6 +16,8 @@ import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { format24Hours, formatDate } from '../../utils/time'
 import Manifest from '../../components/manifest/Manifest'
 import bs58check from 'bs58check'
+import useWindowWidth from '../../hooks/useWindowWidth'
+import { truncateHash } from '../../utils/formatter'
 
 interface MatchParams {
   hash: string
@@ -33,6 +35,7 @@ const Contract: React.FC<Props> = (props: Props) => {
     ({ contract }: { contract: ContractState }) => contract,
   )
   const { contract, isLoading, contractStats } = contractsState
+  const width = useWindowWidth()
 
   function getAddressLink(): string {
     if (contract && chain === 'neo3') {
@@ -94,7 +97,9 @@ const Contract: React.FC<Props> = (props: Props) => {
                   ROUTES.WALLET.url
                 }/${chain}/${network}/${getAddressLink()}`}
               >
-                {contract && !isLoading && contract.hash}
+                {contract &&
+                  !isLoading &&
+                  truncateHash(contract.hash, width <= 768, undefined, 15)}
               </Link>
             </div>
           </div>
