@@ -1,6 +1,11 @@
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { store } from '../../../../store'
 import { AddressTransactionsResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const fetchTransaction = async (hash: string, page = 1) => {
   try {

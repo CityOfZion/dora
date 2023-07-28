@@ -8,12 +8,17 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { convertToArbitraryDecimals } from '../../../../utils/formatter'
 import AddressTransactionsCard from './fragments/AddressTransactionCard'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import {
   Notification,
   TransactionEnhanced,
   Transfer as TransferDoraTS,
 } from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 interface MatchParams {
   hash: string

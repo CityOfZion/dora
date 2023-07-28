@@ -3,9 +3,14 @@ import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../../components/copy/Copy'
 import { DetailedTransaction } from '../../../reducers/transactionReducer'
 
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { store } from '../../../store'
 import { LogResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 interface Props extends BoxProps {
   transaction: DetailedTransaction | null
