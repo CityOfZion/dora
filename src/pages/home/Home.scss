@@ -75,6 +75,10 @@
       width: 100%;
       max-width: 1540px;
       padding-top: 24px;
+
+      @media screen and (max-width: 768px) {
+        padding: 0;
+      }
     }
 
     .invocations-list-wrapper {
