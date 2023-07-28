@@ -41,7 +41,9 @@ const ParsedTransactionType: React.FC<Props> = ({ type }: Props) => (
   <div className="parsed-transaction-type-row">
     {' '}
     <div className="parsed-transaction-icon"> {parseTypeToIcon(type)}</div>
-    {parseTypeToDiplayValue(type)}
+    <div className="parsed-transaction-title">
+      {parseTypeToDiplayValue(type)}
+    </div>
   </div>
 )
 
