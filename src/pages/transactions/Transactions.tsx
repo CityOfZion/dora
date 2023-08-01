@@ -195,6 +195,7 @@ const Transactions: React.FC<{}> = () => {
             perPage={perPage}
             totalCount={transactionState.totalCount}
             model={model}
+            isLoading={transactionState.isLoading}
           />
         </div>
       </div>

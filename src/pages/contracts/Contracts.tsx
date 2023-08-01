@@ -214,6 +214,7 @@ const Contracts: React.FC<{}> = () => {
             perPage={perPage}
             totalCount={contractsState.totalCount}
             model={model}
+            isLoading={contractsState.isLoading}
           />
         </div>
       </div>

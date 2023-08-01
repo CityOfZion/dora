@@ -1,4 +1,5 @@
 import {
+  LoadingDots,
   Pagination,
   PaginationModel,
   getVisibleResultsMax,
@@ -8,8 +9,9 @@ import {
 const ListPagination: React.FC<{
   totalCount: number
   perPage: number
+  isLoading: boolean
   model: PaginationModel
-}> = ({ totalCount, perPage, model }) => {
+}> = ({ totalCount, perPage, isLoading, model }) => {
   return (
     <div>
       <Pagination
@@ -20,24 +22,28 @@ const ListPagination: React.FC<{
         marginTop={10}
         padding={10}
       >
-        <Pagination.Controls>
-          <Pagination.JumpToFirstButton aria-label="First" />
-          <Pagination.StepToPreviousButton aria-label="Previous" />
-          <Pagination.PageList>
-            {({ state }) =>
-              state.range.map(pageNumber => (
-                <Pagination.PageListItem key={pageNumber}>
-                  <Pagination.PageButton
-                    aria-label={`Page ${pageNumber}`}
-                    pageNumber={pageNumber}
-                  />
-                </Pagination.PageListItem>
-              ))
-            }
-          </Pagination.PageList>
-          <Pagination.StepToNextButton aria-label="Next" />
-          <Pagination.JumpToLastButton aria-label="Last" />
-        </Pagination.Controls>
+        {!isLoading ? (
+          <Pagination.Controls>
+            <Pagination.JumpToFirstButton aria-label="First" aria-disabled />
+            <Pagination.StepToPreviousButton aria-label="Previous" />
+            <Pagination.PageList>
+              {({ state }) =>
+                state.range.map(pageNumber => (
+                  <Pagination.PageListItem key={pageNumber}>
+                    <Pagination.PageButton
+                      aria-label={`Page ${pageNumber}`}
+                      pageNumber={pageNumber}
+                    />
+                  </Pagination.PageListItem>
+                ))
+              }
+            </Pagination.PageList>
+            <Pagination.StepToNextButton aria-label="Next" />
+            <Pagination.JumpToLastButton aria-label="Last" />
+          </Pagination.Controls>
+        ) : (
+          <LoadingDots />
+        )}
         <Pagination.AdditionalDetails color={'#cae0eb'}>
           {({ state }) =>
             `${getVisibleResultsMin(
