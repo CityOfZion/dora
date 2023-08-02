@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import { BrowserRouter, Route, Switch, useLocation } from 'react-router-dom'
+import { BrowserRouter, Switch, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -21,6 +21,7 @@ import Endpoint from '../../pages/endpoint/Endpoint'
 import { MonitorProvider } from '../../contexts/MonitorContext'
 import NftInformationPage from '../../pages/nft/NftInformationPage'
 import Lookup from '../../pages/lookup/Lookup'
+import { SentryRoute } from '../../sentry/SentryRoute'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -32,6 +33,10 @@ const reload = () => {
   window.location.reload()
   return <></>
 }
+
+/** If the react-router-dom library is updated, it is essential to find and
+ *  update the corresponding version of the routingInstrumentation in Sentry.
+ */
 
 const Router: React.FC = (): ReactElement => {
   return (
@@ -46,63 +51,63 @@ const Router: React.FC = (): ReactElement => {
             <div className="column-container router-page-container">
               <ScrollToTop />
               <Switch>
-                <Route
+                <SentryRoute
                   path={ROUTES.HOME.url}
                   component={(): ReactElement => <Home />}
                   exact
                 />
 
-                <Route
+                <SentryRoute
                   path={ROUTES.LOOKUP.url}
                   component={(): ReactElement => <Lookup />}
                 />
 
-                <Route
+                <SentryRoute
                   path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
                   component={(): ReactElement => <NftInformationPage />}
                 />
 
-                <Route
+                <SentryRoute
                   path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Address />}
                 />
 
-                <Route
+                <SentryRoute
                   path={`${ROUTES.CONTRACT.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Contract />}
                 />
 
-                <Route
+                <SentryRoute
                   exact
                   path={`${ROUTES.TRANSACTION.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Transaction />}
                 />
 
-                <Route
+                <SentryRoute
                   exact
                   path={`${ROUTES.BLOCK.url}/:chain/:network/:hash`}
                   component={(): ReactElement => <Block />}
                 />
 
-                <Route
+                <SentryRoute
                   exact
                   path={`${ROUTES.SEARCH.url}/:protocol/:network/:search`}
                   component={(): ReactElement => <SearchResults />}
                 />
 
-                <Route
+                <SentryRoute
                   path={ROUTES.CONTRACTS.url}
                   component={(): ReactElement => <Contracts />}
                 />
-                <Route
+                <SentryRoute
                   path={`${ROUTES.TRANSACTIONS.url}/:chain?/:network?`}
                   component={(): ReactElement => <Transactions />}
                 />
-                <Route
+                <SentryRoute
                   path={`${ROUTES.BLOCKS.url}/:chain?/:network?`}
                   component={(): ReactElement => <Blocks />}
                 />
-                <Route
+                <SentryRoute
                   path={ROUTES.MONITOR.url}
                   component={(): ReactElement => (
                     <MonitorProvider>
@@ -110,17 +115,17 @@ const Router: React.FC = (): ReactElement => {
                     </MonitorProvider>
                   )}
                 />
-                <Route
+                <SentryRoute
                   exact
                   path={`${ROUTES.ENDPOINT.url}/:endpoint`}
                   component={(): ReactElement => <Endpoint />}
                 />
-                <Route
+                <SentryRoute
                   path={ROUTES.NOT_FOUND.url}
                   component={(): ReactElement => <NotFound />}
                 />
-                <Route path={`${ROUTES.API.url}`} render={reload} />
-                <Route component={(): ReactElement => <NotFound />} />
+                <SentryRoute path={`${ROUTES.API.url}`} render={reload} />
+                <SentryRoute component={(): ReactElement => <NotFound />} />
               </Switch>
             </div>
           </div>
