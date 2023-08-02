@@ -57,7 +57,7 @@ const Endpoint: React.FC<Props> = (props: Props) => {
             <CloseX />
           </div>
           <div className="details-section">
-            <div className="inner-page-container">
+            <div>
               <div className="endpoint-flag">
                 <ReactCountryFlag
                   style={{
@@ -76,10 +76,12 @@ const Endpoint: React.FC<Props> = (props: Props) => {
                   <label className="title-tile endpoint-title-tile">
                     ENDPOINT
                   </label>
-                  <span className="content-tile endpoint-content-tile">
-                    {endpointSelected && endpointSelected.url}
+                  <span className="endpoint-content-tile-url">
+                    <span className="content-tile endpoint-content-tile">
+                      {endpointSelected && endpointSelected.url}
+                    </span>
+                    <Copy text={endpointSelected ? endpointSelected.url : ''} />
                   </span>
-                  <Copy text={endpointSelected ? endpointSelected.url : ''} />
                 </div>
                 <div className="detail-tile endpoint-detail-tile">
                   <label className="title-tile endpoint-title-tile">TYPE</label>

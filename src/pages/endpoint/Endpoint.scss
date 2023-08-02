@@ -37,21 +37,20 @@
     &-detail-tile {
       height: 51px;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      width: 100%;
+
+      @media screen and (max-width: 576px) {
+        flex-basis: 100%;
+      }
 
       span {
-        margin-right: 0;
         font-size: 14px;
         font-weight: 400;
       }
 
       label {
         left: 6px;
-        margin-top: -10px;
-      }
-
-      svg {
-        margin-left: 16px;
       }
     }
 
@@ -65,6 +64,17 @@
       flex-direction: row;
       justify-self: flex-end;
       right: 0;
+      padding: 3px 10px;
+
+      &-url {
+        display: flex;
+        flex-direction: row;
+
+        svg {
+          margin-left: 16px;
+          margin-top: 3px;
+        }
+      }
     }
   }
 }
