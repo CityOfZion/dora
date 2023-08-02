@@ -6,3 +6,11 @@
 .parsed-transaction-icon {
   width: 50px;
 }
+
+@media screen and (max-width: 576px) {
+  .parsed-transaction-type-row {
+    .parsed-transaction-title {
+      display: none;
+    }
+  }
+}

@@ -81,7 +81,9 @@ const Footer: React.FC = (): ReactElement => {
               </a>
             </p>
           </div>
-          {process.env.REACT_APP_LAST_COMMIT ?? ''}
+          <p className="last-commit">
+            {process.env.REACT_APP_LAST_COMMIT ?? ''}
+          </p>
         </div>
       </div>
     </div>

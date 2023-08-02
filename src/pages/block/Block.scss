@@ -75,11 +75,25 @@
   }
 }
 
+@media screen and (max-width: 576px) {
+  #Block {
+    .detail-tile {
+      flex: none;
+      width: 100%;
+    }
+    .inner-details-container {
+      padding-right: 25px;
+    }
+    .data-list > a {
+      padding: 0px 14px;
+    }
+  }
+}
+
 @media screen and (max-width: 768px) {
   #Block {
     .detail-tile {
       height: 50px;
-
       span {
         font-size: 18px;
       }
