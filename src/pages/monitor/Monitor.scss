@@ -151,7 +151,7 @@
 }
 
 .data-list-column {
-  padding: 0px 24px;
+  padding: 4px 24px;
   font-weight: 300;
   display: flex;
   align-items: center;
@@ -317,9 +317,7 @@
   }
 
   .network-status-toggle {
-    padding-top: 13px;
-    padding-bottom: 17px;
-    padding-right: 17px;
+    padding: 13px 17px 17px 11px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
