@@ -17,6 +17,10 @@
     display: flex;
     margin-bottom: 48px;
 
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+
     .results {
       color: #d355e7;
       margin-left: 6px;
@@ -34,7 +38,6 @@
     .search-result-chain-info {
       min-height: 90px;
       height: 90px;
-      //max-height: 90px;
       background-color: #27454c;
       width: 90px;
       display: flex;
@@ -111,7 +114,10 @@
             font-size: 12px;
             color: #7d9fb1;
             letter-spacing: 0;
-            // text-align: right;
+          }
+
+          span {
+            padding-top: 2px;
           }
         }
       }
