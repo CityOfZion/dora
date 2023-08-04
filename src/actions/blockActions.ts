@@ -149,7 +149,7 @@ export function fetchBlock(index = 1) {
           time: Number(time),
           hash,
           jsonsize,
-          witnesses: witnesses,
+          witnesses,
           tx: tx.map(
             t =>
               ({
