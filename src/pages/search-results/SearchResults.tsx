@@ -11,6 +11,8 @@ import { State as SearchState } from '../../reducers/searchReducer'
 import { handleSearchInput } from '../../actions/searchActions'
 import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
 import { formatDate } from '../../utils/time'
+import { truncateHash } from '../../utils/formatter'
+import useWindowWidth from '../../hooks/useWindowWidth'
 
 interface MatchParams {
   search: string
@@ -80,30 +82,37 @@ const BlockResult = (result: any): ReactElement => (
   </Link>
 )
 
-const AddressResult = (result: any): ReactElement => (
-  <Link
-    to={`${ROUTES.WALLET.url}/${result.protocol}/${result.network}/${result.address}`}
-  >
-    <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
-      <div className="search-results-details">
-        <div className="search-result-type">
-          {ROUTES.WALLETS.renderIcon()} Address
-        </div>
-        <div className="search-result-info">
-          <div className="search-result-detail">
-            <label>Address</label>
-            {result.address}
+const AddressResult = (result: any): ReactElement => {
+  const width = useWindowWidth()
+  return (
+    <Link
+      to={`${ROUTES.WALLET.url}/${result.protocol}/${result.network}/${result.address}`}
+    >
+      <div className="search-result-container">
+        <PlatformElement protocol={result.protocol} network={result.network} />
+        <div className="search-results-details">
+          <div className="search-result-type">
+            {ROUTES.WALLETS.renderIcon()} Address
           </div>
-          <div className="search-result-detail">
-            <label>Asset Types</label>
-            {result.balances.length}
+          <div className="search-result-info">
+            <div className="search-result-detail">
+              <label>Address</label>
+              <span>
+                {width <= 350
+                  ? truncateHash(result.address, width <= 350, undefined, 5)
+                  : truncateHash(result.address, width <= 576, undefined, 15)}
+              </span>
+            </div>
+            <div className="search-result-detail">
+              <label>Asset Types</label>
+              <span>{result.balances.length}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </Link>
-)
+    </Link>
+  )
+}
 
 const TransactionResult = (result: any): ReactElement => (
   <Link

@@ -74,8 +74,8 @@
 }
 
 .detail-tile {
-  max-height: 74px;
-  height: 74px;
+  row-gap: 10px;
+  min-height: 74px;
   background: rgba(255, 255, 255, 0.07);
   border-radius: 2.4px;
   display: flex;
@@ -111,7 +111,6 @@
 }
 
 .full-width-tile-row {
-  max-height: 52px;
   margin: 0 2px 6px 2px;
 
   span {
@@ -156,7 +155,6 @@
   display: flex;
   flex: 1;
   word-break: break-word;
-  min-width: 90%;
 }
 
 @media screen and (max-width: 768px) {
@@ -183,5 +181,10 @@
 @media only screen and (max-width: 450px) {
   #contract-invocations-graph-container {
     display: none;
+  }
+  #Contract {
+    .detail-tile {
+      flex-basis: 100%;
+    }
   }
 }

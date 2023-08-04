@@ -138,6 +138,7 @@ export function fetchBlock(index = 1) {
           hash,
           jsonsize,
           tx,
+          witnesses,
         } = await NeoRest.block(index, network)
 
         const block = {
@@ -153,6 +154,7 @@ export function fetchBlock(index = 1) {
           time: Number(time),
           hash,
           jsonsize,
+          witnesses,
           tx: tx.map(
             t =>
               ({

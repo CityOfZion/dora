@@ -212,6 +212,7 @@ const Blocks: React.FC<MatchParams> = props => {
             perPage={perPage}
             totalCount={blockState.totalCount}
             model={model}
+            isLoading={blockState.isLoading}
           />
         </div>
       </div>
