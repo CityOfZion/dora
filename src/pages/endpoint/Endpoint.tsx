@@ -84,12 +84,6 @@ const Endpoint: React.FC<Props> = (props: Props) => {
                   </span>
                 </div>
                 <div className="detail-tile endpoint-detail-tile">
-                  <label className="title-tile endpoint-title-tile">TYPE</label>
-                  <span className="content-tile endpoint-content-tile">
-                    {endpointSelected && endpointSelected.type}
-                  </span>
-                </div>
-                <div className="detail-tile endpoint-detail-tile">
                   <label className="title-tile endpoint-title-tile">
                     IS IT UP?
                   </label>
@@ -107,14 +101,6 @@ const Endpoint: React.FC<Props> = (props: Props) => {
                 </div>
                 <div className="detail-tile endpoint-detail-tile">
                   <label className="title-tile endpoint-title-tile">
-                    STATE HEIGHT
-                  </label>
-                  <span className="content-tile endpoint-content-tile">
-                    #{endpointSelected && endpointSelected.stateheight}
-                  </span>
-                </div>
-                <div className="detail-tile endpoint-detail-tile">
-                  <label className="title-tile endpoint-title-tile">
                     BLOCK HEIGHT
                   </label>
                   <span className="content-tile endpoint-content-tile">
@@ -126,7 +112,7 @@ const Endpoint: React.FC<Props> = (props: Props) => {
                     VERSION
                   </label>
                   <span className="content-tile endpoint-content-tile">
-                    {endpointSelected && endpointSelected.version}
+                    {endpointSelected && endpointSelected.user_agent}
                   </span>
                 </div>
                 <div className="detail-tile endpoint-detail-tile">

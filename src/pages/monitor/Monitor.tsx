@@ -43,10 +43,8 @@ import { uniqueId } from 'lodash'
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
-  type: React.FC<{}>
   isItUp: React.FC<{}>
   availability: string | React.FC<{}>
-  stateHeight: string | React.FC<{}>
   blockHeight: string | React.FC<{}>
   version: string | React.FC<{}>
   peers: number | React.FC<{}>
@@ -59,7 +57,7 @@ interface AllNodes {
 
 interface Endpoint extends AllNodes {
   url: string
-  locale: string
+  endpointLocation: string
 }
 
 const STATUS_ICONS = [
@@ -69,7 +67,7 @@ const STATUS_ICONS = [
   { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
 ]
 
-const Endpoint: React.FC<Endpoint> = ({ url, locale, disable }) => {
+const Endpoint: React.FC<Endpoint> = ({ url, endpointLocation, disable }) => {
   const { setMessage, setShowMessage } = useContext(MonitorContext)
   const handleClickEndpoint = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -80,6 +78,18 @@ const Endpoint: React.FC<Endpoint> = ({ url, locale, disable }) => {
     setShowMessage(true)
   }
 
+  const LOCATIONS_FLAGS = [
+    { location: 'United States', countryCode: 'US' },
+    { location: 'USA', countryCode: 'US' },
+    { location: 'Hong Kong', countryCode: 'HK' },
+    { location: 'Canada', countryCode: 'CA' },
+    { location: 'China', countryCode: 'CN' },
+    { location: 'US', countryCode: 'US' },
+    { location: 'Singapore', countryCode: 'SG' },
+    { location: 'France', countryCode: 'FR' },
+    { location: 'Russia', countryCode: 'RU' },
+  ]
+
   return (
     <div className={disable ? 'endpoint disable' : 'endpoint'}>
       <div className="endpoint-flag-container">
@@ -89,7 +99,11 @@ const Endpoint: React.FC<Endpoint> = ({ url, locale, disable }) => {
             fontSize: '1.5em',
             lineHeight: '1.5em',
           }}
-          countryCode={locale}
+          countryCode={
+            LOCATIONS_FLAGS.find(
+              ({ location }) => location === endpointLocation,
+            )?.countryCode
+          }
         />
       </div>
       <div className="endpoint-url">{url}</div>
@@ -346,13 +360,10 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
     endpoint: (): ReactElement => (
       <Endpoint
         url={data.url}
-        locale={data.locale}
+        endpointLocation={data.location}
         disable={!isPositive()}
         key={data.url}
       />
-    ),
-    type: (): ReactElement => (
-      <TypeNode textType={data.type} disable={!isPositive()} />
     ),
     blockHeight: isPositive()
       ? (): ReactElement => (
@@ -366,7 +377,7 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
           />
         ),
     version: isPositive()
-      ? (): ReactElement => <NavigateColumn text={data.version} url={url} />
+      ? (): ReactElement => <NavigateColumn text={data.user_agent} url={url} />
       : (): ReactElement => (
           <NegativeComponent disable={!isPositive()} url={url} />
         ),
@@ -381,23 +392,12 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
         ),
     availability: isPositive()
       ? (): ReactElement => (
-          <Availability text={`${data.reliability}%`} url={url} />
+          <Availability text={`${data.availability}%`} url={url} />
         )
       : (): ReactElement => (
           <NegativeComponent
             disable={!isPositive()}
             hasArrowAvailability={true}
-            url={url}
-          />
-        ),
-    stateHeight: isPositive()
-      ? (): ReactElement => (
-          <NavigateColumn text={`#${data.stateheight}`} url={url} />
-        )
-      : (): ReactElement => (
-          <NegativeComponent
-            useHashTag={true}
-            disable={!isPositive()}
             url={url}
           />
         ),
@@ -431,10 +431,8 @@ const columns: ColumnType[] = [
     sortOpt: 'endpoint',
     style: { minWidth: '250px' },
   },
-  { name: 'Type', accessor: 'type', sortOpt: 'type' },
   { name: 'Is it up?', accessor: 'isItUp', sortOpt: 'isItUp' },
   { name: 'Availability', accessor: 'availability', sortOpt: 'availability' },
-  { name: 'State Height', accessor: 'stateHeight', sortOpt: 'stateHeight' },
   { name: 'Block Height', accessor: 'blockHeight', sortOpt: 'blockHeight' },
   { name: 'Version', accessor: 'version', sortOpt: 'version' },
   { name: 'Peers', accessor: 'peers', sortOpt: 'peers' },
@@ -573,20 +571,16 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }>({ desc: false, sort: 'isItUp' })
 
   const selectedData = (): WSDoraData[] => {
-    let sortedNodes = OrderNodes(
+    const sortedNodes = OrderNodes(
       sortDataList.sort,
       nodes.nodesArray,
       sortDataList.desc,
     )
 
-    sortedNodes = sortedNodes.filter(node => node.protocol !== 'neo2')
-
     if (protocol === 'all' && network === 'all') {
       return sortedNodes
-    } else if (protocol === 'all' && network !== 'all') {
+    } else if (network !== 'all') {
       return sortedNodes.filter(node => node.network === network)
-    } else if (protocol !== 'all' && network === 'all') {
-      return sortedNodes.filter(node => node.protocol === protocol)
     } else {
       //temporary state, remove when api cuts over
       let mutableNetwork = network
@@ -594,9 +588,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
         mutableNetwork = 'testnet'
       }
 
-      return sortedNodes.filter(
-        node => node.protocol === protocol && node.network === mutableNetwork,
-      )
+      return sortedNodes.filter(node => node.network === mutableNetwork)
     }
   }
 
@@ -620,7 +612,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   useEffect(() => {
     let socket: Socket
     if (window.location.pathname.includes(ROUTES.MONITOR.url)) {
-      socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
+      // TODO: Change the endpoint address to the new v2 one when it's ready
+      socket = new Socket('ws://localhost:8080/network_status')
       socket.listening<WSDoraData>(data => {
         dispatch(setNode(data))
       })
@@ -834,10 +827,6 @@ const Monitor: React.FC<{}> = () => {
       nodes.nodesArray,
       sortDataList.desc,
     )
-
-    if (protocol !== 'all') {
-      sortedNodes = sortedNodes.filter(node => node.protocol === protocol)
-    }
 
     if (network !== 'all') {
       sortedNodes = sortedNodes.filter(node => node.network === network)
