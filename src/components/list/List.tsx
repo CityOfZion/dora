@@ -4,6 +4,7 @@ import classNames from 'classnames'
 import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
 import { SORT_OPTION } from '../../reducers/nodeReducer'
 import './List.scss'
+import { Link } from 'react-router-dom'
 
 interface HeaderCell {
   styleHeader?: React.CSSProperties
@@ -250,10 +251,9 @@ export const List: React.FC<ListProps> = ({
                 ? key !== 'id' &&
                     key !== 'href' &&
                     key !== 'chain' &&
-                    // TODO: this should probably be using the <Link/> component
                     (typeof data.href === 'string' || generateHref ? (
-                      <a
-                        href={conditionalHref()}
+                      <Link
+                        to={conditionalHref()}
                         style={conditionalBorderRadius(
                           i,
                           true,
@@ -267,7 +267,7 @@ export const List: React.FC<ListProps> = ({
                         className={rowClass}
                       >
                         {renderCellData(isLoading, data[key])}
-                      </a>
+                      </Link>
                     ) : (
                       <div
                         id="non-link-list-cell-container"
@@ -289,10 +289,9 @@ export const List: React.FC<ListProps> = ({
                 : key !== 'id' &&
                     key !== 'href' &&
                     key !== 'chain' &&
-                    // TODO: this should probably be using the <Link/> component
                     (!data.href.toString().startsWith('#') || generateHref ? (
-                      <a
-                        href={conditionalHref()}
+                      <Link
+                        to={conditionalHref()}
                         style={{
                           ...conditionalBorderRadius(
                             i,
@@ -309,7 +308,7 @@ export const List: React.FC<ListProps> = ({
                         className={rowClass}
                       >
                         {renderCellData(isLoading, data[key])}
-                      </a>
+                      </Link>
                     ) : (
                       <div
                         id="non-link-list-cell-container"
