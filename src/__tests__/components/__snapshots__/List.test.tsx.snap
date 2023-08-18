@@ -36,9 +36,8 @@ exports[`renders without crashing 1`] = `
     >
       Test Label 2
     </div>
-    <a
+    <Link
       className=""
-      href="#"
       key="1"
       onClick={[Function]}
       style={
@@ -47,22 +46,22 @@ exports[`renders without crashing 1`] = `
           "borderRadius": "3px 0 0 3px",
         }
       }
+      to="#"
     >
       123423445
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="2"
       onClick={[Function]}
+      to="#"
     >
       <div>
          hello test 2 
       </div>
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="3"
       onClick={[Function]}
       style={
@@ -71,22 +70,22 @@ exports[`renders without crashing 1`] = `
           "borderRadius": "3px 0 0 3px",
         }
       }
+      to="#"
     >
       123423445
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="4"
       onClick={[Function]}
+      to="#"
     >
       <div>
          hello test 2 
       </div>
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="5"
       onClick={[Function]}
       style={
@@ -95,22 +94,22 @@ exports[`renders without crashing 1`] = `
           "borderRadius": "3px 0 0 3px",
         }
       }
+      to="#"
     >
       123423445
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="6"
       onClick={[Function]}
+      to="#"
     >
       <div>
          hello test 2 
       </div>
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="7"
       onClick={[Function]}
       style={
@@ -119,22 +118,22 @@ exports[`renders without crashing 1`] = `
           "borderRadius": "3px 0 0 3px",
         }
       }
+      to="#"
     >
       123423445
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="8"
       onClick={[Function]}
+      to="#"
     >
       <div>
          hello test 2 
       </div>
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="9"
       onClick={[Function]}
       style={
@@ -143,19 +142,20 @@ exports[`renders without crashing 1`] = `
           "borderRadius": "3px 0 0 3px",
         }
       }
+      to="#"
     >
       123423445
-    </a>
-    <a
+    </Link>
+    <Link
       className=""
-      href="#"
       key="10"
       onClick={[Function]}
+      to="#"
     >
       <div>
          hello test 2 
       </div>
-    </a>
+    </Link>
   </div>
 </div>
 `;
