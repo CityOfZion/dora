@@ -41,8 +41,6 @@ import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { uniqueId } from 'lodash'
 
-const socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
-
 type ParsedNodes = {
   endpoint: React.FC<{}>
   type: React.FC<{}>
@@ -620,9 +618,13 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
    * Configures and begins listening to the socket
    */
   useEffect(() => {
-    socket.listening<WSDoraData>(data => {
-      dispatch(setNode(data))
-    })
+    let socket: Socket
+    if (window.location.pathname.includes(ROUTES.MONITOR.url)) {
+      socket = new Socket('wss://dora.coz.io/ws/v1/unified/network_status')
+      socket.listening<WSDoraData>(data => {
+        dispatch(setNode(data))
+      })
+    }
 
     return () => {
       socket.close()
