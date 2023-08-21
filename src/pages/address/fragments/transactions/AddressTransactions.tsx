@@ -40,41 +40,59 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
     setCurrentPage(currentPage + 1)
   }
 
-  function convertTransferAmounts(tfxs: TransferDoraTS[]) {
-    return Promise.all(
-      tfxs.map(async ({ scripthash, amount, from, to }) => {
-        const { symbol, decimals } = await NeoRest.asset(scripthash, network)
-        const convertedAmount = convertToArbitraryDecimals(
-          Number(amount),
-          Number(decimals),
-        )
+  function convertTransferAmounts(tfxs: TransferDoraTS[], data: any) {
+    return tfxs.map(({ scripthash, amount, from, to }) => {
+      const { symbol, decimals } = data.get(scripthash)
+      const convertedAmount = convertToArbitraryDecimals(
+        Number(amount),
+        Number(decimals),
+      )
 
-        return {
-          from,
-          to,
-          scripthash,
-          amount: convertedAmount,
-          symbol: symbol,
-        } as Transfer
-      }),
-    )
+      return {
+        from,
+        to,
+        scripthash,
+        amount: convertedAmount,
+        symbol: symbol,
+      } as Transfer
+    })
   }
 
   async function convertToAddressTransactions(
     items: TransactionEnhanced[],
   ): Promise<AddressTransaction[]> {
-    return Promise.all(
-      items.map(async item => {
-        const transfers = await convertTransferAmounts(item.transfers)
-        return {
-          ...item,
-          invocations: item.invocations as Incovation[],
-          notifications: item.notifications as Notification[],
-          time: Number(item.time),
-          transfers,
-        } as AddressTransaction
+    // first collect all script hashes from the transfers
+    const script_hashes = []
+    for (let i = 0; i < items.length; i++) {
+      for (let j = 0; j < items[i].transfers.length; j++) {
+        script_hashes.push(items[i].transfers[j].scripthash)
+      }
+    }
+    // then filter them
+    const unique_hashes = script_hashes.filter((v, i, a) => a.indexOf(v) === i)
+    // then request the symbol + decimals for the unique script hashes
+    const data = await Promise.all(
+      unique_hashes.map(async scripthash => {
+        const { symbol, decimals } = await NeoRest.asset(scripthash, network)
+        return [scripthash, symbol, decimals]
       }),
     )
+    // finally store them in a map for easy lookup
+    const datamap = new Map()
+    data.forEach(entry => {
+      datamap.set(entry[0], { symbol: entry[1], decimals: entry[2] })
+    })
+
+    return items.map(item => {
+      const transfers = convertTransferAmounts(item.transfers, datamap)
+      return {
+        ...item,
+        invocations: item.invocations as Incovation[],
+        notifications: item.notifications as Notification[],
+        time: Number(item.time),
+        transfers,
+      } as AddressTransaction
+    })
   }
 
   useEffect(() => {
