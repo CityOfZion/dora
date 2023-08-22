@@ -33,7 +33,7 @@ const mapTransactionData = (
 }
 
 const returnTxListData = (block: DetailedBlock): Array<ParsedTx> => {
-  return block.tx.map(tx => mapTransactionData(tx, block.blocktime))
+  return block.tx.map(tx => mapTransactionData(tx, block.time))
 }
 
 const N3BlockTransactionsList: React.FC<{
