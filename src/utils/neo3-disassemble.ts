@@ -197,6 +197,8 @@ const opcodetable = {
   0xd8: { name: 'ISNULL', size: 0 },
   0xd9: { name: 'ISTYPE', size: 1 },
   0xdb: { name: 'CONVERT', size: 1 },
+  0xe0: { name: 'ABORTMSG', size: 0 },
+  0xe1: { name: 'ASSERTMSG', size: 0 },
 }
 const methodnames = [
   'System.Contract.Call',

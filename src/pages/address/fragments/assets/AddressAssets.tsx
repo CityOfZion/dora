@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { toBigNumber } from '../../../../utils/formatter'
@@ -31,13 +31,18 @@ interface MatchParams {
 type Props = RouteComponentProps<MatchParams>
 
 const AddressAssets: React.FC<Props> = props => {
-  const { hash, chain } = props.match.params
+  const { hash, chain, network } = props.match.params
   useUpdateNetworkState(props)
   const dispatch = useDispatch()
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
   const { balance, isLoading } = addressState
+
+  const history = useHistory()
+  function handleContractClick(contractHash: string) {
+    history.push(`/contract/${chain}/${network}/${contractHash}`)
+  }
 
   useEffect(() => {
     dispatch(fetchAddress(hash, chain))
@@ -57,7 +62,10 @@ const AddressAssets: React.FC<Props> = props => {
                 <div className="icon-container">
                   {getTransferLogo(balance.symbol, chain)}
                 </div>
-                <div className="balance-infos">
+                <div
+                  className="balance-infos"
+                  onClick={() => handleContractClick(balance.asset)}
+                >
                   <span className="balance-symbol">{balance.symbol}</span>
                   {balance.name && (
                     <span className="balance-name">{balance.name}</span>

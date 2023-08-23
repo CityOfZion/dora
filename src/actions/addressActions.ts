@@ -98,6 +98,7 @@ type ParsedBalanceData = {
   name: string
   balance: string | number
   symbol: string
+  asset: string
 }
 
 export function fetchAddress(address: string, chain: string) {
@@ -127,6 +128,7 @@ export function fetchAddress(address: string, chain: string) {
             name,
             symbol,
             balance,
+            asset: balanceData.asset,
           })
         }
 
