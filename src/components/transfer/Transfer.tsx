@@ -262,6 +262,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     textAlign={'center'}
                     color={'tertiary'}
                     mb={4}
+                    onClick={() => handleAddressClick(transfer.to)}
                     cursor={'pointer'}
                     zIndex={2}
                   >
