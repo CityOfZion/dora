@@ -1,39 +1,12 @@
-import React, { useEffect, useState } from 'react'
 import { Box, BoxProps, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../../components/copy/Copy'
 import { DetailedTransaction } from '../../../reducers/transactionReducer'
-
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
-import { store } from '../../../store'
-import { LogResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 interface Props extends BoxProps {
   transaction: DetailedTransaction | null
 }
 
 export const TransactionLogView = ({ transaction, ...props }: Props) => {
-  const [transactionLog, setTransactionLog] = useState({} as LogResponse)
-
-  useEffect(() => {
-    const getTransactionLog = async () => {
-      if (!transaction) return
-
-      const { network } = store.getState().network
-      try {
-        const txLog = await NeoRest.log(transaction.txid, network)
-        setTransactionLog(txLog)
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
-    getTransactionLog()
-
-    return (): void => {
-      setTransactionLog({} as LogResponse)
-    }
-  }, [transaction])
-
   return (
     <Box {...props} minH={'46px'}>
       <Flex direction={['column', 'row']}>
@@ -69,7 +42,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
           </Flex>
         </Box>
 
-        {!!transactionLog.trigger && (
+        {!!transaction?.trigger && (
           <Flex className="detail-tile" minH={['54px', '74px']}>
             <Text color={'medium-grey'} fontSize={'xs'} flex={1}>
               TRIGGER
@@ -82,13 +55,13 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
               textAlign={['right', 'center']}
               flex={1}
             >
-              {transactionLog.trigger}
+              {transaction.trigger}
             </Text>
           </Flex>
         )}
       </Flex>
 
-      {(!!transactionLog.vmstate || !!transactionLog.exception) && (
+      {(!!transaction?.vmstate || !!transaction?.exception) && (
         <Box backgroundColor={'dark-grey'} p={1.5} m={'2px'} borderRadius={2}>
           <Flex justifyContent={'space-between'} mb={2}>
             <Text color={'medium-grey'} fontSize={'xs'}>
@@ -96,7 +69,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
             </Text>
             <Text
               backgroundColor={
-                transactionLog.vmstate === 'FAULT' ? 'dark-pink' : 'green'
+                transaction.vmstate === 'FAULT' ? 'dark-pink' : 'green'
               }
               px={7}
               py={1.5}
@@ -104,10 +77,10 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
               fontSize={'xs'}
               color={'medium-grey-blue'}
             >
-              {transactionLog.vmstate}
+              {transaction.vmstate}
             </Text>
           </Flex>
-          {!!transactionLog.exception && (
+          {!!transaction.exception && (
             <Box borderTop={'1px solid'} borderColor={'white-200'} py={2}>
               <Text color={'medium-grey'} fontSize={'xs'} py={1}>
                 EXCEPTION
@@ -119,9 +92,9 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
                 alignContent={'center'}
               >
                 <Text color={'white-700'} flexGrow={1} mx={1}>
-                  {transactionLog.exception}
+                  {transaction.exception}
                 </Text>
-                <Copy text={transactionLog.exception ?? ''} />
+                <Copy text={transaction.exception ?? ''} />
               </Flex>
             </Box>
           )}

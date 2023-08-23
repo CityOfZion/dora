@@ -116,6 +116,8 @@ export type DetailedTransaction = {
   signers?: Signer[]
   notifications?: TransactionNotification[]
   exception?: string
+  vmstate?: string
+  trigger?: string
 }
 
 export type Signer = {
