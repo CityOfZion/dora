@@ -190,15 +190,7 @@ export const List: React.FC<ListProps> = ({
 
   return (
     <div className="data-list-container">
-      {countConfig && (
-        <div className="data-list-count-stats">
-          {' '}
-          {countConfig.label} 1 to {data.length}{' '}
-          {!!countConfig.total
-            ? `of ${countConfig.total.toLocaleString()}`
-            : null}
-        </div>
-      )}
+      {countConfig && <div className="data-list-count-stats"> </div>}
       <div className="data-list" style={gridstyle}>
         {columns.map((column, i) => {
           return orderData ? (
