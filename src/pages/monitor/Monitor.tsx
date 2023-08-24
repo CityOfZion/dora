@@ -612,8 +612,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   useEffect(() => {
     let socket: Socket
     if (window.location.pathname.includes(ROUTES.MONITOR.url)) {
-      // TODO: Change the endpoint address to the new v2 one when it's ready
-      socket = new Socket('ws://localhost:8080/network_status')
+      socket = new Socket('wss://dora.coz.io/ws/v2/unified/network_status')
       socket.listening<WSDoraData>(data => {
         dispatch(setNode(data))
       })
