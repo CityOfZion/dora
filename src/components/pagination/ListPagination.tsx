@@ -6,6 +6,8 @@ import {
   getVisibleResultsMin,
 } from '@workday/canvas-kit-react'
 
+import './ListPagination.scss'
+
 const ListPagination: React.FC<{
   totalCount: number
   perPage: number
@@ -17,15 +19,22 @@ const ListPagination: React.FC<{
       <Pagination
         aria-label="Pagination"
         model={model}
-        backgroundColor={'#7d9fb1'}
-        borderRadius={'80px'}
+        backgroundColor={'transparent'}
         marginTop={10}
         padding={10}
+        className="pagination"
       >
         {!isLoading ? (
           <Pagination.Controls>
-            <Pagination.JumpToFirstButton aria-label="First" aria-disabled />
-            <Pagination.StepToPreviousButton aria-label="Previous" />
+            <Pagination.JumpToFirstButton
+              aria-label="First"
+              aria-disabled
+              variant="inverse"
+            />
+            <Pagination.StepToPreviousButton
+              aria-label="Previous"
+              variant="inverse"
+            />
             <Pagination.PageList>
               {({ state }) =>
                 state.range.map(pageNumber => (
@@ -38,8 +47,8 @@ const ListPagination: React.FC<{
                 ))
               }
             </Pagination.PageList>
-            <Pagination.StepToNextButton aria-label="Next" />
-            <Pagination.JumpToLastButton aria-label="Last" />
+            <Pagination.StepToNextButton aria-label="Next" variant="inverse" />
+            <Pagination.JumpToLastButton aria-label="Last" variant="inverse" />
           </Pagination.Controls>
         ) : (
           <LoadingDots />
