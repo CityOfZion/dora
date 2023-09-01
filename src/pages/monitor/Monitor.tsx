@@ -392,7 +392,7 @@ const mapNodesData = (data: WSDoraData): ParsedNodes => {
         ),
     availability: isPositive()
       ? (): ReactElement => (
-          <Availability text={`${data.availability}%`} url={url} />
+          <Availability text={`${data.availability.toFixed(2)}%`} url={url} />
         )
       : (): ReactElement => (
           <NegativeComponent
