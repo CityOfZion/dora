@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
-import { clearList, fetchNFTS, nftLimit } from '../../../../actions/nftActions'
+import { clearList, fetchNFTS } from '../../../../actions/nftActions'
 import NFTFilters, {
   NFTFiltersToggleType,
 } from '../../../../components/nfts/NFTFilters'
@@ -31,19 +31,12 @@ const AddressNFTS: React.FC<Props> = props => {
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
   const windowWidth = useWindowWidth()
 
-  const page = useRef(0)
-
   const [toggleTypeSelected, setToggleTypeSelected] =
     useState<NFTFiltersToggleType>('list')
 
-  const hasMore = useMemo(
-    () => nftState.total && page.current * nftLimit < nftState.total,
-    [nftState],
-  )
-
   function getNFTS() {
-    page.current += 1
-    dispatch(fetchNFTS(hash, network, page.current))
+    const cursor = nftState.next ?? undefined
+    dispatch(fetchNFTS(hash, network, cursor))
   }
 
   function handleNavigate(id: string, contractHash: string) {
@@ -94,7 +87,7 @@ const AddressNFTS: React.FC<Props> = props => {
       )}
 
       <div className="button-container horiz justify-center">
-        {hasMore && (
+        {nftState.hasMore && (
           <Button
             disabled={nftState.isLoading}
             primary={false}

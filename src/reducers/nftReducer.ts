@@ -14,9 +14,9 @@ type Action = {
   type: ActionType
   all: NFT[]
   error: Error
-  page: number
-  total: number
+  next: number
   value: NFT
+  hasMore: boolean
 }
 
 export type NFTAttribute = {
@@ -60,18 +60,19 @@ export type State = {
   isLoading: boolean
   all: NFT[]
   error: Error | null
-  page: number | null
-  total: number | null
+  next: string | null
   value: DETAILED_NFT | null
+  hasMore: boolean | null
 }
 
 const INITIAL_STATE = {
   isLoading: false,
   all: [],
   error: null,
-  page: null,
-  total: null,
+  cursor: null,
+  next: null,
   value: null,
+  hasMore: null,
 }
 
 export default (
@@ -82,7 +83,7 @@ export default (
     case ActionType.REQUEST_NFTS:
       return Object.assign({}, state, {
         isLoading: true,
-        page: action.page,
+        next: action.next,
       })
 
     case ActionType.REQUEST_NFT:
@@ -94,27 +95,30 @@ export default (
       return Object.assign({}, state, {
         isLoading: false,
         all: [...state.all, ...action.all],
-        page: action.page,
-        total: action.total,
+        next: action.next,
+        hasMore: action.hasMore,
       })
 
     case ActionType.REQUEST_NFT_SUCCESS:
       return Object.assign({}, state, {
         isLoading: false,
         value: action.value,
+        hasMore: action.hasMore,
       })
 
     case ActionType.REQUEST_NFT_ERROR:
       return Object.assign({}, state, {
         isLoading: false,
         error: action.error,
+        hasMore: action.hasMore,
       })
 
     case ActionType.REQUEST_NFTS_ERROR:
       return Object.assign({}, state, {
         isLoading: false,
         error: action.error,
-        page: action.page,
+        next: action.next,
+        hasMore: action.hasMore,
       })
     case ActionType.CLEAR_NFTS_LIST:
       return INITIAL_STATE

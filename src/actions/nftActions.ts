@@ -10,31 +10,47 @@ import {
 } from '../reducers/nftReducer'
 
 interface GhostMarketNFT {
-  tokenId?: string
+  tokenId: string
   contract: {
     chain?: string
-    hash?: string
-    symbol?: string
+    hash: string
+    symbol: string
+    contractId?: number
   }
   creator: {
     address?: string
-    offchainName?: string
+    addressVerified?: boolean
+    addressId: number
   }
   apiUrl?: string
   ownerships: {
     owner: {
       address?: string
+      addressVerified?: boolean
+      offchainName?: string
+      offchainTitle?: string
+      addressId?: number
     }
+    amount?: string
   }[]
+  nftType: string[]
   collection: {
     name?: string
     logoUrl?: string
   }
+  metadata: {
+    description: string
+    mediaType: string
+    mediaUri: string
+    mintDate: number
+    mintNumber: number
+    name: string
+  }
 }
 
 interface GhostMarketAssets {
-  assets: GhostMarketNFT[]
-  total: number
+  assets: GhostMarketNFT[] | null
+  next: string
 }
 
 type GhostMarketAttribute = {
@@ -49,7 +65,7 @@ type GhostMarketMetadata = {
   attributes?: GhostMarketAttribute[]
 }
 
-export const nftLimit = 8
+export const nftLimit = 4
 
 export function treatNFTImage(srcImage: string) {
   if (srcImage.startsWith('ipfs://')) {
@@ -84,7 +100,11 @@ async function getGhostMarketNFT(
 
   const data = await response.json()
 
-  const { assets, total } = data as GhostMarketAssets
+  const { assets, next } = data as GhostMarketAssets
+
+  if (!assets) {
+    throw new Error(`The property assets is null`)
+  }
 
   const nfts = assets.map(
     (
@@ -95,7 +115,7 @@ async function getGhostMarketNFT(
         symbol: nft.contract.symbol || '',
         contract: nft.contract.hash || '',
         id: nft.tokenId || '',
-        creatorName: nft.creator.offchainName || '',
+        creatorName: nft.ownerships[0].owner.offchainName || '',
         creatorAddress: nft.creator.address || '',
         ownerAddress: nft.ownerships[0].owner.address || '',
         apiUrl: nft.apiUrl || '',
@@ -139,16 +159,16 @@ async function getGhostMarketNFT(
 
   return {
     nfts: nftsWithMetadata,
-    total,
+    next,
   }
 }
 
 export const requestNFTS =
-  (page: number) =>
+  (next?: string) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: ActionType.REQUEST_NFTS,
-      page,
+      next,
     })
   }
 
@@ -166,6 +186,7 @@ export const requestNFTSuccess =
     dispatch({
       type: ActionType.REQUEST_NFT_SUCCESS,
       value: data,
+      hasMore: true,
     })
   }
 
@@ -175,27 +196,30 @@ export const requestNFTError =
     dispatch({
       type: ActionType.REQUEST_NFT_SUCCESS,
       error,
+      hasMore: false,
     })
   }
 
 export const requestNFTSSuccess =
-  (data: NFT[], page: number, total: number) =>
+  (data: NFT[], total: number, next?: string) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: ActionType.REQUEST_NFTS_SUCCESS,
       all: data,
-      page,
       total,
+      next,
+      hasMore: true,
     })
   }
 
 export const requestNFTSError =
-  (error: Error, page: number) =>
+  (error: Error, next?: string) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: ActionType.REQUEST_NFTS_ERROR,
       error,
-      page,
+      next,
+      hasMore: false,
     })
   }
 
@@ -207,23 +231,22 @@ export const clearList =
     })
   }
 
-export function fetchNFTS(ownerId: string, network: string, page = 1) {
+export function fetchNFTS(ownerId: string, network: string, cursor?: string) {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
-    dispatch(requestNFTS(page))
+    dispatch(requestNFTS(cursor))
     try {
-      const { nfts, total } = await getGhostMarketNFT(network, {
-        owners: [ownerId],
+      const { nfts, next } = await getGhostMarketNFT(network, {
         size: nftLimit,
-        page,
-        getTotal: true,
+        owners: [ownerId],
+        cursor,
       })
 
-      dispatch(requestNFTSSuccess(nfts, page, total))
+      dispatch(requestNFTSSuccess(nfts, nfts.length, next))
     } catch (e) {
       console.log(e)
-      dispatch(requestNFTSError(e as Error, page))
+      dispatch(requestNFTSError(e as Error, cursor))
     }
   }
 }
