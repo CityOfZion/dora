@@ -4,9 +4,14 @@ import { ThunkDispatch } from 'redux-thunk'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { State as NetworkState } from '../reducers/networkReducer'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =

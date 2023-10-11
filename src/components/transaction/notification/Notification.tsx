@@ -10,8 +10,13 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { uuid } from '../../../utils/formatter'
 import { u } from '@cityofzion/neon-js'
 import { StackPanel } from '../StackPanel'
-import { NeoRest } from '@cityofzion/dora-ts/dist/api'
+import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
+
+const NeoRest = new NeoRESTApi({
+  doraUrl: 'https://dora.coz.io',
+  endpoint: '/api/v2/neo3',
+})
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]

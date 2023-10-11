@@ -1,26 +1,16 @@
 import { SET_NODE, NodeDTO } from '../actions/nodeActions'
 export type WSDoraData = {
-  locale: string
   location: string
   network: string
-  protocol: string
-  type: string
   height: number
-  last_seen: number
   peers: number
-  stateheight: number
   status: string
-  version: string
-  reliability: number
-  plugins: {
-    name: string
-    version: string
-    interfaces: string[]
-  }[]
-  lastblocktime: number
-  laststatetime: number
+  user_agent: string
   availability: number
   url: string
+  scheme: string
+  host: string
+  port: number
 }
 
 export type State = {
@@ -45,10 +35,8 @@ export const INITIAL_STATE: State = {
 
 export type SORT_OPTION =
   | 'endpoint'
-  | 'type'
   | 'isItUp'
   | 'availability'
-  | 'stateHeight'
   | 'blockHeight'
   | 'version'
   | 'peers'
@@ -86,8 +74,8 @@ export const OrderNodes = (
     case 'availability':
       return !desc
         ? nodes.sort((node1, node2) => {
-            const nodeValidated1 = node1.reliability ?? node1.availability
-            const nodeValidated2 = node2.reliability ?? node2.availability
+            const nodeValidated1 = node1.availability
+            const nodeValidated2 = node2.availability
             return nodeValidated1 > nodeValidated2
               ? -1
               : nodeValidated2 > nodeValidated1
@@ -95,8 +83,8 @@ export const OrderNodes = (
               : 0
           })
         : nodes.sort((node1, node2) => {
-            const nodeValidated1 = node1.reliability ?? node1.availability
-            const nodeValidated2 = node2.reliability ?? node2.availability
+            const nodeValidated1 = node1.availability
+            const nodeValidated2 = node2.availability
             return nodeValidated1 < nodeValidated2
               ? -1
               : nodeValidated2 < nodeValidated1
@@ -207,35 +195,19 @@ export const OrderNodes = (
         ? greenCheck.concat(yellowCheck, redX)
         : redX.concat(yellowCheck, greenCheck)
 
-    case 'stateHeight':
-      return !desc
-        ? nodes.sort((node1, node2) => {
-            return node1.stateheight > node2.stateheight
-              ? -1
-              : node2.stateheight > node1.stateheight
-              ? 1
-              : 0
-          })
-        : nodes.sort((node1, node2) => {
-            return node1.stateheight < node2.stateheight
-              ? -1
-              : node2.stateheight < node1.stateheight
-              ? 1
-              : 0
-          })
     case 'version':
       return !desc
         ? nodes.sort((node1, node2) => {
-            return node1.version > node2.version
+            return node1.user_agent > node2.user_agent
               ? -1
-              : node2.version > node1.version
+              : node2.user_agent > node1.user_agent
               ? 1
               : 0
           })
         : nodes.sort((node1, node2) => {
-            return node1.version < node2.version
+            return node1.user_agent < node2.user_agent
               ? -1
-              : node2.version < node1.version
+              : node2.user_agent < node1.user_agent
               ? 1
               : 0
           })
