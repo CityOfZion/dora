@@ -106,7 +106,6 @@ const Transactions: React.FC<{}> = () => {
     width > 768
       ? [
           { name: 'Network', accessor: 'platform' },
-          { name: 'Type', accessor: 'parsedType' },
           { name: 'Transaction ID', accessor: 'txid' },
           { name: 'Size', accessor: 'size' },
           { name: 'Completed on', accessor: 'time' },
