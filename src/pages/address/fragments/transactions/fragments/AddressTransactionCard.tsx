@@ -80,6 +80,7 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
               transfers={transaction.transfers}
               chain={chain}
               network={network}
+              notifications={transaction.notifications}
             />
           )}
           <div className="horiz weight-1">
