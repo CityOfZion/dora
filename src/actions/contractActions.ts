@@ -232,7 +232,7 @@ export function fetchContracts(network: string, protocol: string, page = 1) {
   }
 }
 
-export function fetchContractsInvocations() {
+export function fetchMainnetContractsInvocations() {
   return async (
     dispatch: ThunkDispatch<State, void, Action>,
     getState: () => { contract: State },
@@ -240,23 +240,16 @@ export function fetchContractsInvocations() {
     if (shouldFetchContractsInvocations(getState())) {
       dispatch(requestContractsInvocations())
       try {
-        const res = await Promise.all(
-          SUPPORTED_PLATFORMS.map(async ({ network, protocol }) => {
-            const result = await NeoRest.invocationStats(network)
-            if (result) {
-              return result.map(d => ({
-                ...d,
-                network,
-                protocol,
-              }))
-            }
-          }),
-        )
-        const cleanedContracts = res.flat().filter(r => r !== undefined)
-        const sortedContract = cleanedContracts
+        const invocationResponse = await NeoRest.invocationStats('mainnet')
+        const result = invocationResponse.map(r => ({
+          ...r,
+          network: 'mainnet',
+          protocol: 'neo3',
+        }))
+        const sortedContracts = result
           .flat()
           .sort((a, b) => (a!.count < b!.count ? 1 : -1))
-        dispatch(requestContractsInvocationsSuccess(sortedContract))
+        dispatch(requestContractsInvocationsSuccess(sortedContracts))
       } catch (e: any) {
         dispatch(requestContractsInvocationsError(e))
       }

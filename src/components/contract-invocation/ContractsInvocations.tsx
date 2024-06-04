@@ -7,7 +7,7 @@ import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
-import { fetchContractsInvocations } from '../../actions/contractActions'
+import { fetchMainnetContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
@@ -101,7 +101,8 @@ const ContractsInvocations: React.FC<{}> = () => {
   }
 
   useEffect(() => {
-    if (!contractsInvocations.length) dispatch(fetchContractsInvocations())
+    if (!contractsInvocations.length)
+      dispatch(fetchMainnetContractsInvocations())
   }, [contractsInvocations, dispatch])
 
   const columns =
