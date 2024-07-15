@@ -23,7 +23,7 @@ interface GhostMarketNFT {
     addressId: number
   }
   apiUrl?: string
-  ownerships: {
+  ownership: {
     owner: {
       address?: string
       addressVerified?: boolean
@@ -32,7 +32,7 @@ interface GhostMarketNFT {
       addressId?: number
     }
     amount?: string
-  }[]
+  }
   nftType: string[]
   collection: {
     name?: string
@@ -115,9 +115,9 @@ async function getGhostMarketNFT(
         symbol: nft.contract.symbol || '',
         contract: nft.contract.hash || '',
         id: nft.tokenId || '',
-        creatorName: nft.ownerships[0].owner.offchainName || '',
+        creatorName: nft.ownership.owner.offchainName || '',
         creatorAddress: nft.creator.address || '',
-        ownerAddress: nft.ownerships[0].owner.address || '',
+        ownerAddress: nft.ownership.owner.address || '',
         apiUrl: nft.apiUrl || '',
         collection: {
           image: nft.collection.logoUrl || '',
