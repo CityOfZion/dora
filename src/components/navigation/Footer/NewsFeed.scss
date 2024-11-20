@@ -18,15 +18,17 @@
     }
   }
 
-  &.loading {
+  &.loading,
+  &.error {
     padding: 1rem;
     text-align: center;
+  }
+
+  &.loading {
     color: #666;
   }
 
   &.error {
-    padding: 1rem;
-    text-align: center;
     color: #ff4444;
   }
 }
