@@ -7,12 +7,10 @@ import './NewsFeed.scss'
 const parser = new Parser()
 
 const News: React.FC = (): ReactElement => {
-  // Component state to hold new items, error, and loading state.
   const [items, setItems] = useState<Item[]>([])
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // On component mount, fetch and set the news feed, ensuring to handle errors.
   useEffect(() => {
     async function fetchAndSetFeed(): Promise<void> {
       try {
@@ -35,10 +33,8 @@ const News: React.FC = (): ReactElement => {
     fetchAndSetFeed()
   }, [])
 
-  // Regular expression to match img tags in the content.
   const imgTagRegex = new RegExp('<s*img[^>]*>(.*?)')
 
-  // Function to extract the src attribute from img tags.
   // eslint-disable-next-line
   // @ts-ignore
   // eslint-disable-next-line
@@ -51,10 +47,8 @@ const News: React.FC = (): ReactElement => {
       .replace('"', '')
       .replace('"', '')
 
-  // We only want to display 3 items.
   const reducedItems = items.slice(0, 3)
 
-  // Return early if the feed is still loading.
   if (isLoading) {
     return (
       <div id="NewsFeed" className="loading">
@@ -63,7 +57,6 @@ const News: React.FC = (): ReactElement => {
     )
   }
 
-  // Return early if there was an error fetching the feed.
   if (error) {
     return (
       <div id="NewsFeed" className="error">
@@ -72,7 +65,6 @@ const News: React.FC = (): ReactElement => {
     )
   }
 
-  // Render the news feed.
   return (
     <div id="NewsFeed">
       {reducedItems.map(item => {
