@@ -5,7 +5,6 @@ import {
   getDiffInSecondsFromNow,
   convertFromSecondsToLarger,
 } from '../../utils/time'
-import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactions } from '../../actions/transactionActions'
@@ -48,7 +47,7 @@ const returnTxListData = (
   returnStub: boolean,
 ): Array<ParsedTx> => {
   if (returnStub) {
-    return MOCK_TX_LIST_DATA.map(mapTransactionData).slice(0, 8)
+    return []
   } else {
     return data.map(mapTransactionData).slice(0, 8)
   }

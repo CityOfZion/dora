@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchTransactions } from '../../actions/transactionActions'
@@ -59,7 +58,7 @@ const returnTxListData = (
   returnStub: boolean,
 ): Array<ParsedTx> => {
   if (returnStub) {
-    return MOCK_TX_LIST_DATA.map(tx => mapTransactionData(tx))
+    return []
   } else {
     return data.map(tx => mapTransactionData(tx))
   }

@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useState } from 'react'
 import moment from 'moment'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
-import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import {
@@ -82,7 +81,7 @@ const returnContractListData = (
   returnStub: boolean,
 ): Array<ParsedContract> => {
   if (returnStub) {
-    return MOCK_CONTRACT_LIST_DATA.map(c => mapContractData(c))
+    return []
   } else {
     return data.map(c => mapContractData(c))
   }

@@ -6,7 +6,6 @@ import {
   convertMilliseconds,
   getDiffInSecondsFromNow,
 } from '../../utils/time'
-import { MOCK_BLOCK_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBlocks } from '../../actions/blockActions'
@@ -59,7 +58,7 @@ const returnBlockListData = (
   returnStub: boolean,
 ): Array<ParsedBlock> => {
   if (returnStub) {
-    return MOCK_BLOCK_LIST_DATA.map(mapBlockData).slice(0, 8)
+    return []
   } else {
     return data.map(mapBlockData).slice(0, 8)
   }
