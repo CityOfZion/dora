@@ -5,12 +5,7 @@ import { SUPPORTED_PLATFORMS } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
-
-const NeoRest = new NeoRESTApi({
-  doraUrl: 'https://dora.coz.io',
-  endpoint: '/api/v2/neo3',
-})
+import { NeoRest } from '../rest'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =

@@ -67,6 +67,12 @@ const STATUS_ICONS = [
   { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
 ]
 
+const monitorHost =
+  process.env.REACT_APP_MONITOR_HOST === undefined ||
+  process.env.REACT_APP_MONITOR_HOST === ''
+    ? 'wss://dora.coz.io'
+    : process.env.REACT_APP_MONITOR_HOST
+
 const Endpoint: React.FC<Endpoint> = ({ url, endpointLocation, disable }) => {
   const { setMessage, setShowMessage } = useContext(MonitorContext)
   const handleClickEndpoint = (
@@ -612,7 +618,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   useEffect(() => {
     let socket: Socket
     if (window.location.pathname.includes(ROUTES.MONITOR.url)) {
-      socket = new Socket('wss://dora.coz.io/ws/v2/unified/network_status')
+      socket = new Socket(monitorHost + '/ws/v2/unified/network_status')
       socket.listening<WSDoraData>(data => {
         dispatch(setNode(data))
       })

@@ -3,12 +3,7 @@ import { ThunkDispatch } from 'redux-thunk'
 
 import { State } from '../reducers/addressReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
-import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
-
-const NeoRest = new NeoRESTApi({
-  doraUrl: 'https://dora.coz.io',
-  endpoint: '/api/v2/neo3',
-})
+import { NeoRest } from '../rest'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress =
