@@ -4,14 +4,9 @@ import { ThunkDispatch } from 'redux-thunk'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { Block, DetailedBlock, State } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
-import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { BlockTransaction } from '../reducers/transactionReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
-
-const NeoRest = new NeoRESTApi({
-  doraUrl: 'https://dora.coz.io',
-  endpoint: '/api/v2/neo3',
-})
+import { NeoRest } from '../rest'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting

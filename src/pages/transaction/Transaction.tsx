@@ -17,13 +17,8 @@ import BackButton from '../../components/navigation/BackButton'
 import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
-import { NeoRESTApi } from '@cityofzion/dora-ts/dist/api'
 import { store } from '../../store'
-
-const NeoRest = new NeoRESTApi({
-  doraUrl: 'https://dora.coz.io',
-  endpoint: '/api/v2/neo3',
-})
+import { NeoRest } from '../../rest'
 
 export type ParsedTransfer = {
   name: string
