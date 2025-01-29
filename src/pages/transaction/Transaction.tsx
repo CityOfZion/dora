@@ -72,12 +72,18 @@ const parseNeo3TransactionData = async (
             }
           }
 
-          const from_address = neo3_getAddressFromSriptHash(
-            String(notification.state.value[0].value),
-          )
-          const to_address = neo3_getAddressFromSriptHash(
-            String(notification.state.value[1].value),
-          )
+          let from_address = 'mint'
+          if (notification.state.value[0].value !== undefined) {
+            from_address = neo3_getAddressFromSriptHash(
+              String(notification.state.value[0].value),
+            )
+          }
+          let to_address = 'burn'
+          if (notification.state.value[1].value !== undefined) {
+            to_address = neo3_getAddressFromSriptHash(
+              String(notification.state.value[1].value),
+            )
+          }
           transfers.push({
             name,
             symbol,
