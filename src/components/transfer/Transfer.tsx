@@ -43,6 +43,9 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
   const isMobileOrTablet = width <= 990
 
   function handleAddressClick(address: string) {
+    if (address === 'mint' || address === 'burn') {
+      return
+    }
     history.push(`/address/${chain}/${network}/${address}`)
   }
 
