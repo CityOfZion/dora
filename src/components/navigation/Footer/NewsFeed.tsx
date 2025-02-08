@@ -68,11 +68,12 @@ const News: React.FC = (): ReactElement => {
   return (
     <div id="NewsFeed">
       {reducedItems.map(item => {
-        const imgSrc = `${imageHrefFromImgTags(
-          // eslint-disable-next-line
+        let imgSrc = ''
+        const r = item.content?.match(imgTagRegex)
+        if (r !== undefined && r !== null) {
           // @ts-ignore
-          item.content.match(imgTagRegex)[0],
-        )}-300x169.png`
+          imgSrc = `${imageHrefFromImgTags(r[0])}-300x169.png`
+        }
         const { title, link } = item
 
         return (
