@@ -236,11 +236,12 @@ export function fetchNFTS(ownerId: string, network: string, cursor?: string) {
     dispatch: ThunkDispatch<State, void, Action>,
   ): Promise<void> => {
     dispatch(requestNFTS(cursor))
+    const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
     try {
       const { nfts, next } = await getGhostMarketNFT(network, {
         size: nftLimit,
         owners: [ownerId],
-        ownersChains: ['n3'],
+        ownersChains: [ownerChain],
         cursor,
       })
 
