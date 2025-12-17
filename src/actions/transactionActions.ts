@@ -7,6 +7,7 @@ import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '../rest'
 import { AppThunk } from '../store'
+import { toError } from './utils'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =
@@ -126,8 +127,8 @@ export function fetchTransaction(hash: string, chain: string): AppThunk<Promise<
           Object.assign(mergedResponse, response)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
-      } catch (e: any) {
-        dispatch(requestTransactionError(hash, e))
+      } catch (e) {
+        dispatch(requestTransactionError(hash, toError(e)))
       }
     } else {
       return dispatch(
@@ -180,8 +181,8 @@ export function fetchTransactions(
         items: sortSingleListByDate(flatRes) as Transaction[],
       }
       dispatch(requestTransactionsSuccess(page, { all, totalCount }))
-    } catch (e: any) {
-      dispatch(requestTransactionsError(page, e))
+    } catch (e) {
+      dispatch(requestTransactionsError(page, toError(e)))
     }
   }
 }

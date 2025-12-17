@@ -3,6 +3,7 @@ import { Dispatch, Action } from 'redux'
 import { State } from '../reducers/searchReducer'
 import { NeoRest } from '../rest'
 import { AppThunk } from '../store'
+import { toError } from './utils'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered =
@@ -82,8 +83,8 @@ export function handleSearchInput(rawSearch: string): AppThunk<Promise<void>> {
         return dispatch(clearSearchInputState())
       }
       return dispatch(searchInputEnteredError('No results found.'))
-    } catch (e: any) {
-      dispatch(searchInputEnteredError(e.message))
+    } catch (e) {
+      dispatch(searchInputEnteredError(toError(e).message))
     }
   }
 }

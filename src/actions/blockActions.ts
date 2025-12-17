@@ -223,8 +223,8 @@ export function fetchBlocks(
         items: sortSingleListByDate(cleanedBlocks),
       }
       dispatch(requestBlocksSuccess(page, { all, totalCount }))
-    } catch (e: any) {
-      dispatch(requestBlockError(page, e))
+    } catch (e) {
+      dispatch(requestBlockError(page, toError(e)))
     }
   }
 }

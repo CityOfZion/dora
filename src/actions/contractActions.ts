@@ -223,8 +223,8 @@ export function fetchContracts(network: string, protocol: string, page = 1): App
       }
 
       dispatch(requestContractsSuccess(page, { all, totalCount }))
-    } catch (e: any) {
-      dispatch(requestContractsError(page, e))
+    } catch (e) {
+      dispatch(requestContractsError(page, toError(e)))
     }
   }
 }
@@ -247,8 +247,8 @@ export function fetchMainnetContractsInvocations(): AppThunk<Promise<void>> {
           .flat()
           .sort((a, b) => (a!.count < b!.count ? 1 : -1))
         dispatch(requestContractsInvocationsSuccess(sortedContracts))
-      } catch (e: any) {
-        dispatch(requestContractsInvocationsError(e))
+      } catch (e) {
+        dispatch(requestContractsInvocationsError(toError(e)))
       }
     } else {
       dispatch(
