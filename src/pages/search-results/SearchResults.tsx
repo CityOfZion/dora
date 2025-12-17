@@ -9,7 +9,7 @@ import './SearchResults.scss'
 
 import { State as SearchState } from '../../reducers/searchReducer'
 import { handleSearchInput } from '../../actions/searchActions'
-import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
+import Neo3 from '../../assets/icons/neo3.svg?react'
 import { formatDate } from '../../utils/time'
 import { truncateHash } from '../../utils/formatter'
 import useWindowWidth from '../../hooks/useWindowWidth'

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryArea } from 'victory'
 
-import { ReactComponent as Warning } from '../../assets/icons/warning.svg'
+import Warning from '../../assets/icons/warning.svg?react'
 import { InvocationStat } from '../../reducers/contractReducer'
 import './InvocationGraph.scss'
 import { isEmpty } from 'lodash'

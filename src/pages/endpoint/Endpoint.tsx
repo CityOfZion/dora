@@ -9,7 +9,7 @@ import { ROUTES } from '../../constants'
 
 import Copy from '../../components/copy/Copy'
 import { IsItUp } from '../monitor/Monitor'
-import { ReactComponent as CloseX } from '../../assets/icons/close-icon.svg'
+import CloseX from '../../assets/icons/close-icon.svg?react'
 
 interface MatchParams {
   url: string

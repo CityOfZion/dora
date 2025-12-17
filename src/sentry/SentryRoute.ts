@@ -1,5 +1,4 @@
 import { Route, Routes, RouteProps } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 
@@ -9,7 +8,6 @@ import { Integrations } from '@sentry/tracing'
 
 function initSentry() {
   if (process.env.NODE_ENV === 'production') {
-    const history = createBrowserHistory()
     Sentry.init({
       dsn: process.env.SENTRY_KEY,
       integrations: [

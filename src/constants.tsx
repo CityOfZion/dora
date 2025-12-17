@@ -6,18 +6,18 @@ import { wallet, u } from '@cityofzion/neon-js'
 import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
-import { ReactComponent as Home } from './assets/icons/home.svg'
-import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
-import { ReactComponent as Transaction } from './assets/icons/invocation.svg'
-import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
-import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
-import { ReactComponent as Api } from './assets/icons/api.svg'
-import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
-import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
-import { ReactComponent as Diamond } from './assets/icons/shape.svg'
+import Home from './assets/icons/home.svg?react'
+import Transactions from './assets/icons/transactions.svg?react'
+import Transaction from './assets/icons/invocation.svg?react'
+import Blocks from './assets/icons/blocks.svg?react'
+import Wallets from './assets/icons/wallets.svg?react'
+import Api from './assets/icons/api.svg?react'
+import Magnify from './assets/icons/magnify.svg?react'
+import Monitor from './assets/icons/monitor.svg?react'
+import Diamond from './assets/icons/shape.svg?react'
 
 //eslint-disable-next-line
-const bs58check = require('bs58check')
+import bs58check from 'bs58check'
 
 export const NEO_HASHES = [
   '0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',

@@ -1,7 +1,7 @@
 import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
-import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
+import ArrowSortSVG from '../../assets/icons/arrow-sort.svg?react'
 import { SORT_OPTION } from '../../reducers/nodeReducer'
 import './List.scss'
 import { Link } from 'react-router-dom'
