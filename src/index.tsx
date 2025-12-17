@@ -1,27 +1,3 @@
-import { Buffer } from 'buffer';
-// import process from 'process';
-console.log("polyfill loading")
-const processPolyfill = {
-  env: {},
-  version: '',
-  versions: {},
-  browser: true,
-  nextTick: (fn: Function, ...args: any[]) => {
-    setTimeout(() => fn(...args), 0);
-  },
-};
-
-// Make Buffer available globally
-(window as any).Buffer = Buffer;
-(window as any).global = window;
-(window as any).process = processPolyfill;
-
-globalThis.Buffer = Buffer;
-globalThis.process = processPolyfill as any;
-
-console.log('Buffer available:', typeof window.Buffer !== 'undefined');
-console.log('process available:', typeof window.process !== 'undefined');
-
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
@@ -35,8 +11,6 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { store } from './store'
 import { system } from './ChakraTheme'
-
-
 
 const container = document.getElementById('root')
 if (!container) {
