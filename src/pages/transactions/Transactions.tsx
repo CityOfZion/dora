@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { withRouter, useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -19,6 +19,7 @@ import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import TransactionTime from '../../components/transaction/TransactionTime'
 import { usePaginationModel, getLastPage } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedTx = {
   time: React.FC<{}>
@@ -30,7 +31,7 @@ type ParsedTx = {
   href: string
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   chain?: string
   network?: string
 }
@@ -65,9 +66,9 @@ const returnTxListData = (
 }
 
 const Transactions: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
   const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -84,7 +85,7 @@ const Transactions: React.FC<{}> = () => {
   }
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
+    navigate,
     chain,
     networkParam,
   )
@@ -202,4 +203,4 @@ const Transactions: React.FC<{}> = () => {
   )
 }
 
-export default withRouter(Transactions)
+export default Transactions

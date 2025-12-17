@@ -7,6 +7,8 @@ import { sortSingleListByDate } from '../utils/time'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { NeoRest } from '../rest'
+import { toError } from './utils'
+import { AppThunk } from '../store'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -150,9 +152,9 @@ export const resetContractState =
     })
   }
 
-export function fetchContract(hash: string) {
+export function fetchContract(hash: string): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { contract: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchContract(getState(), hash)) {
@@ -170,15 +172,15 @@ export function fetchContract(hash: string) {
           }),
         )
       } catch (e) {
-        dispatch(requestContractError(hash, e))
+        dispatch(requestContractError(hash, toError(e)))
       }
     }
   }
 }
 
-export function fetchContracts(network: string, protocol: string, page = 1) {
+export function fetchContracts(network: string, protocol: string, page = 1): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
   ): Promise<void> => {
     try {
       dispatch(requestContracts(page))
@@ -227,9 +229,9 @@ export function fetchContracts(network: string, protocol: string, page = 1) {
   }
 }
 
-export function fetchMainnetContractsInvocations() {
+export function fetchMainnetContractsInvocations(): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { contract: State },
   ): Promise<void> => {
     if (shouldFetchContractsInvocations(getState())) {

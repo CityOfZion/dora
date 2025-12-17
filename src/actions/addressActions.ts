@@ -4,6 +4,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { State } from '../reducers/addressReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { NeoRest } from '../rest'
+import { toError } from './utils'
 
 export const REQUEST_ADDRESS = 'REQUEST_ADDRESS'
 export const requestAddress =
@@ -134,7 +135,7 @@ export function fetchAddress(address: string, chain: string) {
 
       dispatch(requestAddressSuccess(address, balances))
     } catch (e) {
-      dispatch(requestAddressError(address, e))
+      dispatch(requestAddressError(address, toError(e)))
     }
   }
 }
@@ -150,7 +151,7 @@ export function fetchAddressTransferHistory(address: string, page = 1) {
       const response = await NeoRest.transferHistory(address, page, network)
       dispatch(requestAddressTransferHistorySuccess(address, page, response))
     } catch (e) {
-      dispatch(requestAddressTransferHistoryError(address, page, e))
+      dispatch(requestAddressTransferHistoryError(address, page, toError(e)))
     }
   }
 }

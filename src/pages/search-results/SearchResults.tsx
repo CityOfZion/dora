@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import { ROUTES } from '../../constants'
@@ -13,14 +13,14 @@ import { ReactComponent as Neo3 } from '../../assets/icons/neo3.svg'
 import { formatDate } from '../../utils/time'
 import { truncateHash } from '../../utils/formatter'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { AppThunkDispatch } from '../../store'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   search: string
   protocol: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
 
 const PlatformElement = ({
   protocol,
@@ -160,13 +160,13 @@ const SearchResult = ({ result }: { result: any }): ReactElement => {
   return <div />
 }
 
-const SearchResults: React.FC<Props> = (props: Props) => {
+const SearchResults: React.FC = () => {
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )
-  const { search } = props.match.params
+  const { search= '' } = useParams<MatchParams>()
   const { results } = searchState
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   useEffect(() => {
     dispatch(handleSearchInput(search))
@@ -209,4 +209,4 @@ const SearchResults: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(SearchResults)
+export default SearchResults

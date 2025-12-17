@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
-import ChevronUpIcon from '@material-ui/icons/ExpandLess'
-import ChevronDownIcon from '@material-ui/icons/ExpandMore'
+import ChevronUpIcon from '@mui/icons-material/ExpandLess'
+import ChevronDownIcon from '@mui/icons-material/ExpandMore'
 
 import './ExpandingPanel.scss'
 

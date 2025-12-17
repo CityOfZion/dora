@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import SearchIcon from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/Search'
 import './Search.scss'
 import {
   handleSearchInput,
@@ -8,14 +8,15 @@ import {
   clearSearchInputState,
 } from '../../actions/searchActions'
 import { State as SearchState } from '../../reducers/searchReducer'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { ROUTES, SEARCH_TYPES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { AppThunkDispatch } from '../../store'
 
 const Search: React.FC<{}> = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const dispatch = useDispatch<AppThunkDispatch>()
+  const navigate = useNavigate()
   const width = useWindowWidth()
 
   const searchState = useSelector(
@@ -34,36 +35,39 @@ const Search: React.FC<{}> = () => {
     if (searchValue && searchType && results && results.length > 0) {
       if (results && results.length > 1) {
         dispatch(clearSearchInputState())
-        return history.push(`${ROUTES.SEARCH.url}/all/all/${searchValue}`)
+        navigate(`${ROUTES.SEARCH.url}/all/all/${searchValue}`)
       } else if (results && results[0]) {
         dispatch(clearSearchInputState())
         let url = ''
         switch (results[0].type) {
           case 'block':
             url = ROUTES.BLOCK.url
-            return history.push(
+            navigate(
               `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
             )
+            break
           case 'balance':
             url = ROUTES.WALLET.url
-            return history.push(
+            navigate(
               `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
             )
+            break
           case 'contract':
             url = ROUTES.CONTRACT.url
-            return history.push(
+            navigate(
               `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
             )
+            break
           case 'transaction':
             url = ROUTES.TRANSACTION.url
-            return history.push(
+            navigate(
               `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
             )
-
+            break
           case SEARCH_TYPES.ENDPOINT:
             dispatch(clearSearchInputState())
-            return history.push(`${ROUTES.ENDPOINT.url}/${searchValue}`)
-
+            navigate(`${ROUTES.ENDPOINT.url}/${searchValue}`)
+            break
           default:
             break
         }
@@ -71,13 +75,13 @@ const Search: React.FC<{}> = () => {
     }
 
     if (error) {
-      history.push(ROUTES.NOT_FOUND.url)
+      navigate(ROUTES.NOT_FOUND.url)
     }
   }, [
     chain,
     dispatch,
     error,
-    history,
+    navigate,
     network,
     results,
     searchType,

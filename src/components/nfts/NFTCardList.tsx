@@ -1,6 +1,6 @@
 import React from 'react'
 import { NFT } from '../../reducers/nftReducer'
-import ArrowForward from '@material-ui/icons/ArrowForward'
+import ArrowForward from '@mui/icons-material/ArrowForward'
 import NFTAttribute from './NFTAttibute'
 
 import NoImageFound from '../../assets/no-image-found.png'

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RouteComponentProps, useHistory, withRouter } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { clearList, fetchNFTS } from '../../../../actions/nftActions'
 import NFTFilters, {
   NFTFiltersToggleType,
@@ -14,20 +14,19 @@ import NFTList from '../../../../components/nfts/NFTList'
 import NFTGallery from '../../../../components/nfts/NFTGallery'
 import { ROUTES } from '../../../../constants'
 import useWindowWidth from '../../../../hooks/useWindowWidth'
+import { AppThunkDispatch } from '../../../../store'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
+const AddressNFTS: React.FC = props => {
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
 
-const AddressNFTS: React.FC<Props> = props => {
-  const { hash, chain, network } = props.match.params
-
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const dispatch = useDispatch<AppThunkDispatch>()
+  const navigate = useNavigate()
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
   const windowWidth = useWindowWidth()
 
@@ -40,7 +39,7 @@ const AddressNFTS: React.FC<Props> = props => {
   }
 
   function handleNavigate(id: string, contractHash: string) {
-    history.push(`${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${id}`)
+    navigate(`${ROUTES.NFT.url}/${chain}/${network}/${contractHash}/${id}`)
   }
 
   useEffect(() => {
@@ -101,4 +100,4 @@ const AddressNFTS: React.FC<Props> = props => {
   )
 }
 
-export default withRouter(AddressNFTS)
+export default AddressNFTS

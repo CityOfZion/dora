@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import moment from 'moment'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -17,10 +17,11 @@ import tokens from '../../assets/nep5/svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedContract = {
   time: React.FC<{}>
@@ -88,12 +89,12 @@ const returnContractListData = (
 }
 
 const Contracts: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [perPage, setPerPage] = useState<number>(0)
   const model = usePaginationModel({
     lastPage: getLastPage(perPage, contractsState.totalCount),
@@ -120,7 +121,7 @@ const Contracts: React.FC<{}> = () => {
   }
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
+    navigate,
     'neo3',
     'mainnet',
   )

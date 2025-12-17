@@ -4,14 +4,13 @@ import React, {
   useState,
   useContext,
   useMemo,
-  ReactText,
 } from 'react'
 import { Link } from 'react-router-dom'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Snackbar, Theme, Tooltip, withStyles } from '@material-ui/core'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import { Snackbar, tooltipClasses, Tooltip, styled } from '@mui/material'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { Socket } from '../../config/Socket'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
@@ -40,6 +39,7 @@ import Filter, { Platform } from '../../components/filter/Filter'
 import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { uniqueId } from 'lodash'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
@@ -126,19 +126,21 @@ type IsItUp = {
   url?: string
 }
 
-const IsItUpTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
+const IsItUpTooltip = styled(({ className, ...props }: any) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
     border: '1px solid #4cffb3',
     backgroundColor: 'rgba(14, 25, 27, 0.73)',
     fontSize: '13px',
   },
-  arrow: {
+  [`& .${tooltipClasses.arrow}`]: {
     color: 'rgba(14, 25, 27, 1)',
     '&::before': {
       border: '1px solid #4cffb3',
     },
   },
-}))(Tooltip)
+}))
 
 export const IsItUp: React.FC<IsItUp> = ({
   statusIsItUp,
@@ -568,7 +570,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const { stopRender } = useContext(MonitorContext)
   const [data, setData] = useState<Array<ParsedNodes>>([])
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   const isLoading = nodes.isLoading
   const [sortDataList, setSortDataList] = useState<{
@@ -681,11 +683,14 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const CListMonitor = useMemo(() => {
     const renderCellData = (
       isLoading: boolean,
-      data: string | number | React.FC<{}>,
-    ): ReactText | React.ReactNode => {
+      data: string | number | React.FC<{}> | (() => React.ReactNode),
+    ): React.ReactNode => {
       const cellProps = {}
       if (isLoading) return undefined
-      if (typeof data === 'function') return data(cellProps)
+      if (typeof data === 'function') {
+        const element = (data as React.FC<{}>)(cellProps)
+        return React.isValidElement(element) ? element : (data as () => React.ReactNode)()
+      }
       return data
     }
 

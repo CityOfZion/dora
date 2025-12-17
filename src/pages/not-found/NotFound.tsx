@@ -8,9 +8,10 @@ import { ROUTES } from '../../constants'
 import { ReactComponent as NotFoundIllustration } from '../../assets/icons/Illustration.svg'
 import { clearSearchInputState } from '../../actions/searchActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import { AppThunkDispatch } from '../../store'
 
 const NotFound: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const searchState = useSelector(
     ({ search }: { search: SearchState }) => search,
   )

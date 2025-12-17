@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import Select from '../select/Select'
-import { ValueType } from 'react-select'
+import { SingleValue } from 'react-select'
 import './ToggleDropdown.scss'
 import { Platform } from '../filter/Filter'
 
@@ -12,7 +12,7 @@ export type Option = {
 export const ToggleDropdown: React.FC<{
   disabled: boolean
   options: Option[]
-  handleChange(options: ValueType<Option, false>): void
+  handleChange(options: SingleValue<Option>): void
   selectedOption: Option
 }> = ({ disabled, options, handleChange, selectedOption }): ReactElement => {
   return (

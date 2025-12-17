@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import ExpandingPanel from '../../panel/ExpandingPanel'
 import { Signer } from '../../../reducers/transactionReducer'
-import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
+import { Box, Collapsible, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
 import { ROUTES } from '../../../constants'
 import { truncateHash } from '../../../utils/formatter'
@@ -47,7 +47,7 @@ export const Signature: React.FC<{
                 >
                   <Text
                     fontSize={'sm'}
-                    isTruncated
+                    truncate
                     color={'tertiary'}
                     mx={2}
                     fontWeight={500}
@@ -94,7 +94,8 @@ export const Signature: React.FC<{
             </Box>
 
             {signature.allowedcontracts && (
-              <Collapse in={isOpen[signature.scopes]}>
+              <Collapsible.Root open={isOpen[signature.scopes]}>
+                <Collapsible.Content>
                 <Box bg={`white-70`} px={3} py={4}>
                   {signature.allowedcontracts.map((it, idx) => (
                     <Flex direction={'column'} key={it}>
@@ -111,7 +112,7 @@ export const Signature: React.FC<{
                         </Text>
                         <Text
                           fontSize={'sm'}
-                          isTruncated
+                          truncate
                           color={'tertiary'}
                           fontWeight={400}
                         >
@@ -125,7 +126,8 @@ export const Signature: React.FC<{
                     </Flex>
                   ))}
                 </Box>
-              </Collapse>
+                </Collapsible.Content>
+              </Collapsible.Root>
             )}
           </Box>
         ))}

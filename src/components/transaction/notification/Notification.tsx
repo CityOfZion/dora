@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import ExpandingPanel from '../../panel/ExpandingPanel'
 import { TransactionNotification } from '../../../reducers/transactionReducer'
-import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, Collapsible } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
 import { ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
@@ -94,7 +94,7 @@ export const Notification: React.FC<{
       >
         {isLoading && (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton
@@ -185,7 +185,7 @@ export const Notification: React.FC<{
                     >
                       <Text
                         fontSize={'sm'}
-                        isTruncated
+                        truncate
                         textOverflow={'clip'}
                         color={'tertiary'}
                         fontWeight={500}
@@ -202,21 +202,22 @@ export const Notification: React.FC<{
                     </Flex>
                   </Flex>
                 </Box>
-
-                <Collapse in={isOpen[notification.id]}>
-                  {Array.isArray(notification.state.value) && (
-                    <StackPanel
-                      chain={chain}
-                      keyName={'notification-stack'}
-                      stack={notification.state.value}
-                      names={
-                        contract?.manifest?.abi?.events
-                          ?.find(it => it.name === notification.event_name)
-                          ?.parameters.map(it => it.name) || []
-                      }
-                    />
-                  )}
-                </Collapse>
+                {Array.isArray(notification.state.value) && (
+                  <Collapsible.Root open={isOpen[notification.id]}>
+                    <Collapsible.Content>
+                      <StackPanel
+                        chain={chain}
+                        keyName={'notification-stack'}
+                        stack={notification.state.value}
+                        names={
+                          contract?.manifest?.abi?.events
+                            ?.find(it => it.name === notification.event_name)
+                            ?.parameters.map(it => it.name) || []
+                        }
+                      />
+                  </Collapsible.Content>
+                </Collapsible.Root>
+                )}
               </Box>
             )
           })}

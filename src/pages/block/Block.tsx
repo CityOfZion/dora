@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
+import DateRangeIcon from '@mui/icons-material/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,19 +18,20 @@ import Copy from '../../components/copy/Copy'
 import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { format24Hours, formatDate } from '../../utils/time'
 import N3BlockTransactionsList from '../../components/transaction/N3BlockTransactionList'
+import { AppThunkDispatch } from '../../store'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
 
-const Block: React.FC<Props> = (props: Props) => {
-  useUpdateNetworkState(props)
-  const { hash, chain, network } = props.match.params
-  const dispatch = useDispatch()
+
+const Block: React.FC = () => {
+  useUpdateNetworkState()
+  const { hash = '', chain = '', network ='' } = useParams<MatchParams>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const [blockTimeState, setBlockTimeState] = useState('')
   const { block, isLoading } = blockState
@@ -247,4 +248,4 @@ const Block: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(Block)
+export default Block

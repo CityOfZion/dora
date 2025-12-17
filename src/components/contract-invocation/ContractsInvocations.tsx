@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 
 import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -11,6 +11,7 @@ import { fetchMainnetContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
+import { AppThunkDispatch } from '../../store'
 
 type Invocation = {
   name: string
@@ -88,7 +89,7 @@ const returnBlockListData = (
 }
 
 const ContractsInvocations: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const contractState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )

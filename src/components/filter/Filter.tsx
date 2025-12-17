@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import Select from '../select/Select'
-import { ValueType } from 'react-select'
+import { OnChangeValue } from 'react-select'
 
 import './Filter.scss'
 
@@ -50,7 +50,7 @@ export const Filter: React.FC<Props> = ({
   // TODO: this should read redux state to set default
   const [currentOption, setCurrentOption] = useState(options[0])
 
-  const setFilter = (option: ValueType<Option, false>): void => {
+  const setFilter = (option: OnChangeValue<Option, false>): void => {
     const filterOption = option as Option
     handleFilterUpdate(filterOption)
     setCurrentOption(filterOption)

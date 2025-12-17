@@ -1,4 +1,5 @@
-import { extendTheme } from '@chakra-ui/react'
+import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react'
+
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
@@ -42,21 +43,35 @@ const colors = {
   'black-900': 'rgba(0, 0, 0, 0.9)',
 }
 
-export const theme = extendTheme({
-  colors,
-  styles: {
-    global: () => ({
-      'html, body': {
-        fontFamily:
-          "'SofiaPro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid" +
-          " Sans', 'Helvetica Neue', sans-serif",
-        color: colors.white,
-        backgroundColor: colors['medium-grey-blue'],
-        lineHeight: 'normal',
+const colorTokens = Object.fromEntries(
+  Object.entries(colors).map(([key, value]) => [
+    key,
+    { value },
+  ])
+)
+
+const config = defineConfig({
+  theme: {
+    tokens: {
+      colors: {
+        ...colorTokens,
       },
-      '*, *::before, *::after': {
-        boxSizing: 'unset',
-      },
-    }),
+    },
   },
+  globalCss: {
+    'html, body': {
+      fontFamily:
+        "'SofiaPro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid" +
+        " Sans', 'Helvetica Neue', sans-serif",
+      color: colors.white,
+      backgroundColor: colors['medium-grey-blue'],
+      lineHeight: 'normal',
+    },
+    '*, *::before, *::after': {
+      boxSizing: 'unset',
+    },
+  }
 })
+
+export const system = createSystem(defaultConfig, config)
+

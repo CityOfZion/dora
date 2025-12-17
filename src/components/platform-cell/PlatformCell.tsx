@@ -7,8 +7,8 @@ const PlatformCell = ({
   protocol,
   network,
 }: {
-  protocol: string | void
-  network: string | void
+  protocol?: string
+  network?: string
 }): ReactElement => (
   <div className="txid-index-cell PlatformCell">
     {((): ReactElement => {

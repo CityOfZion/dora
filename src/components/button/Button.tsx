@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import './Button.scss'
 
 type ButtonProps = {
-  children: React.ReactNode | React.ReactText
+  children: React.ReactNode
   primary?: boolean
   onClick?: () => void
   disabled?: boolean

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { toBigNumber } from '../../../../utils/formatter'
@@ -11,6 +11,7 @@ import {
 } from '../../../../actions/addressActions'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
 import { getLogo } from '../../../../utils/getLogo'
+import { AppThunkDispatch } from '../../../../store'
 
 function getTransferLogo(symbol: string, chain: string): React.ReactNode {
   const icon = getLogo(symbol, chain)
@@ -22,26 +23,24 @@ function getTransferLogo(symbol: string, chain: string): React.ReactNode {
   )
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const AddressAssets: React.FC<Props> = props => {
-  const { hash, chain, network } = props.match.params
-  useUpdateNetworkState(props)
-  const dispatch = useDispatch()
+const AddressAssets: React.FC = props => {
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
+  useUpdateNetworkState()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
   const { balance, isLoading } = addressState
 
-  const history = useHistory()
+  const navigate = useNavigate()
   function handleContractClick(contractHash: string) {
-    history.push(`/contract/${chain}/${network}/${contractHash}`)
+    navigate(`/contract/${chain}/${network}/${contractHash}`)
   }
 
   useEffect(() => {
@@ -82,7 +81,7 @@ const AddressAssets: React.FC<Props> = props => {
       {isLoading && (
         <div id="address-balance-container">
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton count={5} />{' '}
@@ -93,4 +92,4 @@ const AddressAssets: React.FC<Props> = props => {
   )
 }
 
-export default withRouter(AddressAssets)
+export default AddressAssets

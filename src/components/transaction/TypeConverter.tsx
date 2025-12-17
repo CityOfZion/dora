@@ -1,6 +1,6 @@
 import { Platform } from '../filter/Filter'
 import React, { ReactElement } from 'react'
-import { ValueType } from 'react-select'
+import { SingleValue } from 'react-select'
 import {
   ADDRESS_OPTION,
   BYTE_STRING_OPTION,
@@ -24,7 +24,7 @@ export const TypeConverter: React.FC<{
   handleValue?: Function
   chain?: string
 }> = ({ value, type, options = [], chain, handleValue }): ReactElement => {
-  const selectOptionPlaceholder: ValueType<Option, false> = {
+  const selectOptionPlaceholder: SingleValue<Option> = {
     convert: null,
     value: '',
     label: '',
@@ -56,7 +56,7 @@ export const TypeConverter: React.FC<{
     }
   }, [selectedOption, options, value, chain])
 
-  const handleChange = (selectedOption: ValueType<Option, false>): void => {
+  const handleChange = (selectedOption: SingleValue<Option>): void => {
     selectedOption && setSelectedOption(selectedOption as Option)
 
     handleValue &&

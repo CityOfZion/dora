@@ -1,18 +1,18 @@
 import React from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import NftInformation from '../../components/nft/NftInformation'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   contractHash: string
   chain: string
   network: string
   id: string
 }
 
-type Props = RouteComponentProps<MatchParams>
 
-const NftInformationPage: React.FC<Props> = (props: Props) => {
-  return <NftInformation {...props.match.params} />
+const NftInformationPage: React.FC = () => {
+  const params = useParams<MatchParams>()
+  return <NftInformation {...params} />
 }
 
-export default withRouter(NftInformationPage)
+export default NftInformationPage

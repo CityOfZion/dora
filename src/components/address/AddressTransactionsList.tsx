@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react'
 import moment from 'moment'
 import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
+import DateRangeIcon from '@mui/icons-material/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 
 import List from '../../components/list/List'

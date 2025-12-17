@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   State as TransactionState,
@@ -17,7 +17,7 @@ import BackButton from '../../components/navigation/BackButton'
 import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
-import { store } from '../../store'
+import { AppThunkDispatch, store } from '../../store'
 import { NeoRest } from '../../rest'
 
 export type ParsedTransfer = {
@@ -101,17 +101,16 @@ const parseNeo3TransactionData = async (
   return transfers
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
 
-const Transaction: React.FC<Props> = (props: Props) => {
-  const { hash, chain, network } = props.match.params
-  const dispatch = useDispatch()
+const Transaction: React.FC = () => {
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const transferArr: ParsedTransfer[] = []
   const [transfers, setTransfers] = useState(transferArr)
   const [localLoadComplete, setLocalLoadComplete] = useState(false)
@@ -133,7 +132,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
     [],
   )
 
-  useUpdateNetworkState(props)
+  useUpdateNetworkState()
 
   useEffect(() => {
     dispatch(fetchTransaction(hash, chain))
@@ -190,7 +189,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
           </>
         ) : (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <div
@@ -231,4 +230,4 @@ const Transaction: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(Transaction)
+export default Transaction

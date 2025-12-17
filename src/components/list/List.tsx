@@ -1,4 +1,4 @@
-import React, { ReactText } from 'react'
+import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
 import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
@@ -181,10 +181,9 @@ export const List: React.FC<ListProps> = ({
   const renderCellData = (
     isLoading: boolean,
     data: string | number | React.FC<{}>,
-  ): ReactText | React.ReactNode => {
-    const cellProps = {}
+  ): string | number | React.ReactNode => {
     if (isLoading) return undefined
-    if (typeof data === 'function') return data(cellProps)
+    if (typeof data === 'function') return (data as () => React.ReactNode)()
     return data
   }
 

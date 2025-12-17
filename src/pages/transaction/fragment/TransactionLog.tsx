@@ -27,7 +27,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
           <Flex alignItems={'center'} flex={1} justifyContent={'space-between'}>
             <Text
               fontSize={'sm'}
-              isTruncated
+              truncate
               color={'tertiary'}
               textOverflow={'clip'}
               mx={[0, 2]}
@@ -49,7 +49,7 @@ export const TransactionLogView = ({ transaction, ...props }: Props) => {
             </Text>
             <Text
               color={'white'}
-              isTruncated
+              truncate
               fontSize={'lg'}
               fontWeight={600}
               textAlign={['right', 'center']}

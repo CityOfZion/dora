@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import { BrowserRouter, Switch, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'
@@ -21,7 +21,7 @@ import Endpoint from '../../pages/endpoint/Endpoint'
 import { MonitorProvider } from '../../contexts/MonitorContext'
 import NftInformationPage from '../../pages/nft/NftInformationPage'
 import Lookup from '../../pages/lookup/Lookup'
-import { SentryRoute } from '../../sentry/SentryRoute'
+import { SentryRoutes } from '../../sentry/SentryRoute'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -50,83 +50,78 @@ const Router: React.FC = (): ReactElement => {
 
             <div className="column-container router-page-container">
               <ScrollToTop />
-              <Switch>
-                <SentryRoute
+              <SentryRoutes>
+                <Route
                   path={ROUTES.HOME.url}
-                  component={(): ReactElement => <Home />}
-                  exact
+                  element={<Home />}
                 />
 
-                <SentryRoute
+                <Route
                   path={ROUTES.LOOKUP.url}
-                  component={(): ReactElement => <Lookup />}
+                  element={<Lookup />}
                 />
 
-                <SentryRoute
+                <Route
                   path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
-                  component={(): ReactElement => <NftInformationPage />}
+                  element={<NftInformationPage />}
                 />
 
-                <SentryRoute
+                <Route
                   path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
-                  component={(): ReactElement => <Address />}
+                  element={<Address />}
                 />
 
-                <SentryRoute
+                <Route
                   path={`${ROUTES.CONTRACT.url}/:chain/:network/:hash`}
-                  component={(): ReactElement => <Contract />}
+                  element={<Contract />}
                 />
 
-                <SentryRoute
-                  exact
+                <Route
                   path={`${ROUTES.TRANSACTION.url}/:chain/:network/:hash`}
-                  component={(): ReactElement => <Transaction />}
+                  element={<Transaction />}
                 />
 
-                <SentryRoute
-                  exact
+                <Route
                   path={`${ROUTES.BLOCK.url}/:chain/:network/:hash`}
-                  component={(): ReactElement => <Block />}
+                  element={<Block />}
                 />
 
-                <SentryRoute
-                  exact
+                <Route
                   path={`${ROUTES.SEARCH.url}/:protocol/:network/:search`}
-                  component={(): ReactElement => <SearchResults />}
+                  element={<SearchResults />}
                 />
 
-                <SentryRoute
+                <Route
                   path={ROUTES.CONTRACTS.url}
-                  component={(): ReactElement => <Contracts />}
+                  element={<Contracts />}
                 />
-                <SentryRoute
+                <Route
                   path={`${ROUTES.TRANSACTIONS.url}/:chain?/:network?`}
-                  component={(): ReactElement => <Transactions />}
+                  element={<Transactions />}
                 />
-                <SentryRoute
+                <Route
                   path={`${ROUTES.BLOCKS.url}/:chain?/:network?`}
-                  component={(): ReactElement => <Blocks />}
+                  element={<Blocks />}
                 />
-                <SentryRoute
+                <Route
                   path={ROUTES.MONITOR.url}
-                  component={(): ReactElement => (
+                  element={
                     <MonitorProvider>
                       <Monitor />
                     </MonitorProvider>
-                  )}
+                    }
                 />
-                <SentryRoute
-                  exact
+                <Route
                   path={`${ROUTES.ENDPOINT.url}/:endpoint`}
-                  component={(): ReactElement => <Endpoint />}
+                  element={<Endpoint />}
                 />
-                <SentryRoute
+                <Route
                   path={ROUTES.NOT_FOUND.url}
-                  component={(): ReactElement => <NotFound />}
+                  element={<NotFound />}
                 />
-                <SentryRoute path={`${ROUTES.API.url}`} render={reload} />
-                <SentryRoute component={(): ReactElement => <NotFound />} />
-              </Switch>
+                <Route path={`${ROUTES.API.url}`} element={reload()} />
+                <Route element={<NotFound />} />
+              </SentryRoutes>
             </div>
           </div>
         </div>

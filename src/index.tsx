@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom/client'
 
 import { ChakraProvider } from '@chakra-ui/react'
 
@@ -10,17 +10,22 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { store } from './store'
-import { theme } from './ChakraTheme'
+import { system } from './ChakraTheme'
 
-ReactDOM.render(
+const container = document.getElementById('root')
+if (!container) {
+  throw new Error('Root container not found')
+}
+
+const root = ReactDOM.createRoot(container)
+root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider value={system}>
       <Provider store={store}>
         <App />
       </Provider>
     </ChakraProvider>
   </React.StrictMode>,
-  document.getElementById('root'),
 )
 
 navigator.serviceWorker &&

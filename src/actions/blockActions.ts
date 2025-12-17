@@ -2,11 +2,13 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { SUPPORTED_PLATFORMS } from '../constants'
-import { Block, DetailedBlock, State } from '../reducers/blockReducer'
+import { Block, DetailedBlock, State as BlockState } from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { BlockTransaction } from '../reducers/transactionReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { NeoRest } from '../rest'
+import { toError } from './utils'
+import { AppThunk } from '../store'
 
 export const REQUEST_BLOCK = 'REQUEST_BLOCK'
 // We can dispatch this action if requesting
@@ -88,7 +90,7 @@ export const clearList =
   }
 
 export function shouldFetchBlock(
-  state: { block: State },
+  state: { block: BlockState },
   index: number,
 ): boolean {
   return true
@@ -111,10 +113,10 @@ export const resetBlockState =
     })
   }
 
-export function fetchBlock(index = 1) {
+export function fetchBlock(index = 1): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { block: State; network: NetworkState },
+    dispatch,
+    getState: () => { block: BlockState; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchBlock(getState(), index)) {
       dispatch(requestBlock(index))
@@ -162,7 +164,7 @@ export function fetchBlock(index = 1) {
         } as DetailedBlock
         dispatch(requestBlockSuccess(block))
       } catch (e) {
-        dispatch(requestBlockError(index, e))
+        dispatch(requestBlockError(index, toError(e)))
       }
     }
   }
@@ -173,10 +175,10 @@ export function fetchBlocks(
   protocol?: string,
   page = 1,
   chain?: string,
-) {
+): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { block: State },
+    dispatch,
+    getState: () => { block: BlockState },
   ): Promise<void> => {
     try {
       dispatch(requestBlocks(page))

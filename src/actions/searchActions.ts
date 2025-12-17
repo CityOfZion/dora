@@ -2,6 +2,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { Dispatch, Action } from 'redux'
 import { State } from '../reducers/searchReducer'
 import { NeoRest } from '../rest'
+import { AppThunk } from '../store'
 
 export const SEARCH_INPUT_ENTERED = 'SEARCH_INPUT_ENTERED'
 export const searchInputEntered =
@@ -67,9 +68,9 @@ export const clearSearchInputError =
     })
   }
 
-export function handleSearchInput(rawSearch: string) {
+export function handleSearchInput(rawSearch: string): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch
   ): Promise<void> => {
     const search = rawSearch.replace(',', '').trim()
     dispatch(searchInputEntered(search))

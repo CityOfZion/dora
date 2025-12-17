@@ -8,6 +8,7 @@ import {
   NFTAttribute,
   State,
 } from '../reducers/nftReducer'
+import { AppThunk } from '../store'
 
 interface GhostMarketNFT {
   tokenId: string
@@ -231,9 +232,9 @@ export const clearList =
     })
   }
 
-export function fetchNFTS(ownerId: string, network: string, cursor?: string) {
+export function fetchNFTS(ownerId: string, network: string, cursor?: string):AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
   ): Promise<void> => {
     dispatch(requestNFTS(cursor))
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
@@ -257,9 +258,9 @@ export function fetchNFT(
   tokenId: string,
   contractHash: string,
   network: string,
-) {
+): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
   ): Promise<void> => {
     dispatch(requestNFT())
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'

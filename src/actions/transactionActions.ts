@@ -6,6 +6,7 @@ import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '../rest'
+import { AppThunk } from '../store'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =
@@ -104,9 +105,9 @@ export function shouldFetchTransaction(
 
 export const RESET = 'RESET'
 
-export function fetchTransaction(hash: string, chain: string) {
+export function fetchTransaction(hash: string, chain: string): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { transaction: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchTransaction(getState(), hash)) {
@@ -140,9 +141,9 @@ export function fetchTransactions(
   network?: string,
   protocol?: string,
   page = 1,
-) {
+): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { transaction: State },
   ): Promise<void> => {
     try {

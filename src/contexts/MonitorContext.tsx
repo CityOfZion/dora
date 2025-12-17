@@ -15,7 +15,7 @@ export type MonitorContent = {
 
 export const MonitorContext = createContext({} as MonitorContent)
 
-export const MonitorProvider: React.FC = ({ children }) => {
+export const MonitorProvider: React.FC<{ children : React.ReactNode }> = ({ children }) => {
   const [showMessage, setShowMessage] = useState(false)
   const [message, setMessage] = useState('')
   const [stopRender, setStopRender] = useState<boolean>(false)
