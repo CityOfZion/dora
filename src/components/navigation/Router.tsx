@@ -29,9 +29,9 @@ const ScrollToTop = (): null => {
   return null
 }
 
-const reload = () => {
+const Reload = () => {
   window.location.reload()
-  return <></>
+  return null
 }
 
 /** If the react-router-dom library is updated, it is essential to find and
@@ -50,16 +50,11 @@ const Router: React.FC = (): ReactElement => {
 
             <div className="column-container router-page-container">
               <ScrollToTop />
-              <SentryRoutes>
-                <Route
-                  path={ROUTES.HOME.url}
-                  element={<Home />}
-                />
 
-                <Route
-                  path={ROUTES.LOOKUP.url}
-                  element={<Lookup />}
-                />
+              <SentryRoutes>
+                <Route path={ROUTES.HOME.url} element={<Home />} />
+
+                <Route path={ROUTES.LOOKUP.url} element={<Lookup />} />
 
                 <Route
                   path={`${ROUTES.NFT.url}/:chain/:network/:contractHash/:id`}
@@ -91,10 +86,7 @@ const Router: React.FC = (): ReactElement => {
                   element={<SearchResults />}
                 />
 
-                <Route
-                  path={ROUTES.CONTRACTS.url}
-                  element={<Contracts />}
-                />
+                <Route path={ROUTES.CONTRACTS.url} element={<Contracts />} />
                 <Route
                   path={`${ROUTES.TRANSACTIONS.url}/:chain?/:network?`}
                   element={<Transactions />}
@@ -109,17 +101,14 @@ const Router: React.FC = (): ReactElement => {
                     <MonitorProvider>
                       <Monitor />
                     </MonitorProvider>
-                    }
+                  }
                 />
                 <Route
                   path={`${ROUTES.ENDPOINT.url}/:endpoint`}
                   element={<Endpoint />}
                 />
-                <Route
-                  path={ROUTES.NOT_FOUND.url}
-                  element={<NotFound />}
-                />
-                <Route path={`${ROUTES.API.url}`} element={reload()} />
+                <Route path={ROUTES.NOT_FOUND.url} element={<NotFound />} />
+                <Route path={ROUTES.API.url} element={<Reload />} />
                 <Route element={<NotFound />} />
               </SentryRoutes>
             </div>
