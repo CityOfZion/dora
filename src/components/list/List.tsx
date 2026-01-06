@@ -238,10 +238,31 @@ export const List: React.FC<ListProps> = ({
                 return '#'
               }
 
+              const cellContent = renderCellData(isLoading, data[key])
+              const isLinkElement = React.isValidElement(cellContent) && cellContent.type === Link
+
               return !paddingCell
                 ? key !== 'id' &&
                     key !== 'href' &&
                     key !== 'chain' &&
+                (isLinkElement ? (
+                    <div
+                      style={conditionalBorderRadius(
+                        i,
+                        true,
+                        data.id,
+                        data.chain,
+                      )}
+                      onClick={(): void =>
+                        handleRowClick && handleRowClick(data)
+                      }
+                      key={uniqueId()}
+                      className={rowClass}
+                    >
+                      {renderCellData(isLoading, data[key])}
+                    </div>
+                ) :
+
                     (typeof data.href === 'string' || generateHref ? (
                       <Link
                         to={conditionalHref()}
@@ -276,7 +297,7 @@ export const List: React.FC<ListProps> = ({
                       >
                         {renderCellData(isLoading, data[key])}
                       </div>
-                    ))
+                    )))
                 : key !== 'id' &&
                     key !== 'href' &&
                     key !== 'chain' &&
