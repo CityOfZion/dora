@@ -25,13 +25,13 @@ const Copy: React.FC<CopyProps> = ({ text }) => {
   };
 
   return (
-    <div onClick={copyText} style={{ cursor: 'pointer' }}>
+    <span onClick={copyText} style={{ cursor: 'pointer', display: 'inline-flex', width: 19, justifyContent: 'center' }}>
       {copied ? (
         <Check style={{ width: 19, color: '#D355E7' }} />
       ) : (
         <FileCopy id="copy-icon" style={{ width: 16, color: '#D355E7' }} />
       )}
-    </div>
+    </span>
   );
 };
 
