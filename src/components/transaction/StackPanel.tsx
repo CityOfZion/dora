@@ -2,6 +2,7 @@ import { Flex } from '@chakra-ui/react'
 import { StackState } from '../../reducers/transactionReducer'
 import { StackArrayRow } from './StackArrayRow'
 import { StackRow } from './StackRow'
+import React from 'react'
 
 type Props = {
   stack: StackState[]
@@ -14,7 +15,7 @@ export const StackPanel = ({ stack, chain, names, keyName }: Props) => {
   return (
     <Flex direction={'column'} bg={'gray'} fontWeight={500} gridRowGap={4}>
       {stack.map((it, index) => (
-        <>
+        <React.Fragment key={`${keyName}-${index}`}>
           {it.type === 'Array' ? (
             <StackArrayRow
               key={`${keyName}-${index}`}
@@ -33,7 +34,7 @@ export const StackPanel = ({ stack, chain, names, keyName }: Props) => {
               name={names?.[index]}
             />
           )}
-        </>
+        </React.Fragment>
       ))}
     </Flex>
   )
