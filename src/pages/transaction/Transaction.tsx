@@ -19,6 +19,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
 import { AppThunkDispatch, store } from '../../store'
 import { NeoRest } from '../../rest'
+import { AssetResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 export type ParsedTransfer = {
   name: string
@@ -45,7 +46,13 @@ const parseNeo3TransactionData = async (
 
         if (isTransfer) {
           const { network } = store.getState().network
-          const asset = await NeoRest.asset(notification.contract, network)
+          let asset: AssetResponse
+          try {
+             asset = await NeoRest.asset(notification.contract, network)
+          } catch (e) {
+            continue
+          }
+
           const { symbol, decimals, name } = asset
           let amount = 0
 
