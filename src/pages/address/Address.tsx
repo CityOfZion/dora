@@ -8,9 +8,6 @@ import AddressNFTS from './fragments/nfts/AddressNFTS'
 import AddressAssets from './fragments/assets/AddressAssets'
 
 const Address: React.FC = () => {
-  const match = useMatch('/address/:hash/:chain/:network/*')
-  const basePath = match?.pathname || ''
-
   return (
     <div id="Address" className="page-container">
       <div className="inner-page-container">
@@ -18,14 +15,14 @@ const Address: React.FC = () => {
 
         <Routes>
           {/* Redirect base path to /assets */}
-          <Route path={basePath} element={<Navigate to={`${basePath}/assets`} replace />} />
+          <Route index element={<Navigate to="assets" replace />} />
 
-          <Route path={`${basePath}/assets`} element={<AddressAssets />} />
-          <Route path={`${basePath}/nfts`} element={<AddressNFTS />} />
-          <Route path={`${basePath}/transactions`} element={<AddressTransactions />} />
+          <Route path="assets" element={<AddressAssets />} />
+          <Route path="nfts" element={<AddressNFTS />} />
+          <Route path="transactions" element={<AddressTransactions />} />
 
           {/* Catch-all redirect to /assets if unmatched */}
-          <Route path="*" element={<Navigate to={`${basePath}/assets`} replace />} />
+          <Route path="*" element={<Navigate to="assets" replace />} />
         </Routes>
       </div>
     </div>

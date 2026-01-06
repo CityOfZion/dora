@@ -12,6 +12,7 @@ import { u } from '@cityofzion/neon-js'
 import { StackPanel } from '../StackPanel'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { NeoRest } from '../../../rest'
+import { cloneDeep } from 'lodash'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -28,8 +29,9 @@ export const Notification: React.FC<{
   }
 
   useEffect(() => {
+    const clonedNotifications = cloneDeep(notifications)
     //fix for NEP-17 contract that emit transfer events with ByteString as amount
-    for (const notification of notifications) {
+    for (const notification of clonedNotifications) {
       if (notification.state.type === 'Array') {
         if (
           !notification.state.value ||

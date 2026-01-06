@@ -62,7 +62,7 @@ const Router: React.FC = (): ReactElement => {
                 />
 
                 <Route
-                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash`}
+                  path={`${ROUTES.WALLET.url}/:chain/:network/:hash/*`}
                   element={<Address />}
                 />
 
