@@ -58,7 +58,7 @@ export const Notification: React.FC<{
       notification.id = uuid()
     }
 
-    setItems(notifications)
+    setItems(clonedNotifications)
 
     setOpen(Object.fromEntries(items.map(item => [item.id, false])))
     return () => {
