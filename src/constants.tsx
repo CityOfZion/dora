@@ -1,15 +1,15 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
+import homeIcon from '@iconify/icons-simple-line-icons/home'
+import transactionsIcon from '@iconify/icons-simple-line-icons/refresh'
+import blocksIcon from '@iconify/icons-simple-line-icons/grid'
 import NeoConvertor from 'neo-convertor'
 import { wallet, u } from '@cityofzion/neon-js'
 import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
-import Home from './assets/icons/home.svg?react'
-import Transactions from './assets/icons/transactions.svg?react'
 import Transaction from './assets/icons/invocation.svg?react'
-import Blocks from './assets/icons/blocks.svg?react'
 import Wallets from './assets/icons/wallets.svg?react'
 import Api from './assets/icons/api.svg?react'
 import Magnify from './assets/icons/magnify.svg?react'
@@ -154,7 +154,9 @@ export const ROUTES = {
   HOME: {
     url: '/',
     name: 'Home',
-    renderIcon: (): React.ReactNode => <Home />,
+    renderIcon: (): React.ReactNode => (
+      <Icon icon={homeIcon} style={{ fontSize: 24 }} />
+    ),
     target: '_self',
   },
   SEARCH: {
@@ -179,7 +181,9 @@ export const ROUTES = {
   TRANSACTIONS: {
     url: '/transactions',
     name: 'Transactions',
-    renderIcon: (): React.ReactNode => <Transactions />,
+    renderIcon: (): React.ReactNode => (
+      <Icon icon={transactionsIcon} style={{ fontSize: 24 }} />
+    ),
     target: '_self',
   },
   TRANSACTION: {
@@ -191,7 +195,9 @@ export const ROUTES = {
   BLOCKS: {
     url: '/blocks',
     name: 'Blocks',
-    renderIcon: (): React.ReactNode => <Blocks />,
+    renderIcon: (): React.ReactNode => (
+      <Icon icon={blocksIcon} style={{ fontSize: 24 }} />
+    ),
     target: '_self',
   },
   BLOCK: {
