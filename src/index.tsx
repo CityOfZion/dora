@@ -12,6 +12,9 @@ import * as serviceWorker from './serviceWorker'
 import { store } from './store'
 import { system } from './ChakraTheme'
 
+import '@workday/canvas-tokens-web/css/base/_variables.css'
+import '@workday/canvas-tokens-web/css/system/_variables.css'
+
 const container = document.getElementById('root')
 if (!container) {
   throw new Error('Root container not found')

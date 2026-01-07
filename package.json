@@ -13,6 +13,7 @@
     "@sentry/react": "^10.30.0",
     "@sentry/tracing": "^7.120.4",
     "@workday/canvas-kit-react": "^14.1.24",
+    "@workday/canvas-tokens-web": "^3.1.6",
     "bignumber.js": "^9.0.1",
     "bs58check": "^4.0.0",
     "buffer": "^6.0.3",
