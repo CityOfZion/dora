@@ -38,7 +38,7 @@ import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
 import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
-import { uniqueId } from 'lodash'
+import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
 
 type ParsedNodes = {
@@ -579,9 +579,10 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }>({ desc: false, sort: 'isItUp' })
 
   const selectedData = (): WSDoraData[] => {
+    const nodesCopy = cloneDeep(nodes.nodesArray)
     const sortedNodes = OrderNodes(
       sortDataList.sort,
-      nodes.nodesArray,
+      nodesCopy,
       sortDataList.desc,
     )
 
