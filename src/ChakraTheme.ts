@@ -1,6 +1,5 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react'
 
-
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
   primary: '#4cffb3',
@@ -44,10 +43,7 @@ const colors = {
 }
 
 const colorTokens = Object.fromEntries(
-  Object.entries(colors).map(([key, value]) => [
-    key,
-    { value },
-  ])
+  Object.entries(colors).map(([key, value]) => [key, { value }]),
 )
 
 const config = defineConfig({
@@ -55,6 +51,9 @@ const config = defineConfig({
     tokens: {
       colors: {
         ...colorTokens,
+        'color-palette': {
+          emphasized: { value: colors['white-400'] },
+        },
       },
     },
   },
@@ -70,8 +69,7 @@ const config = defineConfig({
     '*, *::before, *::after': {
       boxSizing: 'unset',
     },
-  }
+  },
 })
 
-export const system = createSystem(defaultConfig, config)
-
+export const system = createSystem(config, defaultConfig)
