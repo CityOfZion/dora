@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/neoscan-2
     docker:
-      - image: circleci/node:25.2.1
+      - image: cimg/node:25.2.1
     steps:
       - checkout
       - restore_cache:
@@ -30,7 +30,7 @@ jobs:
 
   deploy-develop:
       docker:
-        - image: circleci/node:25.2.1
+        - image: cimg/node:25.2.1
       steps:
         - checkout
         - restore_cache:
@@ -60,7 +60,7 @@ jobs:
 
   deploy-stage:
     docker:
-      - image: circleci/node:25.2.1
+      - image: cimg/node:25.2.1
     steps:
       - checkout
       - restore_cache:
@@ -90,7 +90,7 @@ jobs:
 
   deploy-production:
     docker:
-      - image: circleci/node:25.2.1
+      - image: cimg/node:25.2.1
     steps:
       - checkout
       - restore_cache:
