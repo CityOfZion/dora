@@ -82,7 +82,7 @@ const Router: React.FC = (): ReactElement => {
                 />
 
                 <Route
-                  path={`${ROUTES.SEARCH.url}/:protocol/:network/:search`}
+                  path={`${ROUTES.SEARCH.url}/:protocol/:network`}
                   element={<SearchResults />}
                 />
 

@@ -1,26 +1,27 @@
 /* eslint-disable */
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import { ROUTES } from '../../constants'
 import './SearchResults.scss'
 
-import { State as SearchState } from '../../reducers/searchReducer'
-import { handleSearchInput } from '../../actions/searchActions'
 import Neo3 from '../../assets/icons/neo3.svg?react'
+
 import { formatDate } from '../../utils/time'
 import { truncateHash } from '../../utils/formatter'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { AppThunkDispatch } from '../../store'
+import { useBlockchainSearch } from '../../hooks/useBlockchainSearch'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { NoResult } from '../../components/no-result/NoResult'
 
 interface MatchParams extends Record<string, string | undefined> {
   search: string
   protocol: string
   network: string
 }
-
 
 const PlatformElement = ({
   protocol,
@@ -161,16 +162,16 @@ const SearchResult = ({ result }: { result: any }): ReactElement => {
 }
 
 const SearchResults: React.FC = () => {
-  const searchState = useSelector(
-    ({ search }: { search: SearchState }) => search,
-  )
-  const { search= '' } = useParams<MatchParams>()
-  const { results } = searchState
-  const dispatch = useDispatch<AppThunkDispatch>()
+  const [searchParams] = useSearchParams()
+  const { search } = useBlockchainSearch()
+  const searchText = searchParams.get('search')
+
+  const [results, setResults] = React.useState<any[] | undefined>()
 
   useEffect(() => {
-    dispatch(handleSearchInput(search))
-  }, [dispatch, search])
+    if (!searchText) return
+    search(searchText).then(setResults)
+  }, [searchText])
 
   return (
     <div id="SearchResults" className="page-container">
@@ -195,15 +196,26 @@ const SearchResults: React.FC = () => {
         </div>
 
         <div className="results-explanation">
-          Showing results for <div className="results">"{search}"</div>
+          Showing results for <div className="results">"{searchText}"</div>
         </div>
 
-        <div className="results">
-          {results &&
-            Object.values(results).map(result => {
-              return <SearchResult result={result} />
-            })}
-        </div>
+        {!results ? (
+          <SkeletonTheme
+            baseColor="#21383d"
+            highlightColor="rgb(125 159 177 / 25%)"
+          >
+            <Skeleton height={120} count={2} className="skeleton-row" />
+          </SkeletonTheme>
+        ) : results.length === 0 ? (
+          <NoResult />
+        ) : (
+          <div className="results">
+            {results &&
+              Object.values(results).map(result => {
+                return <SearchResult result={result} />
+              })}
+          </div>
+        )}
       </div>
     </div>
   )

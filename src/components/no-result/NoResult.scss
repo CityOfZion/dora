@@ -1,0 +1,40 @@
+#no-result-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+
+  svg {
+    margin-bottom: 24px;
+    max-width: 100%;
+    display: flex;
+  }
+
+  span {
+    font-size: 20px;
+    color: #7d9fb1;
+    letter-spacing: 0;
+    text-align: center;
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: 29px;
+    color: #ffffff;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 25px;
+  }
+}
+
+
+
+@media screen and (max-width: 768px) {
+  #no-result-container {
+    h3 {
+      font-size: 24px;
+    }
+  }
+
+}
