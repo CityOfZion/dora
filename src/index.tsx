@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 
 import { Provider } from 'react-redux'
 import 'simple-line-icons/css/simple-line-icons.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import './index.css'
 import App from './App'
