@@ -17,7 +17,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: type check
           command: npm run ts-build
@@ -44,7 +44,7 @@ jobs:
               - ./node_modules
         - run:
             name: fetch git commit hash
-            command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+            command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
         - run:
             name: build
             command: npm run build
@@ -74,7 +74,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: build
           command: npm run build
@@ -104,7 +104,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: build
           command: npm run build

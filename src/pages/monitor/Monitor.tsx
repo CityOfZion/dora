@@ -67,11 +67,7 @@ const STATUS_ICONS = [
   { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
 ]
 
-const monitorHost =
-  process.env.REACT_APP_MONITOR_HOST === undefined ||
-  process.env.REACT_APP_MONITOR_HOST === ''
-    ? 'wss://dora.coz.io'
-    : process.env.REACT_APP_MONITOR_HOST
+const monitorHost = import.meta.env.VITE_MONITOR_HOST || 'wss://dora.coz.io'
 
 const Endpoint: React.FC<Endpoint> = ({ url, endpointLocation, disable }) => {
   const { setMessage, setShowMessage } = useContext(MonitorContext)
