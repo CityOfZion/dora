@@ -88,8 +88,8 @@ const Blocks: React.FC<MatchParams> = props => {
   const { chain, network: networkParam } = useParams<MatchParams>()
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
     navigate,
-    chain,
-    networkParam,
+    'neo3',
+    'mainnet',
   )
   const [perPage, setPerPage] = useState<number>(0)
 

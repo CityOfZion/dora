@@ -40,6 +40,7 @@ import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
+import { useNavigate } from 'react-router'
 
 type ParsedNodes = {
   endpoint: React.FC<{}>
@@ -819,7 +820,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
 
 const Monitor: React.FC<{}> = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { protocol, handleSetFilterData, network } = useFilterState(undefined, 'neo3', 'mainnet')
   const [sortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION

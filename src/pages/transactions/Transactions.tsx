@@ -86,8 +86,8 @@ const Transactions: React.FC<{}> = () => {
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
     navigate,
-    chain,
-    networkParam,
+    'neo3',
+    'mainnet',
   )
 
   useEffect(() => {
