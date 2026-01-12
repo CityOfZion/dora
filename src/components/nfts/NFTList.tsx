@@ -24,7 +24,10 @@ const NFTList: React.FC<Props> = ({ data, isLoading, onClickToNavigate }) => {
       ))}
 
       {isLoading && (
-        <SkeletonTheme baseColor="#21383d" highlightColor="rgb(125 159 177 / 25%)">
+        <SkeletonTheme
+          baseColor="#21383d"
+          highlightColor="rgb(125 159 177 / 25%)"
+        >
           <Skeleton height={110} count={nftLimit} className="skeleton-row" />
         </SkeletonTheme>
       )}

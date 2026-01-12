@@ -21,7 +21,6 @@ interface MatchParams extends Record<string, string | undefined> {
   network: string
 }
 
-
 const AddressTransactions: React.FC = () => {
   const { chain = '', network = '', hash = '' } = useParams<MatchParams>()
   useUpdateNetworkState()

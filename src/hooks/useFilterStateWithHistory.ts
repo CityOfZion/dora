@@ -25,9 +25,10 @@ const useFilterStateWithFilter = (
       navigate(location.pathname, {
         replace: true,
         state: {
-        protocol: filter.protocol,
-        network: filter.network,
-      }})
+          protocol: filter.protocol,
+          network: filter.network,
+        },
+      })
     }
   }, [filter.protocol, filter.network, navigate, location.pathname])
 

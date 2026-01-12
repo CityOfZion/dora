@@ -232,10 +232,12 @@ export const clearList =
     })
   }
 
-export function fetchNFTS(ownerId: string, network: string, cursor?: string):AppThunk<Promise<void>> {
-  return async (
-    dispatch,
-  ): Promise<void> => {
+export function fetchNFTS(
+  ownerId: string,
+  network: string,
+  cursor?: string,
+): AppThunk<Promise<void>> {
+  return async (dispatch): Promise<void> => {
     dispatch(requestNFTS(cursor))
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
     try {
@@ -259,9 +261,7 @@ export function fetchNFT(
   contractHash: string,
   network: string,
 ): AppThunk<Promise<void>> {
-  return async (
-    dispatch,
-  ): Promise<void> => {
+  return async (dispatch): Promise<void> => {
     dispatch(requestNFT())
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
     try {

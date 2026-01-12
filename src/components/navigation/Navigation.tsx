@@ -131,7 +131,9 @@ const Navigation: React.FC = (): ReactElement => {
               to={ROUTES.CONTRACTS.url}
               className={({ isActive }) => {
                 const pathname = location.pathname.toLowerCase()
-                const contractsName = ROUTES.CONTRACTS.name.slice(0, -1).toLowerCase()
+                const contractsName = ROUTES.CONTRACTS.name
+                  .slice(0, -1)
+                  .toLowerCase()
 
                 const active =
                   (pathname.includes(contractsName) && pathname !== '/') ||
@@ -154,7 +156,9 @@ const Navigation: React.FC = (): ReactElement => {
               to={ROUTES.TRANSACTIONS.url}
               className={({ isActive }) => {
                 const pathname = location.pathname.toLowerCase()
-                const transactionsName = ROUTES.TRANSACTIONS.name.slice(0, -1).toLowerCase()
+                const transactionsName = ROUTES.TRANSACTIONS.name
+                  .slice(0, -1)
+                  .toLowerCase()
 
                 const active =
                   (pathname.includes(transactionsName) && pathname !== '/') ||
@@ -197,7 +201,9 @@ const Navigation: React.FC = (): ReactElement => {
               }}
               className={({ isActive }) => {
                 const pathname = location.pathname.toLowerCase()
-                const monitorName = ROUTES.MONITOR.name.slice(0, -1).toLowerCase()
+                const monitorName = ROUTES.MONITOR.name
+                  .slice(0, -1)
+                  .toLowerCase()
 
                 const active =
                   (pathname.includes(monitorName) && pathname !== '/') ||

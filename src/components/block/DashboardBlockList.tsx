@@ -107,9 +107,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
           <div className="label-wrapper-2">
             <Button
               primary
-              onClick={() =>
-                navigate(`${ROUTES.BLOCKS.url}/neo3/${network}`)
-              }
+              onClick={() => navigate(`${ROUTES.BLOCKS.url}/neo3/${network}`)}
             >
               view blocks
             </Button>

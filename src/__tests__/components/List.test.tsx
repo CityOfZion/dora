@@ -57,7 +57,7 @@ describe('List Component', () => {
         rowId="test"
         handleRowClick={handleRowClick}
         isLoading={false}
-      />
+      />,
     )
 
     // 3. Snapshot (optional)
@@ -81,7 +81,7 @@ describe('List Component', () => {
         rowId="test"
         handleRowClick={handleRowClick}
         isLoading={false}
-      />
+      />,
     )
 
     // Example: simulate a click on the first row

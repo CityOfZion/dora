@@ -28,7 +28,7 @@ interface MatchParams extends Record<string, string | undefined> {
 
 const Contract: React.FC = () => {
   useUpdateNetworkState()
-  const { hash = '', chain = '', network ='' } = useParams<MatchParams>()
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
   const dispatch = useDispatch<AppThunkDispatch>()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,

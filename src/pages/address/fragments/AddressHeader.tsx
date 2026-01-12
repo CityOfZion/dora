@@ -13,7 +13,7 @@ interface MatchParams extends Record<string, string | undefined> {
 }
 
 const AddressHeader: React.FC = () => {
-  const { hash = '', chain = '', network ='' } = useParams<MatchParams>()
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
 
   return (
     <>

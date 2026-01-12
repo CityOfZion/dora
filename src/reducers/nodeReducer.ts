@@ -61,15 +61,15 @@ export const OrderNodes = (
             return node1.height > node2.height
               ? -1
               : node2.height > node1.height
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
         : nodes.sort((node1, node2) => {
             return node1.height < node2.height
               ? -1
               : node2.height < node1.height
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
     case 'availability':
       return !desc
@@ -79,8 +79,8 @@ export const OrderNodes = (
             return nodeValidated1 > nodeValidated2
               ? -1
               : nodeValidated2 > nodeValidated1
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
         : nodes.sort((node1, node2) => {
             const nodeValidated1 = node1.availability
@@ -88,8 +88,8 @@ export const OrderNodes = (
             return nodeValidated1 < nodeValidated2
               ? -1
               : nodeValidated2 < nodeValidated1
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
     case 'isItUp':
       const greenCheck = !desc
@@ -106,8 +106,8 @@ export const OrderNodes = (
               return node1.peers > node2.peers
                 ? -1
                 : node2.peers > node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
         : nodes
             .filter(nodes => {
@@ -122,8 +122,8 @@ export const OrderNodes = (
               return node1.peers < node2.peers
                 ? -1
                 : node2.peers < node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
       const yellowCheck = !desc
         ? nodes
@@ -137,8 +137,8 @@ export const OrderNodes = (
               return node1.peers > node2.peers
                 ? -1
                 : node2.peers > node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
         : nodes
             .filter(nodes => {
@@ -151,8 +151,8 @@ export const OrderNodes = (
               return node1.peers < node2.peers
                 ? -1
                 : node2.peers < node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
       const redX = !desc
         ? nodes
@@ -170,8 +170,8 @@ export const OrderNodes = (
               return node1.peers > node2.peers
                 ? -1
                 : node2.peers > node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
         : nodes
             .filter(nodes => {
@@ -188,8 +188,8 @@ export const OrderNodes = (
               return node1.peers < node2.peers
                 ? -1
                 : node2.peers < node1.peers
-                ? 1
-                : 0
+                  ? 1
+                  : 0
             })
       return !desc
         ? greenCheck.concat(yellowCheck, redX)
@@ -201,15 +201,15 @@ export const OrderNodes = (
             return node1.user_agent > node2.user_agent
               ? -1
               : node2.user_agent > node1.user_agent
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
         : nodes.sort((node1, node2) => {
             return node1.user_agent < node2.user_agent
               ? -1
               : node2.user_agent < node1.user_agent
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
     case 'peers':
       return !desc
@@ -217,15 +217,15 @@ export const OrderNodes = (
             return node1.peers > node2.peers
               ? -1
               : node2.peers > node1.peers
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
         : nodes.sort((node1, node2) => {
             return node1.peers < node2.peers
               ? -1
               : node2.peers < node1.peers
-              ? 1
-              : 0
+                ? 1
+                : 0
           })
     default:
       return nodes

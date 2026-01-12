@@ -48,7 +48,7 @@ const parseNeo3TransactionData = async (
           const { network } = store.getState().network
           let asset: AssetResponse
           try {
-             asset = await NeoRest.asset(notification.contract, network)
+            asset = await NeoRest.asset(notification.contract, network)
           } catch (e) {
             continue
           }
@@ -114,7 +114,6 @@ interface MatchParams extends Record<string, string | undefined> {
   network: string
 }
 
-
 const Transaction: React.FC = () => {
   const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
   const dispatch = useDispatch<AppThunkDispatch>()
@@ -129,9 +128,8 @@ const Transaction: React.FC = () => {
 
   const parseTransfers = useCallback(
     async (transaction: DetailedTransaction) => {
-      const parsedTransfers: ParsedTransfer[] = await parseNeo3TransactionData(
-        transaction,
-      )
+      const parsedTransfers: ParsedTransfer[] =
+        await parseNeo3TransactionData(transaction)
 
       setTransfers(parsedTransfers)
       setLocalLoadComplete(true)

@@ -96,36 +96,36 @@ export const Signature: React.FC<{
             {signature.allowedcontracts && (
               <Collapsible.Root open={isOpen[signature.scopes]}>
                 <Collapsible.Content>
-                <Box bg={`white-70`} px={3} py={4}>
-                  {signature.allowedcontracts.map((it, idx) => (
-                    <Flex direction={'column'} key={it}>
-                      <Flex
-                        minH={10}
-                        alignItems={'center'}
-                        bg={'white-100'}
-                        mb={1}
-                        overflow={'hidden'}
-                        flex={1}
-                      >
-                        <Text color={'white-500'} mx={3}>
-                          [{idx}]
-                        </Text>
-                        <Text
-                          fontSize={'sm'}
-                          truncate
-                          color={'tertiary'}
-                          fontWeight={400}
+                  <Box bg={`white-70`} px={3} py={4}>
+                    {signature.allowedcontracts.map((it, idx) => (
+                      <Flex direction={'column'} key={it}>
+                        <Flex
+                          minH={10}
+                          alignItems={'center'}
+                          bg={'white-100'}
+                          mb={1}
+                          overflow={'hidden'}
+                          flex={1}
                         >
-                          <Link
-                            to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${it}`}
+                          <Text color={'white-500'} mx={3}>
+                            [{idx}]
+                          </Text>
+                          <Text
+                            fontSize={'sm'}
+                            truncate
+                            color={'tertiary'}
+                            fontWeight={400}
                           >
-                            {truncateHash(it, isMobile, 15, 5)}
-                          </Link>
-                        </Text>
+                            <Link
+                              to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${it}`}
+                            >
+                              {truncateHash(it, isMobile, 15, 5)}
+                            </Link>
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  ))}
-                </Box>
+                    ))}
+                  </Box>
                 </Collapsible.Content>
               </Collapsible.Root>
             )}

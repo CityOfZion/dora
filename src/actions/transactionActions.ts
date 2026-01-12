@@ -106,7 +106,10 @@ export function shouldFetchTransaction(
 
 export const RESET = 'RESET'
 
-export function fetchTransaction(hash: string, chain: string): AppThunk<Promise<void>> {
+export function fetchTransaction(
+  hash: string,
+  chain: string,
+): AppThunk<Promise<void>> {
   return async (
     dispatch,
     getState: () => { transaction: State; network: NetworkState },
@@ -172,7 +175,7 @@ export function fetchTransactions(
                 txid: hash,
                 protocol: protocol,
                 network: network,
-              } as Transaction),
+              }) as Transaction,
           )
         }),
       )

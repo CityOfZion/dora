@@ -7,7 +7,9 @@
       color: white !important;
 
       &:focus {
-        box-shadow: 0 0 0 2px white, 0 0 0 4px #d355e7 !important;
+        box-shadow:
+          0 0 0 2px white,
+          0 0 0 4px #d355e7 !important;
         background-color: #d355e7 !important;
         color: white !important;
       }
@@ -18,7 +20,9 @@
     }
 
     &:focus {
-      box-shadow: 0 0 0 2px #21383d, 0 0 0 4px white !important;
+      box-shadow:
+        0 0 0 2px #21383d,
+        0 0 0 4px white !important;
       background-color: white !important;
       color: #21383d !important;
     }
@@ -31,7 +35,9 @@
     &:focus {
       span svg g path {
         fill: #21383d !important;
-        box-shadow: 0 0 0 2px #21383d, 0 0 0 4px white !important;
+        box-shadow:
+          0 0 0 2px #21383d,
+          0 0 0 4px white !important;
       }
     }
     &:hover {

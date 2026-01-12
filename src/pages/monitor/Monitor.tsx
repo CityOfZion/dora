@@ -687,7 +687,9 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
       if (isLoading) return undefined
       if (typeof data === 'function') {
         const element = (data as React.FC<{}>)(cellProps)
-        return React.isValidElement(element) ? element : (data as () => React.ReactNode)()
+        return React.isValidElement(element)
+          ? element
+          : (data as () => React.ReactNode)()
       }
       return data
     }
@@ -698,8 +700,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
           ? tabletColumns
           : columns
         : width < 768
-        ? mobileColumns
-        : tabletColumns
+          ? mobileColumns
+          : tabletColumns
 
     const gridstyle = {
       gridTemplateColumns: `repeat(${conditionalColumns.length}, auto)`,
@@ -820,7 +822,11 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
 
 const Monitor: React.FC<{}> = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const { protocol, handleSetFilterData, network } = useFilterState(undefined, 'neo3', 'mainnet')
+  const { protocol, handleSetFilterData, network } = useFilterState(
+    undefined,
+    'neo3',
+    'mainnet',
+  )
   const [sortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION

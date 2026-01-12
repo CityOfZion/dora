@@ -9,7 +9,6 @@ interface MatchParams extends Record<string, string | undefined> {
   id: string
 }
 
-
 const NftInformationPage: React.FC = () => {
   const params = useParams<MatchParams>()
   return <NftInformation {...params} />

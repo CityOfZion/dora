@@ -15,7 +15,6 @@ interface MatchParams {
   url: string
 }
 
-
 const Endpoint: React.FC = () => {
   const { endpoint } = useParams<{ endpoint: string }>()
   const navigate = useNavigate()

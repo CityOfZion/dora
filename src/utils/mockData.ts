@@ -154,7 +154,7 @@ export const MOCK_TX_LIST_DATA = Array.from(
       time: 666,
       size: 666,
       hash: '',
-    } as Transaction),
+    }) as Transaction,
 )
 export const MOCK_CONTRACT_LIST_DATA = [
   {

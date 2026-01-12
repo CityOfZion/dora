@@ -15,17 +15,17 @@ export type GlobalState = {
 
 export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     process.env.NODE_ENV === 'production'
       ? getDefaultMiddleware()
-      : getDefaultMiddleware().concat(logger)
+      : getDefaultMiddleware().concat(logger),
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppThunkDispatch = typeof store.dispatch
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
-  RootState,      // the entire store state
-  unknown,        // extra argument (usually unused)
-  Action<string>  // action type
+  RootState, // the entire store state
+  unknown, // extra argument (usually unused)
+  Action<string> // action type
 >

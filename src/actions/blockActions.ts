@@ -2,7 +2,11 @@ import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
 
 import { SUPPORTED_PLATFORMS } from '../constants'
-import { Block, DetailedBlock, State as BlockState } from '../reducers/blockReducer'
+import {
+  Block,
+  DetailedBlock,
+  State as BlockState,
+} from '../reducers/blockReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { BlockTransaction } from '../reducers/transactionReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
@@ -159,7 +163,7 @@ export function fetchBlock(index = 1): AppThunk<Promise<void>> {
                 time: Number(t.time),
                 txid: t.hash,
                 hash: t.hash,
-              } as BlockTransaction),
+              }) as BlockTransaction,
           ),
         } as DetailedBlock
         dispatch(requestBlockSuccess(block))

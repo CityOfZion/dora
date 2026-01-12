@@ -178,10 +178,12 @@ export function fetchContract(hash: string): AppThunk<Promise<void>> {
   }
 }
 
-export function fetchContracts(network: string, protocol: string, page = 1): AppThunk<Promise<void>> {
-  return async (
-    dispatch,
-  ): Promise<void> => {
+export function fetchContracts(
+  network: string,
+  protocol: string,
+  page = 1,
+): AppThunk<Promise<void>> {
+  return async (dispatch): Promise<void> => {
     try {
       dispatch(requestContracts(page))
       let totalCount = 0

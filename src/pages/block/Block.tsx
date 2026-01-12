@@ -26,11 +26,9 @@ interface MatchParams extends Record<string, string | undefined> {
   network: string
 }
 
-
-
 const Block: React.FC = () => {
   useUpdateNetworkState()
-  const { hash = '', chain = '', network ='' } = useParams<MatchParams>()
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
   const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const [blockTimeState, setBlockTimeState] = useState('')

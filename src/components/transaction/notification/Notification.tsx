@@ -217,8 +217,8 @@ export const Notification: React.FC<{
                             ?.parameters.map(it => it.name) || []
                         }
                       />
-                  </Collapsible.Content>
-                </Collapsible.Root>
+                    </Collapsible.Content>
+                  </Collapsible.Root>
                 )}
               </Box>
             )
