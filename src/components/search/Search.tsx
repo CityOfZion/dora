@@ -59,7 +59,9 @@ const Search: React.FC = () => {
       return
     }
 
-    navigate(`${ROUTES.SEARCH.url}/all/all?search=${text}`)
+    navigate(`${ROUTES.SEARCH.url}/all/all?search=${text}`, {
+      state: { results },
+    })
   }
 
   function handleTextChange(event: ChangeEvent<HTMLInputElement>) {

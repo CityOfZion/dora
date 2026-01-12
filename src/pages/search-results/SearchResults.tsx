@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import { ROUTES } from '../../constants'
@@ -13,23 +13,18 @@ import { formatDate } from '../../utils/time'
 import { truncateHash } from '../../utils/formatter'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { AppThunkDispatch } from '../../store'
-import { useBlockchainSearch } from '../../hooks/useBlockchainSearch'
+import {
+  useBlockchainSearch,
+  type SearchResult,
+} from '../../hooks/useBlockchainSearch'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { NoResult } from '../../components/no-result/NoResult'
 
-interface MatchParams extends Record<string, string | undefined> {
-  search: string
-  protocol: string
-  network: string
-}
+type PlatformElementProps = { network: string }
 
-const PlatformElement = ({
-  protocol,
-  network,
-}: {
-  protocol: string | void
-  network: string | void
-}): ReactElement => (
+type ResultComponentProps = { result: SearchResult }
+
+const PlatformElement = ({ network }: PlatformElementProps) => (
   <div className="search-result-chain-info">
     <div id="chain-icon">
       <Neo3 />
@@ -49,12 +44,12 @@ const PlatformElement = ({
   </div>
 )
 
-const BlockResult = (result: any): ReactElement => (
+const BlockResult = ({ result }: ResultComponentProps) => (
   <Link
-    to={`${ROUTES.BLOCK.url}/${result.protocol}/${result.network}/${result.index}`}
+    to={`${ROUTES.BLOCK.url}/${result.protocol}/${result.network}/${result.response.index}`}
   >
     <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
+      <PlatformElement network={result.network} />
       <div className="search-results-details">
         <div className="search-result-type">
           {ROUTES.BLOCKS.renderIcon()} Block
@@ -62,20 +57,20 @@ const BlockResult = (result: any): ReactElement => (
         <div className="search-result-info">
           <div className="search-result-detail">
             <label>Height</label>
-            {result.index}
+            {result.response.index}
           </div>
           <div className="search-result-detail">
             <label>Size</label>
-            {result.size.toLocaleString()} Bytes
+            {result.response.size.toLocaleString()} Bytes
           </div>
           <div className="search-result-detail">
             <label>Date</label>
-            {formatDate(result.time)}
+            {formatDate(result.response.time)}
           </div>
 
           <div className="search-result-detail">
             <label>Transaction count</label>
-            {result.txCount}
+            {result.response.txCount}
           </div>
         </div>
       </div>
@@ -83,14 +78,14 @@ const BlockResult = (result: any): ReactElement => (
   </Link>
 )
 
-const AddressResult = (result: any): ReactElement => {
+const AddressResult = ({ result }: ResultComponentProps) => {
   const width = useWindowWidth()
   return (
     <Link
-      to={`${ROUTES.WALLET.url}/${result.protocol}/${result.network}/${result.address}`}
+      to={`${ROUTES.WALLET.url}/${result.protocol}/${result.network}/${result.text}`}
     >
       <div className="search-result-container">
-        <PlatformElement protocol={result.protocol} network={result.network} />
+        <PlatformElement network={result.network} />
         <div className="search-results-details">
           <div className="search-result-type">
             {ROUTES.WALLETS.renderIcon()} Address
@@ -100,13 +95,13 @@ const AddressResult = (result: any): ReactElement => {
               <label>Address</label>
               <span>
                 {width <= 350
-                  ? truncateHash(result.address, width <= 350, undefined, 5)
-                  : truncateHash(result.address, width <= 576, undefined, 15)}
+                  ? truncateHash(result.text, width <= 350, undefined, 5)
+                  : truncateHash(result.text, width <= 576, undefined, 15)}
               </span>
             </div>
             <div className="search-result-detail">
               <label>Asset Types</label>
-              <span>{result.balances.length}</span>
+              <span>{result.response.length}</span>
             </div>
           </div>
         </div>
@@ -115,12 +110,12 @@ const AddressResult = (result: any): ReactElement => {
   )
 }
 
-const TransactionResult = (result: any): ReactElement => (
+const TransactionResult = ({ result }: ResultComponentProps) => (
   <Link
-    to={`${ROUTES.TRANSACTION.url}/${result.protocol}/${result.network}/${result.hash}`}
+    to={`${ROUTES.TRANSACTION.url}/${result.protocol}/${result.network}/${result.text}`}
   >
     <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
+      <PlatformElement network={result.network} />
       <div className="search-results-details">
         <div className="search-result-type">
           {ROUTES.TRANSACTIONS.renderIcon()} Transaction
@@ -131,47 +126,69 @@ const TransactionResult = (result: any): ReactElement => (
   </Link>
 )
 
-const ContractResult = (result: any): ReactElement => (
+const ContractResult = ({ result }: ResultComponentProps) => (
   <Link
-    to={`${ROUTES.CONTRACT.url}/${result.protocol}/${result.network}/${result.hash}`}
+    to={`${ROUTES.CONTRACT.url}/${result.protocol}/${result.network}/${result.text}`}
   >
     <div className="search-result-container">
-      <PlatformElement protocol={result.protocol} network={result.network} />
+      <PlatformElement network={result.network} />
       <div className="search-results-details">
         <div className="search-result-type">
           {ROUTES.CONTRACTS.renderIcon()} Contract
         </div>
-        <div className="search-result-info"></div>
+
+        <div className="search-result-info">
+          <div className="search-result-detail">
+            <span> {result.response.manifest.name}</span>
+          </div>
+        </div>
       </div>
     </div>
   </Link>
 )
 
-const SearchResult = ({ result }: { result: any }): ReactElement => {
-  switch (result.type) {
-    case 'block':
-      return BlockResult(result)
-    case 'balance':
-      return AddressResult(result)
-    case 'transaction':
-      return TransactionResult(result)
-    case 'contract':
-      return ContractResult(result)
-  }
-  return <div />
+const resultComponentByType: Record<string, React.FC<ResultComponentProps>> = {
+  block: BlockResult,
+  balance: AddressResult,
+  transaction: TransactionResult,
+  contract: ContractResult,
 }
 
 const SearchResults: React.FC = () => {
   const [searchParams] = useSearchParams()
+  const { state } = useLocation()
   const { search } = useBlockchainSearch()
   const searchText = searchParams.get('search')
 
-  const [results, setResults] = React.useState<any[] | undefined>()
+  const isSearchingRef = React.useRef(false)
+
+  const [results, setResults] = React.useState<SearchResult[] | undefined>()
 
   useEffect(() => {
-    if (!searchText) return
-    search(searchText).then(setResults)
-  }, [searchText])
+    async function handle() {
+      if (!searchText || isSearchingRef.current) return
+
+      try {
+        isSearchingRef.current = true
+
+        console.log({ state })
+
+        if (state?.results) {
+          setResults(state.results)
+          return
+        }
+
+        const result = await search(searchText)
+        setResults(result)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        isSearchingRef.current = false
+      }
+    }
+
+    handle()
+  }, [searchText, state])
 
   return (
     <div id="SearchResults" className="page-container">
@@ -210,10 +227,16 @@ const SearchResults: React.FC = () => {
           <NoResult />
         ) : (
           <div className="results">
-            {results &&
-              Object.values(results).map(result => {
-                return <SearchResult result={result} />
-              })}
+            {Object.values(results).map(result => {
+              const ResultComponent = resultComponentByType[result.type]
+
+              return (
+                <ResultComponent
+                  result={result}
+                  key={`${result.type}-${result.network}-${result.protocol}-${result.text}`}
+                />
+              )
+            })}
           </div>
         )}
       </div>
