@@ -50,7 +50,7 @@ const Navigation: React.FC = (): ReactElement => {
             </div>
 
             <div className="navigation-search-container">
-              <Search />
+              <Search key={location.pathname} />
             </div>
           </div>
         </div>
