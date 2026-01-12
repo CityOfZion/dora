@@ -42,7 +42,6 @@ import useFilterState from '../../hooks/useFilterState'
 import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
 import { Icon } from '@iconify/react'
-import homeIcon from '@iconify/icons-simple-line-icons/home'
 
 type ParsedNodes = {
   endpoint: React.FC

@@ -11,7 +11,6 @@ import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
 import Transaction from './assets/icons/invocation.svg?react'
-import Wallets from './assets/icons/wallets.svg?react'
 import Api from './assets/icons/api.svg?react'
 import Magnify from './assets/icons/magnify.svg?react'
 import Monitor from './assets/icons/monitor.svg?react'
