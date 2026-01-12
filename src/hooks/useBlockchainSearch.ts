@@ -94,7 +94,7 @@ export const useBlockchainSearch = () => {
     //execute the search across the search scope
     await Promise.allSettled(
       filteredOptions.map(async ({ fetchFn, ...options }) => {
-        let fetchResponse = await fetchFn(text)
+        const fetchResponse = await fetchFn(text)
 
         if (!fetchResponse || isEmpty(fetchResponse)) {
           return
