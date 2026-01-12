@@ -5,7 +5,7 @@ import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import { NoResult } from '../../components/no-result/NoResult'
 
-const NotFound: React.FC<{}> = () => {
+const NotFound: React.FC = () => {
   return (
     <div id="NotFound" className="page-container">
       <div className="list-wrapper">

@@ -11,9 +11,9 @@ import TransactionTime, { TransactionTimeProps } from './TransactionTime'
 
 type ParsedTx = {
   time: React.FC<TransactionTimeProps>
-  txid: React.FC<{}>
+  txid: React.FC
   size: string
-  parsedType: React.FC<{}>
+  parsedType: React.FC
   hash: string
 }
 

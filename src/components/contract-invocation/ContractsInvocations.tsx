@@ -23,9 +23,9 @@ type Invocation = {
 }
 
 type ParsedInvocation = {
-  contract: React.FC<{}>
-  count: React.FC<{}>
-  change: React.FC<{}>
+  contract: React.FC
+  count: React.FC
+  change: React.FC
 }
 
 const mapInvocationData = (
@@ -88,7 +88,7 @@ const returnBlockListData = (
   }
 }
 
-const ContractsInvocations: React.FC<{}> = () => {
+const ContractsInvocations: React.FC = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const contractState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,

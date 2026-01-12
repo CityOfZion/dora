@@ -22,11 +22,11 @@ import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
 
 type ParsedTx = {
-  time: React.FC<{}>
-  txid: React.FC<{}>
+  time: React.FC
+  txid: React.FC
   size: string
   hash: string
-  platform: React.FC<{}>
+  platform: React.FC
   chain: string
   href: string
 }
@@ -65,10 +65,11 @@ const returnTxListData = (
   }
 }
 
-const Transactions: React.FC<{}> = () => {
+const Transactions: React.FC = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
   const navigate = useNavigate()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -169,8 +170,8 @@ const Transactions: React.FC<{}> = () => {
             label: 'Transactions',
           }}
           leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
+            id: string | number | void | React.FC,
+            chain: string | number | void | React.FC,
           ): string => {
             if (typeof chain === 'string') {
               interface TxColorMap {

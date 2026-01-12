@@ -22,7 +22,7 @@ interface MatchParams extends Record<string, string | undefined> {
   network: string
 }
 
-const AddressNFTS: React.FC = props => {
+const AddressNFTS: React.FC = () => {
   const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
 
   const dispatch = useDispatch<AppThunkDispatch>()

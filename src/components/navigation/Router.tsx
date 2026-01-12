@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, useLocation } from 'react-router-dom'
 
 import Home from '../../pages/home/Home'
 import Blocks from '../../pages/blocks/Blocks'

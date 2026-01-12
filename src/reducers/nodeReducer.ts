@@ -91,7 +91,7 @@ export const OrderNodes = (
                 ? 1
                 : 0
           })
-    case 'isItUp':
+    case 'isItUp': {
       const greenCheck = !desc
         ? nodes
             .filter(nodes => {
@@ -194,7 +194,7 @@ export const OrderNodes = (
       return !desc
         ? greenCheck.concat(yellowCheck, redX)
         : redX.concat(yellowCheck, greenCheck)
-
+    }
     case 'version':
       return !desc
         ? nodes.sort((node1, node2) => {

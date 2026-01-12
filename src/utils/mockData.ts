@@ -149,7 +149,7 @@ export const MOCK_BLOCK_LIST_DATA = [
 
 export const MOCK_TX_LIST_DATA = Array.from(
   { length: 15 },
-  (_, i) =>
+  (_, __) =>
     ({
       time: 666,
       size: 666,

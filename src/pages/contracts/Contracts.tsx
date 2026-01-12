@@ -24,14 +24,14 @@ import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
 
 type ParsedContract = {
-  time: React.FC<{}>
-  block: React.FC<{}>
-  name: React.FC<{}>
+  time: React.FC
+  block: React.FC
+  name: React.FC
   symbol: string
   hash: string
   chain: string
   href: string
-  platform: React.FC<{}>
+  platform: React.FC
 }
 
 const mapContractData = (contract: Contract): ParsedContract => {
@@ -88,7 +88,7 @@ const returnContractListData = (
   }
 }
 
-const Contracts: React.FC<{}> = () => {
+const Contracts: React.FC = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
@@ -186,8 +186,8 @@ const Contracts: React.FC<{}> = () => {
           isLoading={contractsState.isLoading}
           columns={columns}
           leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
+            id: string | number | void | React.FC,
+            chain: string | number | void | React.FC,
           ): string => {
             if (typeof chain === 'string') {
               interface TxColorMap {

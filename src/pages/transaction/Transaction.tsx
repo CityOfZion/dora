@@ -49,7 +49,7 @@ const parseNeo3TransactionData = async (
           let asset: AssetResponse
           try {
             asset = await NeoRest.asset(notification.contract, network)
-          } catch (e) {
+          } catch {
             continue
           }
 

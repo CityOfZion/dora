@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
 import Check from '@mui/icons-material/Check'
 import FileCopy from '@mui/icons-material/FilterNone'
-// eslint-disable-next-line
-// @ts-ignore
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-
 import './Copy.scss'
 
 type CopyProps = {

@@ -21,6 +21,7 @@ export const TypeConverter: React.FC<{
   value: string
   type: string
   options: Option[]
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   handleValue?: Function
   chain?: string
 }> = ({ value, type, options = [], chain, handleValue }): ReactElement => {
@@ -38,10 +39,12 @@ export const TypeConverter: React.FC<{
     const convert = async (): Promise<string | void> => {
       if (selectedOption && selectedOption.convert) {
         const _convertedValue = await selectedOption.convert(value, chain)
-        _convertedValue && setConvertedvalue(_convertedValue)
+        if (_convertedValue) {
+          setConvertedvalue(_convertedValue)
+        }
 
-        if (!convertedValue) {
-          handleValue && handleValue(_convertedValue)
+        if (!convertedValue && handleValue) {
+          handleValue(_convertedValue)
         }
       }
     }
@@ -57,12 +60,15 @@ export const TypeConverter: React.FC<{
   }, [selectedOption, options, value, chain])
 
   const handleChange = (selectedOption: SingleValue<Option>): void => {
-    selectedOption && setSelectedOption(selectedOption as Option)
+    if (selectedOption) {
+      setSelectedOption(selectedOption as Option)
+    }
 
-    handleValue &&
+    if (handleValue) {
       handleValue(
         selectedOption?.label === STRING_OPTION.label ? convertedValue : value,
       )
+    }
   }
 
   let filteredOptions: Option[] = []

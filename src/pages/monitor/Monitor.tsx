@@ -40,15 +40,14 @@ import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
-import { useNavigate } from 'react-router'
 
 type ParsedNodes = {
-  endpoint: React.FC<{}>
-  isItUp: React.FC<{}>
-  availability: string | React.FC<{}>
-  blockHeight: string | React.FC<{}>
-  version: string | React.FC<{}>
-  peers: number | React.FC<{}>
+  endpoint: React.FC
+  isItUp: React.FC
+  availability: string | React.FC
+  blockHeight: string | React.FC
+  version: string | React.FC
+  peers: number | React.FC
   chain: string
 }
 
@@ -125,7 +124,7 @@ type IsItUp = {
 
 const IsItUpTooltip = styled(({ className, ...props }: any) => (
   <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+))(({ _theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     border: '1px solid #4cffb3',
     backgroundColor: 'rgba(14, 25, 27, 0.73)',
@@ -177,7 +176,9 @@ export const IsItUp: React.FC<IsItUp> = ({
         arrow={true}
         title={`Status: ${statusIsItUp}`}
         onClose={(): void => {
-          setStopRender && setStopRender(false)
+          if (setStopRender) {
+            setStopRender(false)
+          }
         }}
         placement={'right'}
       >
@@ -514,7 +515,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
   useEffect(() => {
     handleAvgBlockCounter()
-    setLastBlockCounter(0) //eslint-disable-next-line
+    setLastBlockCounter(0)
   }, [bestBlock])
 
   useEffect(() => {
@@ -534,7 +535,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   }, [])
 
   useEffect(() => {
-    setBestBlock(getBestBlock()) //eslint-disable-next-line
+    setBestBlock(getBestBlock())
   }, [data])
 
   return (
@@ -599,8 +600,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }
 
   const leftBorderColorOnRow = (
-    _: string | number | React.FC<{}> | undefined,
-    chain: string | number | React.FC<{}> | undefined,
+    _: string | number | React.FC | undefined,
+    chain: string | number | React.FC | undefined,
   ): string => {
     const color = STATUS_ICONS.find(({ status }) => status === chain)?.color
     return color ?? '#de4c85'
@@ -637,11 +638,11 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   useEffect(() => {
     if (!stopRender) {
       setData(returnNodesListData(selectedData(), !selectedData().length))
-    } //eslint-disable-next-line
+    }
   }, [nodes, sortDataList])
 
   useEffect(() => {
-    setData(returnNodesListData(selectedData(), !selectedData().length)) //eslint-disable-next-line
+    setData(returnNodesListData(selectedData(), !selectedData().length))
   }, [network, protocol])
 
   const rowClass = classNames({
@@ -652,8 +653,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const conditionalBorderRadius = (
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
-    id?: string | number | React.FC<{}>,
-    chain?: string | number | React.FC<{}>,
+    id?: string | number | React.FC,
+    chain?: string | number | React.FC,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -681,12 +682,12 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const CListMonitor = useMemo(() => {
     const renderCellData = (
       isLoading: boolean,
-      data: string | number | React.FC<{}> | (() => React.ReactNode),
+      data: string | number | React.FC | (() => React.ReactNode),
     ): React.ReactNode => {
       const cellProps = {}
       if (isLoading) return undefined
       if (typeof data === 'function') {
-        const element = (data as React.FC<{}>)(cellProps)
+        const element = (data as React.FC)(cellProps)
         return React.isValidElement(element)
           ? element
           : (data as () => React.ReactNode)()
@@ -710,14 +711,14 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
     const sortedByAccessor = data.map(
       (
         data: {
-          [key: string]: string | number | React.FC<{}>
+          [key: string]: string | number | React.FC
         },
-        index: number,
+        _index: number,
       ) => {
         interface Sorted {
           id: string
 
-          [key: string]: string | number | React.FC<{}>
+          [key: string]: string | number | React.FC
         }
 
         const sorted = {} as Sorted
@@ -755,7 +756,9 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
           key={nameColumn}
           onClick={(e): void => {
             e.preventDefault()
-            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+            if (callbalOrderData && sortOpt) {
+              callbalOrderData(sortOpt)
+            }
           }}
         >
           {isLoading ? '' : nameColumn}
@@ -787,9 +790,9 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
         {sortedByAccessor.map(
           (
             data: {
-              [key: string]: string | number | React.FC<{}>
+              [key: string]: string | number | React.FC
             },
-            index: number,
+            _index: number,
           ) =>
             Object.keys(data).map((key, i) => {
               return (
@@ -814,13 +817,13 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
             }),
         )}
       </div>
-    ) //eslint-disable-next-line
+    )
   }, [data, width])
 
   return CListMonitor
 }
 
-const Monitor: React.FC<{}> = () => {
+const Monitor: React.FC = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const { protocol, handleSetFilterData, network } = useFilterState(
     undefined,

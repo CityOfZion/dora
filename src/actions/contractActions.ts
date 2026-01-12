@@ -1,6 +1,4 @@
-import { Dispatch, Action } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
-
+import { Dispatch } from 'redux'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
@@ -44,7 +42,7 @@ export const requestContractSuccess =
 
 export const REQUEST_CONTRACTS_SUCCESS = 'REQUEST_CONTRACTS_SUCCESS'
 export const requestContractsSuccess =
-  (page: number, json: {}) =>
+  (page: number, json: Record<string, unknown>) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACTS_SUCCESS,
@@ -101,7 +99,7 @@ export const requestContractsInvocations =
 export const REQUEST_CONTRACTS_INVOCATIONS_SUCCESS =
   'REQUEST_CONTRACTS_INVOCATIONS_SUCCESS'
 export const requestContractsInvocationsSuccess =
-  (json: {}) =>
+  (json: object) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,

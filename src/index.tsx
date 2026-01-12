@@ -32,12 +32,11 @@ root.render(
   </React.StrictMode>,
 )
 
-navigator.serviceWorker &&
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    for (const registration of registrations) {
-      registration && registration.unregister()
-    }
-  })
+navigator.serviceWorker?.getRegistrations().then(registrations => {
+  for (const registration of registrations) {
+    registration?.unregister()
+  }
+})
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

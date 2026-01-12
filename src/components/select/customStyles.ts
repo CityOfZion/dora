@@ -35,13 +35,12 @@ export const customStyles = {
     boxShadow: state.isFocused ? '0' : '0',
     zIndex: 100,
     flexWrap: 'nowrap',
-    // eslint-disable-next-line
     // @ts-ignore
     '&:hover': {
       border: state.isFocused ? '0' : '0',
     },
   }),
-  container: (provided: CSSProperties, state: SelectState): CSSProperties => ({
+  container: (provided: CSSProperties, _state: SelectState): CSSProperties => ({
     ...provided,
     border: 'none',
     height: '30px',
@@ -71,7 +70,6 @@ export const customStyles = {
     color: '#cae0eb',
     backgroundColor:
       state.isFocused || state.isSelected ? '#2F454E' : '#2F454E',
-    // eslint-disable-next-line
     // @ts-ignore
     '&:active': {
       color: '#cae0eb',

@@ -26,11 +26,11 @@ import { AppThunkDispatch } from '../../store'
 
 type ParsedBlock = {
   time: string
-  index: React.FC<{}>
-  platform: React.FC<{}>
+  index: React.FC
+  platform: React.FC
   transactions: number
   blocktime: string
-  size: React.FC<{}>
+  size: React.FC
   height: number
   href: string
   chain: string
@@ -70,7 +70,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
 const returnBlockListData = (
   data: Array<Block>,
   returnStub: boolean,
-  network: string,
+  _network: string,
 ): Array<ParsedBlock> => {
   if (returnStub) {
     return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
@@ -79,12 +79,13 @@ const returnBlockListData = (
   }
 }
 
-const Blocks: React.FC<MatchParams> = props => {
+const Blocks: React.FC<MatchParams> = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const width = useWindowWidth()
 
   const navigate = useNavigate()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
     navigate,
@@ -187,8 +188,8 @@ const Blocks: React.FC<MatchParams> = props => {
             label: 'Blocks',
           }}
           leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
+            id: string | number | void | React.FC,
+            chain: string | number | void | React.FC,
           ): string => {
             if (typeof chain === 'string') {
               interface TxColorMap {

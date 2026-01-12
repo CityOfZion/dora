@@ -1,6 +1,5 @@
-import { Route, Routes, RouteProps } from 'react-router-dom'
+import { Routes, RouteProps } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
-import { Integrations } from '@sentry/tracing'
 
 /** Sentry will be active only in the production
  *  environment to capture errors and exceptions.

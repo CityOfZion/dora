@@ -8,6 +8,7 @@ const ExpandingPanel: React.FC<{
   title: string | ReactElement
   open: boolean
   children: React.ReactNode
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   handleClick?: Function
 }> = ({ title, open, handleClick, children }) => {
   const [isOpen, setIsOpen] = React.useState(open)
@@ -18,7 +19,9 @@ const ExpandingPanel: React.FC<{
         className="expanding-panel-header"
         onClick={(): void => {
           setIsOpen(!isOpen)
-          handleClick && handleClick(!isOpen)
+          if (handleClick) {
+            handleClick(!isOpen)
+          }
         }}
       >
         <div className="expanding-panel-title">{title}</div>

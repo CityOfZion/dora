@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Platform } from '../components/filter/Filter'
-import { useLocation, useNavigate, NavigateFunction } from 'react-router'
+import { useLocation, NavigateFunction } from 'react-router'
 import useFilterState, { FilterState } from './useFilterState'
 
 const useFilterStateWithFilter = (

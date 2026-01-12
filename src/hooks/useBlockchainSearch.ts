@@ -31,7 +31,7 @@ const options: SearchOptions[] = [
 
 export const useBlockchainSearch = () => {
   const search = useCallback(async (text: string): Promise<any[]> => {
-    let searchResults: any[] = []
+    const searchResults: any[] = []
 
     //execute the search across the search scope
     await Promise.allSettled(

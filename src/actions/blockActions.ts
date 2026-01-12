@@ -1,6 +1,4 @@
-import { Dispatch, Action } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
-
+import { Dispatch } from 'redux'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import {
   Block,
@@ -49,7 +47,7 @@ export const requestBlockSuccess =
 
 export const REQUEST_BLOCKS_SUCCESS = 'REQUEST_BLOCKS_SUCCESS'
 export const requestBlocksSuccess =
-  (page: number, json: {}) =>
+  (page: number, json: Record<string, unknown>) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_BLOCKS_SUCCESS,
@@ -94,8 +92,8 @@ export const clearList =
   }
 
 export function shouldFetchBlock(
-  state: { block: BlockState },
-  index: number,
+  _state: { block: BlockState },
+  _index: number,
 ): boolean {
   return true
 
@@ -178,11 +176,11 @@ export function fetchBlocks(
   network?: string,
   protocol?: string,
   page = 1,
-  chain?: string,
+  _chain?: string,
 ): AppThunk<Promise<void>> {
   return async (
     dispatch,
-    getState: () => { block: BlockState },
+    _getState: () => { block: BlockState },
   ): Promise<void> => {
     try {
       dispatch(requestBlocks(page))

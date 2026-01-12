@@ -31,7 +31,9 @@ const HeaderCell: React.FC<HeaderCell> = ({
       key={nameColumn}
       onClick={(e): void => {
         e.preventDefault()
-        callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+        if (callbalOrderData && sortOpt) {
+          callbalOrderData(sortOpt)
+        }
       }}
     >
       {isLoading ? '' : nameColumn}
@@ -49,29 +51,24 @@ const HeaderCell: React.FC<HeaderCell> = ({
 export type ColumnType = {
   name: string
   accessor: string
-  style?: {}
+  style?: object
   sortOpt?: SORT_OPTION
 }
 
 type ListProps = {
   columns: Array<ColumnType>
-  // eslint-disable-next-line
   // @ts-ignore
-  data: Array<{ [key: string]: string | number | React.FC<{}>; href?: string }>
-  handleRowClick?: (data: {
-    [key: string]: string | number | React.FC<{}>
-  }) => void
-  generateHref?: (data: {
-    [key: string]: string | number | React.FC<{}>
-  }) => string
+  data: Array<{ [key: string]: string | number | React.FC; href?: string }>
+  handleRowClick?: (data: { [key: string]: string | number | React.FC }) => void
+  generateHref?: (data: { [key: string]: string | number | React.FC }) => string
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
   leftBorderColorOnRow?:
     | string
     | ((
-        id: string | number | void | React.FC<{}>,
-        chain?: string | number | React.FC<{}>,
+        id: string | number | void | React.FC,
+        chain?: string | number | React.FC,
       ) => string)
 
   countConfig?: {
@@ -101,7 +98,7 @@ export const List: React.FC<ListProps> = ({
     interface Sorted {
       id: string
       href: string
-      [key: string]: string | number | React.FC<{}>
+      [key: string]: string | number | React.FC
     }
 
     const sorted = {} as Sorted
@@ -121,8 +118,8 @@ export const List: React.FC<ListProps> = ({
   const conditionalBorderRadius = (
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
-    id?: string | number | React.FC<{}>,
-    chain?: string | number | React.FC<{}>,
+    id?: string | number | React.FC,
+    chain?: string | number | React.FC,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -180,7 +177,7 @@ export const List: React.FC<ListProps> = ({
 
   const renderCellData = (
     isLoading: boolean,
-    data: string | number | React.FC<{}>,
+    data: string | number | React.FC,
   ): string | number | React.ReactNode => {
     if (isLoading) return undefined
     if (typeof data === 'function') return (data as () => React.ReactNode)()
@@ -223,9 +220,9 @@ export const List: React.FC<ListProps> = ({
         {sortedByAccessor.map(
           (
             data: {
-              [key: string]: string | number | React.FC<{}>
+              [key: string]: string | number | React.FC
             },
-            index: number,
+            _index: number,
           ) =>
             Object.keys(data).map((key, i) => {
               const conditionalHref = (): string => {

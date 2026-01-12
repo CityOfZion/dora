@@ -8,7 +8,7 @@ import { ROUTES, SEARCH_TYPES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useBlockchainSearch } from '../../hooks/useBlockchainSearch'
 
-const Search: React.FC<{}> = () => {
+const Search: React.FC = () => {
   const navigate = useNavigate()
   const width = useWindowWidth()
   const [searchParams] = useSearchParams()

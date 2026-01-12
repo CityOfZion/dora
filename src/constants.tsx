@@ -16,7 +16,6 @@ import Magnify from './assets/icons/magnify.svg?react'
 import Monitor from './assets/icons/monitor.svg?react'
 import Diamond from './assets/icons/shape.svg?react'
 
-//eslint-disable-next-line
 import bs58check from 'bs58check'
 
 export const NEO_HASHES = [
@@ -288,7 +287,6 @@ export const hexToAscii = async (str1: string): Promise<string> => {
 }
 
 export const neo3_hexToAscii = async (str1: string): Promise<string> => {
-  // eslint-disable-next-line
   // @ts-ignore
   const size = parseInt(str1.replace(/=/g, '').length * 0.75)
 
@@ -360,7 +358,7 @@ export const BUFFER_OPTION = {
 export const ADDRESS_OPTION = {
   value: 'Address',
   label: 'Address',
-  convert: (value: string, chain?: string): Promise<string> =>
+  convert: (value: string, _chain?: string): Promise<string> =>
     NeoConvertor.Address.scriptHashToAddress(value, true),
 }
 

@@ -32,7 +32,7 @@ type Block = {
 
 type ParsedBlock = {
   time: string
-  index: React.FC<{}>
+  index: React.FC
   transactions: number
   blocktime: string
   size: string

@@ -18,7 +18,7 @@ export const requestAddress =
 
 export const REQUEST_ADDRESS_SUCCESS = 'REQUEST_ADDRESS_SUCCESS'
 export const requestAddressSuccess =
-  (requestedAddress: string, json: {}) =>
+  (requestedAddress: string, json: object) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_ADDRESS_SUCCESS,
@@ -55,7 +55,7 @@ export const requestAddressTransferHistory =
 export const REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS =
   'REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS'
 export const requestAddressTransferHistorySuccess =
-  (requestedAddress: string, transferHistoryPage = 1, json: {}) =>
+  (requestedAddress: string, transferHistoryPage = 1, json: object) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS,
@@ -97,9 +97,9 @@ type ParsedBalanceData = {
   asset: string
 }
 
-export function fetchAddress(address: string, chain: string) {
+export function fetchAddress(address: string, _chain: string) {
   return async (
-    dispatch: ThunkDispatch<{}, void, Action>,
+    dispatch: ThunkDispatch<object, void, Action>,
     getState: () => { network: NetworkState },
   ): Promise<void> => {
     dispatch(requestAddress(address))
@@ -142,8 +142,8 @@ export function fetchAddress(address: string, chain: string) {
 
 export function fetchAddressTransferHistory(address: string, page = 1) {
   return async (
-    dispatch: ThunkDispatch<{}, void, Action>,
-    getState: () => State,
+    dispatch: ThunkDispatch<object, void, Action>,
+    _getState: () => State,
   ): Promise<void> => {
     dispatch(requestAddressTransferHistory(address, page))
     try {

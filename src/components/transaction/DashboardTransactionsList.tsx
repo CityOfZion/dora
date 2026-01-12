@@ -21,7 +21,7 @@ import { AppThunkDispatch } from '../../store'
 
 type ParsedTx = {
   time: string
-  txid: React.FC<{}>
+  txid: React.FC
   size: string
   hash: string
 }

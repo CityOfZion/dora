@@ -8,7 +8,6 @@ import ExpandingPanel from '../panel/ExpandingPanel'
 
 import { TX_STATE_TYPE_MAPPINGS } from '../../constants'
 
-// eslint-disable-next-line
 // @ts-ignore
 export const Parameter = ({ parameter, hideComma }): ReactElement => (
   <React.Fragment>
@@ -38,7 +37,6 @@ export const Parameter = ({ parameter, hideComma }): ReactElement => (
   </React.Fragment>
 )
 
-// eslint-disable-next-line
 // @ts-ignore
 export const ManifestRowContents = ({ method }): ReactElement => (
   <div className="manifest-method-row-container">
@@ -85,7 +83,6 @@ export const ManifestRowContents = ({ method }): ReactElement => (
   </div>
 )
 
-// eslint-disable-next-line
 // @ts-ignore
 const Manifest = ({ manifest }): ReactElement => {
   return (

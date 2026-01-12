@@ -1,5 +1,4 @@
-import { Dispatch, Action } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { Dispatch } from 'redux'
 
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
@@ -31,7 +30,7 @@ export const requestTransactions =
 
 export const REQUEST_TRANSACTION_SUCCESS = 'REQUEST_TRANSACTION_SUCCESS'
 export const requestTransactionSuccess =
-  (hash: string, json: {}) =>
+  (hash: string, json: Record<string, unknown>) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_TRANSACTION_SUCCESS,
@@ -108,7 +107,7 @@ export const RESET = 'RESET'
 
 export function fetchTransaction(
   hash: string,
-  chain: string,
+  _chain: string,
 ): AppThunk<Promise<void>> {
   return async (
     dispatch,
@@ -148,7 +147,7 @@ export function fetchTransactions(
 ): AppThunk<Promise<void>> {
   return async (
     dispatch,
-    getState: () => { transaction: State },
+    _getState: () => { transaction: State },
   ): Promise<void> => {
     try {
       dispatch(requestTransactions(page))

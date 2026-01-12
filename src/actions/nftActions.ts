@@ -1,12 +1,10 @@
-import { Action, Dispatch } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { Dispatch } from 'redux'
 import { BUILD_GHOST_MARKET_URL } from '../constants'
 import {
   ActionType,
   DETAILED_NFT,
   NFT,
   NFTAttribute,
-  State,
 } from '../reducers/nftReducer'
 import { AppThunk } from '../store'
 
