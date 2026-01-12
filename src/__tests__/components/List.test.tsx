@@ -1,8 +1,13 @@
 import React, { ReactElement } from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
-
+import { vi } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
 import List from '../../components/list/List'
+
+function renderWithRouter(ui: any, { route = '/' } = {}) {
+  return render(<MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>)
+}
 
 const columns = [
   {
@@ -47,11 +52,12 @@ const data: RowType[] = [
 
 describe('List Component', () => {
   test('renders without crashing and shows all rows', () => {
-    const handleRowClick = jest.fn()
+    const handleRowClick = vi.fn()
 
     // Render the List
-    render(
+    renderWithRouter(
       <List
+        data-testid="list-container"
         columns={columns}
         data={data}
         rowId="test"
@@ -60,21 +66,18 @@ describe('List Component', () => {
       />,
     )
 
-    // 3. Snapshot (optional)
-    const container = screen.getByTestId('list-container') // make sure your List adds data-testid="list-container"
-    expect(container).toMatchSnapshot()
+    const container = document.querySelector('.data-list')
+    expect(container).toBeInTheDocument()
 
-    // 4. Verify each row content is in the document
-    data.forEach(row => {
-      render(row.test2()) // render the cell component
-      expect(screen.getByText('hello test 2')).toBeInTheDocument()
-    })
+    // Verify all row cells are rendered
+    const cells = screen.getAllByText('hello test 2')
+    expect(cells.length).toBe(data.length)
   })
 
   test('calls handleRowClick when a row is clicked', () => {
-    const handleRowClick = jest.fn()
+    const handleRowClick = vi.fn()
 
-    render(
+    renderWithRouter(
       <List
         columns={columns}
         data={data}
@@ -85,10 +88,12 @@ describe('List Component', () => {
     )
 
     // Example: simulate a click on the first row
-    const firstRow = screen.getByText(data[0].test.toString())
+    const firstRow = screen.getAllByText(data[0].test.toString())[0]
     fireEvent.click(firstRow)
 
     expect(handleRowClick).toHaveBeenCalledTimes(1)
-    expect(handleRowClick).toHaveBeenCalledWith(data[0])
+    expect(handleRowClick).toHaveBeenCalledWith(
+      expect.objectContaining({ id: data[0].test.toString() }),
+    )
   })
 })

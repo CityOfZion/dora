@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import svgr from 'vite-plugin-svgr';
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+import svgr from 'vite-plugin-svgr'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
@@ -8,9 +8,13 @@ export default defineConfig({
     react(),
     svgr({
       svgrOptions: {
-        namedExport: 'ReactComponent'
-      }
+        namedExport: 'ReactComponent',
+      },
     }),
-    nodePolyfills()
+    nodePolyfills(),
   ],
-});
+  test: {
+    globals: true,
+    environment: 'jsdom',
+  },
+})
