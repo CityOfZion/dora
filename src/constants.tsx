@@ -4,6 +4,7 @@ import noteIcon from '@iconify/icons-simple-line-icons/note'
 import homeIcon from '@iconify/icons-simple-line-icons/home'
 import transactionsIcon from '@iconify/icons-simple-line-icons/refresh'
 import blocksIcon from '@iconify/icons-simple-line-icons/grid'
+import walletIcon from '@iconify/icons-simple-line-icons/wallet'
 import NeoConvertor from 'neo-convertor'
 import { wallet, u } from '@cityofzion/neon-js'
 import queryString from 'query-string'
@@ -207,7 +208,9 @@ export const ROUTES = {
   WALLETS: {
     url: '/addresses',
     name: 'Wallets',
-    renderIcon: (): React.ReactNode => <Wallets />,
+    renderIcon: (): React.ReactNode => (
+      <Icon icon={walletIcon} style={{ fontSize: 26 }} />
+    ),
     target: '_self',
   },
   WALLET: {

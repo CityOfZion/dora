@@ -17,8 +17,9 @@ import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import ArrowSortSVG from '../../assets/icons/arrow-sort.svg?react'
 import Cube from '../../assets/icons/cube.svg?react'
-import Graphic from '../../assets/icons/graphic.svg?react'
-import Hourglass from '../../assets/icons/hourglass.svg?react'
+import hourglassIcon from '@iconify/icons-simple-line-icons/hourglass'
+import chartIcon from '@iconify/icons-simple-line-icons/chart'
+
 import {
   State as NodeState,
   WSDoraData,
@@ -40,6 +41,8 @@ import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
 import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
+import { Icon } from '@iconify/react'
+import homeIcon from '@iconify/icons-simple-line-icons/home'
 
 type ParsedNodes = {
   endpoint: React.FC
@@ -548,12 +551,19 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
       <InformationPanel
         title={LAST_BLOCK}
         data={`${String(lastBlockCounter)} seconds ago`}
-        icon={<Hourglass />}
+        icon={
+          <Icon
+            icon={hourglassIcon}
+            style={{ fontSize: 34, color: '#7d9fb1' }}
+          />
+        }
       />
       <InformationPanel
         title={AVG_BLOCK_TIME}
         data={`${avgBlockTime} seconds`}
-        icon={<Graphic />}
+        icon={
+          <Icon icon={chartIcon} style={{ fontSize: 34, color: '#7d9fb1' }} />
+        }
       />
     </div>
   )
