@@ -178,7 +178,7 @@ const Transaction: React.FC = () => {
 
         <Flex alignItems={'center'} mb={10}>
           <TransactionIcon width={22} height={23} />
-          <Text ml={2} fontSize={26} fontWeight={700} lineHeight={10}>
+          <Text ml={2} fontSize={26} fontWeight={700}>
             Transaction Information
           </Text>
         </Flex>

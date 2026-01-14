@@ -1,5 +1,8 @@
 .pagination div {
+  font-family: inherit !important;
+
   ol li button {
+    font-family: inherit !important;
     color: #cae0eb !important;
 
     &[aria-current='page'] {
@@ -41,6 +44,7 @@
       }
     }
     &:hover {
+      background-color: white !important;
       span svg g path {
         fill: #21383d !important;
       }
