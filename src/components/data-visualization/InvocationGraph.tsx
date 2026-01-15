@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryArea } from 'victory'
 
-import { ReactComponent as Warning } from '../../assets/icons/warning.svg'
+import Warning from '../../assets/icons/warning.svg?react'
 import { InvocationStat } from '../../reducers/contractReducer'
 import './InvocationGraph.scss'
 import { isEmpty } from 'lodash'
@@ -38,7 +38,6 @@ const theme = {
 const InvocationGraph: React.FC<Props> = ({ data }) => {
   const [width, setWidth] = useState(window.innerWidth)
   const [invocationsMade, setNoInvocationsMade] = useState(true)
-  //eslint-disable-next-line
   // @ts-ignore
   const updateWidth = (ev): void => {
     setWidth(ev.target.innerWidth)
@@ -106,7 +105,6 @@ const InvocationGraph: React.FC<Props> = ({ data }) => {
         <rect width="300" height="300" y="0" x="0" fill="url(#gradient)" />
       </svg>
       <svg
-        // eslint-disable-next-line
         viewBox={'0 0' + ' ' + width + ' ' + '400'}
         preserveAspectRatio="none"
         width="100%"

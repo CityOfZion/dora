@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ROUTES } from '../../constants'
 import { rpc, sc, u } from '@cityofzion/neon-js'
 import NftInformation from '../../components/nft/NftInformation'
@@ -11,7 +11,7 @@ const ENDPOINT = 'https://mainnet4.neo.coz.io:443'
 
 const Lookup: React.FC = () => {
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
 
   const [tokenId, setTokenId] = useState<string>()
@@ -22,7 +22,7 @@ const Lookup: React.FC = () => {
     const pubkey = searchParams.get('pubkey')
 
     if (!pubkey) {
-      history.push(ROUTES.HOME.url)
+      navigate(ROUTES.HOME.url)
       return
     }
 
@@ -39,7 +39,7 @@ const Lookup: React.FC = () => {
     )
 
     if (result.stack.length === 0) {
-      history.push(ROUTES.HOME.url)
+      navigate(ROUTES.HOME.url)
       return
     }
 

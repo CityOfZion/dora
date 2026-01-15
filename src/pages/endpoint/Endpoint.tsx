@@ -1,7 +1,6 @@
 import React from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ReactCountryFlag from 'react-country-flag'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
 
 import { useSelector } from 'react-redux'
 import { State as NodeState, OrderNodes } from '../../reducers/nodeReducer'
@@ -10,17 +9,15 @@ import { ROUTES } from '../../constants'
 
 import Copy from '../../components/copy/Copy'
 import { IsItUp } from '../monitor/Monitor'
-import { ReactComponent as CloseX } from '../../assets/icons/close-icon.svg'
+import CloseX from '../../assets/icons/close-icon.svg?react'
 
-interface MatchParams {
-  url: string
-}
-
-type Props = RouteComponentProps<MatchParams>
-
-const Endpoint: React.FC<Props> = (props: Props) => {
+const Endpoint: React.FC = () => {
   const { endpoint } = useParams<{ endpoint: string }>()
-  const history = useHistory()
+  const navigate = useNavigate()
+  if (!endpoint) {
+    navigate(ROUTES.MONITOR.url)
+    return null
+  }
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const endpointUrl = endpoint
     .replace(/\+/g, 'http://')
@@ -46,7 +43,7 @@ const Endpoint: React.FC<Props> = (props: Props) => {
   ]
 
   const handleCloseButton = (): void => {
-    history.push(ROUTES.MONITOR.url)
+    navigate(ROUTES.MONITOR.url)
   }
 
   return (
@@ -132,4 +129,4 @@ const Endpoint: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(Endpoint)
+export default Endpoint

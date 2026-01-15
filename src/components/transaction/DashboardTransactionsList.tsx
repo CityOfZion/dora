@@ -16,11 +16,12 @@ import {
 import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Button from '../button/Button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedTx = {
   time: string
-  txid: React.FC<{}>
+  txid: React.FC
   size: string
   hash: string
 }
@@ -54,9 +55,9 @@ const returnTxListData = (
 }
 
 const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
   const txState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
@@ -88,9 +89,9 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
           <div className="label-wrapper-2">
             <Button
               primary
-              onClick={(): void =>
-                history.push(`${ROUTES.TRANSACTIONS.url}/neo3/${network}`)
-              }
+              onClick={(): void => {
+                navigate(`${ROUTES.TRANSACTIONS.url}/neo3/${network}`)
+              }}
             >
               view transactions
             </Button>

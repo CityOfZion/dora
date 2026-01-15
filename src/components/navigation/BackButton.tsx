@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
-import { useHistory } from 'react-router-dom'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import { useNavigate } from 'react-router-dom'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { Box, BoxProps, Button, Flex, Text } from '@chakra-ui/react'
 
 interface Props extends BoxProps {
@@ -9,15 +9,15 @@ interface Props extends BoxProps {
 }
 
 const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleClick = () => {
     if (url) {
-      history.push(url)
+      navigate(url)
       return
     }
 
-    history.goBack()
+    navigate(-1)
   }
 
   return (

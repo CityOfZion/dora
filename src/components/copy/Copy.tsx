@@ -1,10 +1,6 @@
 import React, { useState } from 'react'
-import Check from '@material-ui/icons/Check'
-import FileCopy from '@material-ui/icons/FilterNone'
-// eslint-disable-next-line
-// @ts-ignore
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-
+import Check from '@mui/icons-material/Check'
+import FileCopy from '@mui/icons-material/FilterNone'
 import './Copy.scss'
 
 type CopyProps = {
@@ -14,25 +10,32 @@ type CopyProps = {
 const Copy: React.FC<CopyProps> = ({ text }) => {
   const [copied, setCopied] = useState(false)
 
-  const copyText = (): void => {
-    setCopied(true)
-    setTimeout(() => {
-      setCopied(false)
-    }, 750)
+  const copyText = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 750)
+    } catch (err) {
+      console.error('Failed to copy text: ', err)
+    }
   }
 
   return (
-    <CopyToClipboard text={text}>
+    <button
+      onClick={copyText}
+      style={{ cursor: 'pointer', width: 19 }}
+      aria-label="Copy"
+    >
       {copied ? (
-        <Check style={{ width: 19, color: '#D355E7' }} />
+        <Check style={{ width: 19, color: '#D355E7' }} aria-hidden="true" />
       ) : (
         <FileCopy
-          onClick={copyText}
           id="copy-icon"
           style={{ width: 16, color: '#D355E7' }}
+          aria-hidden="true"
         />
       )}
-    </CopyToClipboard>
+    </button>
   )
 }
 

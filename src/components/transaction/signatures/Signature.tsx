@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import ExpandingPanel from '../../panel/ExpandingPanel'
 import { Signer } from '../../../reducers/transactionReducer'
-import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
+import { Box, Collapsible, Flex, Text } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
 import { ROUTES } from '../../../constants'
 import { truncateHash } from '../../../utils/formatter'
@@ -47,7 +47,7 @@ export const Signature: React.FC<{
                 >
                   <Text
                     fontSize={'sm'}
-                    isTruncated
+                    truncate
                     color={'tertiary'}
                     mx={2}
                     fontWeight={500}
@@ -94,38 +94,40 @@ export const Signature: React.FC<{
             </Box>
 
             {signature.allowedcontracts && (
-              <Collapse in={isOpen[signature.scopes]}>
-                <Box bg={`white-70`} px={3} py={4}>
-                  {signature.allowedcontracts.map((it, idx) => (
-                    <Flex direction={'column'} key={it}>
-                      <Flex
-                        minH={10}
-                        alignItems={'center'}
-                        bg={'white-100'}
-                        mb={1}
-                        overflow={'hidden'}
-                        flex={1}
-                      >
-                        <Text color={'white-500'} mx={3}>
-                          [{idx}]
-                        </Text>
-                        <Text
-                          fontSize={'sm'}
-                          isTruncated
-                          color={'tertiary'}
-                          fontWeight={400}
+              <Collapsible.Root open={isOpen[signature.scopes]}>
+                <Collapsible.Content>
+                  <Box bg={`white-70`} px={3} py={4}>
+                    {signature.allowedcontracts.map((it, idx) => (
+                      <Flex direction={'column'} key={it}>
+                        <Flex
+                          minH={10}
+                          alignItems={'center'}
+                          bg={'white-100'}
+                          mb={1}
+                          overflow={'hidden'}
+                          flex={1}
                         >
-                          <Link
-                            to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${it}`}
+                          <Text color={'white-500'} mx={3}>
+                            [{idx}]
+                          </Text>
+                          <Text
+                            fontSize={'sm'}
+                            truncate
+                            color={'tertiary'}
+                            fontWeight={400}
                           >
-                            {truncateHash(it, isMobile, 15, 5)}
-                          </Link>
-                        </Text>
+                            <Link
+                              to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${it}`}
+                            >
+                              {truncateHash(it, isMobile, 15, 5)}
+                            </Link>
+                          </Text>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  ))}
-                </Box>
-              </Collapse>
+                    ))}
+                  </Box>
+                </Collapsible.Content>
+              </Collapsible.Root>
             )}
           </Box>
         ))}

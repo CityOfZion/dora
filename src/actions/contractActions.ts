@@ -1,12 +1,12 @@
-import { Dispatch, Action } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
-
+import { Dispatch } from 'redux'
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { Contract, InvocationStat, State } from '../reducers/contractReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { NeoRest } from '../rest'
+import { toError } from './utils'
+import { AppThunk } from '../store'
 
 export const REQUEST_CONTRACT = 'REQUEST_CONTRACT'
 export const requestContract =
@@ -42,7 +42,7 @@ export const requestContractSuccess =
 
 export const REQUEST_CONTRACTS_SUCCESS = 'REQUEST_CONTRACTS_SUCCESS'
 export const requestContractsSuccess =
-  (page: number, json: {}) =>
+  (page: number, json: Record<string, unknown>) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACTS_SUCCESS,
@@ -99,7 +99,7 @@ export const requestContractsInvocations =
 export const REQUEST_CONTRACTS_INVOCATIONS_SUCCESS =
   'REQUEST_CONTRACTS_INVOCATIONS_SUCCESS'
 export const requestContractsInvocationsSuccess =
-  (json: {}) =>
+  (json: object) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_CONTRACTS_INVOCATIONS_SUCCESS,
@@ -150,9 +150,9 @@ export const resetContractState =
     })
   }
 
-export function fetchContract(hash: string) {
+export function fetchContract(hash: string): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { contract: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchContract(getState(), hash)) {
@@ -170,16 +170,18 @@ export function fetchContract(hash: string) {
           }),
         )
       } catch (e) {
-        dispatch(requestContractError(hash, e))
+        dispatch(requestContractError(hash, toError(e)))
       }
     }
   }
 }
 
-export function fetchContracts(network: string, protocol: string, page = 1) {
-  return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-  ): Promise<void> => {
+export function fetchContracts(
+  network: string,
+  protocol: string,
+  page = 1,
+): AppThunk<Promise<void>> {
+  return async (dispatch): Promise<void> => {
     try {
       dispatch(requestContracts(page))
       let totalCount = 0
@@ -221,15 +223,15 @@ export function fetchContracts(network: string, protocol: string, page = 1) {
       }
 
       dispatch(requestContractsSuccess(page, { all, totalCount }))
-    } catch (e: any) {
-      dispatch(requestContractsError(page, e))
+    } catch (e) {
+      dispatch(requestContractsError(page, toError(e)))
     }
   }
 }
 
-export function fetchMainnetContractsInvocations() {
+export function fetchMainnetContractsInvocations(): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { contract: State },
   ): Promise<void> => {
     if (shouldFetchContractsInvocations(getState())) {
@@ -245,8 +247,8 @@ export function fetchMainnetContractsInvocations() {
           .flat()
           .sort((a, b) => (a!.count < b!.count ? 1 : -1))
         dispatch(requestContractsInvocationsSuccess(sortedContracts))
-      } catch (e: any) {
-        dispatch(requestContractsInvocationsError(e))
+      } catch (e) {
+        dispatch(requestContractsInvocationsError(toError(e)))
       }
     } else {
       dispatch(

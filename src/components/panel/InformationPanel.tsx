@@ -7,7 +7,7 @@ const InformationPanel: React.FC<{
   icon: React.ReactNode
   data: string
   children?: React.ReactNode
-}> = ({ title, icon, data, children }) => {
+}> = ({ title, icon, data, children: _children }) => {
   return (
     <div className="information-panel-container">
       <div className="information-panel-header">

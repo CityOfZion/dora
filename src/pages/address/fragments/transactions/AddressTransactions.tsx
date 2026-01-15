@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { fetchTransaction } from './AddressTransactionService'
 import './AddressTransactions.scss'
 import { AddressTransaction, Incovation, Transfer } from './AddressTransaction'
@@ -15,17 +15,15 @@ import {
   Transfer as TransferDoraTS,
 } from '@cityofzion/dora-ts/dist/interfaces/api/neo/interface'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const AddressTransactions: React.FC<Props> = (props: Props) => {
-  const { chain, network, hash } = props.match.params
-  useUpdateNetworkState(props)
+const AddressTransactions: React.FC = () => {
+  const { chain = '', network = '', hash = '' } = useParams<MatchParams>()
+  useUpdateNetworkState()
   const [transactions, setTransactions] = useState([] as AddressTransaction[])
   const [currentPage, setCurrentPage] = useState(1)
   const [pages, setPages] = useState(0)
@@ -140,7 +138,7 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
 
         {isLoading && (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton count={15} style={{ margin: '5px 0', height: '100px' }} />
@@ -159,4 +157,4 @@ const AddressTransactions: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(AddressTransactions)
+export default AddressTransactions

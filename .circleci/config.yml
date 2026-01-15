@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/neoscan-2
     docker:
-      - image: circleci/node:14.16.0
+      - image: cimg/node:24.13.0
     steps:
       - checkout
       - restore_cache:
@@ -17,7 +17,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: type check
           command: npm run ts-build
@@ -30,7 +30,7 @@ jobs:
 
   deploy-develop:
       docker:
-        - image: circleci/node:14.16.0
+        - image: cimg/node:24.13.0
       steps:
         - checkout
         - restore_cache:
@@ -44,7 +44,7 @@ jobs:
               - ./node_modules
         - run:
             name: fetch git commit hash
-            command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+            command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
         - run:
             name: build
             command: npm run build
@@ -60,7 +60,7 @@ jobs:
 
   deploy-stage:
     docker:
-      - image: circleci/node:14.16.0
+      - image: cimg/node:24.13.0
     steps:
       - checkout
       - restore_cache:
@@ -74,7 +74,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: build
           command: npm run build
@@ -90,7 +90,7 @@ jobs:
 
   deploy-production:
     docker:
-      - image: circleci/node:14.16.0
+      - image: cimg/node:24.13.0
     steps:
       - checkout
       - restore_cache:
@@ -104,7 +104,7 @@ jobs:
             - ./node_modules
       - run:
           name: fetch git commit hash
-          command: echo REACT_APP_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
+          command: echo VITE_LAST_COMMIT=$(git log --pretty=format:%h -n 1 --abbrev=7) > .env
       - run:
           name: build
           command: npm run build

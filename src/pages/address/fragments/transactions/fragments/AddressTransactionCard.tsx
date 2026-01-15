@@ -1,5 +1,5 @@
 import Neo3 from '../../../../../assets/icons/neo3.svg'
-import { ArrowForwardIos } from '@material-ui/icons'
+import { ArrowForwardIos } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../../../../constants'
 import TransactionTime from './TransactionTime'

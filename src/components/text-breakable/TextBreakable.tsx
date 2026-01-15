@@ -11,7 +11,7 @@ const TextBreakable: React.FC<Props> = ({ text, className }) => {
   return (
     <p
       className={
-        !!className
+        className
           ? `text-breakable-container ${className}`
           : 'text-breakable-container'
       }

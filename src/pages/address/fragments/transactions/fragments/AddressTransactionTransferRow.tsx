@@ -36,8 +36,8 @@ const AddressTransactionTransfer: React.FC<Props> = ({
               notification?.state.length === 3
                 ? 'NEP-17 Transfer'
                 : notification?.state.length === 4
-                ? 'NEP-11 Transfer'
-                : 'Transfer'
+                  ? 'NEP-11 Transfer'
+                  : 'Transfer'
             return (
               <div
                 className="address-transactions__table--transfers-values"

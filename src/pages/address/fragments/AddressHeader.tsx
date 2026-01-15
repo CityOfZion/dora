@@ -1,21 +1,19 @@
 import React from 'react'
-import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import { ROUTES } from '../../../constants'
 import Copy from '../../../components/copy/Copy'
 import classNames from 'classnames'
 import { getLogo } from '../../../utils/getLogo'
 import { capitalizeWord } from '../../../utils/formatter'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const AddressHeader: React.FC<Props> = (props: Props) => {
-  const { hash, chain, network } = props.match.params
+const AddressHeader: React.FC = () => {
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
 
   return (
     <>
@@ -75,4 +73,4 @@ const AddressHeader: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(AddressHeader)
+export default AddressHeader

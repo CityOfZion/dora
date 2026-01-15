@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { withRouter, useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -19,18 +19,19 @@ import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import TransactionTime from '../../components/transaction/TransactionTime'
 import { usePaginationModel, getLastPage } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedTx = {
-  time: React.FC<{}>
-  txid: React.FC<{}>
+  time: React.FC
+  txid: React.FC
   size: string
   hash: string
-  platform: React.FC<{}>
+  platform: React.FC
   chain: string
   href: string
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   chain?: string
   network?: string
 }
@@ -64,10 +65,11 @@ const returnTxListData = (
   }
 }
 
-const Transactions: React.FC<{}> = () => {
-  const dispatch = useDispatch()
+const Transactions: React.FC = () => {
+  const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
@@ -84,9 +86,9 @@ const Transactions: React.FC<{}> = () => {
   }
 
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
-    chain,
-    networkParam,
+    navigate,
+    'neo3',
+    'mainnet',
   )
 
   useEffect(() => {
@@ -168,8 +170,8 @@ const Transactions: React.FC<{}> = () => {
             label: 'Transactions',
           }}
           leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
+            id: string | number | void | React.FC,
+            chain: string | number | void | React.FC,
           ): string => {
             if (typeof chain === 'string') {
               interface TxColorMap {
@@ -202,4 +204,4 @@ const Transactions: React.FC<{}> = () => {
   )
 }
 
-export default withRouter(Transactions)
+export default Transactions

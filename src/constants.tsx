@@ -1,23 +1,22 @@
 import React from 'react'
 import { Icon } from '@iconify/react'
 import noteIcon from '@iconify/icons-simple-line-icons/note'
+import homeIcon from '@iconify/icons-simple-line-icons/home'
+import transactionsIcon from '@iconify/icons-simple-line-icons/refresh'
+import blocksIcon from '@iconify/icons-simple-line-icons/grid'
+import walletIcon from '@iconify/icons-simple-line-icons/wallet'
 import NeoConvertor from 'neo-convertor'
 import { wallet, u } from '@cityofzion/neon-js'
 import queryString from 'query-string'
 
 import './components/navigation/Sidebar.scss'
-import { ReactComponent as Home } from './assets/icons/home.svg'
-import { ReactComponent as Transactions } from './assets/icons/transactions.svg'
-import { ReactComponent as Transaction } from './assets/icons/invocation.svg'
-import { ReactComponent as Blocks } from './assets/icons/blocks.svg'
-import { ReactComponent as Wallets } from './assets/icons/wallets.svg'
-import { ReactComponent as Api } from './assets/icons/api.svg'
-import { ReactComponent as Magnify } from './assets/icons/magnify.svg'
-import { ReactComponent as Monitor } from './assets/icons/monitor.svg'
-import { ReactComponent as Diamond } from './assets/icons/shape.svg'
+import Transaction from './assets/icons/invocation.svg?react'
+import Api from './assets/icons/api.svg?react'
+import Magnify from './assets/icons/magnify.svg?react'
+import Monitor from './assets/icons/monitor.svg?react'
+import Diamond from './assets/icons/shape.svg?react'
 
-//eslint-disable-next-line
-const bs58check = require('bs58check')
+import bs58check from 'bs58check'
 
 export const NEO_HASHES = [
   '0xc56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b',
@@ -150,24 +149,33 @@ export const SEARCH_TYPES = {
   ENDPOINT: 'ENDPOINT',
 }
 
-export const ROUTES = {
+export type ROUTES_ENTRY = {
+  url: string
+  name: string
+  renderIcon: () => React.ReactNode
+  target: '_self' | '_blank'
+}
+
+export const ROUTES: Record<string, ROUTES_ENTRY> = {
   HOME: {
     url: '/',
     name: 'Home',
-    renderIcon: (): React.ReactNode => <Home />,
+    renderIcon: (): React.ReactNode => (
+      <Icon aria-hidden="true" icon={homeIcon} style={{ fontSize: 24 }} />
+    ),
     target: '_self',
   },
   SEARCH: {
     url: '/search',
     name: 'Search',
     target: '_self',
-    renderIcon: (): React.ReactNode => <Magnify />,
+    renderIcon: (): React.ReactNode => <Magnify aria-hidden="true" />,
   },
   CONTRACTS: {
     url: '/contracts',
     name: 'Contracts',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={noteIcon} style={{ fontSize: 24 }} />
+      <Icon aria-hidden="true" icon={noteIcon} style={{ fontSize: 24 }} />
     ),
     target: '_self',
   },
@@ -175,73 +183,88 @@ export const ROUTES = {
     url: '/contract',
     name: 'Contract',
     target: '_self',
+    renderIcon: () => null,
   },
   TRANSACTIONS: {
     url: '/transactions',
     name: 'Transactions',
-    renderIcon: (): React.ReactNode => <Transactions />,
+    renderIcon: (): React.ReactNode => (
+      <Icon
+        aria-hidden="true"
+        icon={transactionsIcon}
+        style={{ fontSize: 24 }}
+      />
+    ),
     target: '_self',
   },
   TRANSACTION: {
     url: '/transaction',
     name: 'Transaction',
-    renderIcon: (): React.ReactNode => <Transaction />,
+    renderIcon: (): React.ReactNode => <Transaction aria-hidden="true" />,
     target: '_self',
   },
   BLOCKS: {
     url: '/blocks',
     name: 'Blocks',
-    renderIcon: (): React.ReactNode => <Blocks />,
+    renderIcon: (): React.ReactNode => (
+      <Icon aria-hidden="true" icon={blocksIcon} style={{ fontSize: 24 }} />
+    ),
     target: '_self',
   },
   BLOCK: {
     url: '/block',
     name: 'Block',
     target: '_self',
+    renderIcon: () => null,
   },
   WALLETS: {
     url: '/addresses',
     name: 'Wallets',
-    renderIcon: (): React.ReactNode => <Wallets />,
+    renderIcon: (): React.ReactNode => (
+      <Icon aria-hidden="true" icon={walletIcon} style={{ fontSize: 26 }} />
+    ),
     target: '_self',
   },
   WALLET: {
     url: '/address',
     name: 'Wallet',
     target: '_self',
+    renderIcon: () => null,
   },
   API: {
     url: '/documentation/index.html',
     name: 'API',
-    renderIcon: (): React.ReactNode => <Api />,
+    renderIcon: (): React.ReactNode => <Api aria-hidden="true" />,
     target: '_blank',
   },
   MONITOR: {
     url: '/monitor',
     name: 'Monitor',
-    renderIcon: (): React.ReactNode => <Monitor />,
+    renderIcon: (): React.ReactNode => <Monitor aria-hidden="true" />,
     target: '_self',
   },
   ENDPOINT: {
     url: '/endpoint',
     name: 'Endpoint',
     target: '_self',
+    renderIcon: () => null,
   },
   NFT: {
     url: '/nft',
     name: 'NFT',
-    renderIcon: (): React.ReactNode => <Diamond />,
-    target: 'self',
+    renderIcon: (): React.ReactNode => <Diamond aria-hidden="true" />,
+    target: '_self',
   },
   LOOKUP: {
     url: '/lookup',
     name: 'Lookup',
     target: '_self',
+    renderIcon: () => null,
   },
   NOT_FOUND: {
     url: '/not-found',
     name: 'No results found',
-    renderIcon: (): React.ReactNode => <Magnify />,
+    renderIcon: (): React.ReactNode => <Magnify aria-hidden="true" />,
     target: '_self',
   },
 }
@@ -282,7 +305,6 @@ export const hexToAscii = async (str1: string): Promise<string> => {
 }
 
 export const neo3_hexToAscii = async (str1: string): Promise<string> => {
-  // eslint-disable-next-line
   // @ts-ignore
   const size = parseInt(str1.replace(/=/g, '').length * 0.75)
 
@@ -354,7 +376,7 @@ export const BUFFER_OPTION = {
 export const ADDRESS_OPTION = {
   value: 'Address',
   label: 'Address',
-  convert: (value: string, chain?: string): Promise<string> =>
+  convert: (value: string, _chain?: string): Promise<string> =>
     NeoConvertor.Address.scriptHashToAddress(value, true),
 }
 

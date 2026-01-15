@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React from 'react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
+import DateRangeIcon from '@mui/icons-material/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { Icon } from '@iconify/react'
 

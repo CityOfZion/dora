@@ -1,7 +1,7 @@
 import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 
-import { ReactComponent as TransferArrow } from '../../assets/icons/transfer-arrow.svg'
+import TransferArrow from '../../assets/icons/transfer-arrow.svg?react'
 import txBackgroundCubes from '../../assets/tx_mask.svg'
 import txBackgroundCubesMobile from '../../assets/cubes.png'
 import txRightCube from '../../assets/tx_right_cubes.svg'
@@ -10,9 +10,9 @@ import txCube from '../../assets/tx_cube.svg'
 import './Transfer.scss'
 import { getLogo } from '../../utils/getLogo'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
-import { Box, Flex, Img, SimpleGrid, Text } from '@chakra-ui/react'
+import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
 
 type Transfer = {
@@ -38,7 +38,7 @@ function getTransferLogo(symbol: string, chain: string): React.ReactNode {
 
 const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const isMobileOrTablet = width <= 990
 
@@ -46,7 +46,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
     if (address === 'mint' || address === 'burn') {
       return
     }
-    history.push(`/address/${chain}/${network}/${address}`)
+    navigate(`/address/${chain}/${network}/${address}`)
   }
 
   function getNetworkFee() {
@@ -92,7 +92,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                   <Text
                     maxW={'inherit'}
                     flex={1}
-                    isTruncated
+                    truncate
                     textOverflow={'clip'}
                     textAlign={'center'}
                     color={'tertiary'}
@@ -113,7 +113,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           )}
         </Box>
         {isMobileOrTablet ? (
-          <Img
+          <Image
             pos={'absolute'}
             src={txCube}
             alt="tx-background-cubes"
@@ -123,7 +123,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
             w={120}
           />
         ) : (
-          <Img
+          <Image
             pos={'absolute'}
             src={txCube}
             alt="tx-background-cubes"
@@ -147,7 +147,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
         py={5}
       >
         {isMobileOrTablet ? (
-          <Img
+          <Image
             src={txBackgroundCubesMobile}
             alt="tx-background-cubes"
             pos={'absolute'}
@@ -157,7 +157,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
             top={0}
           />
         ) : (
-          <Img
+          <Image
             src={txBackgroundCubes}
             alt="tx-background-cubes"
             pos={'absolute'}
@@ -230,7 +230,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           SENT TO
         </Text>
         {isMobileOrTablet ? (
-          <Img
+          <Image
             src={txCube}
             pos={'absolute'}
             alt="tx-background-cubes"
@@ -239,7 +239,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
             w={120}
           />
         ) : (
-          <Img
+          <Image
             src={txRightCube}
             pos={'absolute'}
             alt="tx-background-cubes"
@@ -260,7 +260,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                   <Text
                     maxW={'inherit'}
                     flex={1}
-                    isTruncated
+                    truncate
                     textOverflow={'clip'}
                     textAlign={'center'}
                     color={'tertiary'}

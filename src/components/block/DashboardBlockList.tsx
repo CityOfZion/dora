@@ -15,7 +15,8 @@ import { ROUTES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import './DashboardBlockList.scss'
 import Button from '../button/Button'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { AppThunkDispatch } from '../../store'
 
 /*
 type Block = {
@@ -31,7 +32,7 @@ type Block = {
 
 type ParsedBlock = {
   time: string
-  index: React.FC<{}>
+  index: React.FC
   transactions: number
   blocktime: string
   size: string
@@ -65,9 +66,9 @@ const returnBlockListData = (
 }
 
 const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
-  const history = useHistory()
+  const navigate = useNavigate()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const neo3List = blockState.all.filter(
     d => d.protocol === 'neo3' && d.network === 'mainnet',
@@ -106,9 +107,7 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
           <div className="label-wrapper-2">
             <Button
               primary
-              onClick={(): void =>
-                history.push(`${ROUTES.BLOCKS.url}/neo3/${network}`)
-              }
+              onClick={() => navigate(`${ROUTES.BLOCKS.url}/neo3/${network}`)}
             >
               view blocks
             </Button>

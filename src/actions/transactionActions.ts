@@ -1,11 +1,12 @@
-import { Dispatch, Action } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { Dispatch } from 'redux'
 
 import { SUPPORTED_PLATFORMS } from '../constants'
 import { State as NetworkState } from '../reducers/networkReducer'
 import { State, Transaction } from '../reducers/transactionReducer'
 import { sortSingleListByDate } from '../utils/time'
 import { NeoRest } from '../rest'
+import { AppThunk } from '../store'
+import { toError } from './utils'
 
 export const REQUEST_TRANSACTION = 'REQUEST_TRANSACTION'
 export const requestTransaction =
@@ -29,7 +30,7 @@ export const requestTransactions =
 
 export const REQUEST_TRANSACTION_SUCCESS = 'REQUEST_TRANSACTION_SUCCESS'
 export const requestTransactionSuccess =
-  (hash: string, json: {}) =>
+  (hash: string, json: Record<string, unknown>) =>
   (dispatch: Dispatch): void => {
     dispatch({
       type: REQUEST_TRANSACTION_SUCCESS,
@@ -104,9 +105,12 @@ export function shouldFetchTransaction(
 
 export const RESET = 'RESET'
 
-export function fetchTransaction(hash: string, chain: string) {
+export function fetchTransaction(
+  hash: string,
+  _chain: string,
+): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
+    dispatch,
     getState: () => { transaction: State; network: NetworkState },
   ): Promise<void> => {
     if (shouldFetchTransaction(getState(), hash)) {
@@ -125,8 +129,8 @@ export function fetchTransaction(hash: string, chain: string) {
           Object.assign(mergedResponse, response)
         }
         dispatch(requestTransactionSuccess(hash, mergedResponse))
-      } catch (e: any) {
-        dispatch(requestTransactionError(hash, e))
+      } catch (e) {
+        dispatch(requestTransactionError(hash, toError(e)))
       }
     } else {
       return dispatch(
@@ -140,10 +144,10 @@ export function fetchTransactions(
   network?: string,
   protocol?: string,
   page = 1,
-) {
+): AppThunk<Promise<void>> {
   return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-    getState: () => { transaction: State },
+    dispatch,
+    _getState: () => { transaction: State },
   ): Promise<void> => {
     try {
       dispatch(requestTransactions(page))
@@ -170,7 +174,7 @@ export function fetchTransactions(
                 txid: hash,
                 protocol: protocol,
                 network: network,
-              } as Transaction),
+              }) as Transaction,
           )
         }),
       )
@@ -179,8 +183,8 @@ export function fetchTransactions(
         items: sortSingleListByDate(flatRes) as Transaction[],
       }
       dispatch(requestTransactionsSuccess(page, { all, totalCount }))
-    } catch (e: any) {
-      dispatch(requestTransactionsError(page, e))
+    } catch (e) {
+      dispatch(requestTransactionsError(page, toError(e)))
     }
   }
 }

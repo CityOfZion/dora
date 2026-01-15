@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { RouteComponentProps, withRouter } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   State as TransactionState,
@@ -14,11 +14,12 @@ import { TransactionN3 } from '../../components/transaction/TransactionN3'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import BackButton from '../../components/navigation/BackButton'
-import { ReactComponent as TransactionIcon } from '../../assets/icons/invocation.svg'
+import TransactionIcon from '../../assets/icons/invocation.svg?react'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
-import { store } from '../../store'
+import { AppThunkDispatch, store } from '../../store'
 import { NeoRest } from '../../rest'
+import { AssetResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
 export type ParsedTransfer = {
   name: string
@@ -45,7 +46,13 @@ const parseNeo3TransactionData = async (
 
         if (isTransfer) {
           const { network } = store.getState().network
-          const asset = await NeoRest.asset(notification.contract, network)
+          let asset: AssetResponse
+          try {
+            asset = await NeoRest.asset(notification.contract, network)
+          } catch {
+            continue
+          }
+
           const { symbol, decimals, name } = asset
           let amount = 0
 
@@ -101,17 +108,15 @@ const parseNeo3TransactionData = async (
   return transfers
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const Transaction: React.FC<Props> = (props: Props) => {
-  const { hash, chain, network } = props.match.params
-  const dispatch = useDispatch()
+const Transaction: React.FC = () => {
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const transferArr: ParsedTransfer[] = []
   const [transfers, setTransfers] = useState(transferArr)
   const [localLoadComplete, setLocalLoadComplete] = useState(false)
@@ -123,9 +128,8 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
   const parseTransfers = useCallback(
     async (transaction: DetailedTransaction) => {
-      const parsedTransfers: ParsedTransfer[] = await parseNeo3TransactionData(
-        transaction,
-      )
+      const parsedTransfers: ParsedTransfer[] =
+        await parseNeo3TransactionData(transaction)
 
       setTransfers(parsedTransfers)
       setLocalLoadComplete(true)
@@ -133,7 +137,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
     [],
   )
 
-  useUpdateNetworkState(props)
+  useUpdateNetworkState()
 
   useEffect(() => {
     dispatch(fetchTransaction(hash, chain))
@@ -174,7 +178,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
 
         <Flex alignItems={'center'} mb={10}>
           <TransactionIcon width={22} height={23} />
-          <Text ml={2} fontSize={26} fontWeight={700} lineHeight={10}>
+          <Text ml={2} fontSize={26} fontWeight={700}>
             Transaction Information
           </Text>
         </Flex>
@@ -190,7 +194,7 @@ const Transaction: React.FC<Props> = (props: Props) => {
           </>
         ) : (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <div
@@ -231,4 +235,4 @@ const Transaction: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(Transaction)
+export default Transaction

@@ -4,22 +4,22 @@ import React, {
   useState,
   useContext,
   useMemo,
-  ReactText,
 } from 'react'
 import { Link } from 'react-router-dom'
 import ReactCountryFlag from 'react-country-flag'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Snackbar, Theme, Tooltip, withStyles } from '@material-ui/core'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import { Snackbar, tooltipClasses, Tooltip, styled } from '@mui/material'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import { Socket } from '../../config/Socket'
 import './Monitor.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
-import { ReactComponent as Cube } from '../../assets/icons/cube.svg'
-import { ReactComponent as Graphic } from '../../assets/icons/graphic.svg'
-import { ReactComponent as Hourglass } from '../../assets/icons/hourglass.svg'
+import ArrowSortSVG from '../../assets/icons/arrow-sort.svg?react'
+import Cube from '../../assets/icons/cube.svg?react'
+import hourglassIcon from '@iconify/icons-simple-line-icons/hourglass'
+import chartIcon from '@iconify/icons-simple-line-icons/chart'
+
 import {
   State as NodeState,
   WSDoraData,
@@ -30,24 +30,26 @@ import { setNode } from '../../actions/nodeActions'
 import { ColumnType } from '../../components/list/List'
 import { MOCK_NODES } from '../../utils/mockData'
 import InformationPanel from '../../components/panel/InformationPanel'
-import { ReactComponent as ApprovedSVG } from '../../assets/icons/approved.svg'
-import { ReactComponent as DisapprovedSVG } from '../../assets/icons/disapproved.svg'
-import { ReactComponent as OnHoldSVG } from '../../assets/icons/on-hold.svg'
+import ApprovedSVG from '../../assets/icons/approved.svg?react'
+import DisapprovedSVG from '../../assets/icons/disapproved.svg?react'
+import OnHoldSVG from '../../assets/icons/on-hold.svg?react'
 import { MonitorContext } from '../../contexts/MonitorContext'
-import { ReactComponent as CopyIcon } from '../../assets/icons/content_copy_white_48dp.svg'
+import CopyIcon from '../../assets/icons/content_copy_white_48dp.svg?react'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import Filter, { Platform } from '../../components/filter/Filter'
 import classNames from 'classnames'
 import useFilterState from '../../hooks/useFilterState'
-import { uniqueId } from 'lodash'
+import { cloneDeep, uniqueId } from 'lodash'
+import { AppThunkDispatch } from '../../store'
+import { Icon } from '@iconify/react'
 
 type ParsedNodes = {
-  endpoint: React.FC<{}>
-  isItUp: React.FC<{}>
-  availability: string | React.FC<{}>
-  blockHeight: string | React.FC<{}>
-  version: string | React.FC<{}>
-  peers: number | React.FC<{}>
+  endpoint: React.FC
+  isItUp: React.FC
+  availability: string | React.FC
+  blockHeight: string | React.FC
+  version: string | React.FC
+  peers: number | React.FC
   chain: string
 }
 
@@ -67,11 +69,7 @@ const STATUS_ICONS = [
   { status: 'stalled', Icon: DisapprovedSVG, color: '#de4c85' },
 ]
 
-const monitorHost =
-  process.env.REACT_APP_MONITOR_HOST === undefined ||
-  process.env.REACT_APP_MONITOR_HOST === ''
-    ? 'wss://dora.coz.io'
-    : process.env.REACT_APP_MONITOR_HOST
+const monitorHost = import.meta.env.VITE_MONITOR_HOST || 'wss://dora.coz.io'
 
 const Endpoint: React.FC<Endpoint> = ({ url, endpointLocation, disable }) => {
   const { setMessage, setShowMessage } = useContext(MonitorContext)
@@ -126,19 +124,21 @@ type IsItUp = {
   url?: string
 }
 
-const IsItUpTooltip = withStyles((theme: Theme) => ({
-  tooltip: {
+const IsItUpTooltip = styled(({ className, ...props }: any) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ _theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
     border: '1px solid #4cffb3',
     backgroundColor: 'rgba(14, 25, 27, 0.73)',
     fontSize: '13px',
   },
-  arrow: {
+  [`& .${tooltipClasses.arrow}`]: {
     color: 'rgba(14, 25, 27, 1)',
     '&::before': {
       border: '1px solid #4cffb3',
     },
   },
-}))(Tooltip)
+}))
 
 export const IsItUp: React.FC<IsItUp> = ({
   statusIsItUp,
@@ -178,7 +178,9 @@ export const IsItUp: React.FC<IsItUp> = ({
         arrow={true}
         title={`Status: ${statusIsItUp}`}
         onClose={(): void => {
-          setStopRender && setStopRender(false)
+          if (setStopRender) {
+            setStopRender(false)
+          }
         }}
         placement={'right'}
       >
@@ -515,7 +517,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
 
   useEffect(() => {
     handleAvgBlockCounter()
-    setLastBlockCounter(0) //eslint-disable-next-line
+    setLastBlockCounter(0)
   }, [bestBlock])
 
   useEffect(() => {
@@ -535,7 +537,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
   }, [])
 
   useEffect(() => {
-    setBestBlock(getBestBlock()) //eslint-disable-next-line
+    setBestBlock(getBestBlock())
   }, [data])
 
   return (
@@ -548,12 +550,24 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
       <InformationPanel
         title={LAST_BLOCK}
         data={`${String(lastBlockCounter)} seconds ago`}
-        icon={<Hourglass />}
+        icon={
+          <Icon
+            aria-hidden="true"
+            icon={hourglassIcon}
+            style={{ fontSize: 34, color: '#7d9fb1' }}
+          />
+        }
       />
       <InformationPanel
         title={AVG_BLOCK_TIME}
         data={`${avgBlockTime} seconds`}
-        icon={<Graphic />}
+        icon={
+          <Icon
+            aria-hidden="true"
+            icon={chartIcon}
+            style={{ fontSize: 34, color: '#7d9fb1' }}
+          />
+        }
       />
     </div>
   )
@@ -568,7 +582,7 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const { stopRender } = useContext(MonitorContext)
   const [data, setData] = useState<Array<ParsedNodes>>([])
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
   const isLoading = nodes.isLoading
   const [sortDataList, setSortDataList] = useState<{
@@ -577,9 +591,10 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }>({ desc: false, sort: 'isItUp' })
 
   const selectedData = (): WSDoraData[] => {
+    const nodesCopy = cloneDeep(nodes.nodesArray)
     const sortedNodes = OrderNodes(
       sortDataList.sort,
-      nodes.nodesArray,
+      nodesCopy,
       sortDataList.desc,
     )
 
@@ -599,8 +614,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   }
 
   const leftBorderColorOnRow = (
-    _: string | number | React.FC<{}> | undefined,
-    chain: string | number | React.FC<{}> | undefined,
+    _: string | number | React.FC | undefined,
+    chain: string | number | React.FC | undefined,
   ): string => {
     const color = STATUS_ICONS.find(({ status }) => status === chain)?.color
     return color ?? '#de4c85'
@@ -637,11 +652,11 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   useEffect(() => {
     if (!stopRender) {
       setData(returnNodesListData(selectedData(), !selectedData().length))
-    } //eslint-disable-next-line
+    }
   }, [nodes, sortDataList])
 
   useEffect(() => {
-    setData(returnNodesListData(selectedData(), !selectedData().length)) //eslint-disable-next-line
+    setData(returnNodesListData(selectedData(), !selectedData().length))
   }, [network, protocol])
 
   const rowClass = classNames({
@@ -652,8 +667,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const conditionalBorderRadius = (
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
-    id?: string | number | React.FC<{}>,
-    chain?: string | number | React.FC<{}>,
+    id?: string | number | React.FC,
+    chain?: string | number | React.FC,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -681,11 +696,16 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
   const CListMonitor = useMemo(() => {
     const renderCellData = (
       isLoading: boolean,
-      data: string | number | React.FC<{}>,
-    ): ReactText | React.ReactNode => {
+      data: string | number | React.FC | (() => React.ReactNode),
+    ): React.ReactNode => {
       const cellProps = {}
       if (isLoading) return undefined
-      if (typeof data === 'function') return data(cellProps)
+      if (typeof data === 'function') {
+        const element = (data as React.FC)(cellProps)
+        return React.isValidElement(element)
+          ? element
+          : (data as () => React.ReactNode)()
+      }
       return data
     }
 
@@ -695,8 +715,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
           ? tabletColumns
           : columns
         : width < 768
-        ? mobileColumns
-        : tabletColumns
+          ? mobileColumns
+          : tabletColumns
 
     const gridstyle = {
       gridTemplateColumns: `repeat(${conditionalColumns.length}, auto)`,
@@ -705,14 +725,14 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
     const sortedByAccessor = data.map(
       (
         data: {
-          [key: string]: string | number | React.FC<{}>
+          [key: string]: string | number | React.FC
         },
-        index: number,
+        _index: number,
       ) => {
         interface Sorted {
           id: string
 
-          [key: string]: string | number | React.FC<{}>
+          [key: string]: string | number | React.FC
         }
 
         const sorted = {} as Sorted
@@ -750,7 +770,9 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
           key={nameColumn}
           onClick={(e): void => {
             e.preventDefault()
-            callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+            if (callbalOrderData && sortOpt) {
+              callbalOrderData(sortOpt)
+            }
           }}
         >
           {isLoading ? '' : nameColumn}
@@ -782,9 +804,9 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
         {sortedByAccessor.map(
           (
             data: {
-              [key: string]: string | number | React.FC<{}>
+              [key: string]: string | number | React.FC
             },
-            index: number,
+            _index: number,
           ) =>
             Object.keys(data).map((key, i) => {
               return (
@@ -809,15 +831,19 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
             }),
         )}
       </div>
-    ) //eslint-disable-next-line
+    )
   }, [data, width])
 
   return CListMonitor
 }
 
-const Monitor: React.FC<{}> = () => {
+const Monitor: React.FC = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const { protocol, handleSetFilterData, network } = useFilterState()
+  const { protocol, handleSetFilterData, network } = useFilterState(
+    undefined,
+    'neo3',
+    'mainnet',
+  )
   const [sortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION

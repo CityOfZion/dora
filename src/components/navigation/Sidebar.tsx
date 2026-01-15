@@ -15,24 +15,20 @@ const Sidebar: React.FC = (): ReactElement => {
       {SIDEBAR_ROUTES.map(route => (
         <NavLink
           key={route.name}
-          className="sidebar-route-container"
-          activeClassName="active-sidebar-route"
-          target={route.target}
-          isActive={(match, location): boolean => {
-            if (
-              location.pathname.includes(
-                route.name.slice(0, -1).toLowerCase(),
-              ) &&
-              location.pathname !== '/'
-            ) {
-              return true
-            }
-            if (location.pathname === '/' && match) {
-              return true
-            }
-            return false
-          }}
           to={route.url}
+          target={route.target}
+          className={({ isActive }) => {
+            const pathname = location.pathname
+
+            const customActive =
+              (pathname.includes(route.name.slice(0, -1).toLowerCase()) &&
+                pathname !== '/') ||
+              (pathname === '/' && isActive)
+
+            return `sidebar-route-container ${
+              customActive ? 'active-sidebar-route' : ''
+            }`
+          }}
         >
           {route.renderIcon()}
           {route.name}

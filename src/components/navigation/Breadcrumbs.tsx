@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react'
 import { NavLink } from 'react-router-dom'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 import './Breadcrumbs.scss'
 
@@ -20,8 +20,9 @@ const Breadcrumbs: React.FC<Props> = ({ crumbs }): ReactElement => (
       <div className="crumb-container" key={crumb.label}>
         <NavLink
           to={crumb.active ? '#' : crumb.url}
-          isActive={(): boolean => !!crumb.active}
-          activeClassName="active-breadcrumb"
+          className={({ isActive }) =>
+            crumb.active || isActive ? 'active-breadcrumb' : ''
+          }
         >
           {crumb.label}
         </NavLink>

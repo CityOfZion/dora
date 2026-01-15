@@ -35,9 +35,7 @@ const News: React.FC = (): ReactElement => {
 
   const imgTagRegex = new RegExp('<s*img[^>]*>(.*?)')
 
-  // eslint-disable-next-line
   // @ts-ignore
-  // eslint-disable-next-line
   const imageHrefFromImgTags = img =>
     img
       .split(' ')

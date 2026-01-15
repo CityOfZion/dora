@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import moment from 'moment'
 
 import {
@@ -19,23 +19,24 @@ import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
+import { AppThunkDispatch } from '../../store'
 
 type ParsedBlock = {
   time: string
-  index: React.FC<{}>
-  platform: React.FC<{}>
+  index: React.FC
+  platform: React.FC
   transactions: number
   blocktime: string
-  size: React.FC<{}>
+  size: React.FC
   height: number
   href: string
   chain: string
 }
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   chain?: string
   network?: string
 }
@@ -69,7 +70,7 @@ const mapBlockData = (block: Block): ParsedBlock => {
 const returnBlockListData = (
   data: Array<Block>,
   returnStub: boolean,
-  network: string,
+  _network: string,
 ): Array<ParsedBlock> => {
   if (returnStub) {
     return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
@@ -78,17 +79,18 @@ const returnBlockListData = (
   }
 }
 
-const Blocks: React.FC<MatchParams> = props => {
-  const dispatch = useDispatch()
+const Blocks: React.FC<MatchParams> = () => {
+  const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const width = useWindowWidth()
 
-  const history = useHistory()
+  const navigate = useNavigate()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    history,
-    chain,
-    networkParam,
+    navigate,
+    'neo3',
+    'mainnet',
   )
   const [perPage, setPerPage] = useState<number>(0)
 
@@ -186,8 +188,8 @@ const Blocks: React.FC<MatchParams> = props => {
             label: 'Blocks',
           }}
           leftBorderColorOnRow={(
-            id: string | number | void | React.FC<{}>,
-            chain: string | number | void | React.FC<{}>,
+            id: string | number | void | React.FC,
+            chain: string | number | void | React.FC,
           ): string => {
             if (typeof chain === 'string') {
               interface TxColorMap {

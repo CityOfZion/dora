@@ -244,12 +244,10 @@ for (let i = 0; i < methodnames.length; i++) {
   const data = Buffer.from(methodnames[i], 'utf8').toString('hex')
   const datawords = CryptoJS.enc.Hex.parse(data)
   const hash_buffer = Buffer.from(SHA256(datawords).toString(), 'hex')
-  // eslint-disable-next-line
   // @ts-ignore
-
   interopmethod[hash_buffer.readUInt32LE(0)] = methodnames[i]
 }
-// eslint-disable-next-line
+
 // @ts-ignore
 export function neo3Disassemble(base64_encoded_script): string {
   let out = ''
@@ -258,15 +256,13 @@ export function neo3Disassemble(base64_encoded_script): string {
   let ip = 0
   while (ip < script.length) {
     const opcode = script[ip]
-    if (opcodetable.hasOwnProperty(opcode)) {
-      // eslint-disable-next-line
+    if (Object.prototype.hasOwnProperty.call(opcodetable, opcode)) {
       // @ts-ignore
       const opcodedata = opcodetable[opcode]
       const inst = opcodedata.name
 
       if (opcodedata.name === 'SYSCALL') {
         const hash = script.readUInt32LE(ip + 1)
-        // eslint-disable-next-line
         // @ts-ignore
         let interop_name = interopmethod[hash]
         if (interop_name == null) interop_name = hash
@@ -298,7 +294,6 @@ export function neo3Disassemble(base64_encoded_script): string {
               // if you messed up the size you deserve to pay for it :-)
               out += `SOMEBODY MESSED UP THE PUSHDATA SIZE for ${opcodedata.name} at index ${ip} (size ${opcodedata.size})`
 
-              // eslint-disable-next-line
               // @ts-ignore
               return
           }

@@ -1,5 +1,5 @@
 import Transfer from '../transfer/Transfer'
-import DateRangeIcon from '@material-ui/icons/DateRange'
+import DateRangeIcon from '@mui/icons-material/DateRange'
 import { Icon } from '@iconify/react'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { ParsedTransfer } from '../../pages/transaction/Transaction'
@@ -76,7 +76,7 @@ export const TransactionN3: React.FC<Props> = ({
 
                 <Text
                   color={'tertiary'}
-                  isTruncated
+                  truncate
                   fontSize={'lg'}
                   fontWeight={600}
                   textAlign={['right', 'center']}
@@ -91,7 +91,7 @@ export const TransactionN3: React.FC<Props> = ({
 
                 <Text
                   color={'white'}
-                  isTruncated
+                  truncate
                   fontSize={'lg'}
                   fontWeight={600}
                   textAlign={['right', 'center']}
@@ -108,7 +108,7 @@ export const TransactionN3: React.FC<Props> = ({
 
                 <Text
                   color={'white'}
-                  isTruncated
+                  truncate
                   fontSize={'lg'}
                   fontWeight={600}
                   textAlign={['right', 'center']}
@@ -124,7 +124,7 @@ export const TransactionN3: React.FC<Props> = ({
                 <Flex
                   flexDir={['column', 'row']}
                   color={'white'}
-                  isTruncated
+                  truncate
                   fontSize={['sm', 'sm', 'lg']}
                   fontWeight={600}
                   flex={1}

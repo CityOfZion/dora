@@ -1,7 +1,7 @@
-import React, { ReactText } from 'react'
+import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 import classNames from 'classnames'
-import { ReactComponent as ArrowSortSVG } from '../../assets/icons/arrow-sort.svg'
+import ArrowSortSVG from '../../assets/icons/arrow-sort.svg?react'
 import { SORT_OPTION } from '../../reducers/nodeReducer'
 import './List.scss'
 import { Link } from 'react-router-dom'
@@ -31,7 +31,9 @@ const HeaderCell: React.FC<HeaderCell> = ({
       key={nameColumn}
       onClick={(e): void => {
         e.preventDefault()
-        callbalOrderData && sortOpt && callbalOrderData(sortOpt)
+        if (callbalOrderData && sortOpt) {
+          callbalOrderData(sortOpt)
+        }
       }}
     >
       {isLoading ? '' : nameColumn}
@@ -49,29 +51,24 @@ const HeaderCell: React.FC<HeaderCell> = ({
 export type ColumnType = {
   name: string
   accessor: string
-  style?: {}
+  style?: object
   sortOpt?: SORT_OPTION
 }
 
 type ListProps = {
   columns: Array<ColumnType>
-  // eslint-disable-next-line
   // @ts-ignore
-  data: Array<{ [key: string]: string | number | React.FC<{}>; href?: string }>
-  handleRowClick?: (data: {
-    [key: string]: string | number | React.FC<{}>
-  }) => void
-  generateHref?: (data: {
-    [key: string]: string | number | React.FC<{}>
-  }) => string
+  data: Array<{ [key: string]: string | number | React.FC; href?: string }>
+  handleRowClick?: (data: { [key: string]: string | number | React.FC }) => void
+  generateHref?: (data: { [key: string]: string | number | React.FC }) => string
   isLoading: boolean
   rowId: string
   withoutPointer?: boolean
   leftBorderColorOnRow?:
     | string
     | ((
-        id: string | number | void | React.FC<{}>,
-        chain?: string | number | React.FC<{}>,
+        id: string | number | void | React.FC,
+        chain?: string | number | React.FC,
       ) => string)
 
   countConfig?: {
@@ -101,7 +98,7 @@ export const List: React.FC<ListProps> = ({
     interface Sorted {
       id: string
       href: string
-      [key: string]: string | number | React.FC<{}>
+      [key: string]: string | number | React.FC
     }
 
     const sorted = {} as Sorted
@@ -121,8 +118,8 @@ export const List: React.FC<ListProps> = ({
   const conditionalBorderRadius = (
     index: number,
     shouldReturnBorderLeftStyle?: boolean,
-    id?: string | number | React.FC<{}>,
-    chain?: string | number | React.FC<{}>,
+    id?: string | number | React.FC,
+    chain?: string | number | React.FC,
   ): { borderRadius: string } | undefined => {
     if (!index) {
       const border = {
@@ -180,11 +177,10 @@ export const List: React.FC<ListProps> = ({
 
   const renderCellData = (
     isLoading: boolean,
-    data: string | number | React.FC<{}>,
-  ): ReactText | React.ReactNode => {
-    const cellProps = {}
+    data: string | number | React.FC,
+  ): string | number | React.ReactNode => {
     if (isLoading) return undefined
-    if (typeof data === 'function') return data(cellProps)
+    if (typeof data === 'function') return (data as () => React.ReactNode)()
     return data
   }
 
@@ -224,9 +220,9 @@ export const List: React.FC<ListProps> = ({
         {sortedByAccessor.map(
           (
             data: {
-              [key: string]: string | number | React.FC<{}>
+              [key: string]: string | number | React.FC
             },
-            index: number,
+            _index: number,
           ) =>
             Object.keys(data).map((key, i) => {
               const conditionalHref = (): string => {
@@ -239,11 +235,32 @@ export const List: React.FC<ListProps> = ({
                 return '#'
               }
 
+              const cellContent = renderCellData(isLoading, data[key])
+              const isLinkElement =
+                React.isValidElement(cellContent) && cellContent.type === Link
+
               return !paddingCell
                 ? key !== 'id' &&
                     key !== 'href' &&
                     key !== 'chain' &&
-                    (typeof data.href === 'string' || generateHref ? (
+                    (isLinkElement ? (
+                      <div
+                        style={conditionalBorderRadius(
+                          i,
+                          true,
+                          data.id,
+                          data.chain,
+                        )}
+                        onClick={(): void =>
+                          handleRowClick && handleRowClick(data)
+                        }
+                        tabIndex={0}
+                        key={uniqueId()}
+                        className={rowClass}
+                      >
+                        {renderCellData(isLoading, data[key])}
+                      </div>
+                    ) : typeof data.href === 'string' || generateHref ? (
                       <Link
                         to={conditionalHref()}
                         style={conditionalBorderRadius(

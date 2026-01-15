@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { ReactElement } from 'react'
 
 import './Footer.scss'
@@ -82,7 +81,7 @@ const Footer: React.FC = (): ReactElement => {
             </p>
           </div>
           <p className="last-commit">
-            {process.env.REACT_APP_LAST_COMMIT ?? ''}
+            {import.meta.env.VITE_LAST_COMMIT ?? ''}
           </p>
         </div>
       </div>

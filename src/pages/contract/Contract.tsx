@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import { Link, RouteComponentProps, withRouter } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { Icon } from '@iconify/react'
-import DateRangeIcon from '@material-ui/icons/DateRange'
+import DateRangeIcon from '@mui/icons-material/DateRange'
 import clockIcon from '@iconify/icons-simple-line-icons/clock'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,19 +18,18 @@ import Manifest from '../../components/manifest/Manifest'
 import bs58check from 'bs58check'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { truncateHash } from '../../utils/formatter'
+import { AppThunkDispatch } from '../../store'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   hash: string
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const Contract: React.FC<Props> = (props: Props) => {
-  useUpdateNetworkState(props)
-  const { hash, chain, network } = props.match.params
-  const dispatch = useDispatch()
+const Contract: React.FC = () => {
+  useUpdateNetworkState()
+  const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
@@ -246,4 +245,4 @@ const Contract: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default withRouter(Contract)
+export default Contract

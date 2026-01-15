@@ -19,9 +19,11 @@ const ListPagination: React.FC<{
       <Pagination
         aria-label="Pagination"
         model={model}
-        backgroundColor={'transparent'}
-        marginTop={10}
-        padding={10}
+        cs={{
+          backgroundColor: 'transparent',
+          marginTop: '10px',
+          padding: '10px',
+        }}
         className="pagination"
       >
         {!isLoading ? (

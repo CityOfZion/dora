@@ -1,11 +1,11 @@
-import { createStore, applyMiddleware, Store } from 'redux'
-import { createLogger } from 'redux-logger'
-import thunk from 'redux-thunk'
-
+import { configureStore } from '@reduxjs/toolkit'
+import { logger } from 'redux-logger'
+import type { ThunkAction } from 'redux-thunk'
 import { State as BlockState } from './reducers/blockReducer'
 import rootReducer from './reducers/rootReducer'
 import { State as TransactionState } from './reducers/transactionReducer'
 import { State as NetworkState } from './reducers/networkReducer'
+import { Action } from 'redux'
 
 export type GlobalState = {
   block: BlockState
@@ -13,18 +13,19 @@ export type GlobalState = {
   network: NetworkState
 }
 
-// TODO: initial state should match the definition above
-export const INITIAL_STATE = {}
-
-const loggerMiddleware = createLogger()
-
-function configureStore(initialState = INITIAL_STATE): Store {
-  return createStore(
-    rootReducer,
-    initialState,
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware =>
     process.env.NODE_ENV === 'production'
-      ? applyMiddleware(thunk)
-      : applyMiddleware(thunk, loggerMiddleware),
-  )
-}
-export const store = configureStore()
+      ? getDefaultMiddleware()
+      : getDefaultMiddleware().concat(logger),
+})
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppThunkDispatch = typeof store.dispatch
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState, // the entire store state
+  unknown, // extra argument (usually unused)
+  Action<string> // action type
+>

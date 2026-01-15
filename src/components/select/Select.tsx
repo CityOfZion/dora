@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import Select, { ValueType } from 'react-select'
+import Select, { SingleValue } from 'react-select'
 
 import './Select.scss'
 import { customStyles } from './customStyles'
@@ -8,7 +8,7 @@ import { Option } from '../filter/Filter'
 type SelectProps = {
   computedDisplayValue?: string
   options: Option[]
-  handleChange?: (selected: ValueType<Option, false>) => void
+  handleChange?: (selected: SingleValue<Option>) => void
   selectedOption: Option
   disabled?: boolean
   showSelected?: boolean
@@ -29,7 +29,6 @@ const CustomSelect: React.FC<SelectProps> = ({
         onChange={handleChange}
         options={options}
         isSearchable={false}
-        // eslint-disable-next-line
         // @ts-ignore
         styles={customStyles}
         autosize={false}

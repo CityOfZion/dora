@@ -1,5 +1,4 @@
-import { Route } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
+import { Routes, RouteProps } from 'react-router-dom'
 import * as Sentry from '@sentry/react'
 
 /** Sentry will be active only in the production
@@ -8,22 +7,21 @@ import * as Sentry from '@sentry/react'
 
 function initSentry() {
   if (process.env.NODE_ENV === 'production') {
-    const history = createBrowserHistory()
     Sentry.init({
       dsn: process.env.SENTRY_KEY,
       integrations: [
-        new Sentry.BrowserTracing({
-          routingInstrumentation: Sentry.reactRouterV5Instrumentation(history),
-        }),
+        // Sentry.reactRouterV6BrowserTracingIntegration({}), // TODO: fix
       ],
       tracesSampleRate: 1.0,
     })
   }
 }
 
-const SentryRoute =
-  process.env.NODE_ENV === 'production'
-    ? Sentry.withSentryRouting(Route)
-    : Route
+type RouteElementProps = Omit<RouteProps, 'component' | ' render'>
 
-export { SentryRoute, initSentry }
+const SentryRoutes: React.FC<RouteElementProps> =
+  process.env.NODE_ENV === 'production'
+    ? Sentry.withSentryReactRouterV6Routing(Routes)
+    : Routes
+
+export { SentryRoutes, initSentry }

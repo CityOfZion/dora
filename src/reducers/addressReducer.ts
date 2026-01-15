@@ -46,7 +46,7 @@ export type State = {
   totalCount: number
 }
 
-export type Block = {}
+export type Block = object
 
 export const INITIAL_STATE = {
   isLoading: false,

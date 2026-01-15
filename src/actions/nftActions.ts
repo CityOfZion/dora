@@ -1,13 +1,12 @@
-import { Action, Dispatch } from 'redux'
-import { ThunkDispatch } from 'redux-thunk'
+import { Dispatch } from 'redux'
 import { BUILD_GHOST_MARKET_URL } from '../constants'
 import {
   ActionType,
   DETAILED_NFT,
   NFT,
   NFTAttribute,
-  State,
 } from '../reducers/nftReducer'
+import { AppThunk } from '../store'
 
 interface GhostMarketNFT {
   tokenId: string
@@ -231,10 +230,12 @@ export const clearList =
     })
   }
 
-export function fetchNFTS(ownerId: string, network: string, cursor?: string) {
-  return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-  ): Promise<void> => {
+export function fetchNFTS(
+  ownerId: string,
+  network: string,
+  cursor?: string,
+): AppThunk<Promise<void>> {
+  return async (dispatch): Promise<void> => {
     dispatch(requestNFTS(cursor))
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
     try {
@@ -257,10 +258,8 @@ export function fetchNFT(
   tokenId: string,
   contractHash: string,
   network: string,
-) {
-  return async (
-    dispatch: ThunkDispatch<State, void, Action>,
-  ): Promise<void> => {
+): AppThunk<Promise<void>> {
+  return async (dispatch): Promise<void> => {
     dispatch(requestNFT())
     const ownerChain = network === 'mainnet' ? 'n3' : 'n3t'
     try {

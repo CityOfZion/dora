@@ -4,8 +4,8 @@ import './NftInformation.scss'
 import Neo3 from '../../assets/icons/neo3.svg'
 import ZoomIcon from '../../assets/icons/zoom-icon.svg'
 import BackButton from '../../components/navigation/BackButton'
-import Modal from '@material-ui/core/Modal'
-import CloseIcon from '@material-ui/icons/Close'
+import Modal from '@mui/material/Modal'
+import CloseIcon from '@mui/icons-material/Close'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useDispatch, useSelector } from 'react-redux'
 import { State } from '../../reducers/nftReducer'
@@ -13,6 +13,7 @@ import { fetchNFT } from '../../actions/nftActions'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import NoImageFound from '../../assets/no-image-found.png'
 import { truncateHash } from '../../utils/formatter'
+import { AppThunkDispatch } from '../../store'
 
 interface Props {
   contractHash?: string
@@ -32,7 +33,7 @@ const NftInformation: React.FC<Props> = ({
   const [isOpenModal, setIsOpenModal] = useState(false)
 
   const width = useWindowWidth()
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const nftState = useSelector<{ nft: State }, State>(({ nft }) => nft)
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const NftInformation: React.FC<Props> = ({
 
         {isLoading || nftState.isLoading ? (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton height={650} style={{ margin: '50px 0' }} />
@@ -211,7 +212,7 @@ const NftInformation: React.FC<Props> = ({
           )}
           {nftState.isLoading && (
             <SkeletonTheme
-              color="#21383d"
+              baseColor="#21383d"
               highlightColor="rgb(125 159 177 / 25%)"
             >
               <Skeleton height={87} style={{ margin: '50px 0' }} />

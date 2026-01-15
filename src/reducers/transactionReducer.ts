@@ -179,7 +179,6 @@ export default (
         page: 0,
       })
     case 'RESET':
-      // eslint-disable-next-line
       // @ts-ignore
       return INITIAL_STATE
     default:

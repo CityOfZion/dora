@@ -35,7 +35,7 @@ const NFTGallery: React.FC<Props> = ({
         skeletonRows.map(item => (
           <SkeletonTheme
             key={item}
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton height={399} width={280} />

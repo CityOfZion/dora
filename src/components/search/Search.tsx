@@ -1,111 +1,83 @@
-import React, { useEffect } from 'react'
+import React, { useState, type ChangeEvent } from 'react'
 
-import SearchIcon from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/Search'
 import './Search.scss'
-import {
-  handleSearchInput,
-  updateSearchInput,
-  clearSearchInputState,
-} from '../../actions/searchActions'
-import { State as SearchState } from '../../reducers/searchReducer'
-import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ROUTES, SEARCH_TYPES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { useBlockchainSearch } from '../../hooks/useBlockchainSearch'
 
-const Search: React.FC<{}> = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+const Search: React.FC = () => {
+  const navigate = useNavigate()
   const width = useWindowWidth()
+  const [searchParams] = useSearchParams()
 
-  const searchState = useSelector(
-    ({ search }: { search: SearchState }) => search,
-  )
+  const { search } = useBlockchainSearch()
 
-  const { error, searchValue, searchType, results } = searchState
-  const network = 'mainnet'
-  const chain = 'neo3'
+  const [text, setText] = useState(searchParams.get('search') || '')
+
   const placeholder =
     width > 900
       ? 'Search for block height, hash, address, or transaction ID'
       : 'Search for block height, hash or address...'
 
-  useEffect(() => {
-    if (searchValue && searchType && results && results.length > 0) {
-      if (results && results.length > 1) {
-        dispatch(clearSearchInputState())
-        return history.push(`${ROUTES.SEARCH.url}/all/all/${searchValue}`)
-      } else if (results && results[0]) {
-        dispatch(clearSearchInputState())
-        let url = ''
-        switch (results[0].type) {
-          case 'block':
-            url = ROUTES.BLOCK.url
-            return history.push(
-              `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
-            )
-          case 'balance':
-            url = ROUTES.WALLET.url
-            return history.push(
-              `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
-            )
-          case 'contract':
-            url = ROUTES.CONTRACT.url
-            return history.push(
-              `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
-            )
-          case 'transaction':
-            url = ROUTES.TRANSACTION.url
-            return history.push(
-              `${url}/${results[0].protocol}/${results[0].network}/${searchValue}`,
-            )
+  async function handleSearch(event: React.SyntheticEvent) {
+    event.preventDefault()
 
-          case SEARCH_TYPES.ENDPOINT:
-            dispatch(clearSearchInputState())
-            return history.push(`${ROUTES.ENDPOINT.url}/${searchValue}`)
+    const results = await search(text)
 
-          default:
-            break
-        }
+    if (results.length === 1) {
+      switch (results[0].type) {
+        case 'block':
+          navigate(
+            `${ROUTES.BLOCK.url}/${results[0].protocol}/${results[0].network}/${text}`,
+          )
+          break
+        case 'balance':
+          navigate(
+            `${ROUTES.WALLET.url}/${results[0].protocol}/${results[0].network}/${text}`,
+          )
+          break
+        case 'contract':
+          navigate(
+            `${ROUTES.CONTRACT.url}/${results[0].protocol}/${results[0].network}/${text}`,
+          )
+          break
+        case 'transaction':
+          navigate(
+            `${ROUTES.TRANSACTION.url}/${results[0].protocol}/${results[0].network}/${text}`,
+          )
+          break
+        case SEARCH_TYPES.ENDPOINT:
+          navigate(`${ROUTES.ENDPOINT.url}/${text}`)
+          break
+        default:
+          break
       }
+
+      return
     }
 
-    if (error) {
-      history.push(ROUTES.NOT_FOUND.url)
-    }
-  }, [
-    chain,
-    dispatch,
-    error,
-    history,
-    network,
-    results,
-    searchType,
-    searchValue,
-  ])
-
-  function handleSearch(e: React.SyntheticEvent): void {
-    e.preventDefault()
-    dispatch(handleSearchInput(searchValue || ''))
+    navigate(`${ROUTES.SEARCH.url}/all/all?search=${text}`, {
+      state: { results },
+    })
   }
 
-  function updateSearch(searchTerms: string): void {
-    dispatch(updateSearchInput(searchTerms))
+  function handleTextChange(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value.replace(',', '')
+    setText(value)
   }
 
   return (
     <div id="Search">
       <form onSubmit={handleSearch}>
         <input
-          value={searchValue || ''}
-          onChange={(e: React.SyntheticEvent): void => {
-            const target = e.target as HTMLInputElement
-            const searchTerms = target.value
-
-            updateSearch(searchTerms)
-          }}
+          value={text}
+          onChange={handleTextChange}
           placeholder={placeholder}
-        ></input>{' '}
+        />
+
         <SearchIcon onClick={handleSearch} />
       </form>
     </div>

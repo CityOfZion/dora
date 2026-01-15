@@ -1,25 +1,24 @@
 import { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { RouteComponentProps } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { changeNetwork, changeChain } from '../actions/networkActions'
 import { State as NetworkState } from '../reducers/networkReducer'
+import { AppThunkDispatch } from '../store'
 
-interface MatchParams {
+interface MatchParams extends Record<string, string | undefined> {
   chain: string
   network: string
 }
 
-type Props = RouteComponentProps<MatchParams>
-
-const useUpdateNetworkState = (props: Props): void => {
+const useUpdateNetworkState = (): void => {
   const networkState = useSelector(
     ({ network }: { network: NetworkState }) => network,
   )
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
 
-  const { chain, network } = props.match.params
+  const { chain, network } = useParams<MatchParams>()
 
   useEffect(() => {
     if (network && networkState.network !== network) {

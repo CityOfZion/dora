@@ -9,7 +9,7 @@ import ContractsInvocations from '../../components/contract-invocation/Contracts
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
 
-const Home: React.FC<{}> = () => {
+const Home: React.FC = () => {
   const { network } = useSelector(
     ({ network }: { network: NetworkState }) => network,
   )

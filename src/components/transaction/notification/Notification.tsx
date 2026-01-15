@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import ExpandingPanel from '../../panel/ExpandingPanel'
 import { TransactionNotification } from '../../../reducers/transactionReducer'
-import { Box, Collapse, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex, Text, Collapsible } from '@chakra-ui/react'
 import Copy from '../../copy/Copy'
 import { ROUTES } from '../../../constants'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
@@ -12,6 +12,7 @@ import { u } from '@cityofzion/neon-js'
 import { StackPanel } from '../StackPanel'
 import { ContractResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 import { NeoRest } from '../../../rest'
+import { cloneDeep } from 'lodash'
 
 export const Notification: React.FC<{
   notifications: TransactionNotification[]
@@ -28,8 +29,9 @@ export const Notification: React.FC<{
   }
 
   useEffect(() => {
+    const clonedNotifications = cloneDeep(notifications)
     //fix for NEP-17 contract that emit transfer events with ByteString as amount
-    for (const notification of notifications) {
+    for (const notification of clonedNotifications) {
       if (notification.state.type === 'Array') {
         if (
           !notification.state.value ||
@@ -56,7 +58,7 @@ export const Notification: React.FC<{
       notification.id = uuid()
     }
 
-    setItems(notifications)
+    setItems(clonedNotifications)
 
     setOpen(Object.fromEntries(items.map(item => [item.id, false])))
     return () => {
@@ -94,7 +96,7 @@ export const Notification: React.FC<{
       >
         {isLoading && (
           <SkeletonTheme
-            color="#21383d"
+            baseColor="#21383d"
             highlightColor="rgb(125 159 177 / 25%)"
           >
             <Skeleton
@@ -185,7 +187,7 @@ export const Notification: React.FC<{
                     >
                       <Text
                         fontSize={'sm'}
-                        isTruncated
+                        truncate
                         textOverflow={'clip'}
                         color={'tertiary'}
                         fontWeight={500}
@@ -202,21 +204,22 @@ export const Notification: React.FC<{
                     </Flex>
                   </Flex>
                 </Box>
-
-                <Collapse in={isOpen[notification.id]}>
-                  {Array.isArray(notification.state.value) && (
-                    <StackPanel
-                      chain={chain}
-                      keyName={'notification-stack'}
-                      stack={notification.state.value}
-                      names={
-                        contract?.manifest?.abi?.events
-                          ?.find(it => it.name === notification.event_name)
-                          ?.parameters.map(it => it.name) || []
-                      }
-                    />
-                  )}
-                </Collapse>
+                {Array.isArray(notification.state.value) && (
+                  <Collapsible.Root open={isOpen[notification.id]}>
+                    <Collapsible.Content>
+                      <StackPanel
+                        chain={chain}
+                        keyName={'notification-stack'}
+                        stack={notification.state.value}
+                        names={
+                          contract?.manifest?.abi?.events
+                            ?.find(it => it.name === notification.event_name)
+                            ?.parameters.map(it => it.name) || []
+                        }
+                      />
+                    </Collapsible.Content>
+                  </Collapsible.Root>
+                )}
               </Box>
             )
           })}

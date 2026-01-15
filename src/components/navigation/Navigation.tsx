@@ -1,22 +1,23 @@
 import React, { ReactElement, useEffect, useState } from 'react'
 import { slide as Menu } from 'react-burger-menu'
 import { useDispatch, useSelector } from 'react-redux'
-import { NavLink, useHistory } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { closeMenu, openMenu } from '../../actions/menuActions'
-import { ReactComponent as BurgerMenu } from '../../assets/icons/burger-menu.svg'
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import { ReactComponent as ResourceLogo } from '../../assets/icons/coz-resource-logo.svg'
-import { ReactComponent as MobileLogo } from '../../assets/icons/mobile-logo.svg'
-import { ROUTES } from '../../constants'
+import BurgerMenu from '../../assets/icons/burger-menu.svg?react'
+import CloseIcon from '../../assets/icons/close-icon.svg?react'
+import ResourceLogo from '../../assets/icons/coz-resource-logo.svg?react'
+import MobileLogo from '../../assets/icons/mobile-logo.svg?react'
+import { ROUTES, ROUTES_ENTRY } from '../../constants'
 import { State as MenuState } from '../../reducers/menuReducer'
 import Search from '../search/Search'
 import './Navigation.scss'
+import { AppThunkDispatch } from '../../store'
 
 const Navigation: React.FC = (): ReactElement => {
-  const history = useHistory()
-  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const menuState = useSelector(({ menu }: { menu: MenuState }) => menu)
-
+  const location = useLocation()
   const [width, setWidth] = useState(window.innerWidth)
 
   useEffect(() => {
@@ -33,6 +34,18 @@ const Navigation: React.FC = (): ReactElement => {
     dispatch(closeMenu())
   }
 
+  const applyActiveClassName = (route: ROUTES_ENTRY, isActive: boolean) => {
+    const pathname = location.pathname.toLowerCase()
+    const routeName = route.name.slice(0, -1).toLowerCase()
+
+    const active =
+      (pathname.includes(routeName) && pathname !== '/') ||
+      pathname === '/' ||
+      isActive
+
+    return `mobile-route-container${active ? ' active-mobile-route' : ''}`
+  }
+
   return (
     <>
       <div id="navigation-container">
@@ -44,12 +57,12 @@ const Navigation: React.FC = (): ReactElement => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ResourceLogo />
+                <ResourceLogo style={{ marginRight: '10px' }} />
               </a>
             </div>
 
             <div className="navigation-search-container">
-              <Search />
+              <Search key={location.pathname} />
             </div>
           </div>
         </div>
@@ -59,7 +72,7 @@ const Navigation: React.FC = (): ReactElement => {
             <MobileLogo
               onClick={(): void => {
                 dispatch(closeMenu())
-                history.push(ROUTES.HOME.url)
+                navigate(ROUTES.HOME.url)
               }}
             />
           </div>
@@ -106,23 +119,10 @@ const Navigation: React.FC = (): ReactElement => {
                 dispatch(closeMenu())
               }}
               key={ROUTES.HOME.name}
-              className="mobile-route-container"
-              activeClassName="active-mobile-route"
-              isActive={(match, location): boolean => {
-                if (
-                  location.pathname.includes(
-                    ROUTES.HOME.name.slice(0, -1).toLowerCase(),
-                  ) &&
-                  location.pathname !== '/'
-                ) {
-                  return true
-                }
-                if (location.pathname === '/' && match) {
-                  return true
-                }
-                return false
-              }}
               to={ROUTES.HOME.url}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.HOME, isActive)
+              }
             >
               {ROUTES.HOME.renderIcon()}
               {ROUTES.HOME.name}
@@ -132,23 +132,10 @@ const Navigation: React.FC = (): ReactElement => {
                 dispatch(closeMenu())
               }}
               key={ROUTES.CONTRACTS.name}
-              className="mobile-route-container"
-              activeClassName="active-mobile-route"
-              isActive={(match, location): boolean => {
-                if (
-                  location.pathname.includes(
-                    ROUTES.CONTRACTS.name.slice(0, -1).toLowerCase(),
-                  ) &&
-                  location.pathname !== '/'
-                ) {
-                  return true
-                }
-                if (location.pathname === '/' && match) {
-                  return true
-                }
-                return false
-              }}
               to={ROUTES.CONTRACTS.url}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.CONTRACTS, isActive)
+              }
             >
               {ROUTES.CONTRACTS.renderIcon()}
               {ROUTES.CONTRACTS.name}
@@ -160,75 +147,37 @@ const Navigation: React.FC = (): ReactElement => {
                 dispatch(closeMenu())
               }}
               key={ROUTES.TRANSACTIONS.name}
-              className="mobile-route-container"
-              activeClassName="active-mobile-route"
-              isActive={(match, location): boolean => {
-                if (
-                  location.pathname.includes(
-                    ROUTES.TRANSACTIONS.name.slice(0, -1).toLowerCase(),
-                  ) &&
-                  location.pathname !== '/'
-                ) {
-                  return true
-                }
-                if (location.pathname === '/' && match) {
-                  return true
-                }
-                return false
-              }}
               to={ROUTES.TRANSACTIONS.url}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.TRANSACTIONS, isActive)
+              }
             >
               {ROUTES.TRANSACTIONS.renderIcon()}
               {ROUTES.TRANSACTIONS.name}
             </NavLink>
             <NavLink
+              key={ROUTES.BLOCKS.name}
+              to={ROUTES.BLOCKS.url}
               onClick={(): void => {
                 dispatch(closeMenu())
               }}
-              key={ROUTES.BLOCKS.name}
-              className="mobile-route-container"
-              activeClassName="active-mobile-route"
-              isActive={(match, location): boolean => {
-                if (
-                  location.pathname.includes(
-                    ROUTES.BLOCKS.name.slice(0, -1).toLowerCase(),
-                  ) &&
-                  location.pathname !== '/'
-                ) {
-                  return true
-                }
-                if (location.pathname === '/' && match) {
-                  return true
-                }
-                return false
-              }}
-              to={ROUTES.BLOCKS.url}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.BLOCKS, isActive)
+              }
             >
               {ROUTES.BLOCKS.renderIcon()}
               {ROUTES.BLOCKS.name}
             </NavLink>
+
             <NavLink
+              key={ROUTES.MONITOR.name}
+              to={ROUTES.MONITOR.url}
               onClick={(): void => {
                 dispatch(closeMenu())
               }}
-              key={ROUTES.MONITOR.name}
-              className="mobile-route-container"
-              activeClassName="active-mobile-route"
-              isActive={(match, location): boolean => {
-                if (
-                  location.pathname.includes(
-                    ROUTES.MONITOR.name.slice(0, -1).toLowerCase(),
-                  ) &&
-                  location.pathname !== '/'
-                ) {
-                  return true
-                }
-                if (location.pathname === '/' && match) {
-                  return true
-                }
-                return false
-              }}
-              to={ROUTES.MONITOR.url}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.MONITOR, isActive)
+              }
             >
               {ROUTES.MONITOR.renderIcon()}
               {ROUTES.MONITOR.name}
