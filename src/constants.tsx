@@ -149,12 +149,19 @@ export const SEARCH_TYPES = {
   ENDPOINT: 'ENDPOINT',
 }
 
-export const ROUTES = {
+export type ROUTES_ENTRY = {
+  url: string
+  name: string
+  renderIcon: () => React.ReactNode
+  target: '_self' | '_blank'
+}
+
+export const ROUTES: Record<string, ROUTES_ENTRY> = {
   HOME: {
     url: '/',
     name: 'Home',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={homeIcon} style={{ fontSize: 24 }} />
+      <Icon aria-hidden="true" icon={homeIcon} style={{ fontSize: 24 }} />
     ),
     target: '_self',
   },
@@ -168,7 +175,7 @@ export const ROUTES = {
     url: '/contracts',
     name: 'Contracts',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={noteIcon} style={{ fontSize: 24 }} />
+      <Icon aria-hidden="true" icon={noteIcon} style={{ fontSize: 24 }} />
     ),
     target: '_self',
   },
@@ -176,12 +183,17 @@ export const ROUTES = {
     url: '/contract',
     name: 'Contract',
     target: '_self',
+    renderIcon: () => null,
   },
   TRANSACTIONS: {
     url: '/transactions',
     name: 'Transactions',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={transactionsIcon} style={{ fontSize: 24 }} />
+      <Icon
+        aria-hidden="true"
+        icon={transactionsIcon}
+        style={{ fontSize: 24 }}
+      />
     ),
     target: '_self',
   },
@@ -195,7 +207,7 @@ export const ROUTES = {
     url: '/blocks',
     name: 'Blocks',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={blocksIcon} style={{ fontSize: 24 }} />
+      <Icon aria-hidden="true" icon={blocksIcon} style={{ fontSize: 24 }} />
     ),
     target: '_self',
   },
@@ -203,12 +215,13 @@ export const ROUTES = {
     url: '/block',
     name: 'Block',
     target: '_self',
+    renderIcon: () => null,
   },
   WALLETS: {
     url: '/addresses',
     name: 'Wallets',
     renderIcon: (): React.ReactNode => (
-      <Icon icon={walletIcon} style={{ fontSize: 26 }} />
+      <Icon aria-hidden="true" icon={walletIcon} style={{ fontSize: 26 }} />
     ),
     target: '_self',
   },
@@ -216,6 +229,7 @@ export const ROUTES = {
     url: '/address',
     name: 'Wallet',
     target: '_self',
+    renderIcon: () => null,
   },
   API: {
     url: '/documentation/index.html',
@@ -233,17 +247,19 @@ export const ROUTES = {
     url: '/endpoint',
     name: 'Endpoint',
     target: '_self',
+    renderIcon: () => null,
   },
   NFT: {
     url: '/nft',
     name: 'NFT',
     renderIcon: (): React.ReactNode => <Diamond />,
-    target: 'self',
+    target: '_self',
   },
   LOOKUP: {
     url: '/lookup',
     name: 'Lookup',
     target: '_self',
+    renderIcon: () => null,
   },
   NOT_FOUND: {
     url: '/not-found',

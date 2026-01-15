@@ -552,6 +552,7 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
         data={`${String(lastBlockCounter)} seconds ago`}
         icon={
           <Icon
+            aria-hidden="true"
             icon={hourglassIcon}
             style={{ fontSize: 34, color: '#7d9fb1' }}
           />
@@ -561,7 +562,11 @@ const NetworkStatus: React.FC<NetworkStatus> = ({ data }) => {
         title={AVG_BLOCK_TIME}
         data={`${avgBlockTime} seconds`}
         icon={
-          <Icon icon={chartIcon} style={{ fontSize: 34, color: '#7d9fb1' }} />
+          <Icon
+            aria-hidden="true"
+            icon={chartIcon}
+            style={{ fontSize: 34, color: '#7d9fb1' }}
+          />
         }
       />
     </div>

@@ -254,6 +254,7 @@ export const List: React.FC<ListProps> = ({
                         onClick={(): void =>
                           handleRowClick && handleRowClick(data)
                         }
+                        tabIndex={0}
                         key={uniqueId()}
                         className={rowClass}
                       >

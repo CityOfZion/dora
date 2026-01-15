@@ -7,7 +7,7 @@ import BurgerMenu from '../../assets/icons/burger-menu.svg?react'
 import CloseIcon from '../../assets/icons/close-icon.svg?react'
 import ResourceLogo from '../../assets/icons/coz-resource-logo.svg?react'
 import MobileLogo from '../../assets/icons/mobile-logo.svg?react'
-import { ROUTES } from '../../constants'
+import { ROUTES, ROUTES_ENTRY } from '../../constants'
 import { State as MenuState } from '../../reducers/menuReducer'
 import Search from '../search/Search'
 import './Navigation.scss'
@@ -34,6 +34,18 @@ const Navigation: React.FC = (): ReactElement => {
     dispatch(closeMenu())
   }
 
+  const applyActiveClassName = (route: ROUTES_ENTRY, isActive: boolean) => {
+    const pathname = location.pathname.toLowerCase()
+    const routeName = route.name.slice(0, -1).toLowerCase()
+
+    const active =
+      (pathname.includes(routeName) && pathname !== '/') ||
+      pathname === '/' ||
+      isActive
+
+    return `mobile-route-container${active ? ' active-mobile-route' : ''}`
+  }
+
   return (
     <>
       <div id="navigation-container">
@@ -45,7 +57,7 @@ const Navigation: React.FC = (): ReactElement => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ResourceLogo />
+                <ResourceLogo style={{ marginRight: '10px' }} />
               </a>
             </div>
 
@@ -108,17 +120,9 @@ const Navigation: React.FC = (): ReactElement => {
               }}
               key={ROUTES.HOME.name}
               to={ROUTES.HOME.url}
-              className={({ isActive }) => {
-                const pathname = location.pathname.toLowerCase()
-                const homeName = ROUTES.HOME.name.slice(0, -1).toLowerCase()
-
-                const active =
-                  (pathname.includes(homeName) && pathname !== '/') ||
-                  pathname === '/' ||
-                  isActive
-
-                return `mobile-route-container${active ? ' active-mobile-route' : ''}`
-              }}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.HOME, isActive)
+              }
             >
               {ROUTES.HOME.renderIcon()}
               {ROUTES.HOME.name}
@@ -129,19 +133,9 @@ const Navigation: React.FC = (): ReactElement => {
               }}
               key={ROUTES.CONTRACTS.name}
               to={ROUTES.CONTRACTS.url}
-              className={({ isActive }) => {
-                const pathname = location.pathname.toLowerCase()
-                const contractsName = ROUTES.CONTRACTS.name
-                  .slice(0, -1)
-                  .toLowerCase()
-
-                const active =
-                  (pathname.includes(contractsName) && pathname !== '/') ||
-                  pathname === '/' ||
-                  isActive
-
-                return `mobile-route-container${active ? ' active-mobile-route' : ''}`
-              }}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.CONTRACTS, isActive)
+              }
             >
               {ROUTES.CONTRACTS.renderIcon()}
               {ROUTES.CONTRACTS.name}
@@ -154,19 +148,9 @@ const Navigation: React.FC = (): ReactElement => {
               }}
               key={ROUTES.TRANSACTIONS.name}
               to={ROUTES.TRANSACTIONS.url}
-              className={({ isActive }) => {
-                const pathname = location.pathname.toLowerCase()
-                const transactionsName = ROUTES.TRANSACTIONS.name
-                  .slice(0, -1)
-                  .toLowerCase()
-
-                const active =
-                  (pathname.includes(transactionsName) && pathname !== '/') ||
-                  pathname === '/' ||
-                  isActive
-
-                return `mobile-route-container${active ? ' active-mobile-route' : ''}`
-              }}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.TRANSACTIONS, isActive)
+              }
             >
               {ROUTES.TRANSACTIONS.renderIcon()}
               {ROUTES.TRANSACTIONS.name}
@@ -177,17 +161,9 @@ const Navigation: React.FC = (): ReactElement => {
               onClick={(): void => {
                 dispatch(closeMenu())
               }}
-              className={({ isActive }) => {
-                const pathname = location.pathname.toLowerCase()
-                const blocksName = ROUTES.BLOCKS.name.slice(0, -1).toLowerCase()
-
-                const active =
-                  (pathname.includes(blocksName) && pathname !== '/') ||
-                  pathname === '/' ||
-                  isActive
-
-                return `mobile-route-container${active ? ' active-mobile-route' : ''}`
-              }}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.BLOCKS, isActive)
+              }
             >
               {ROUTES.BLOCKS.renderIcon()}
               {ROUTES.BLOCKS.name}
@@ -199,19 +175,9 @@ const Navigation: React.FC = (): ReactElement => {
               onClick={(): void => {
                 dispatch(closeMenu())
               }}
-              className={({ isActive }) => {
-                const pathname = location.pathname.toLowerCase()
-                const monitorName = ROUTES.MONITOR.name
-                  .slice(0, -1)
-                  .toLowerCase()
-
-                const active =
-                  (pathname.includes(monitorName) && pathname !== '/') ||
-                  pathname === '/' ||
-                  isActive
-
-                return `mobile-route-container${active ? ' active-mobile-route' : ''}`
-              }}
+              className={({ isActive }) =>
+                applyActiveClassName(ROUTES.MONITOR, isActive)
+              }
             >
               {ROUTES.MONITOR.renderIcon()}
               {ROUTES.MONITOR.name}

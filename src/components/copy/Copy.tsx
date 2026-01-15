@@ -12,7 +12,7 @@ const Copy: React.FC<CopyProps> = ({ text }) => {
 
   const copyText = async (): Promise<void> => {
     try {
-      await navigator.clipboard.writeText(text) // modern Clipboard API
+      await navigator.clipboard.writeText(text)
       setCopied(true)
       setTimeout(() => setCopied(false), 750)
     } catch (err) {
@@ -21,11 +21,19 @@ const Copy: React.FC<CopyProps> = ({ text }) => {
   }
 
   return (
-    <button onClick={copyText} style={{ cursor: 'pointer', width: 19 }}>
+    <button
+      onClick={copyText}
+      style={{ cursor: 'pointer', width: 19 }}
+      aria-label="Copy"
+    >
       {copied ? (
-        <Check style={{ width: 19, color: '#D355E7' }} />
+        <Check style={{ width: 19, color: '#D355E7' }} aria-hidden="true" />
       ) : (
-        <FileCopy id="copy-icon" style={{ width: 16, color: '#D355E7' }} />
+        <FileCopy
+          id="copy-icon"
+          style={{ width: 16, color: '#D355E7' }}
+          aria-hidden="true"
+        />
       )}
     </button>
   )
