@@ -169,7 +169,7 @@ export const ROUTES: Record<string, ROUTES_ENTRY> = {
     url: '/search',
     name: 'Search',
     target: '_self',
-    renderIcon: (): React.ReactNode => <Magnify />,
+    renderIcon: (): React.ReactNode => <Magnify aria-hidden="true" />,
   },
   CONTRACTS: {
     url: '/contracts',
@@ -200,7 +200,7 @@ export const ROUTES: Record<string, ROUTES_ENTRY> = {
   TRANSACTION: {
     url: '/transaction',
     name: 'Transaction',
-    renderIcon: (): React.ReactNode => <Transaction />,
+    renderIcon: (): React.ReactNode => <Transaction aria-hidden="true" />,
     target: '_self',
   },
   BLOCKS: {
@@ -234,13 +234,13 @@ export const ROUTES: Record<string, ROUTES_ENTRY> = {
   API: {
     url: '/documentation/index.html',
     name: 'API',
-    renderIcon: (): React.ReactNode => <Api />,
+    renderIcon: (): React.ReactNode => <Api aria-hidden="true" />,
     target: '_blank',
   },
   MONITOR: {
     url: '/monitor',
     name: 'Monitor',
-    renderIcon: (): React.ReactNode => <Monitor />,
+    renderIcon: (): React.ReactNode => <Monitor aria-hidden="true" />,
     target: '_self',
   },
   ENDPOINT: {
@@ -252,7 +252,7 @@ export const ROUTES: Record<string, ROUTES_ENTRY> = {
   NFT: {
     url: '/nft',
     name: 'NFT',
-    renderIcon: (): React.ReactNode => <Diamond />,
+    renderIcon: (): React.ReactNode => <Diamond aria-hidden="true" />,
     target: '_self',
   },
   LOOKUP: {
@@ -264,7 +264,7 @@ export const ROUTES: Record<string, ROUTES_ENTRY> = {
   NOT_FOUND: {
     url: '/not-found',
     name: 'No results found',
-    renderIcon: (): React.ReactNode => <Magnify />,
+    renderIcon: (): React.ReactNode => <Magnify aria-hidden="true" />,
     target: '_self',
   },
 }
