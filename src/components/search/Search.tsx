@@ -28,35 +28,23 @@ const Search: React.FC = () => {
     const results = await search(text)
 
     if (results.length === 1) {
-      switch (results[0].type) {
-        case 'block':
-          navigate(
-            `${ROUTES.BLOCK.url}/${results[0].protocol}/${results[0].network}/${text}`,
-          )
-          break
-        case 'balance':
-          navigate(
-            `${ROUTES.WALLET.url}/${results[0].protocol}/${results[0].network}/${text}`,
-          )
-          break
-        case 'contract':
-          navigate(
-            `${ROUTES.CONTRACT.url}/${results[0].protocol}/${results[0].network}/${text}`,
-          )
-          break
-        case 'transaction':
-          navigate(
-            `${ROUTES.TRANSACTION.url}/${results[0].protocol}/${results[0].network}/${text}`,
-          )
-          break
-        case SEARCH_TYPES.ENDPOINT:
-          navigate(`${ROUTES.ENDPOINT.url}/${text}`)
-          break
-        default:
-          break
+      const routesOptions: Record<string, string> = {
+        [SEARCH_TYPES.BLOCK]: ROUTES.BLOCK.url,
+        [SEARCH_TYPES.BALANCE]: ROUTES.WALLET.url,
+        [SEARCH_TYPES.CONTRACT]: ROUTES.CONTRACT.url,
+        [SEARCH_TYPES.TRANSACTION]: ROUTES.TRANSACTION.url,
+        [SEARCH_TYPES.ENDPOINT]: ROUTES.ENDPOINT.url,
       }
 
-      return
+      const [result] = results
+      const type = result.type.toString().toUpperCase()
+      const startUrl = routesOptions[type]
+
+      return navigate(
+        type === SEARCH_TYPES.ENDPOINT
+          ? `${startUrl}/${text}`
+          : `${startUrl}/${result.protocol}/${result.network}/${text}`,
+      )
     }
 
     navigate(`${ROUTES.SEARCH.url}/all/all?search=${text}`, {
