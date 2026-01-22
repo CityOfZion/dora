@@ -14,6 +14,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import NoImageFound from '../../assets/no-image-found.png'
 import { truncateHash } from '../../utils/formatter'
 import { AppThunkDispatch } from '../../store'
+import Button from '../button/Button'
 
 interface Props {
   contractHash?: string
@@ -227,9 +228,9 @@ const NftInformation: React.FC<Props> = ({
       >
         <div className="verti justify-center modal-content">
           <div className="content-position">
-            <button type="button" onClick={handleCloseModal}>
-              <CloseIcon />
-            </button>
+            <Button variant="icon" type="button" onClick={handleCloseModal}>
+              <CloseIcon aria-hidden />
+            </Button>
           </div>
 
           <div className="content-image">

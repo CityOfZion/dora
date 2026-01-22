@@ -124,10 +124,11 @@ const AddressTransactionsList: React.FC<{
       <div className="load-more-button-container">
         <Button
           disabled={isLoading}
-          primary={false}
+          schema="secondary"
           onClick={(): void => handleLoadMore()}
+          lowercase
         >
-          load more
+          Load more
         </Button>
       </div>
     )}

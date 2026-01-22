@@ -88,7 +88,6 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
         <div>
           <div className="label-wrapper-2">
             <Button
-              primary
               onClick={(): void => {
                 navigate(`${ROUTES.TRANSACTIONS.url}/neo3/${network}`)
               }}

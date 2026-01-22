@@ -7,6 +7,7 @@ import NoImageFound from '../../assets/no-image-found.png'
 
 import './NFTCardList.scss'
 import TextBreakable from '../text-breakable/TextBreakable'
+import Button from '../button/Button'
 
 type Props = {
   data: NFT
@@ -22,7 +23,7 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
   }
 
   return (
-    <button onClick={onClickToNavigate}>
+    <Button variant="unstyled" onClick={onClickToNavigate}>
       <div className="card-list-container">
         <div className="card-image-container">
           <div className="token-image">
@@ -77,7 +78,7 @@ const NFTCardList: React.FC<Props> = ({ data, onClickToNavigate }) => {
           )}
         </div>
       </div>
-    </button>
+    </Button>
   )
 }
 

@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import { FOOTER_ROUTES } from '../../../constants'
-import { Link } from 'react-router-dom'
+import { Link as LinkReactDom } from 'react-router-dom'
+import Link from '../../link/Link'
 import cozSm from '../../../assets/icons/coz-logo-sm.svg'
 import gitHubLogo from '../../../assets/icons/github-logo.svg'
 import discordLogo from '../../../assets/icons/discord-logo.svg'
@@ -19,7 +20,7 @@ interface InfoLinks {
 export const makeNavLinks = (): ReactNode => {
   return FOOTER_ROUTES.map(route => (
     <li key={route.name}>
-      <Link to={route.url}> {route.name} </Link>
+      <LinkReactDom to={route.url}>{route.name}</LinkReactDom>
     </li>
   ))
 }
@@ -53,7 +54,7 @@ export const infoLinksData = {
 
 export const makeInfoLinks = (infoLinks: InfoLinks): ReactNode => {
   return Object.values(infoLinks).map(link => (
-    <a
+    <Link
       className="accent"
       key={link.copy}
       href={link.href}
@@ -62,6 +63,6 @@ export const makeInfoLinks = (infoLinks: InfoLinks): ReactNode => {
     >
       <img className="icon" alt={link.alt} src={link.src} />
       <span>{link.copy}</span>
-    </a>
+    </Link>
   ))
 }

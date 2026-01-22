@@ -147,8 +147,13 @@ const AddressTransactions: React.FC = () => {
 
         {currentPage < pages && (
           <div className="load-more-button-container">
-            <Button disabled={isLoading} primary={false} onClick={loadMore}>
-              load more
+            <Button
+              disabled={isLoading}
+              schema="secondary"
+              lowercase
+              onClick={loadMore}
+            >
+              Load more
             </Button>
           </div>
         )}
