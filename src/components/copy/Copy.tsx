@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Check from '@mui/icons-material/Check'
 import FileCopy from '@mui/icons-material/FilterNone'
 import './Copy.scss'
+import Button from '../button/Button'
 
 type CopyProps = {
   text: string
@@ -21,11 +22,7 @@ const Copy: React.FC<CopyProps> = ({ text }) => {
   }
 
   return (
-    <button
-      onClick={copyText}
-      style={{ cursor: 'pointer', width: 19 }}
-      aria-label="Copy"
-    >
+    <Button onClick={copyText} variant="icon" aria-label="Copy">
       {copied ? (
         <Check style={{ width: 19, color: '#D355E7' }} aria-hidden="true" />
       ) : (
@@ -35,7 +32,7 @@ const Copy: React.FC<CopyProps> = ({ text }) => {
           aria-hidden="true"
         />
       )}
-    </button>
+    </Button>
   )
 }
 

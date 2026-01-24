@@ -1,5 +1,5 @@
 import NotFoundIllustration from '../../assets/icons/Illustration.svg?react'
-import Button from '../button/Button'
+import ButtonLink from '../button-link/ButtonLink'
 import './NoResult.scss'
 
 export const NoResult = () => {
@@ -17,9 +17,14 @@ export const NoResult = () => {
       <span>If you think Dora is having a bad day please let us know.</span>
 
       <div className="load-more-button-container">
-        <a href="mailto:contact@coz.io">
-          <Button primary={false}>contact us</Button>
-        </a>
+        <ButtonLink
+          href="mailto:contact@coz.io"
+          lowercase
+          style={{ width: 174 }}
+          schema="secondary"
+        >
+          Contact us
+        </ButtonLink>
       </div>
     </div>
   )

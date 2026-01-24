@@ -89,10 +89,11 @@ const AddressNFTS: React.FC = () => {
         {nftState.hasMore && (
           <Button
             disabled={nftState.isLoading}
-            primary={false}
+            schema="secondary"
+            lowercase
             onClick={() => getNFTS()}
           >
-            load more
+            Load more
           </Button>
         )}
       </div>

@@ -12,6 +12,7 @@ import { State as MenuState } from '../../reducers/menuReducer'
 import Search from '../search/Search'
 import './Navigation.scss'
 import { AppThunkDispatch } from '../../store'
+import Link from '../link/Link'
 
 const Navigation: React.FC = (): ReactElement => {
   const navigate = useNavigate()
@@ -52,13 +53,13 @@ const Navigation: React.FC = (): ReactElement => {
         <div id="desktop-navigation">
           <div id="inner-desktop-navigation-container">
             <div id="coz-blockchain-logo">
-              <a
+              <Link
                 href="https://coz.io"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ResourceLogo style={{ marginRight: '10px' }} />
-              </a>
+                <ResourceLogo aria-hidden style={{ marginRight: '10px' }} />
+              </Link>
             </div>
 
             <div className="navigation-search-container">

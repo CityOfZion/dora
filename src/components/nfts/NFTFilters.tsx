@@ -6,6 +6,7 @@ import galleryIconSelected from '../../assets/icons/nft-gallery-selected.svg'
 import listIconSelected from '../../assets/icons/nft-list-selected.svg'
 
 import './NFTFilters.scss'
+import Button from '../button/Button'
 
 export type NFTFiltersToggleType = 'list' | 'gallery'
 
@@ -21,21 +22,21 @@ const NFTFilters: React.FC<Props> = ({ onSelected, toggleTypeSelected }) => {
 
   return (
     <div id="nft-filters-container">
-      <button onClick={() => handleOnSelect('gallery')}>
+      <Button variant="unstyled" onClick={() => handleOnSelect('gallery')}>
         <img
           src={
             toggleTypeSelected === 'gallery' ? galleryIconSelected : galleryIcon
           }
           alt={toggleTypeSelected}
         />
-      </button>
+      </Button>
 
-      <button onClick={() => handleOnSelect('list')}>
+      <Button variant="unstyled" onClick={() => handleOnSelect('list')}>
         <img
           src={toggleTypeSelected === 'list' ? listIconSelected : listIcon}
           alt={toggleTypeSelected}
         />
-      </button>
+      </Button>
     </div>
   )
 }

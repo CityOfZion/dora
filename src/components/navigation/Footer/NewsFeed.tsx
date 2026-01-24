@@ -3,6 +3,7 @@ import React, { useState, useEffect, ReactElement } from 'react'
 import Parser, { Item } from 'rss-parser'
 
 import './NewsFeed.scss'
+import Link from '../../link/Link'
 
 const parser = new Parser()
 
@@ -75,7 +76,7 @@ const News: React.FC = (): ReactElement => {
         const { title, link } = item
 
         return (
-          <a
+          <Link
             className="news-item-container"
             href={link}
             target="_blank"
@@ -86,7 +87,7 @@ const News: React.FC = (): ReactElement => {
             <div>
               <p> {title}</p>
             </div>
-          </a>
+          </Link>
         )
       })}
     </div>

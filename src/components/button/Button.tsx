@@ -1,31 +1,32 @@
 import React from 'react'
-import classNames from 'classnames'
 
-import './Button.scss'
+import Clickable, { ClickableProps } from '../clickable/Clickable'
 
-type ButtonProps = {
-  children: React.ReactNode
-  primary?: boolean
+export type ButtonProps = {
   onClick?: () => void
-  disabled?: boolean
-}
+} & ClickableProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement>
 
 const Button: React.FC<ButtonProps> = ({
   children,
-  primary = true,
   onClick,
   disabled = false,
+  variant = 'contained',
+  schema = 'primary',
+  lowercase = false,
+  ...props
 }) => {
-  const styles = classNames({
-    'neoscan-button': true,
-    'primary-button': primary,
-    'secondary-button': !primary,
-    'disabled-button': disabled,
-  })
-
   return (
-    <button onClick={onClick} className={styles} disabled={disabled}>
-      {children}
+    <button onClick={onClick} disabled={disabled} {...props}>
+      <Clickable
+        variant={variant}
+        schema={schema}
+        disabled={disabled}
+        lowercase={lowercase}
+        style={props.style}
+      >
+        {children}
+      </Clickable>
     </button>
   )
 }

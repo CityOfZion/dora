@@ -5,8 +5,9 @@ import logo from '../../../assets/icons/neoscan-logo.svg'
 import cozLogo from '../../../assets/icons/coz-logo.svg'
 import newsStreamLogo from '../../../assets/icons/news-stream-logo.svg'
 import { makeNavLinks, makeInfoLinks, infoLinksData } from './helpers'
-import Button from '../../button/Button'
 import NewsFeed from './NewsFeed'
+import Link from '../../link/Link'
+import ButtonLink from '../../button-link/ButtonLink'
 
 const Footer: React.FC = (): ReactElement => {
   return (
@@ -53,13 +54,15 @@ const Footer: React.FC = (): ReactElement => {
               <hr className="divider" />
               <div className="news-stream">
                 <NewsFeed />
-                <a
+                <ButtonLink
                   href="https://neonewstoday.com/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  schema="secondary"
+                  lowercase
                 >
-                  <Button primary={false}>view more</Button>
-                </a>
+                  View more
+                </ButtonLink>
               </div>
             </div>
           </div>
@@ -69,7 +72,7 @@ const Footer: React.FC = (): ReactElement => {
             <img className="coz-logo" alt="coz-logo" src={cozLogo} />
             <p className="copyright">
               {new Date().getFullYear()} Copyright{' '}
-              <a
+              <Link
                 className="accent"
                 href="https://coz.io"
                 target="_blank"
@@ -77,7 +80,7 @@ const Footer: React.FC = (): ReactElement => {
                 data-test="test400"
               >
                 COZ
-              </a>
+              </Link>
             </p>
           </div>
           <p className="last-commit">
