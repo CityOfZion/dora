@@ -3,6 +3,7 @@ import {
   REQUEST_ADDRESS_SUCCESS,
   REQUEST_ADDRESS_TRANSFER_HISTORY,
   REQUEST_ADDRESS_TRANSFER_HISTORY_SUCCESS,
+  REQUEST_UNCLAIMED_GAS_SUCCESS,
 } from '../actions/addressActions'
 
 export type TransferHistoryDetail = {
@@ -27,6 +28,7 @@ type Action = {
     totalCount: number
   }
   transferHistoryPage: number
+  unclaimedGas: string | null
 }
 
 export type Balance = {
@@ -44,6 +46,7 @@ export type State = {
   transferHistory: TransferHistoryDetail[]
   transferHistoryPage: number
   totalCount: number
+  unclaimedGas: string | null
 }
 
 export type Block = object
@@ -56,6 +59,7 @@ export const INITIAL_STATE = {
   transferHistory: [],
   transferHistoryPage: 1,
   totalCount: 0,
+  unclaimedGas: null,
 }
 
 export default (state: State = INITIAL_STATE, action: Action): State => {
@@ -83,6 +87,11 @@ export default (state: State = INITIAL_STATE, action: Action): State => {
         totalCount: action.json.totalCount,
         lastUpdated: action.receivedAt,
         transferHistoryPage: action.transferHistoryPage,
+      })
+    case REQUEST_UNCLAIMED_GAS_SUCCESS:
+      return Object.assign({}, state, {
+        unclaimedGas: action.unclaimedGas,
+        lastUpdated: action.receivedAt,
       })
     case 'RESET':
       return INITIAL_STATE

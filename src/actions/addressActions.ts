@@ -1,5 +1,6 @@
 import { Dispatch, Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
+import { rpc } from '@cityofzion/neon-js'
 
 import { State } from '../reducers/addressReducer'
 import { State as NetworkState } from '../reducers/networkReducer'
@@ -89,6 +90,31 @@ export const resetAddressState =
       receivedAt: Date.now(),
     })
   }
+
+export const REQUEST_UNCLAIMED_GAS_SUCCESS = 'REQUEST_UNCLAIMED_GAS_SUCCESS'
+export function fetchUnclaimedGas(address: string, network: string) {
+  return async (
+    dispatch: ThunkDispatch<object, void, Action>,
+  ): Promise<void> => {
+    dispatch(requestAddress(address))
+
+    try {
+      const client = new rpc.RPCClient(
+        network === 'mainnet'
+          ? import.meta.env.VITE_NODE_NEO3_MAINNET
+          : import.meta.env.VITE_NODE_NEO3_TESTNET,
+      )
+      const unclaimedGas = await client.getUnclaimedGas(address)
+      dispatch({
+        type: REQUEST_UNCLAIMED_GAS_SUCCESS,
+        unclaimedGas,
+        receivedAt: Date.now(),
+      })
+    } catch (error) {
+      dispatch(requestAddressError(address, toError(error)))
+    }
+  }
+}
 
 type ParsedBalanceData = {
   name: string
