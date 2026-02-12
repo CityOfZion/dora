@@ -166,10 +166,18 @@ const SearchResults: React.FC = () => {
 
   useEffect(() => {
     async function handle() {
-      if (!searchText || isSearchingRef.current) return
+      if (!searchText || isSearchingRef.current) {
+        console.log(`abort handling search`, searchText, isSearchingRef.current)
+        return
+      }
 
       try {
         isSearchingRef.current = true
+
+        if (state?.results) {
+          setResults(state.results)
+          return
+        }
         const result = await search(searchText)
         setResults(result)
       } catch (error) {
