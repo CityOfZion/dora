@@ -40,11 +40,18 @@ const Search: React.FC = () => {
       const type = result.type.toString().toUpperCase()
       const startUrl = routesOptions[type]
 
-      return navigate(
-        type === SEARCH_TYPES.ENDPOINT
-          ? `${startUrl}/${text}`
-          : `${startUrl}/${result.protocol}/${result.network}/${text}`,
-      )
+      let path
+      switch (type) {
+        case SEARCH_TYPES.BLOCK:
+          path = `${startUrl}/${result.protocol}/${result.network}/${result.response.index}`
+          break
+        case SEARCH_TYPES.ENDPOINT:
+          path = `${startUrl}/${text}`
+          break
+        default:
+          path = `${startUrl}/${result.protocol}/${result.network}/${text}`
+      }
+      return navigate(path)
     }
 
     navigate(`${ROUTES.SEARCH.url}/all/all?search=${text}`, {
