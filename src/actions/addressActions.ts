@@ -101,8 +101,10 @@ export function fetchUnclaimedGas(address: string, network: string) {
     try {
       const client = new rpc.RPCClient(
         network === 'mainnet'
-          ? import.meta.env.VITE_NODE_NEO3_MAINNET
-          : import.meta.env.VITE_NODE_NEO3_TESTNET,
+          ? import.meta.env.VITE_NODE_NEO3_MAINNET ||
+              'https://mainnet1.neo.coz.io:443'
+          : import.meta.env.VITE_NODE_NEO3_TESTNET ||
+              'https://testnet1.neo.coz.io:443',
       )
       const unclaimedGas = await client.getUnclaimedGas(address)
       dispatch({
