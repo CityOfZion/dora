@@ -23,8 +23,8 @@ const options: SearchOptions[] = [
     type: 'block',
     fetchFn: (text: string) => NeoRest.block(text as any, 'testnet'),
     validateFn: (text: string) => {
-      const blockNr = Number.parseInt(text, 10)
-      if (!isNaN(blockNr)) {
+      const blockNumber = parseInt(text, 10)
+      if (!isNaN(blockNumber)) {
         return true
       }
       return u.isHex(u.remove0xPrefix(text))
@@ -57,8 +57,8 @@ const options: SearchOptions[] = [
     type: 'block',
     fetchFn: (text: string) => NeoRest.block(text as any, 'mainnet'),
     validateFn: (text: string) => {
-      const blockNr = Number.parseInt(text, 10)
-      if (!isNaN(blockNr)) {
+      const blockNumber = parseInt(text, 10)
+      if (!isNaN(blockNumber)) {
         return true
       }
       return u.isHex(u.remove0xPrefix(text))
