@@ -100,7 +100,6 @@ export const useBlockchainSearch = () => {
     const searchResults: SearchResult[] = []
 
     if (filteredOptions.length === 0) {
-      console.log('filtered options 0')
       return searchResults
     }
 
