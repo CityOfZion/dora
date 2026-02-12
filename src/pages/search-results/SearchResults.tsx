@@ -166,9 +166,7 @@ const SearchResults: React.FC = () => {
 
   useEffect(() => {
     async function handle() {
-      if (!searchText || isSearchingRef.current) {
-        return
-      }
+      if (!searchText || isSearchingRef.current) return
 
       try {
         isSearchingRef.current = true
