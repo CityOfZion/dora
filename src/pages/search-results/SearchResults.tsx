@@ -171,13 +171,10 @@ const SearchResults: React.FC = () => {
       try {
         isSearchingRef.current = true
 
-        console.log({ state })
-
         if (state?.results) {
           setResults(state.results)
           return
         }
-
         const result = await search(searchText)
         setResults(result)
       } catch (error) {

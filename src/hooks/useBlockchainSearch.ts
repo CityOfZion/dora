@@ -22,7 +22,13 @@ const options: SearchOptions[] = [
     network: 'testnet',
     type: 'block',
     fetchFn: (text: string) => NeoRest.block(text as any, 'testnet'),
-    validateFn: (text: string) => u.isHex(u.remove0xPrefix(text)),
+    validateFn: (text: string) => {
+      const blockNumber = parseInt(text, 10)
+      if (!isNaN(blockNumber)) {
+        return true
+      }
+      return u.isHex(u.remove0xPrefix(text))
+    },
   },
   {
     protocol: 'neo3',
@@ -50,7 +56,13 @@ const options: SearchOptions[] = [
     network: 'mainnet',
     type: 'block',
     fetchFn: (text: string) => NeoRest.block(text as any, 'mainnet'),
-    validateFn: (text: string) => u.isHex(u.remove0xPrefix(text)),
+    validateFn: (text: string) => {
+      const blockNumber = parseInt(text, 10)
+      if (!isNaN(blockNumber)) {
+        return true
+      }
+      return u.isHex(u.remove0xPrefix(text))
+    },
   },
   {
     protocol: 'neo3',
