@@ -142,25 +142,22 @@ export function fetchTransaction(
 
 export function fetchTransactions(
   network?: string,
-  protocol?: string,
   page = 1,
 ): AppThunk<Promise<void>> {
   return async (
     dispatch,
     _getState: () => { transaction: State },
   ): Promise<void> => {
+    const protocol = 'neo3'
+
     try {
       dispatch(requestTransactions(page))
       let totalCount = 0
-      const filterSupportedPlatform =
-        network === 'all'
-          ? SUPPORTED_PLATFORMS
-          : SUPPORTED_PLATFORMS.filter(item => {
-              return (
-                (!protocol || item.protocol === protocol) &&
-                (!network || item.network === network)
-              )
-            })
+      const filterSupportedPlatform = SUPPORTED_PLATFORMS.filter(item => {
+        return (
+          item.protocol === protocol && (!network || item.network === network)
+        )
+      })
 
       const res = await Promise.all(
         filterSupportedPlatform.map(async ({ network, protocol }) => {

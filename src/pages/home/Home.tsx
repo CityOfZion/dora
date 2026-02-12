@@ -1,18 +1,15 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
-import { State as NetworkState } from '../../reducers/networkReducer'
 import logo from '../../assets/icons/logo.png'
 import './Home.scss'
 import '../../constants'
 import ContractsInvocations from '../../components/contract-invocation/ContractsInvocations'
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 const Home: React.FC = () => {
-  const { network } = useSelector(
-    ({ network }: { network: NetworkState }) => network,
-  )
+  const { network } = useNetworkGlobalSelector()
 
   return (
     <div id="Home" className="page-container">
@@ -43,7 +40,7 @@ const Home: React.FC = () => {
         </div>
         <div id="contracts-invocations-container">
           <div className="invocations-list-wrapper">
-            <ContractsInvocations />
+            <ContractsInvocations network={network} />
           </div>
         </div>
       </div>

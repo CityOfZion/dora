@@ -13,8 +13,17 @@ import Search from '../search/Search'
 import './Navigation.scss'
 import { AppThunkDispatch } from '../../store'
 import Link from '../link/Link'
+import Filter, { Option } from '../filter/Filter'
 
-const Navigation: React.FC = (): ReactElement => {
+type Props = {
+  handleFilterUpdate: (option: Option) => void
+  selectedOption?: Option
+}
+
+const Navigation: React.FC<Props> = ({
+  handleFilterUpdate,
+  selectedOption,
+}): ReactElement => {
   const navigate = useNavigate()
   const dispatch = useDispatch<AppThunkDispatch>()
   const menuState = useSelector(({ menu }: { menu: MenuState }) => menu)
@@ -65,6 +74,11 @@ const Navigation: React.FC = (): ReactElement => {
             <div className="navigation-search-container">
               <Search key={location.pathname} />
             </div>
+
+            <Filter
+              selectedOption={selectedOption}
+              handleFilterUpdate={handleFilterUpdate}
+            />
           </div>
         </div>
 

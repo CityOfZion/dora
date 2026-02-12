@@ -7,7 +7,7 @@ import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
-import { fetchMainnetContractsInvocations } from '../../actions/contractActions'
+import { fetchAllContractsInvocations } from '../../actions/contractActions'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '../../constants'
@@ -26,6 +26,10 @@ type ParsedInvocation = {
   contract: React.FC
   count: React.FC
   change: React.FC
+}
+
+type Props = {
+  network: string
 }
 
 const mapInvocationData = (
@@ -88,7 +92,7 @@ const returnBlockListData = (
   }
 }
 
-const ContractsInvocations: React.FC = () => {
+const ContractsInvocations: React.FC<Props> = ({ network }) => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const contractState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
@@ -97,14 +101,13 @@ const ContractsInvocations: React.FC = () => {
   const width = useWindowWidth()
   const selectedData = (): Array<any> => {
     return contractsInvocations.filter(
-      d => d.network === 'mainnet' && d.protocol === 'neo3',
+      block => block.protocol === 'neo3' && block.network === network,
     )
   }
 
   useEffect(() => {
-    if (!contractsInvocations.length)
-      dispatch(fetchMainnetContractsInvocations())
-  }, [contractsInvocations, dispatch])
+    if (!contractsInvocations.length) dispatch(fetchAllContractsInvocations())
+  }, [contractsInvocations, dispatch, network])
 
   const columns =
     width > 768

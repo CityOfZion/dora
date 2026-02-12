@@ -22,6 +22,11 @@ import { MonitorProvider } from '../../contexts/MonitorContext'
 import NftInformationPage from '../../pages/nft/NftInformationPage'
 import Lookup from '../../pages/lookup/Lookup'
 import { SentryRoutes } from '../../sentry/SentryRoute'
+import { Platform } from '../filter/Filter'
+import { useDispatch } from 'react-redux'
+import { AppThunkDispatch } from '../../store'
+import { changeNetwork } from '../../actions/networkActions'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 const ScrollToTop = (): null => {
   const { pathname } = useLocation()
@@ -39,6 +44,13 @@ const Reload = () => {
  */
 
 const Router: React.FC = (): ReactElement => {
+  const dispatch = useDispatch<AppThunkDispatch>()
+  const { network } = useNetworkGlobalSelector()
+
+  const handleSetFilterData = (platform: Platform): void => {
+    dispatch(changeNetwork(platform.network))
+  }
+
   return (
     <>
       <BrowserRouter>
@@ -46,7 +58,21 @@ const Router: React.FC = (): ReactElement => {
           <Sidebar />
           <div className="sidebar-spacer" />
           <div className="column-container">
-            <Navigation />
+            <Navigation
+              handleFilterUpdate={(option): void => {
+                handleSetFilterData({
+                  protocol: (option.value as Platform).protocol,
+                  network: (option.value as Platform).network,
+                })
+              }}
+              selectedOption={{
+                label: '',
+                value: {
+                  protocol: 'neo3',
+                  network,
+                },
+              }}
+            />
 
             <div className="column-container router-page-container">
               <ScrollToTop />

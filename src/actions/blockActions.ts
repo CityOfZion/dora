@@ -174,7 +174,6 @@ export function fetchBlock(index = 1): AppThunk<Promise<void>> {
 
 export function fetchBlocks(
   network?: string,
-  protocol?: string,
   page = 1,
   _chain?: string,
 ): AppThunk<Promise<void>> {
@@ -182,18 +181,16 @@ export function fetchBlocks(
     dispatch,
     _getState: () => { block: BlockState },
   ): Promise<void> => {
+    const protocol = 'neo3'
+
     try {
       dispatch(requestBlocks(page))
       let totalCount = 0
-      const filterSupportedPlatform =
-        network === 'all'
-          ? SUPPORTED_PLATFORMS
-          : SUPPORTED_PLATFORMS.filter(item => {
-              return (
-                (!protocol || item.protocol === protocol) &&
-                (!network || item.network === network)
-              )
-            })
+      const filterSupportedPlatform = SUPPORTED_PLATFORMS.filter(item => {
+        return (
+          item.protocol === protocol && (!network || item.network === network)
+        )
+      })
 
       const res = await Promise.allSettled(
         filterSupportedPlatform.map(async ({ network, protocol }) => {

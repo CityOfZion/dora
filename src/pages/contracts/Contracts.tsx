@@ -15,13 +15,11 @@ import { fetchContracts } from '../../actions/contractActions'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import tokens from '../../assets/nep5/svg'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import { useNavigate } from 'react-router-dom'
-import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 type ParsedContract = {
   time: React.FC
@@ -93,8 +91,8 @@ const Contracts: React.FC = () => {
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,
   )
+  const { network } = useNetworkGlobalSelector()
   const width = useWindowWidth()
-  const navigate = useNavigate()
   const [perPage, setPerPage] = useState<number>(0)
   const model = usePaginationModel({
     lastPage: getLastPage(perPage, contractsState.totalCount),
@@ -117,27 +115,13 @@ const Contracts: React.FC = () => {
         ]
 
   function loadPage(page: number): void {
-    dispatch(fetchContracts(network, protocol, page))
+    dispatch(fetchContracts(network, page))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    navigate,
-    'neo3',
-    'mainnet',
-  )
-
   useEffect(() => {
-    if (network !== 'all') {
-      setPerPage(15)
-      return
-    }
-
-    setPerPage(60)
+    setPerPage(15)
+    dispatch(fetchContracts(network))
   }, [network])
-
-  useEffect(() => {
-    dispatch(fetchContracts(network, protocol))
-  }, [protocol, network])
 
   return (
     <div id="Contracts" className="page-container">
@@ -159,22 +143,6 @@ const Contracts: React.FC = () => {
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>{ROUTES.CONTRACTS.name}</h1>
         </div>
-        <Filter
-          selectedOption={{
-            label: '',
-            value: {
-              protocol,
-              network,
-            },
-          }}
-          handleFilterUpdate={(option): void => {
-            model.events.goTo(1)
-            handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
-            })
-          }}
-        />
 
         <List
           data={returnContractListData(

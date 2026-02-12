@@ -178,17 +178,16 @@ export function fetchContract(hash: string): AppThunk<Promise<void>> {
 
 export function fetchContracts(
   network: string,
-  protocol: string,
   page = 1,
 ): AppThunk<Promise<void>> {
   return async (dispatch): Promise<void> => {
+    const protocol = 'neo3'
+
     try {
       dispatch(requestContracts(page))
       let totalCount = 0
       const filterSupportedPlatform = SUPPORTED_PLATFORMS.filter(
-        item =>
-          network === 'all' ||
-          (item.network === network && item.protocol === protocol),
+        item => item.network === network && item.protocol === protocol,
       )
       const res = await Promise.all(
         filterSupportedPlatform.map(async ({ network, protocol }) => {
@@ -249,6 +248,62 @@ export function fetchMainnetContractsInvocations(): AppThunk<Promise<void>> {
         dispatch(requestContractsInvocationsSuccess(sortedContracts))
       } catch (e) {
         dispatch(requestContractsInvocationsError(toError(e)))
+      }
+    } else {
+      dispatch(
+        requestContractsInvocationsSuccess(
+          getState().contract.contractsInvocations,
+        ),
+      )
+    }
+  }
+}
+
+type FetchAllContractsInvocationsResult = {
+  network: string
+  protocol: string
+  name: string
+  hash: string
+  count: number
+  change: string
+}
+
+export function fetchAllContractsInvocations(): AppThunk<Promise<void>> {
+  return async (
+    dispatch,
+    getState: () => { contract: State },
+  ): Promise<void> => {
+    if (shouldFetchContractsInvocations(getState())) {
+      dispatch(requestContractsInvocations())
+      try {
+        const result: FetchAllContractsInvocationsResult[] = []
+        const invocationResponseMainnet =
+          await NeoRest.invocationStats('mainnet')
+
+        result.push(
+          ...invocationResponseMainnet.map(invocation => ({
+            ...invocation,
+            network: 'mainnet',
+            protocol: 'neo3',
+          })),
+        )
+
+        const invocationResponseTestnet =
+          await NeoRest.invocationStats('testnet')
+
+        result.push(
+          ...invocationResponseTestnet.map(invocation => ({
+            ...invocation,
+            network: 'testnet',
+            protocol: 'neo3',
+          })),
+        )
+        const sortedContracts = result
+          .flat()
+          .sort((a, b) => (a?.count < b?.count ? 1 : -1))
+        dispatch(requestContractsInvocationsSuccess(sortedContracts))
+      } catch (error) {
+        dispatch(requestContractsInvocationsError(toError(error)))
       }
     } else {
       dispatch(

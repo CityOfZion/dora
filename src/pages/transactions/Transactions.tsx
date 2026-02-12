@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
@@ -13,13 +13,12 @@ import {
 } from '../../reducers/transactionReducer'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
-import Filter, { Platform } from '../../components/filter/Filter'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
 import TransactionTime from '../../components/transaction/TransactionTime'
 import { usePaginationModel, getLastPage } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 type ParsedTx = {
   time: React.FC
@@ -68,12 +67,12 @@ const returnTxListData = (
 const Transactions: React.FC = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
-  const navigate = useNavigate()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
+  const { network } = useNetworkGlobalSelector()
   const [perPage, setPerPage] = useState<number>(0)
 
   const model = usePaginationModel({
@@ -82,27 +81,13 @@ const Transactions: React.FC = () => {
   })
 
   function loadPage(page: number): void {
-    dispatch(fetchTransactions(network, protocol, page))
+    dispatch(fetchTransactions(network, page))
   }
 
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    navigate,
-    'neo3',
-    'mainnet',
-  )
-
   useEffect(() => {
-    if (network !== 'all') {
-      setPerPage(15)
-      return
-    }
-
-    setPerPage(60)
+    setPerPage(15)
+    dispatch(fetchTransactions(network))
   }, [network])
-
-  useEffect(() => {
-    dispatch(fetchTransactions(network, protocol))
-  }, [protocol, network])
 
   const columns =
     width > 768
@@ -139,25 +124,6 @@ const Transactions: React.FC = () => {
           {ROUTES.TRANSACTIONS.renderIcon()}
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
-        <Filter
-          selectedOption={{
-            label: '',
-            value: {
-              protocol,
-              network,
-            },
-          }}
-          handleFilterUpdate={(option): void => {
-            model.events.goTo(1)
-            if ((option.value as Platform).network !== 'all') {
-              setPerPage(15)
-            }
-            handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
-            })
-          }}
-        />
         <List
           data={returnTxListData(
             transactionState.all,
