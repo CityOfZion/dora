@@ -3,11 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { toBigNumber } from '../../../../utils/formatter'
+import {
+  convertToArbitraryDecimals,
+  toBigNumber,
+} from '../../../../utils/formatter'
 import { State as AddressState } from '../../../../reducers/addressReducer'
 import {
   fetchAddress,
   resetAddressState,
+  fetchUnclaimedGas,
 } from '../../../../actions/addressActions'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
 import { getLogo } from '../../../../utils/getLogo'
@@ -36,7 +40,7 @@ const AddressAssets: React.FC = () => {
   const addressState = useSelector(
     ({ address }: { address: AddressState }) => address,
   )
-  const { balance, isLoading } = addressState
+  const { balance, isLoading, unclaimedGas } = addressState
 
   const navigate = useNavigate()
   function handleContractClick(contractHash: string) {
@@ -45,6 +49,7 @@ const AddressAssets: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchAddress(hash, chain))
+    dispatch(fetchUnclaimedGas(hash, network))
 
     return () => {
       dispatch(resetAddressState())
@@ -53,6 +58,27 @@ const AddressAssets: React.FC = () => {
 
   return (
     <div id="nft-container" className="page-container">
+      {unclaimedGas && unclaimedGas !== '0' && (
+        <div id="unclaimed-gas-balance-container">
+          <div className="balance-container">
+            <div className="balance-details">
+              <div className="icon-container">
+                {getTransferLogo('GAS', chain)}
+              </div>
+              <p className="balance-infos">
+                <span className="balance-symbol">Unclaimed GAS</span>
+                <span className="balance-name">GasToken</span>
+              </p>
+            </div>
+            <p className="balance-amount">
+              {convertToArbitraryDecimals(
+                Number(unclaimedGas || 0),
+                8,
+              ).toString()}
+            </p>
+          </div>
+        </div>
+      )}
       <div id="address-balance-container">
         {balance &&
           balance.map(balance => (
@@ -61,7 +87,7 @@ const AddressAssets: React.FC = () => {
                 <div className="icon-container">
                   {getTransferLogo(balance.symbol, chain)}
                 </div>
-                <div
+                <p
                   className="balance-infos"
                   onClick={() => handleContractClick(balance.asset)}
                 >
@@ -69,11 +95,11 @@ const AddressAssets: React.FC = () => {
                   {balance.name && (
                     <span className="balance-name">{balance.name}</span>
                   )}
-                </div>
+                </p>
               </div>
-              <div className="balance-amount">
+              <p className="balance-amount">
                 {toBigNumber(balance.balance).toString()}
-              </div>
+              </p>
             </div>
           ))}
       </div>

@@ -19,6 +19,7 @@
 `dora` is built on top of a new cross chain backend service, documentation for which can be found [here](https://dora.coz.io/documentation/index.html) and should be referenced for all contributors and future development.
 
 ## Local development
+
 `npm run start` Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
@@ -26,7 +27,22 @@ The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
 ## Generating static documentation
+
 Static documentation automatically gets parsed and generated on the client side based on the contents of `/src/documentation/api.yaml` in the `develop` branch built on top of [swagger-ui-dist](https://www.npmjs.com/package/swagger-ui-dist)
 
 ## Deployment to Develop and Production Environments
+
 Merges made to the `develop` branch will automatically build and deploy to https://dora-dev.coz.io/ while updates to `master` will deploy https://dora.coz.io/
+
+## Environment Configuration
+
+Create a `.env` file in the project root with the following variables:
+
+```env
+VITE_NODE_NEO3_MAINNET='http://seed1.neo.org:10332'
+VITE_NODE_NEO3_TESTNET='http://seed2t5.neo.org:20332'
+VITE_LAST_COMMIT=''
+VITE_API_HOST='https://dora.coz.io'
+VITE_API_BASE_PATH='/api/v2/neo3'
+VITE_MONITOR_HOST='wss://dora.coz.io'
+```
