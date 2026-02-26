@@ -21,8 +21,8 @@ export const MonitorProvider: React.FC<{ children: React.ReactNode }> = ({
   const [showMessage, setShowMessage] = useState(false)
   const [message, setMessage] = useState('')
   const [stopRender, setStopRender] = useState<boolean>(false)
-  const [protocol, setProtocol] = useState<string>('all')
-  const [network, setNetwork] = useState<string>('all')
+  const [protocol, setProtocol] = useState<string>('neo3')
+  const [network, setNetwork] = useState<string>('mainnet')
 
   return (
     <MonitorContext.Provider

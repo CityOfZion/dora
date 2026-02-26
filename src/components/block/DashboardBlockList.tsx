@@ -71,12 +71,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
   const navigate = useNavigate()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const neo3List = blockState.all.filter(
-    d => d.protocol === 'neo3' && d.network === 'mainnet',
+    block => block.protocol === 'neo3' && block.network === network,
   )
 
   useEffect(() => {
-    if (!neo3List.length) dispatch(fetchBlocks('mainnet'))
-  }, [dispatch, neo3List.length])
+    if (!neo3List.length) dispatch(fetchBlocks(network))
+  }, [dispatch, neo3List.length, network])
 
   const columns =
     width > 768
@@ -118,9 +118,12 @@ const DashboardBlockList: React.FC<{ network: string }> = ({ network }) => {
                 blockState.isLoading || neo3List.length === 0,
               )}
               rowId="height"
-              generateHref={(data): string =>
-                `${ROUTES.BLOCK.url}/neo3/mainnet/${data.id}`
-              }
+              generateHref={(data): string => {
+                const dataNetwork =
+                  neo3List.find(block => block.index.toString() === data.id)
+                    ?.network || 'mainnet'
+                return `${ROUTES.BLOCK.url}/neo3/${dataNetwork}/${data.id}`
+              }}
               isLoading={blockState.isLoading || neo3List.length === 0}
               columns={columns}
               leftBorderColorOnRow="#D355E7"

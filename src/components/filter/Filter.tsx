@@ -25,13 +25,6 @@ export const Filter: React.FC<Props> = ({
 }): ReactElement => {
   const options: Option[] = [
     {
-      label: 'All',
-      value: {
-        protocol: 'all',
-        network: 'all',
-      },
-    },
-    {
       label: 'Mainnet',
       value: {
         protocol: 'neo3',

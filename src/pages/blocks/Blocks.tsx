@@ -15,14 +15,13 @@ import { State as BlockState, Block } from '../../reducers/blockReducer'
 import './Blocks.scss'
 import { ROUTES } from '../../constants'
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import Filter, { Platform } from '../../components/filter/Filter'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import useFilterStateWithHistory from '../../hooks/useFilterStateWithHistory'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 type ParsedBlock = {
   time: string
@@ -82,16 +81,11 @@ const returnBlockListData = (
 const Blocks: React.FC<MatchParams> = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
+  const { network } = useNetworkGlobalSelector()
   const width = useWindowWidth()
 
-  const navigate = useNavigate()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
-  const { protocol, handleSetFilterData, network } = useFilterStateWithHistory(
-    navigate,
-    'neo3',
-    'mainnet',
-  )
   const [perPage, setPerPage] = useState<number>(0)
 
   const model = usePaginationModel({
@@ -100,21 +94,13 @@ const Blocks: React.FC<MatchParams> = () => {
   })
 
   function loadPage(page: number): void {
-    dispatch(fetchBlocks(network, protocol, page))
+    dispatch(fetchBlocks(network, page))
   }
 
   useEffect(() => {
-    if (network !== 'all') {
-      setPerPage(15)
-      return
-    }
-
-    setPerPage(60)
+    setPerPage(15)
+    dispatch(fetchBlocks(network))
   }, [network])
-
-  useEffect(() => {
-    dispatch(fetchBlocks(network, protocol))
-  }, [protocol, network])
 
   const columns =
     width > 768
@@ -159,22 +145,6 @@ const Blocks: React.FC<MatchParams> = () => {
           {ROUTES.BLOCKS.renderIcon()}
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
-        <Filter
-          selectedOption={{
-            label: '',
-            value: {
-              protocol,
-              network,
-            },
-          }}
-          handleFilterUpdate={(option): void => {
-            model.events.goTo(1)
-            handleSetFilterData({
-              protocol: (option.value as Platform).protocol,
-              network: (option.value as Platform).network,
-            })
-          }}
-        />
         <List
           data={returnBlockListData(
             blockState.all,

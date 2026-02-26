@@ -36,12 +36,11 @@ import OnHoldSVG from '../../assets/icons/on-hold.svg?react'
 import { MonitorContext } from '../../contexts/MonitorContext'
 import CopyIcon from '../../assets/icons/content_copy_white_48dp.svg?react'
 import useWindowWidth from '../../hooks/useWindowWidth'
-import Filter, { Platform } from '../../components/filter/Filter'
 import classNames from 'classnames'
-import useFilterState from '../../hooks/useFilterState'
 import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
 import { Icon } from '@iconify/react'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 type ParsedNodes = {
   endpoint: React.FC
@@ -598,19 +597,13 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
       sortDataList.desc,
     )
 
-    if (protocol === 'all' && network === 'all') {
-      return sortedNodes
-    } else if (network !== 'all') {
-      return sortedNodes.filter(node => node.network === network)
-    } else {
-      //temporary state, remove when api cuts over
-      let mutableNetwork = network
-      if (mutableNetwork === 'testnet_rc4') {
-        mutableNetwork = 'testnet'
-      }
-
-      return sortedNodes.filter(node => node.network === mutableNetwork)
+    //temporary state, remove when api cuts over
+    let mutableNetwork = network
+    if (mutableNetwork === 'testnet_rc4') {
+      mutableNetwork = 'testnet'
     }
+
+    return sortedNodes.filter(node => node.network === mutableNetwork)
   }
 
   const leftBorderColorOnRow = (
@@ -839,31 +832,22 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
 
 const Monitor: React.FC = () => {
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
-  const { protocol, handleSetFilterData, network } = useFilterState(
-    undefined,
-    'neo3',
-    'mainnet',
-  )
+  const { network } = useNetworkGlobalSelector()
   const [sortDataList] = useState<{
     desc: boolean
     sort: SORT_OPTION
   }>({ desc: false, sort: 'isItUp' })
 
-  const { message, showMessage, setShowMessage, setNetwork, setProtocol } =
-    useContext(MonitorContext)
+  const { message, showMessage, setShowMessage } = useContext(MonitorContext)
 
   const selectedData = (): WSDoraData[] => {
-    let sortedNodes = OrderNodes(
+    const sortedNodes = OrderNodes(
       sortDataList.sort,
       nodes.nodesArray,
       sortDataList.desc,
     )
 
-    if (network !== 'all') {
-      sortedNodes = sortedNodes.filter(node => node.network === network)
-    }
-
-    return sortedNodes
+    return sortedNodes.filter(node => node.network === network)
   }
 
   return (
@@ -890,30 +874,11 @@ const Monitor: React.FC = () => {
         <div className="network-status-container">
           <div className="network-status-header">
             <span className="network-status-title">Network status</span>
-            <div className="network-status-toggle">
-              <Filter
-                selectedOption={{
-                  label: '',
-                  value: {
-                    protocol,
-                    network,
-                  },
-                }}
-                handleFilterUpdate={(option): void => {
-                  handleSetFilterData({
-                    protocol: (option.value as Platform).protocol,
-                    network: (option.value as Platform).network,
-                  })
-                  setNetwork((option.value as Platform).network)
-                  setProtocol((option.value as Platform).protocol)
-                }}
-              />
-            </div>
           </div>
           <NetworkStatus data={selectedData()} />
         </div>
         <div>
-          <ListMonitor network={network} protocol={protocol} />
+          <ListMonitor network={network} protocol={'neo3'} />
         </div>
         <Snackbar
           title={message}

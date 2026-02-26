@@ -63,12 +63,12 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
   )
   const { all } = txState
   const neo3List = all.filter(
-    d => d.protocol === 'neo3' && d.network === 'mainnet',
+    block => block.protocol === 'neo3' && block.network === network,
   )
 
   useEffect(() => {
-    if (!neo3List.length) dispatch(fetchTransactions('mainnet'))
-  }, [dispatch, neo3List.length])
+    if (!neo3List.length) dispatch(fetchTransactions(network))
+  }, [dispatch, neo3List.length, network])
 
   const columns =
     width > 768
@@ -99,9 +99,12 @@ const DashboardTransactionsList: React.FC<Props> = ({ network }) => {
             <List
               data={returnTxListData(neo3List, txState.isLoading)}
               rowId="hash"
-              generateHref={(data): string =>
-                `${ROUTES.TRANSACTION.url}/neo3/mainnet/${data.id}`
-              }
+              generateHref={(data): string => {
+                const dataNetwork =
+                  neo3List.find(block => block.hash === data.hash)?.network ||
+                  'mainnet'
+                return `${ROUTES.TRANSACTION.url}/neo3/${dataNetwork}/${data.id}`
+              }}
               isLoading={txState.isLoading}
               columns={columns}
               leftBorderColorOnRow="#D355E7"
