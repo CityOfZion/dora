@@ -10,7 +10,7 @@ import txCube from '../../assets/tx_cube.svg'
 import './Transfer.scss'
 import { getLogo } from '../../utils/getLogo'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
-import { convertToArbitraryDecimals } from '../../utils/formatter'
+import { convertToArbitraryDecimals, formatAmount } from '../../utils/formatter'
 import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useAddressNavigation } from '../../hooks/useAddressNavigation'
@@ -102,8 +102,9 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                   </Text>
                   <Flex className="transfer-amount-container" mb={2}>
                     {getTransferLogo(transfer.symbol, chain)}
-                    <Text>{transfer.amount}</Text>
-                    <Text>{transfer.name}</Text>
+                    <Text maxW={'inherit'} wordBreak={'break-all'}>
+                      {formatAmount(transfer.amount)} {transfer.name}
+                    </Text>
                   </Flex>
                 </Flex>
               )
@@ -275,8 +276,9 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                   </Text>
                   <Flex className="transfer-amount-container" mb={2}>
                     {getTransferLogo(transfer.symbol, chain)}
-                    <Text>{transfer.amount}</Text>
-                    <Text>{transfer.name}</Text>
+                    <Text maxW={'inherit'} wordBreak={'break-all'}>
+                      {formatAmount(transfer.amount)} {transfer.name}
+                    </Text>
                   </Flex>
                 </Flex>
               )

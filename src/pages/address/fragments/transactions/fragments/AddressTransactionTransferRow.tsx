@@ -1,7 +1,7 @@
 import React from 'react'
 import { Transfer, Notification } from '../AddressTransaction'
 import tokens from '../../../../../assets/nep5/svg'
-import { truncateHash } from '../../../../../utils/formatter'
+import { formatAmount, truncateHash } from '../../../../../utils/formatter'
 import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
 
 type Props = {
@@ -58,7 +58,7 @@ const AddressTransactionTransfer: React.FC<Props> = ({
                       alt=""
                     />
                   )}
-                  {transfer.amount}
+                  {formatAmount(transfer.amount)}
                 </span>
                 <span>{type}</span>
               </div>
