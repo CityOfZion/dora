@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { NeoRest } from '../rest'
 import { isEmpty } from 'lodash'
 import { u, wallet } from '@cityofzion/neon-js'
+import { nativeContracts } from '../constants'
 
 type SearchOptions = {
   protocol: string
@@ -87,15 +88,59 @@ const options: SearchOptions[] = [
   },
 ]
 
+type SearchPrimaryOption = Omit<SearchOptions, 'validateFn'> & {
+  validateFn: (text: string) => { valid: boolean; text?: string }
+}
+
+const primaryOptions: SearchPrimaryOption[] = [
+  {
+    protocol: 'neo3',
+    network: 'mainnet',
+    type: 'contract',
+    fetchFn: (text: string) => NeoRest.contract(text, 'mainnet'),
+    validateFn: (text: string) => {
+      const nativeContractHex = nativeContracts.get(text.toLowerCase())
+
+      return { valid: !!nativeContractHex, text: nativeContractHex }
+    },
+  },
+  {
+    protocol: 'neo3',
+    network: 'testnet',
+    type: 'contract',
+    fetchFn: (text: string) => NeoRest.contract(text, 'testnet'),
+    validateFn: (text: string) => {
+      const nativeContractHex = nativeContracts.get(text.toLowerCase())
+
+      return { valid: !!nativeContractHex, text: nativeContractHex }
+    },
+  },
+]
+
 export const useBlockchainSearch = () => {
   const search = useCallback(async (text: string): Promise<any[]> => {
-    const filteredOptions = options.filter(option => {
-      if (option.validateFn) {
-        return option.validateFn(text)
-      }
+    const cachedText = text
 
-      return true
+    const filteredPrimaryOptions = primaryOptions.filter(option => {
+      const result = option.validateFn(cachedText)
+
+      if (typeof result.text === 'string') text = result.text
+
+      return result.valid
     })
+
+    let filteredOptions: SearchOptions[] | SearchPrimaryOption[] =
+      filteredPrimaryOptions.length > 0 ? filteredPrimaryOptions : []
+
+    if (filteredOptions.length === 0) {
+      filteredOptions = options.filter(option => {
+        if (option.validateFn) {
+          return option.validateFn(text)
+        }
+
+        return true
+      })
+    }
 
     const searchResults: SearchResult[] = []
 
@@ -117,7 +162,7 @@ export const useBlockchainSearch = () => {
           network: options.network,
           protocol: options.protocol,
           type: options.type,
-          text: text,
+          text,
         })
       }),
     )
