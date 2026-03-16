@@ -10,10 +10,10 @@ import txCube from '../../assets/tx_cube.svg'
 import './Transfer.scss'
 import { getLogo } from '../../utils/getLogo'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
-import { useNavigate } from 'react-router-dom'
 import { convertToArbitraryDecimals } from '../../utils/formatter'
 import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
+import { useAddressNavigation } from '../../hooks/useAddressNavigation'
 
 type Transfer = {
   from: string
@@ -38,16 +38,9 @@ function getTransferLogo(symbol: string, chain: string): React.ReactNode {
 
 const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
   const width = useWindowWidth()
-  const navigate = useNavigate()
+  const { navigateToAddress, isAddressClickable } = useAddressNavigation()
 
   const isMobileOrTablet = width <= 990
-
-  function handleAddressClick(address: string) {
-    if (address === 'mint' || address === 'burn') {
-      return
-    }
-    navigate(`/address/${chain}/${network}/${address}`)
-  }
 
   function getNetworkFee() {
     return String(convertToArbitraryDecimals(Number(transaction.netfee), 8))
@@ -80,8 +73,10 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           SENT FROM
         </Text>
         <Box className="asset-transfer-details-container">
-          {transfers.map(
-            (transfer: Transfer) =>
+          {transfers.map((transfer: Transfer) => {
+            const isAddressFromClickable = isAddressClickable(transfer.from)
+
+            return (
               transfer.from && (
                 <Flex
                   maxW={'100%'}
@@ -95,10 +90,12 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     truncate
                     textOverflow={'clip'}
                     textAlign={'center'}
-                    color={'tertiary'}
+                    color={isAddressFromClickable ? 'tertiary' : 'white'}
                     mb={4}
-                    onClick={() => handleAddressClick(transfer.from)}
-                    cursor={'pointer'}
+                    onClick={() =>
+                      navigateToAddress(chain, network, transfer.from)
+                    }
+                    cursor={isAddressFromClickable ? 'pointer' : 'default'}
                     zIndex={2}
                   >
                     {transfer.from}
@@ -109,8 +106,9 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     <Text>{transfer.name}</Text>
                   </Flex>
                 </Flex>
-              ),
-          )}
+              )
+            )
+          })}
         </Box>
         {isMobileOrTablet ? (
           <Image
@@ -248,8 +246,10 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           />
         )}
         <Box className="asset-transfer-details-container">
-          {transfers.map(
-            (transfer: Transfer) =>
+          {transfers.map((transfer: Transfer) => {
+            const isAddressToClickable = isAddressClickable(transfer.to)
+
+            return (
               transfer.to && (
                 <Flex
                   maxW={'100%'}
@@ -263,10 +263,12 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     truncate
                     textOverflow={'clip'}
                     textAlign={'center'}
-                    color={'tertiary'}
+                    color={isAddressToClickable ? 'tertiary' : 'white'}
                     mb={4}
-                    onClick={() => handleAddressClick(transfer.to)}
-                    cursor={'pointer'}
+                    onClick={() =>
+                      navigateToAddress(chain, network, transfer.to)
+                    }
+                    cursor={isAddressToClickable ? 'pointer' : 'default'}
                     zIndex={2}
                   >
                     {transfer.to}
@@ -277,8 +279,9 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     <Text>{transfer.name}</Text>
                   </Flex>
                 </Flex>
-              ),
-          )}
+              )
+            )
+          })}
         </Box>
       </Flex>
     </SimpleGrid>

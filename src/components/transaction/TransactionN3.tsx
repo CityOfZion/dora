@@ -14,6 +14,7 @@ import Signature from './signatures/Signature'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { StackResult } from './StackResult'
+import { useAddressNavigation } from '../../hooks/useAddressNavigation'
 
 type Props = {
   transfers: ParsedTransfer[]
@@ -29,8 +30,11 @@ export const TransactionN3: React.FC<Props> = ({
   transfers,
 }) => {
   const width = useWindowWidth()
+  const { navigateToAddress, isAddressClickable } = useAddressNavigation()
 
   const isMobileOrTablet = width <= 768
+
+  const isAddressSenderClickable = isAddressClickable(transaction.sender)
 
   return (
     <>
@@ -75,11 +79,15 @@ export const TransactionN3: React.FC<Props> = ({
                 <Text flex={1}>SENDER</Text>
 
                 <Text
-                  color={'tertiary'}
+                  color={isAddressSenderClickable ? 'tertiary' : 'white'}
                   truncate
                   fontSize={'lg'}
                   fontWeight={600}
                   textAlign={['right', 'center']}
+                  onClick={() =>
+                    navigateToAddress(chain, network, transaction.sender)
+                  }
+                  cursor={isAddressSenderClickable ? 'pointer' : 'default'}
                   flex={1}
                 >
                   {transaction.sender}
