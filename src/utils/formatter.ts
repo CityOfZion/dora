@@ -47,3 +47,10 @@ export const uuid = () => {
   const numbers = Math.random().toString(36)
   return date + numbers
 }
+
+export const formatAmount = (amount: string | number) => {
+  if (!amount && amount != 0) return '0'
+
+  const bigNumber = toBigNumber(amount)
+  return bigNumber.toFixed()
+}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { AddressTransaction } from '../AddressTransaction'
 import TransactionTime from './TransactionTime'
 import { ROUTES } from '../../../../../constants'
-import { truncateHash } from '../../../../../utils/formatter'
+import { formatAmount, truncateHash } from '../../../../../utils/formatter'
 import tokens from '../../../../../assets/nep5/svg'
 import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
 
@@ -66,7 +66,7 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
                 alt=""
               />
             )}
-            <span>{it.amount}</span>
+            <span>{formatAmount(it.amount)}</span>
           </div>
           <div className="horiz">
             <label className="weight-1">Type</label>
