@@ -452,3 +452,20 @@ export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
     options: [STRING_OPTION],
   },
 }
+
+export const nativeContracts = new Map<string, string>([
+  ['contractmanagement', '0xfffdc93764dbaddd97c48f252a53ea4643faa3fd'],
+  ['cryptolib', '0x726cb6e0cd8628a1350a611384688911ab75f51b'],
+  ['gastoken', '0xd2a4cff31913016155e38e474a2c06d08be276cf'],
+  ['gas', '0xd2a4cff31913016155e38e474a2c06d08be276cf'],
+  ['ledgercontract', '0xda65b600f7124ce6c79950c1772a36403104f2be'],
+  ['ledger', '0xda65b600f7124ce6c79950c1772a36403104f2be'],
+  ['neo', '0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5'],
+  ['neotoken', '0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5'],
+  ['oracle', '0xfe924b7cfe89ddd271abaf7210a80a7e11178758'],
+  ['oraclecontract', '0xfe924b7cfe89ddd271abaf7210a80a7e11178758'],
+  ['policy', '0xcc5e4edd9f5f8dba8bb65734541df7a1c081c67b'],
+  ['policycontract', '0xcc5e4edd9f5f8dba8bb65734541df7a1c081c67b'],
+  ['rolemanagement', '0x49cf4e5378ffcd4dec034fd98a174c5491e395e2'],
+  ['stdlib', ' 	0xacce6fd80d44e1796aa0c2c625e9e4e0ce39efc0'],
+])

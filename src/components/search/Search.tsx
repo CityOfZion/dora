@@ -46,10 +46,10 @@ const Search: React.FC = () => {
           path = `${startUrl}/${result.protocol}/${result.network}/${result.response.index}`
           break
         case SEARCH_TYPES.ENDPOINT:
-          path = `${startUrl}/${text}`
+          path = `${startUrl}/${result.text}`
           break
         default:
-          path = `${startUrl}/${result.protocol}/${result.network}/${text}`
+          path = `${startUrl}/${result.protocol}/${result.network}/${result.text}`
       }
       return navigate(path)
     }
