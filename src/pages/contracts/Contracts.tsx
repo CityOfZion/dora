@@ -1,25 +1,25 @@
-import React, { ReactElement, useEffect, useState } from 'react'
-import moment from 'moment'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import moment from 'moment'
+import React, { ReactElement, useEffect, useState } from 'react'
 
-import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
-import List from '../../components/list/List'
+import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchContracts } from '../../actions/contractActions'
+import List from '../../components/list/List'
+import Breadcrumbs from '../../components/navigation/Breadcrumbs'
+import ListPagination from '../../components/pagination/ListPagination'
+import PlatformCell from '../../components/platform-cell/PlatformCell'
+import { TokenIcon } from '../../components/token-icon/TokenIcon'
+import { ROUTES } from '../../constants'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import useWindowWidth from '../../hooks/useWindowWidth'
 import {
   Contract,
   State as ContractState,
 } from '../../reducers/contractReducer'
-import './Contracts.scss'
-import { ROUTES } from '../../constants'
-import { fetchContracts } from '../../actions/contractActions'
-import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import tokens from '../../assets/nep5/svg'
-import useWindowWidth from '../../hooks/useWindowWidth'
-import PlatformCell from '../../components/platform-cell/PlatformCell'
-import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
-import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
-import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
+import './Contracts.scss'
 
 type ParsedContract = {
   time: React.FC
@@ -41,13 +41,16 @@ const mapContractData = (contract: Contract): ParsedContract => {
     hash: contract.hash,
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
-        {tokens[contract.symbol] ? (
-          <div className="contract-icon-container">
-            <img src={tokens[contract.symbol]} alt="token-logo" />
-          </div>
-        ) : (
-          <div className="contract-icon-stub"></div>
-        )}
+        {contract.protocol?.length &&
+          contract.hash.length &&
+          contract.symbol.length && (
+            <TokenIcon
+              blockchain={contract.protocol}
+              hash={contract.hash}
+              className="contract-icon"
+            />
+          )}
+
         <div className="contract-name-label">
           {contract.name ||
             contract.asset_name ||

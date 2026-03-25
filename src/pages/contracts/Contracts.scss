@@ -10,12 +10,8 @@
     color: #d355e7;
     overflow: hidden;
 
-    .contract-icon-container {
-      width: 36px;
-
-      img {
-        max-width: 25px;
-      }
+    .contract-icon {
+      margin-right: 8px;
     }
 
     .contract-name-label {
