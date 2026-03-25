@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 
-import { MOCK_CONTRACTS_INVOCATIONS_DATA } from '../../utils/mockData'
 import List from '../../components/list/List'
 import './ContractsInvocations.scss'
 import { State as ContractState } from '../../reducers/contractReducer'
@@ -78,9 +77,7 @@ const returnBlockListData = (
   returnStub: boolean,
 ): Array<ParsedInvocation> => {
   if (returnStub) {
-    return MOCK_CONTRACTS_INVOCATIONS_DATA.map((invocation, i) =>
-      mapInvocationData(invocation, 0, i),
-    ).slice(0, 5)
+    return []
   } else {
     const totalTransactions =
       data.length && data.reduce((a, b) => a + b.count, 0)

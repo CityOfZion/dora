@@ -28,7 +28,6 @@ import {
 } from '../../reducers/nodeReducer'
 import { setNode } from '../../actions/nodeActions'
 import { ColumnType } from '../../components/list/List'
-import { MOCK_NODES } from '../../utils/mockData'
 import InformationPanel from '../../components/panel/InformationPanel'
 import ApprovedSVG from '../../assets/icons/approved.svg?react'
 import DisapprovedSVG from '../../assets/icons/disapproved.svg?react'
@@ -425,7 +424,7 @@ const returnNodesListData = (
   returnStub: boolean,
 ): Array<ParsedNodes> => {
   if (returnStub) {
-    return MOCK_NODES.map(n => n)
+    return []
   } else {
     return data.map(data => mapNodesData(data))
   }
