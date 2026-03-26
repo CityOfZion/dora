@@ -88,69 +88,34 @@ const options: SearchOptions[] = [
   },
 ]
 
-type SearchPrimaryOption = Omit<SearchOptions, 'validateFn'> & {
-  validateFn: (text: string) => { valid: boolean; text?: string }
-}
-
-const primaryOptions: SearchPrimaryOption[] = [
-  {
-    protocol: 'neo3',
-    network: 'mainnet',
-    type: 'contract',
-    fetchFn: (text: string) => NeoRest.contract(text, 'mainnet'),
-    validateFn: (text: string) => {
-      const nativeContractHex = nativeContracts.get(text.toLowerCase())
-
-      return { valid: !!nativeContractHex, text: nativeContractHex }
-    },
-  },
-  {
-    protocol: 'neo3',
-    network: 'testnet',
-    type: 'contract',
-    fetchFn: (text: string) => NeoRest.contract(text, 'testnet'),
-    validateFn: (text: string) => {
-      const nativeContractHex = nativeContracts.get(text.toLowerCase())
-
-      return { valid: !!nativeContractHex, text: nativeContractHex }
-    },
-  },
-]
-
 export const useBlockchainSearch = () => {
   const search = useCallback(async (text: string): Promise<any[]> => {
-    const cachedText = text
+    // lookup name to contract hash
+    const contractHash = nativeContracts.get(text.toLowerCase())
 
-    const filteredPrimaryOptions = primaryOptions.filter(option => {
-      const result = option.validateFn(cachedText)
-
-      if (typeof result.text === 'string') text = result.text
-
-      return result.valid
-    })
-
-    let filteredOptions: SearchOptions[] | SearchPrimaryOption[] =
-      filteredPrimaryOptions.length > 0 ? filteredPrimaryOptions : []
-
-    if (filteredOptions.length === 0) {
-      filteredOptions = options.filter(option => {
+    let searchOptions
+    if (contractHash === undefined) {
+      searchOptions = options.filter(option => {
         if (option.validateFn) {
           return option.validateFn(text)
         }
-
         return true
       })
+    } else {
+      searchOptions = options.filter(option => {
+        return option.type === 'contract'
+      })
+      text = contractHash
+    }
+
+    if (searchOptions.length === 0) {
+      return []
     }
 
     const searchResults: SearchResult[] = []
-
-    if (filteredOptions.length === 0) {
-      return searchResults
-    }
-
     //execute the search across the search scope
     await Promise.allSettled(
-      filteredOptions.map(async ({ fetchFn, ...options }) => {
+      searchOptions.map(async ({ fetchFn, ...options }) => {
         const fetchResponse = await fetchFn(text)
 
         if (!fetchResponse || isEmpty(fetchResponse)) {
