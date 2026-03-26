@@ -95,7 +95,7 @@ export const useBlockchainSearch = () => {
       const contractHash = nativeContracts.get(text.toLowerCase())
 
       let searchOptions
-      if (contractHash === undefined) {
+      if (!contractHash) {
         searchOptions = options.filter(option => {
           return option.network === network && option.validateFn(text)
         })
