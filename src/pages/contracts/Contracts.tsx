@@ -42,14 +42,16 @@ const mapContractData = (contract: Contract): ParsedContract => {
     name: (): ReactElement => (
       <div className="contract-name-and-icon-row">
         {contract.protocol?.length &&
-          contract.hash.length &&
-          contract.symbol.length && (
-            <TokenIcon
-              blockchain={contract.protocol}
-              hash={contract.hash}
-              className="contract-icon"
-            />
-          )}
+        contract.hash.length &&
+        contract.symbol.length ? (
+          <TokenIcon
+            blockchain={contract.protocol}
+            hash={contract.hash}
+            className="contract-icon"
+          />
+        ) : (
+          <div className="contract-icon-stub"></div>
+        )}
 
         <div className="contract-name-label">
           {contract.name ||
