@@ -19,6 +19,7 @@ import {
 } from '../../hooks/useBlockchainSearch'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { NoResult } from '../../components/no-result/NoResult'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 type PlatformElementProps = { network: string }
 
@@ -164,6 +165,8 @@ const SearchResults: React.FC = () => {
 
   const [results, setResults] = React.useState<SearchResult[] | undefined>()
 
+  const { network } = useNetworkGlobalSelector()
+
   useEffect(() => {
     async function handle() {
       if (!searchText || isSearchingRef.current) return
@@ -175,7 +178,7 @@ const SearchResults: React.FC = () => {
           setResults(state.results)
           return
         }
-        const result = await search(searchText)
+        const result = await search(searchText, network)
         setResults(result)
       } catch (error) {
         console.error(error)
