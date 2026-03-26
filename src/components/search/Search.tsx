@@ -7,11 +7,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { ROUTES, SEARCH_TYPES } from '../../constants'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useBlockchainSearch } from '../../hooks/useBlockchainSearch'
+import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 
 const Search: React.FC = () => {
   const navigate = useNavigate()
   const width = useWindowWidth()
   const [searchParams] = useSearchParams()
+  const { network } = useNetworkGlobalSelector()
 
   const { search } = useBlockchainSearch()
 
@@ -25,7 +27,7 @@ const Search: React.FC = () => {
   async function handleSearch(event: React.SyntheticEvent) {
     event.preventDefault()
 
-    const results = await search(text)
+    const results = await search(text, network)
 
     if (results.length === 1) {
       const routesOptions: Record<string, string> = {
