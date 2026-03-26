@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { MOCK_TX_LIST_DATA } from '../../utils/mockData'
@@ -15,10 +15,10 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import TransactionTime from '../../components/transaction/TransactionTime'
-import { usePaginationModel, getLastPage } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import { usePagination } from '../../hooks/usePagination'
 
 type ParsedTx = {
   time: React.FC
@@ -35,59 +35,64 @@ interface MatchParams extends Record<string, string | undefined> {
   network?: string
 }
 
-const mapTransactionData = (tx: Transaction): ParsedTx => {
+type MapTransactionDataParams = {
+  tx: Transaction
+}
+
+type ReturnTxListDataParams = {
+  data: Array<Transaction>
+  returnStub: boolean
+}
+
+const mapTransactionData = ({ tx }: MapTransactionDataParams): ParsedTx => {
+  const hash = tx.hash || tx.txid
+
   return {
     platform: (): ReactElement => (
       <PlatformCell protocol={tx.protocol} network={tx.network} />
     ),
     time: (): ReactElement => <TransactionTime block_time={tx.time} />,
-    txid: (): ReactElement => (
-      <div className="txid-index-cell"> {tx.hash || tx.txid} </div>
-    ),
+    txid: (): ReactElement => <div className="txid-index-cell"> {hash} </div>,
     size: `${tx.size.toLocaleString()} Bytes`,
-    hash: tx.hash || tx.txid,
+    hash: hash,
     chain: tx.protocol || '',
-    href: `${ROUTES.TRANSACTION.url}/${tx.protocol}/${tx.network}/${
-      tx.hash || tx.txid
-    }`,
+    href: `${ROUTES.TRANSACTION.url}/${tx.protocol}/${tx.network}/${hash}`,
   }
 }
 
-const returnTxListData = (
-  data: Array<Transaction>,
-  returnStub: boolean,
-): Array<ParsedTx> => {
+const returnTxListData = ({
+  data,
+  returnStub,
+}: ReturnTxListDataParams): Array<ParsedTx> => {
   if (returnStub) {
-    return MOCK_TX_LIST_DATA.map(tx => mapTransactionData(tx))
+    return MOCK_TX_LIST_DATA.map(tx => mapTransactionData({ tx }))
   } else {
-    return data.map(tx => mapTransactionData(tx))
+    return data.map(tx => mapTransactionData({ tx }))
   }
 }
 
 const Transactions: React.FC = () => {
   const dispatch = useDispatch<AppThunkDispatch>()
   const width = useWindowWidth()
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
   const transactionState = useSelector(
     ({ transaction }: { transaction: TxState }) => transaction,
   )
   const { network } = useNetworkGlobalSelector()
-  const [perPage, setPerPage] = useState<number>(0)
-
-  const model = usePaginationModel({
-    lastPage: getLastPage(perPage, transactionState.totalCount),
-    onPageChange: pageNumber => loadPage(pageNumber),
+  const { model, perPage, page } = usePagination({
+    loadPage,
+    totalCount: transactionState.totalCount,
   })
 
-  function loadPage(page: number): void {
-    dispatch(fetchTransactions(network, page))
+  function loadPage(nextPage: number): void {
+    dispatch(fetchTransactions(network, nextPage))
   }
 
   useEffect(() => {
-    setPerPage(15)
-    dispatch(fetchTransactions(network))
-  }, [network])
+    dispatch(fetchTransactions(network, page))
+  }, [network, page])
 
   const columns =
     width > 768
@@ -125,10 +130,10 @@ const Transactions: React.FC = () => {
           <h1>{ROUTES.TRANSACTIONS.name}</h1>
         </div>
         <List
-          data={returnTxListData(
-            transactionState.all,
-            !transactionState.all.length,
-          )}
+          data={returnTxListData({
+            data: transactionState.all,
+            returnStub: !transactionState.all.length,
+          })}
           rowId="hash"
           isLoading={transactionState.isLoading}
           columns={columns}

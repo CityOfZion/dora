@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import moment from 'moment'
@@ -18,10 +18,10 @@ import Breadcrumbs from '../../components/navigation/Breadcrumbs'
 import PlatformCell from '../../components/platform-cell/PlatformCell'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useParams } from 'react-router-dom'
-import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import { usePagination } from '../../hooks/usePagination'
 
 type ParsedBlock = {
   time: string
@@ -40,7 +40,16 @@ interface MatchParams extends Record<string, string | undefined> {
   network?: string
 }
 
-const mapBlockData = (block: Block): ParsedBlock => {
+type ReturnBlockListDataParams = {
+  data: Array<Block>
+  returnStub: boolean
+}
+
+type MapBlockDataParams = {
+  block: Block
+}
+
+const mapBlockData = ({ block }: MapBlockDataParams): ParsedBlock => {
   return {
     chain: block.protocol || '',
     platform: (): ReactElement => (
@@ -66,15 +75,14 @@ const mapBlockData = (block: Block): ParsedBlock => {
   }
 }
 
-const returnBlockListData = (
-  data: Array<Block>,
-  returnStub: boolean,
-  _network: string,
-): Array<ParsedBlock> => {
+const returnBlockListData = ({
+  data,
+  returnStub,
+}: ReturnBlockListDataParams): Array<ParsedBlock> => {
   if (returnStub) {
-    return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData(block))
+    return MOCK_BLOCK_LIST_DATA.map(block => mapBlockData({ block }))
   } else {
-    return data.map(block => mapBlockData(block))
+    return data.map(block => mapBlockData({ block }))
   }
 }
 
@@ -83,24 +91,21 @@ const Blocks: React.FC<MatchParams> = () => {
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { network } = useNetworkGlobalSelector()
   const width = useWindowWidth()
+  const { perPage, page, model } = usePagination({
+    loadPage,
+    totalCount: blockState.totalCount,
+  })
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { chain, network: networkParam } = useParams<MatchParams>()
-  const [perPage, setPerPage] = useState<number>(0)
 
-  const model = usePaginationModel({
-    lastPage: getLastPage(perPage, blockState.totalCount),
-    onPageChange: pageNumber => loadPage(pageNumber),
-  })
-
-  function loadPage(page: number): void {
-    dispatch(fetchBlocks(network, page))
+  function loadPage(nextPage: number): void {
+    dispatch(fetchBlocks(network, nextPage))
   }
 
   useEffect(() => {
-    setPerPage(15)
-    dispatch(fetchBlocks(network))
-  }, [network])
+    dispatch(fetchBlocks(network, page))
+  }, [network, page])
 
   const columns =
     width > 768
@@ -146,11 +151,10 @@ const Blocks: React.FC<MatchParams> = () => {
           <h1>{ROUTES.BLOCKS.name}</h1>
         </div>
         <List
-          data={returnBlockListData(
-            blockState.all,
-            !blockState.all.length,
-            network,
-          )}
+          data={returnBlockListData({
+            data: blockState.all,
+            returnStub: !blockState.all.length,
+          })}
           rowId="height"
           isLoading={blockState.isLoading}
           columns={columns}

@@ -69,7 +69,7 @@ const Block: React.FC = () => {
           ]}
         />
 
-        <BackButton url={ROUTES.BLOCKS.url} text="back to blocks" />
+        <BackButton text="back to blocks" />
 
         <div className="page-title-container">
           {ROUTES.BLOCKS.renderIcon()}
