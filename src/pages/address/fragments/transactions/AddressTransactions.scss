@@ -210,6 +210,18 @@
       }
     }
   }
+
+  &__image {
+    &--token{
+      width: 17px;
+      height: 17px;
+    }
+
+    &--token-mobile{
+      width: 15px;
+      height: 15px;
+    }
+  }
 }
 
 .no-transaction {

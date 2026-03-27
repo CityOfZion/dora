@@ -1,8 +1,8 @@
 import React from 'react'
 import { Transfer, Notification } from '../AddressTransaction'
-import tokens from '../../../../../assets/nep5/svg'
 import { formatAmount, truncateHash } from '../../../../../utils/formatter'
 import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
+import { TokenIcon } from '../../../../../components/token-icon/TokenIcon'
 
 type Props = {
   transfers: Transfer[]
@@ -50,12 +50,12 @@ const AddressTransactionTransfer: React.FC<Props> = ({
                   {truncateHash(transfer.symbol, true, 10, 4)}
                 </span>
                 <span className="whitespace-no-wrap">
-                  {tokens[transfer.symbol ?? 'NEO'] && (
-                    <img
-                      width={15}
-                      height={10}
-                      src={tokens[transfer.symbol ?? 'NEO']}
-                      alt=""
+                  {transfer.symbol && transfer.symbol.length > 0 && (
+                    <TokenIcon
+                      blockchain={props.chain}
+                      hash={transfer.scripthash}
+                      symbol={transfer.symbol}
+                      className="address-transactions__image--token"
                     />
                   )}
                   {formatAmount(transfer.amount)}
