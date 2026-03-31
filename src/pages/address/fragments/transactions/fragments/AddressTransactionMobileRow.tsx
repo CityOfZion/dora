@@ -4,8 +4,8 @@ import { AddressTransaction } from '../AddressTransaction'
 import TransactionTime from './TransactionTime'
 import { ROUTES } from '../../../../../constants'
 import { formatAmount, truncateHash } from '../../../../../utils/formatter'
-import tokens from '../../../../../assets/nep5/svg'
 import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
+import { TokenIcon } from '../../../../../components/token-icon/TokenIcon'
 
 type Props = {
   transaction: AddressTransaction
@@ -58,12 +58,12 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           </div>
           <div className="horiz">
             <label className="weight-1">Amount</label>
-            {tokens[it.symbol ?? 'NEO'] && (
-              <img
-                width={15}
-                height={10}
-                src={tokens[it.symbol ?? 'NEO']}
-                alt=""
+            {it.symbol && it.symbol.length > 0 && (
+              <TokenIcon
+                blockchain={chain}
+                hash={it.scripthash}
+                symbol={it.symbol}
+                className="address-transactions__image--token-mobile"
               />
             )}
             <span>{formatAmount(it.amount)}</span>

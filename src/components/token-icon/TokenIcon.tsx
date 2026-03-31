@@ -1,4 +1,5 @@
-import React from 'react'
+import { memo, useState } from 'react'
+import './TokenIcon.scss'
 
 const NEON_ICONS_URL =
   'https://raw.githubusercontent.com/CityOfZion/neon-icons/main/tokens'
@@ -6,27 +7,26 @@ const NEON_ICONS_URL =
 type Props = {
   blockchain: string
   hash: string
-  width?: number
-  height?: number
+  symbol?: string
   className?: string
+  notFoundElement?: JSX.Element
 }
 
-export const TokenIcon = React.memo(
-  ({ blockchain, hash, width = 24, height = 24, className }: Props) => {
-    return (
+export const TokenIcon = memo(
+  ({ blockchain, hash, symbol, className, notFoundElement }: Props) => {
+    const [hasError, setHasError] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    return hasError && notFoundElement ? (
+      notFoundElement
+    ) : (
       <img
         src={`${NEON_ICONS_URL}/${blockchain}/${hash}.png`}
-        alt="token-logo"
-        width={width}
-        height={height}
-        className={className}
-        style={{ display: 'none' }}
-        onLoad={({ currentTarget }) => {
-          currentTarget.style.display = 'block'
-        }}
-        onError={({ currentTarget }) => {
-          currentTarget.onerror = null
-        }}
+        alt={symbol ? `${symbol} logo` : 'Token logo'}
+        className={`token-icon ${className}`}
+        style={{ display: isLoaded ? 'block' : 'none' }}
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setHasError(true)}
       />
     )
   },

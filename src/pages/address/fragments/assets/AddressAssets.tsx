@@ -14,18 +14,9 @@ import {
   fetchUnclaimedGas,
 } from '../../../../actions/addressActions'
 import useUpdateNetworkState from '../../../../hooks/useUpdateNetworkState'
-import { getLogo } from '../../../../utils/getLogo'
 import { AppThunkDispatch } from '../../../../store'
-
-function getTransferLogo(symbol: string, chain: string): React.ReactNode {
-  const icon = getLogo(symbol, chain)
-
-  return icon ? (
-    <img src={icon} className="icon" alt="token-logo" />
-  ) : (
-    <span className="icon-not-found">N/A</span>
-  )
-}
+import { TokenIcon } from '../../../../components/token-icon/TokenIcon'
+import { N3_GAS_TOKEN_HASH } from '../../../../constants'
 
 interface MatchParams extends Record<string, string | undefined> {
   hash: string
@@ -63,7 +54,12 @@ const AddressAssets: React.FC = () => {
           <div className="balance-container">
             <div className="balance-details">
               <div className="icon-container">
-                {getTransferLogo('GAS', chain)}
+                <TokenIcon
+                  blockchain={chain}
+                  symbol="GAS"
+                  hash={N3_GAS_TOKEN_HASH}
+                  className="icon"
+                />
               </div>
               <p className="balance-infos">
                 <span className="balance-symbol">Unclaimed GAS</span>
@@ -85,7 +81,15 @@ const AddressAssets: React.FC = () => {
             <div key={balance.symbol} className="balance-container">
               <div className="balance-details">
                 <div className="icon-container">
-                  {getTransferLogo(balance.symbol, chain)}
+                  <TokenIcon
+                    blockchain={chain}
+                    symbol={balance.symbol}
+                    hash={balance.asset}
+                    className="icon"
+                    notFoundElement={
+                      <span className="icon-not-found">N/A</span>
+                    }
+                  />
                 </div>
                 <p
                   className="balance-infos"

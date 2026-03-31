@@ -27,6 +27,7 @@ export type ParsedTransfer = {
   to: string
   from: string
   symbol: string
+  contractHash: string
 }
 const parseNeo3TransactionData = async (
   transaction: DetailedTransaction,
@@ -100,6 +101,7 @@ const parseNeo3TransactionData = async (
             ),
             to: to_address,
             from: from_address,
+            contractHash: notification.contract,
           })
         }
       }

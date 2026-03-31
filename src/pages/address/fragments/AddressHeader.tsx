@@ -1,10 +1,10 @@
 import React from 'react'
 import { NavLink, useParams } from 'react-router-dom'
-import { ROUTES } from '../../../constants'
+import { N3_NEO_TOKEN_HASH, ROUTES } from '../../../constants'
 import Copy from '../../../components/copy/Copy'
 import classNames from 'classnames'
-import { getLogo } from '../../../utils/getLogo'
 import { capitalizeWord } from '../../../utils/formatter'
+import { TokenIcon } from '../../../components/token-icon/TokenIcon'
 
 interface MatchParams extends Record<string, string | undefined> {
   hash: string
@@ -27,7 +27,12 @@ const AddressHeader: React.FC = () => {
         <div className="horiz weight-1">
           <div className="address-hash-info">
             <div className="address-hash-logo">
-              <img src={getLogo('NEO', chain)} alt="token-logo" />
+              <TokenIcon
+                blockchain={chain}
+                symbol={'NEO'}
+                hash={N3_NEO_TOKEN_HASH}
+                className="icon"
+              />
             </div>
             <div>
               <div>{`Neo N3 (${capitalizeWord(network)})`}</div>

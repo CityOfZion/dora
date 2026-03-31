@@ -1,4 +1,3 @@
-import React from 'react'
 import uniqueId from 'lodash/uniqueId'
 
 import TransferArrow from '../../assets/icons/transfer-arrow.svg?react'
@@ -8,32 +7,19 @@ import txRightCube from '../../assets/tx_right_cubes.svg'
 import txCube from '../../assets/tx_cube.svg'
 
 import './Transfer.scss'
-import { getLogo } from '../../utils/getLogo'
 import { DetailedTransaction } from '../../reducers/transactionReducer'
 import { convertToArbitraryDecimals, formatAmount } from '../../utils/formatter'
 import { Box, Flex, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { useAddressNavigation } from '../../hooks/useAddressNavigation'
-
-type Transfer = {
-  from: string
-  name: string
-  to: string
-  amount: string | number
-  symbol: string
-}
+import { TokenIcon } from '../token-icon/TokenIcon'
+import { ParsedTransfer } from '../../pages/transaction/Transaction'
 
 type Props = {
-  transfers: Array<Transfer>
+  transfers: ParsedTransfer[]
   network: string
   transaction: DetailedTransaction
   chain: string
-}
-
-function getTransferLogo(symbol: string, chain: string): React.ReactNode {
-  const icon = getLogo(symbol, chain)
-
-  return icon && <img src={icon} className="icon" alt="token-logo" />
 }
 
 const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
@@ -73,7 +59,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           SENT FROM
         </Text>
         <Box className="asset-transfer-details-container">
-          {transfers.map((transfer: Transfer) => {
+          {transfers.map((transfer: ParsedTransfer) => {
             const isAddressFromClickable = isAddressClickable(transfer.from)
 
             return (
@@ -101,7 +87,12 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     {transfer.from}
                   </Text>
                   <Flex className="transfer-amount-container" mb={2}>
-                    {getTransferLogo(transfer.symbol, chain)}
+                    <TokenIcon
+                      blockchain={chain}
+                      symbol={transfer.symbol}
+                      hash={transfer.contractHash}
+                      className="icon"
+                    />
                     <Text maxW={'inherit'} wordBreak={'break-all'}>
                       {formatAmount(transfer.amount)} {transfer.name}
                     </Text>
@@ -247,7 +238,7 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
           />
         )}
         <Box className="asset-transfer-details-container">
-          {transfers.map((transfer: Transfer) => {
+          {transfers.map((transfer: ParsedTransfer) => {
             const isAddressToClickable = isAddressClickable(transfer.to)
 
             return (
@@ -275,7 +266,12 @@ const Transfer = ({ transfers = [], network, transaction, chain }: Props) => {
                     {transfer.to}
                   </Text>
                   <Flex className="transfer-amount-container" mb={2}>
-                    {getTransferLogo(transfer.symbol, chain)}
+                    <TokenIcon
+                      blockchain={chain}
+                      symbol={transfer.symbol}
+                      hash={transfer.contractHash}
+                      className="icon"
+                    />
                     <Text maxW={'inherit'} wordBreak={'break-all'}>
                       {formatAmount(transfer.amount)} {transfer.name}
                     </Text>

@@ -453,15 +453,18 @@ export const TX_STATE_TYPE_MAPPINGS: TxStateTypeMappings = {
   },
 }
 
+export const N3_NEO_TOKEN_HASH = '0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5'
+export const N3_GAS_TOKEN_HASH = '0xd2a4cff31913016155e38e474a2c06d08be276cf'
+
 export const nativeContracts = new Map<string, string>([
   ['contractmanagement', '0xfffdc93764dbaddd97c48f252a53ea4643faa3fd'],
   ['cryptolib', '0x726cb6e0cd8628a1350a611384688911ab75f51b'],
-  ['gastoken', '0xd2a4cff31913016155e38e474a2c06d08be276cf'],
-  ['gas', '0xd2a4cff31913016155e38e474a2c06d08be276cf'],
+  ['gastoken', N3_GAS_TOKEN_HASH],
+  ['gas', N3_GAS_TOKEN_HASH],
   ['ledgercontract', '0xda65b600f7124ce6c79950c1772a36403104f2be'],
   ['ledger', '0xda65b600f7124ce6c79950c1772a36403104f2be'],
-  ['neo', '0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5'],
-  ['neotoken', '0xef4073a0f2b305a38ec4050e4d3d28bc40ea63f5'],
+  ['neo', N3_NEO_TOKEN_HASH],
+  ['neotoken', N3_NEO_TOKEN_HASH],
   ['oracle', '0xfe924b7cfe89ddd271abaf7210a80a7e11178758'],
   ['oraclecontract', '0xfe924b7cfe89ddd271abaf7210a80a7e11178758'],
   ['policy', '0xcc5e4edd9f5f8dba8bb65734541df7a1c081c67b'],
