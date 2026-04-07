@@ -1,8 +1,7 @@
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import moment from 'moment'
-import React, { ReactElement, useEffect, useState } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 
-import { getLastPage, usePaginationModel } from '@workday/canvas-kit-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchContracts } from '../../actions/contractActions'
 import List from '../../components/list/List'
@@ -20,6 +19,7 @@ import {
 import { AppThunkDispatch } from '../../store'
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import './Contracts.scss'
+import { usePagination } from '../../hooks/usePagination'
 
 type ParsedContract = {
   time: React.FC
@@ -32,7 +32,18 @@ type ParsedContract = {
   platform: React.FC
 }
 
-const mapContractData = (contract: Contract): ParsedContract => {
+type MapContractDataParams = {
+  contract: Contract
+}
+
+type ReturnContractListDataParams = {
+  data: Array<Contract>
+  returnStub: boolean
+}
+
+const mapContractData = ({
+  contract,
+}: MapContractDataParams): ParsedContract => {
   return {
     platform: (): ReactElement => (
       <PlatformCell protocol={contract.protocol} network={contract.network} />
@@ -80,14 +91,16 @@ const mapContractData = (contract: Contract): ParsedContract => {
   }
 }
 
-const returnContractListData = (
-  data: Array<Contract>,
-  returnStub: boolean,
-): Array<ParsedContract> => {
+const returnContractListData = ({
+  data,
+  returnStub,
+}: ReturnContractListDataParams): Array<ParsedContract> => {
   if (returnStub) {
-    return MOCK_CONTRACT_LIST_DATA.map(c => mapContractData(c))
+    return MOCK_CONTRACT_LIST_DATA.map(contract =>
+      mapContractData({ contract }),
+    )
   } else {
-    return data.map(c => mapContractData(c))
+    return data.map(contract => mapContractData({ contract }))
   }
 }
 
@@ -98,10 +111,9 @@ const Contracts: React.FC = () => {
   )
   const { network } = useNetworkGlobalSelector()
   const width = useWindowWidth()
-  const [perPage, setPerPage] = useState<number>(0)
-  const model = usePaginationModel({
-    lastPage: getLastPage(perPage, contractsState.totalCount),
-    onPageChange: pageNumber => loadPage(pageNumber),
+  const { perPage, page, model } = usePagination({
+    loadPage,
+    totalCount: contractsState.totalCount,
   })
 
   const columns =
@@ -119,14 +131,13 @@ const Contracts: React.FC = () => {
           { name: 'Name', accessor: 'name' },
         ]
 
-  function loadPage(page: number): void {
-    dispatch(fetchContracts(network, page))
+  function loadPage(nextPage: number): void {
+    dispatch(fetchContracts(network, nextPage))
   }
 
   useEffect(() => {
-    setPerPage(15)
-    dispatch(fetchContracts(network))
-  }, [network])
+    dispatch(fetchContracts(network, page))
+  }, [network, page])
 
   return (
     <div id="Contracts" className="page-container">
@@ -150,10 +161,10 @@ const Contracts: React.FC = () => {
         </div>
 
         <List
-          data={returnContractListData(
-            contractsState.all,
-            !contractsState.all.length,
-          )}
+          data={returnContractListData({
+            data: contractsState.all,
+            returnStub: !contractsState.all.length,
+          })}
           rowId="hash"
           generateHref={(data): string => `${ROUTES.CONTRACT.url}/${data.id}`}
           isLoading={contractsState.isLoading}
