@@ -6,7 +6,7 @@ import { closeMenu, openMenu } from '../../actions/menuActions'
 import BurgerMenu from '../../assets/icons/burger-menu.svg?react'
 import CloseIcon from '../../assets/icons/close-icon.svg?react'
 import ResourceLogo from '../../assets/icons/coz-resource-logo.svg?react'
-import MobileLogo from '../../assets/icons/mobile-logo.svg?react'
+import NeoscanLogo from '../../assets/icons/neoscan-logo.svg?react'
 import { ROUTES, ROUTES_ENTRY } from '../../constants'
 import { State as MenuState } from '../../reducers/menuReducer'
 import Search from '../search/Search'
@@ -84,13 +84,17 @@ const Navigation: React.FC<Props> = ({
 
         <div id="mobile-navigation">
           <div id="mobile-logo-container">
-            <MobileLogo
+            <NeoscanLogo
               onClick={(): void => {
                 dispatch(closeMenu())
                 navigate(ROUTES.HOME.url)
               }}
             />
           </div>
+          <Filter
+            selectedOption={selectedOption}
+            handleFilterUpdate={handleFilterUpdate}
+          />
           <div id="burger-menu-container">
             {menuState.open ? (
               <CloseIcon

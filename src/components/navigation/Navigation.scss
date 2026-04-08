@@ -68,8 +68,26 @@
         cursor: pointer;
       }
 
+      #mobile-logo-container {
+        svg {
+          height: 30px;
+          padding-bottom: 5px;
+        }
+      }
+
+      #burger-menu-container {
+        svg {
+          padding-bottom: 5px;
+        }
+      }
+
       #top-level-mobile-navigation {
         display: flex;
+      }
+
+      #Filter {
+        justify-content: center;
+        padding: 10px 0 0 0;
       }
     }
 
