@@ -73,7 +73,7 @@ const Contract: React.FC = () => {
             },
           ]}
         />
-        <BackButton text="back to contracts" />
+        <BackButton text="back" fallbackUrl={ROUTES.CONTRACTS.url} />
         <div className="page-title-container">
           {ROUTES.CONTRACTS.renderIcon()}
           <h1>Contract Information</h1>
