@@ -6,9 +6,15 @@ import { Box, BoxProps, Button, Flex, Text } from '@chakra-ui/react'
 interface Props extends BoxProps {
   text: string
   url?: string
+  fallbackUrl?: string
 }
 
-const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
+const BackButton: React.FC<Props> = ({
+  text,
+  url,
+  fallbackUrl,
+  ...props
+}): ReactElement => {
   const navigate = useNavigate()
 
   const handleClick = () => {
@@ -17,7 +23,14 @@ const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
       return
     }
 
-    navigate(-1)
+    if (window.history.state?.idx > 0) {
+      navigate(-1)
+      return
+    }
+
+    if (fallbackUrl) {
+      navigate(fallbackUrl)
+    }
   }
 
   return (
@@ -26,7 +39,8 @@ const BackButton: React.FC<Props> = ({ text, url, ...props }): ReactElement => {
         <Flex
           bg={'tertiary'}
           borderRadius={16}
-          px={3}
+          pl={3}
+          pr={6}
           py={1}
           alignItems={`center`}
         >

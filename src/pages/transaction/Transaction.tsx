@@ -176,7 +176,7 @@ const Transaction: React.FC = () => {
           ]}
         />
 
-        <BackButton mb={6} text="back to transactions" />
+        <BackButton mb={6} text="back" fallbackUrl={ROUTES.TRANSACTIONS.url} />
 
         <Flex alignItems={'center'} mb={10}>
           <TransactionIcon width={22} height={23} />
