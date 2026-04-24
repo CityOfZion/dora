@@ -18,6 +18,7 @@ import TransactionIcon from '../../assets/icons/invocation.svg?react'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { u } from '@cityofzion/neon-js'
 import { AppThunkDispatch, store } from '../../store'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { NeoRest } from '../../rest'
 import { AssetResponse } from '@cityofzion/dora-ts/dist/interfaces/api/neo'
 
@@ -140,6 +141,7 @@ const Transaction: React.FC = () => {
   )
 
   useUpdateNetworkState()
+  useDocumentTitle(['Transaction', hash])
 
   useEffect(() => {
     dispatch(fetchTransaction(hash, chain))
