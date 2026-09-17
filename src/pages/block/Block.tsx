@@ -19,6 +19,7 @@ import useUpdateNetworkState from '../../hooks/useUpdateNetworkState'
 import { format24Hours, formatDate } from '../../utils/time'
 import N3BlockTransactionsList from '../../components/transaction/N3BlockTransactionList'
 import { AppThunkDispatch } from '../../store'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 interface MatchParams extends Record<string, string | undefined> {
   hash: string
@@ -28,7 +29,9 @@ interface MatchParams extends Record<string, string | undefined> {
 
 const Block: React.FC = () => {
   useUpdateNetworkState()
+
   const { hash = '', chain = '', network = '' } = useParams<MatchParams>()
+  useDocumentTitle(['Block', hash])
   const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const [blockTimeState, setBlockTimeState] = useState('')

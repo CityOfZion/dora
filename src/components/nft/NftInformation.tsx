@@ -15,6 +15,7 @@ import NoImageFound from '../../assets/no-image-found.png'
 import { truncateHash } from '../../utils/formatter'
 import { AppThunkDispatch } from '../../store'
 import Button from '../button/Button'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 interface Props {
   contractHash?: string
@@ -31,6 +32,7 @@ const NftInformation: React.FC<Props> = ({
   network,
   isLoading,
 }: Props) => {
+  useDocumentTitle(['NFT', truncateHash(id, true)])
   const [isOpenModal, setIsOpenModal] = useState(false)
 
   const width = useWindowWidth()
