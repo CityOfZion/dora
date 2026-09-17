@@ -8,6 +8,7 @@ import AddressTransactionTransfer from './AddressTransactionTransferRow'
 import React from 'react'
 import { AddressTransaction } from '../AddressTransaction'
 import useWindowWidth from '../../../../../hooks/useWindowWidth'
+import AddressTransactionMetadata from './AddressTransactionMetadata'
 
 interface Props {
   transaction: AddressTransaction
@@ -47,8 +48,8 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
               <ArrowForwardIos style={{ color: '#d355e7' }} />
             </Link>
           ) : (
-            <>
-              <div className="horiz">
+            <div className="address-transactions__table--header-details">
+              <div className="address-transactions__table--header-row">
                 <label>ID</label>{' '}
                 <Link
                   className="hash"
@@ -56,9 +57,9 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
                 >
                   <span>{transaction.hash}</span>
                 </Link>
+                <TransactionTime time={transaction.time} />
               </div>
-              <TransactionTime time={transaction.time} />
-            </>
+            </div>
           )}
         </div>
 
@@ -78,17 +79,26 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
           ) : (
             <AddressTransactionTransfer
               transfers={transaction.transfers}
+              events={transaction.events}
               chain={chain}
               network={network}
               notifications={transaction.notifications}
             />
           )}
-          <div className="horiz weight-1">
+          <div className="address-transactions__table--status">
+            <AddressTransactionMetadata transaction={transaction} />
             <div className="address-transactions__table--balloon">
-              Notifications: <span>{transaction.notifications.length}</span>
+              Notifications:{' '}
+              <span>
+                {transaction.notificationCount ??
+                  transaction.notifications.length}
+              </span>
             </div>
             <div className="address-transactions__table--balloon">
-              Invocations: <span>{transaction.invocations.length}</span>
+              Invocations:{' '}
+              <span>
+                {transaction.invocationCount ?? transaction.invocations.length}
+              </span>
             </div>
           </div>
         </div>

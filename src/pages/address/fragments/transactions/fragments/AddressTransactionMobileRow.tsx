@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom'
 import { AddressTransaction } from '../AddressTransaction'
 import TransactionTime from './TransactionTime'
 import { ROUTES } from '../../../../../constants'
-import { formatAmount, truncateHash } from '../../../../../utils/formatter'
-import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
-import { TokenIcon } from '../../../../../components/token-icon/TokenIcon'
+import { truncateHash } from '../../../../../utils/formatter'
+import AddressTransactionEvents from './AddressTransactionTransferRow'
 
 type Props = {
   transaction: AddressTransaction
@@ -31,52 +30,16 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
         <label className="weight-1">Date</label>
         <TransactionTime time={transaction.time} />
       </div>
-      {transaction.transfers.map(it => (
-        <div
-          className="address-transactions__card--mobile-items"
-          key={it.from + it.to + it.amount}
-        >
-          <div className="horiz">
-            <label className="weight-1">From</label>
-            <TransactionAddressLink
-              address={it.from}
-              linkClassName="hash"
-              {...props}
-            />
-          </div>
-          <div className="horiz">
-            <label className="weight-1">To</label>
-            <TransactionAddressLink
-              address={it.to}
-              linkClassName="hash"
-              {...props}
-            />
-          </div>
-          <div className="horiz">
-            <label className="weight-1">Symbol</label>
-            <span>{truncateHash(it.symbol, true, 10, 4)}</span>
-          </div>
-          <div className="horiz">
-            <label className="weight-1">Amount</label>
-            {it.symbol && it.symbol.length > 0 && (
-              <TokenIcon
-                blockchain={chain}
-                hash={it.scripthash}
-                symbol={it.symbol}
-                className="address-transactions__image--token-mobile"
-              />
-            )}
-            <span>{formatAmount(it.amount)}</span>
-          </div>
-          <div className="horiz">
-            <label className="weight-1">Type</label>
-            <span>NEP-17 Transfer</span>
-          </div>
-        </div>
-      ))}
-      {!transaction.transfers.length && (
+      <AddressTransactionEvents
+        transfers={transaction.transfers}
+        events={transaction.events}
+        notifications={transaction.notifications}
+        chain={chain}
+        network={network}
+      />
+      {!transaction.transfers.length && !transaction.events.length && (
         <div className="horiz justify-center">
-          <p>not found transfers</p>
+          <p>No events</p>
         </div>
       )}
     </div>
