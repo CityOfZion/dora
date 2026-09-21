@@ -50,13 +50,15 @@ const AddressTransactionsCard: React.FC<Props> = (props: Props) => {
           ) : (
             <div className="address-transactions__table--header-details">
               <div className="address-transactions__table--header-row">
-                <label>ID</label>{' '}
-                <Link
-                  className="hash"
-                  to={`${ROUTES.TRANSACTION.url}/${chain}/${network}/${transaction.hash}`}
-                >
-                  <span>{transaction.hash}</span>
-                </Link>
+                <div className="address-transactions__table--header-identity">
+                  <label>ID</label>
+                  <Link
+                    className="hash"
+                    to={`${ROUTES.TRANSACTION.url}/${chain}/${network}/${transaction.hash}`}
+                  >
+                    <span>{transaction.hash}</span>
+                  </Link>
+                </div>
                 <TransactionTime time={transaction.time} />
               </div>
             </div>

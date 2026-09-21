@@ -47,6 +47,32 @@
         color: var(--pink);
       }
 
+      &-row {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 5px;
+        min-width: 0;
+
+        label {
+          flex: 0 0 36px;
+          margin-bottom: 0;
+        }
+
+        .hash {
+          margin-bottom: 0;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        > div:last-child {
+          margin-left: auto;
+          margin-bottom: 0;
+        }
+      }
+
       &-items {
         background-color: var(--medium-grey-blue);
         border-radius: 4px;
@@ -151,16 +177,44 @@
     &--header-row {
       align-items: center;
       display: flex;
+      gap: 20px;
       justify-content: space-between;
+      min-width: 0;
 
-      > div:first-child {
-        align-items: center;
-        display: flex;
+      > div:last-child {
+        flex: 0 0 auto;
+      }
+    }
+
+    &--header-identity {
+      align-items: center;
+      display: flex;
+      min-width: 0;
+
+      label {
+        flex: 0 0 auto;
       }
 
       .hash {
         color: var(--pink);
-        margin: 0 10px;
+        margin-left: 10px;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        span {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    &--header-row {
+      > div:first-child {
+        align-items: center;
+        display: flex;
       }
     }
 
@@ -247,6 +301,14 @@
           flex-direction: column;
           font-weight: 600;
           gap: 2px;
+          min-width: 0;
+
+          > span,
+          small {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
 
           small {
             color: var(--pink);
@@ -299,9 +361,9 @@
 
     &--status {
       display: flex;
-      flex: 0 0 130px;
+      flex: 0 0 200px;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
 
       &-details {

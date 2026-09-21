@@ -17,8 +17,8 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="address-transactions__card--mobile">
-      <div className="horiz">
-        <label className="weight-1">ID</label>
+      <div className="address-transactions__card--mobile-row">
+        <label>ID</label>
         <Link
           className="hash"
           to={`${ROUTES.TRANSACTION.url}/${chain}/${network}/${transaction.hash}`}
@@ -26,8 +26,8 @@ const AddressTransactionMobileRow: React.FC<Props> = (props: Props) => {
           {truncateHash(transaction.hash, true)}
         </Link>
       </div>
-      <div className="horiz">
-        <label className="weight-1">Date</label>
+      <div className="address-transactions__card--mobile-row">
+        <label>Date</label>
         <TransactionTime time={transaction.time} />
       </div>
       <AddressTransactionEvents

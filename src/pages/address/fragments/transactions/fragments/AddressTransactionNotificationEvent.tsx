@@ -33,7 +33,7 @@ const AddressTransactionNotificationEvent: React.FC<Props> = ({
             Contract
           </span>
           <Link
-            className="address-transactions__table--event-contract"
+            className="address-transactions__table--transfers-event-contract"
             to={`${ROUTES.CONTRACT.url}/${chain}/${network}/${event.contractHash}`}
           >
             <span>{event.contractName}</span>
