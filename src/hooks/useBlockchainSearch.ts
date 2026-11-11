@@ -17,6 +17,11 @@ export type SearchResult = Omit<SearchOptions, 'fetchFn' | 'validateFn'> & {
   text: string
 }
 
+const addressWithHistory = async (address: string, network: string) => {
+  const { totalCount } = await NeoRest.addressTransactions(address, 1, network)
+  return totalCount > 0 ? { totalCount } : undefined
+}
+
 const options: SearchOptions[] = [
   {
     protocol: 'neo3',
@@ -35,7 +40,8 @@ const options: SearchOptions[] = [
     protocol: 'neo3',
     network: 'testnet',
     type: SEARCH_TYPES.BALANCE,
-    fetchFn: (text: string) => NeoRest.balance(text, 'testnet'),
+    // an address "exists" if it ever had a transaction, regardless of its current balance
+    fetchFn: (text: string) => addressWithHistory(text, 'testnet'),
     validateFn: (text: string) => wallet.isAddress(text),
   },
   {
@@ -69,7 +75,8 @@ const options: SearchOptions[] = [
     protocol: 'neo3',
     network: 'mainnet',
     type: SEARCH_TYPES.BALANCE,
-    fetchFn: (text: string) => NeoRest.balance(text, 'mainnet'),
+    // an address "exists" if it ever had a transaction, regardless of its current balance
+    fetchFn: (text: string) => addressWithHistory(text, 'mainnet'),
     validateFn: (text: string) => wallet.isAddress(text),
   },
   {
