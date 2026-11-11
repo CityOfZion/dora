@@ -101,8 +101,8 @@ const AddressResult = ({ result }: ResultComponentProps) => {
               </span>
             </div>
             <div className="search-result-detail">
-              <label>Asset Types</label>
-              <span>{result.response.length}</span>
+              <label>Transactions</label>
+              <span>{result.response.totalCount}</span>
             </div>
           </div>
         </div>
