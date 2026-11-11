@@ -253,6 +253,7 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
+          min-width: 0;
           padding: 15px;
 
           &-value {
@@ -260,6 +261,8 @@
             font-size: 13px;
             font-weight: 600;
             line-height: 18px;
+            max-width: 100%;
+            overflow-wrap: anywhere;
           }
         }
 
@@ -363,8 +366,8 @@
       display: flex;
       flex: 0 0 200px;
       flex-direction: column;
-      gap: 8px;
-      justify-content: center;
+      gap: 6px;
+      justify-content: flex-start;
 
       &-details {
         display: flex;
@@ -373,15 +376,14 @@
       }
 
       .address-transactions__table--balloon {
+        font-size: 12px;
+        justify-content: space-between;
+        letter-spacing: 0.5px;
         margin: 0;
-      }
-
-      &-balloon {
-        font-size: 10px;
-        padding: 6px 8px;
+        padding: 7px 12px;
 
         span {
-          margin-left: 3px;
+          margin: 0 0 0 8px;
           white-space: nowrap;
         }
       }

@@ -5,6 +5,13 @@ import { truncateHash } from '../../../../../utils/formatter'
 import { TransactionAddressLink } from '../../../../../components/transaction/TransactionAddressLink'
 import { NotificationEvent } from '../AddressTransaction'
 
+const withWordBreaks = (value: string): React.ReactNode[] =>
+  value
+    .split(/(?=[A-Z][a-z])/)
+    .flatMap((part, index) =>
+      index === 0 ? [part] : [<wbr key={index} />, part],
+    )
+
 type Props = {
   event: NotificationEvent
   chain: string
@@ -23,7 +30,7 @@ const AddressTransactionNotificationEvent: React.FC<Props> = ({
           Type
         </span>
         <span className="address-transactions__table--transfers-event-type-value">
-          {event.type}
+          {withWordBreaks(event.type)}
         </span>
       </div>
 
