@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import Breadcrumbs from '../../components/navigation/Breadcrumbs'
-import { ROUTES } from '../../constants'
+import { ROUTES, SEARCH_TYPES } from '../../constants'
 import './SearchResults.scss'
 
 import Neo3 from '../../assets/icons/neo3.svg?react'
@@ -149,10 +149,10 @@ const ContractResult = ({ result }: ResultComponentProps) => (
 )
 
 const resultComponentByType: Record<string, React.FC<ResultComponentProps>> = {
-  block: BlockResult,
-  balance: AddressResult,
-  transaction: TransactionResult,
-  contract: ContractResult,
+  [SEARCH_TYPES.BLOCK]: BlockResult,
+  [SEARCH_TYPES.BALANCE]: AddressResult,
+  [SEARCH_TYPES.TRANSACTION]: TransactionResult,
+  [SEARCH_TYPES.CONTRACT]: ContractResult,
 }
 
 const SearchResults: React.FC = () => {
@@ -229,6 +229,7 @@ const SearchResults: React.FC = () => {
           <div className="results">
             {Object.values(results).map(result => {
               const ResultComponent = resultComponentByType[result.type]
+              if (!ResultComponent) return null
 
               return (
                 <ResultComponent
