@@ -1,72 +1,423 @@
-.manifest-container {
+$manifest-text: #e3ecee;
+$manifest-muted: #93a9ae;
+$manifest-punct: #6f878c;
+$manifest-param: #c5d3d6;
+$manifest-accent: #d355e7;
+$manifest-control-bg: rgba(0, 0, 0, 0.2);
+$manifest-control-border: #34494f;
+$manifest-mono:
+  ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+  monospace;
+
+.manifest {
   display: flex;
   flex-direction: column;
+  gap: 12px;
   width: 100%;
-
-  .methods-panel {
-    flex-direction: column;
-    padding: 12px 0;
-  }
-
-  .expanding-panel-container {
-    margin-bottom: 12px;
-  }
+  min-width: 0;
+  color: $manifest-text;
+  word-break: normal;
 }
 
-.manifest-method-row-container {
+.manifest-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+// Collapsed sections sit close together like the old panels; an expanded
+// section gets extra room before the next one.
+.manifest-section.is-open:not(:last-child) {
+  margin-bottom: 28px;
+}
+
+// Section header: title + count, optional controls, collapse toggle
+
+.manifest-section-header {
   display: flex;
   align-items: center;
-  padding: 0 24px;
   flex-wrap: wrap;
+  gap: 12px 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid $manifest-accent;
+}
 
-  span {
-    font-weight: 400;
-    font-size: 14px;
+.manifest-section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-right: auto;
+  cursor: pointer;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.64px;
     color: #ffffff;
-    letter-spacing: 0;
-    margin-right: 12px;
-  }
-
-  p {
-    min-height: 28px;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    padding: 0 12px;
-    border-radius: 3px;
-    margin: 6px 12px;
-  }
-
-  .method-seperator {
-    font-weight: 600;
-    font-size: 20px;
-    color: #ffffff;
-    letter-spacing: 0;
   }
 }
 
-.method-parameters {
+.manifest-section-count {
+  font-size: 14px;
+  color: $manifest-muted;
+}
+
+.manifest-section-toggle {
+  flex: none;
   display: flex;
   align-items: center;
-  border-radius: 3px;
-  // min-height: 28px;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: $manifest-accent;
+  cursor: pointer;
+}
 
-  span {
-    min-height: 28px;
-    display: flex;
-    align-items: center;
-  }
+.manifest-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
 
-  .parameter-name {
-    background: #262651;
-    color: #fff;
-    padding: 0 6px;
-    border-radius: 3px 0 0 3px;
+.manifest-sort {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 6px;
+  background: $manifest-control-bg;
+}
+
+.manifest-sort-label {
+  padding: 0 8px 0 6px;
+  font-size: 12px;
+  color: $manifest-muted;
+}
+
+.manifest-sort-option {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #a9bcc0;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &.is-active {
+    background: $manifest-control-border;
+    color: $manifest-text;
   }
 }
 
-.param-paren {
-  font-size: 20px !important;
-  font-weight: 600 !important;
-  margin: 0 12px !important;
+.manifest-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 260px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid $manifest-control-border;
+  border-radius: 6px;
+  background: $manifest-control-bg;
+  color: $manifest-muted;
+
+  &:focus-within {
+    border-color: $manifest-accent;
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: $manifest-text;
+    font: inherit;
+    font-size: 13px;
+
+    &::placeholder {
+      color: #7d9499;
+    }
+  }
+}
+
+.manifest-section-toggle,
+.manifest-sort-option,
+.manifest-copy {
+  &:focus-visible {
+    outline: 2px solid $manifest-accent;
+    outline-offset: 1px;
+  }
+}
+
+// Method groups
+
+.manifest-group {
+  margin-top: 24px;
+}
+
+.manifest-group-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin-bottom: 8px;
+}
+
+.manifest-group-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+
+  &--safe {
+    color: #5fd6a8;
+  }
+
+  &--write {
+    color: $manifest-text;
+  }
+
+  &--system {
+    color: #a9bcc0;
+  }
+}
+
+.manifest-group-meta {
+  font-size: 13px;
+  color: $manifest-muted;
+}
+
+.manifest-empty {
+  margin: 24px 0 8px;
+  text-align: center;
+  font-size: 14px;
+  color: $manifest-muted;
+}
+
+// Signatures
+
+.manifest-signature-list {
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.15);
+
+  &--events {
+    margin-top: 20px;
+  }
+}
+
+.manifest-signature-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 4px 8px 4px 16px;
+}
+
+.manifest-signature {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  padding: 0;
+  background: none;
+  font-family: $manifest-mono;
+  font-size: 14px;
+  line-height: 1.7;
+  color: $manifest-text;
+
+  mark {
+    padding: 0;
+    border-radius: 2px;
+    background: rgba(211, 85, 231, 0.38);
+    color: inherit;
+  }
+}
+
+.sig-head {
+  flex: none;
+  white-space: nowrap;
+}
+
+.sig-name {
+  font-weight: 600;
+}
+
+// Parameters wrap as whole units and align under the first parameter
+.sig-params {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.6em;
+}
+
+.sig-param {
+  white-space: nowrap;
+}
+
+.sig-param-name {
+  color: $manifest-param;
+}
+
+.sig-punct {
+  color: $manifest-punct;
+}
+
+.sig-close--block {
+  display: none;
+}
+
+.sig-type {
+  &--primitive {
+    color: #c7a8ff;
+  }
+
+  &--bytes {
+    color: #6fc3ff;
+  }
+
+  &--collection {
+    color: #f3b26a;
+  }
+
+  &--other {
+    color: $manifest-muted;
+  }
+}
+
+.manifest-copy {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin: -4px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: $manifest-muted;
+  cursor: pointer;
+
+  &:hover {
+    color: $manifest-text;
+  }
+
+  &.is-copied {
+    color: $manifest-accent;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .manifest-section.is-open:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .manifest-section-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px 8px;
+  }
+
+  .manifest-section-heading {
+    grid-column: 1;
+    grid-row: 1;
+    margin-right: 0;
+  }
+
+  .manifest-section-toggle {
+    grid-column: 2;
+    grid-row: 1;
+    width: 44px;
+    height: 44px;
+  }
+
+  .manifest-controls {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .manifest-search {
+    order: -1;
+    width: 100%;
+    height: 44px;
+
+    input {
+      // 16px keeps iOS Safari from zooming in on focus
+      font-size: 16px;
+    }
+  }
+
+  .manifest-sort {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .manifest-sort-option {
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .manifest-signature-row {
+    gap: 4px;
+    padding: 6px 4px 6px 12px;
+  }
+
+  // One parameter per line, closing paren on its own line
+  .manifest-signature {
+    display: block;
+    font-size: 13px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  .sig-head {
+    display: block;
+    white-space: normal;
+  }
+
+  .manifest-signature--no-params .sig-head {
+    display: inline;
+  }
+
+  .sig-params {
+    flex-direction: column;
+    padding-left: 16px;
+  }
+
+  .sig-param {
+    white-space: normal;
+  }
+
+  .sig-close--inline {
+    display: none;
+  }
+
+  .sig-close--block {
+    display: block;
+  }
+
+  // Keep the 44px tap target without letting it stretch the row height
+  .manifest-copy {
+    width: 44px;
+    height: 44px;
+    margin: -11px 0;
+  }
 }
