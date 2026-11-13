@@ -19,6 +19,7 @@ import bs58check from 'bs58check'
 import useWindowWidth from '../../hooks/useWindowWidth'
 import { truncateHash } from '../../utils/formatter'
 import { AppThunkDispatch } from '../../store'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 interface MatchParams extends Record<string, string | undefined> {
   hash: string
@@ -35,6 +36,11 @@ const Contract: React.FC = () => {
   )
   const { contract, isLoading, contractStats } = contractsState
   const width = useWindowWidth()
+
+  const contractName =
+    !isLoading && contract?.manifest?.name ? contract.manifest.name : 'N/A'
+
+  useDocumentTitle(['Contract', contractName])
 
   function getAddressLink(): string {
     if (contract && chain === 'neo3') {
@@ -118,13 +124,7 @@ const Contract: React.FC = () => {
               <div className="detail-tile-row">
                 <div className="detail-tile">
                   <label>NAME</label>
-                  <span>
-                    {(contract &&
-                      !isLoading &&
-                      contract.manifest &&
-                      contract?.manifest.name) ||
-                      'N/A'}
-                  </span>
+                  <span>{contractName}</span>
                 </div>
                 <div className="detail-tile">
                   <label>SUPPORTED STANDARDS</label>

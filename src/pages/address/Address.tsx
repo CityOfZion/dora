@@ -1,13 +1,18 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 import './Address.scss'
 import AddressHeader from './fragments/AddressHeader'
 import AddressTransactions from './fragments/transactions/AddressTransactions'
 import AddressNFTS from './fragments/nfts/AddressNFTS'
 import AddressAssets from './fragments/assets/AddressAssets'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 const Address: React.FC = () => {
+  const { pathname } = useLocation()
+  const segments = pathname.split('/').filter(Boolean)
+  useDocumentTitle(['Address', segments[3]])
+
   return (
     <div id="Address" className="page-container">
       <div className="inner-page-container">

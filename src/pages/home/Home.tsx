@@ -7,9 +7,11 @@ import ContractsInvocations from '../../components/contract-invocation/Contracts
 import DashboardBlockList from '../../components/block/DashboardBlockList'
 import DashboardTransactionsList from '../../components/transaction/DashboardTransactionsList'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 const Home: React.FC = () => {
   const { network } = useNetworkGlobalSelector()
+  useDocumentTitle()
 
   return (
     <div id="Home" className="page-container">
