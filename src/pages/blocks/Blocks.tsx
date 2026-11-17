@@ -22,6 +22,7 @@ import ListPagination from '../../components/pagination/ListPagination'
 import { AppThunkDispatch } from '../../store'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
 import { usePagination } from '../../hooks/usePagination'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 type ParsedBlock = {
   time: string
@@ -87,6 +88,8 @@ const returnBlockListData = ({
 }
 
 const Blocks: React.FC<MatchParams> = () => {
+  useDocumentTitle(['Blocks'])
+
   const dispatch = useDispatch<AppThunkDispatch>()
   const blockState = useSelector(({ block }: { block: BlockState }) => block)
   const { network } = useNetworkGlobalSelector()

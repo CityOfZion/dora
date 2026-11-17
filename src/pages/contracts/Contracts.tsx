@@ -20,6 +20,7 @@ import { AppThunkDispatch } from '../../store'
 import { MOCK_CONTRACT_LIST_DATA } from '../../utils/mockData'
 import './Contracts.scss'
 import { usePagination } from '../../hooks/usePagination'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 type ParsedContract = {
   time: React.FC
@@ -105,6 +106,8 @@ const returnContractListData = ({
 }
 
 const Contracts: React.FC = () => {
+  useDocumentTitle(['Contracts'])
+
   const dispatch = useDispatch<AppThunkDispatch>()
   const contractsState = useSelector(
     ({ contract }: { contract: ContractState }) => contract,

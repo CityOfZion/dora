@@ -41,6 +41,7 @@ import { cloneDeep, uniqueId } from 'lodash'
 import { AppThunkDispatch } from '../../store'
 import { Icon } from '@iconify/react'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 type ParsedNodes = {
   endpoint: React.FC
@@ -831,6 +832,8 @@ const ListMonitor: React.FC<ListMonitor> = ({ network, protocol }) => {
 }
 
 const Monitor: React.FC = () => {
+  useDocumentTitle(['Monitor'])
+
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const { network } = useNetworkGlobalSelector()
   const [sortDataList] = useState<{

@@ -8,6 +8,7 @@ import './Endpoint.scss'
 import { ROUTES } from '../../constants'
 
 import Copy from '../../components/copy/Copy'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 import { IsItUp } from '../monitor/Monitor'
 import CloseX from '../../assets/icons/close-icon.svg?react'
 
@@ -18,6 +19,7 @@ const Endpoint: React.FC = () => {
     navigate(ROUTES.MONITOR.url)
     return null
   }
+  useDocumentTitle(['Endpoint', endpoint])
   const nodes = useSelector(({ node }: { node: NodeState }) => node)
   const endpointUrl = endpoint
     .replace(/\+/g, 'http://')

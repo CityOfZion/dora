@@ -20,6 +20,7 @@ import {
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { NoResult } from '../../components/no-result/NoResult'
 import useNetworkGlobalSelector from '../../hooks/useNetworkGlobalSelector'
+import useDocumentTitle from '../../hooks/useDocumentTitle'
 
 type PlatformElementProps = { network: string }
 
@@ -156,6 +157,8 @@ const resultComponentByType: Record<string, React.FC<ResultComponentProps>> = {
 }
 
 const SearchResults: React.FC = () => {
+  useDocumentTitle(['Search'])
+
   const [searchParams] = useSearchParams()
   const { state } = useLocation()
   const { search } = useBlockchainSearch()
