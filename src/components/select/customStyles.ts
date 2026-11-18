@@ -11,6 +11,10 @@ export const customStyles = {
   indicatorSeparator: (): CSSProperties => ({
     display: 'none',
   }),
+  dropdownIndicator: (provided: CSSProperties, _: any) => ({
+    ...provided,
+    color: 'white',
+  }),
   indicatorsContainer: (): CSSProperties => ({
     background: '#D355E7',
     borderRadius: '0 80px 80px 0',
